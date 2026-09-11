@@ -1,0 +1,615 @@
+/*
+ * 湖北艺术职业学院 · 考级考官端视觉升级
+ *
+ * 表现层覆盖：不改变原型数据、路由和业务脚本。
+ * 方向：考场工作台、微信小程序式全屏、任务状态优先。
+ */
+
+:root {
+  --brand-primary: #C8102E;
+  --brand-primary-pressed: #A00D24;
+  --brand-primary-light: #FCE8EC;
+  --brand-primary-dark: #7F0A1C;
+  --text-primary: #1F2937;
+  --text-secondary: #667085;
+  --text-light: #98A2B3;
+  --border-color: #E4E7EC;
+  --border-neutral: #D0D5DD;
+  --surface-muted: #F8FAFC;
+  --bg-body: #F6F7F9;
+  --bg-card: #FFFFFF;
+  --color-info: #2B6BB0;
+  --color-warning: #D98A1B;
+  --color-danger: #D45353;
+  --color-success: #1A8A4A;
+  --header-height: 56px;
+  --tabbar-height: 56px;
+  --shadow-card: 0 1px 3px rgba(16, 24, 40, .06), 0 8px 20px rgba(16, 24, 40, .03);
+  --shadow-hover: 0 4px 14px rgba(16, 24, 40, .10);
+  --shadow-tab: 0 -2px 12px rgba(16, 24, 40, .08);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--bg-body);
+}
+
+body {
+  display: block;
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* The real mini program supplies the status bar and device frame. */
+.phone-shell {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  border: 0;
+  border-radius: 0;
+  background: var(--bg-body);
+  box-shadow: none;
+}
+
+.app {
+  height: 100%;
+  min-height: 100%;
+  padding-bottom: calc(var(--tabbar-height) + 16px + var(--safe-bottom));
+  background: var(--bg-body);
+}
+
+.phone-shell.secondary-view .app {
+  padding-bottom: 24px;
+}
+
+.status-bar,
+.side-handle {
+  display: none !important;
+}
+
+.hero-header {
+  height: var(--header-height);
+  background: rgba(255, 255, 255, .98);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 0 rgba(16, 24, 40, .02);
+}
+
+.topbar {
+  height: var(--header-height);
+  padding: 0 16px;
+  gap: 10px;
+}
+
+.brand-badge {
+  width: 30px;
+  height: 30px;
+  background: var(--brand-primary);
+  color: #fff;
+  font-size: 14px;
+}
+
+.topbar-title,
+.topbar-page-title {
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.topbar-back {
+  width: 40px;
+  height: 40px;
+  color: var(--text-primary);
+  font-size: 26px;
+}
+
+.content {
+  padding: 0 16px 24px;
+}
+
+.section {
+  margin-top: 16px;
+}
+
+.section-title {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.form-hint,
+.detail-copy,
+.card-meta,
+.message-card p {
+  color: var(--text-secondary);
+}
+
+.card,
+.form-card,
+.message-card,
+.profile-card,
+.my-menu,
+.my-data-item {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
+}
+
+.card:active,
+.message-card:active,
+.profile-card:active,
+.my-data-item:active {
+  box-shadow: var(--shadow-hover);
+}
+
+.status-pill {
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.status-pill.info {
+  background: rgba(43, 107, 176, .10);
+  color: var(--color-info);
+}
+
+.status-pill.warn {
+  background: rgba(217, 138, 27, .12);
+  color: #9A5B08;
+}
+
+.status-pill.ok,
+.status-pill.success {
+  background: rgba(26, 138, 74, .10);
+  color: var(--color-success);
+}
+
+.status-pill.muted {
+  background: #F2F4F7;
+  color: var(--text-light);
+}
+
+.status-pill.danger {
+  background: rgba(212, 83, 83, .10);
+  color: var(--color-danger);
+}
+
+/* Schedule: the active session is the visual anchor. */
+#schedule-view .schedule-calendar-head {
+  margin-bottom: 12px;
+}
+
+#schedule-view .schedule-calendar-head .section-title {
+  font-size: 20px;
+}
+
+#schedule-view .schedule-calendar {
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: none;
+}
+
+#schedule-view .schedule-calendar-toolbar {
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+#schedule-view .schedule-calendar-month {
+  font-weight: 700;
+}
+
+#schedule-view .schedule-calendar-nav,
+#schedule-view .schedule-calendar-today {
+  border-color: var(--border-color);
+  background: #fff;
+}
+
+#schedule-view .schedule-card {
+  min-height: 116px;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+#schedule-view .schedule-card:hover,
+#schedule-view .schedule-card:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+#schedule-view .schedule-card-status-bar {
+  width: 4px;
+  border-radius: 0;
+}
+
+#schedule-view .schedule-card[data-status="ongoing"] {
+  border-color: rgba(200, 16, 46, .25);
+  box-shadow: 0 2px 12px rgba(200, 16, 46, .09);
+}
+
+#schedule-view .schedule-card[data-status="ongoing"] .schedule-card-status-bar {
+  background: var(--brand-primary);
+}
+
+#schedule-view .schedule-card[data-status="upcoming"] .schedule-card-status-bar {
+  background: var(--color-warning);
+}
+
+#schedule-view .schedule-card[data-status="done"] .schedule-card-status-bar {
+  background: #B8C0CC;
+}
+
+#schedule-view .schedule-card-subject {
+  background: var(--brand-primary-light);
+  color: var(--brand-primary-dark);
+}
+
+#schedule-view .schedule-card-action {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+#schedule-view .schedule-card[data-status="ongoing"] .schedule-card-action {
+  color: var(--brand-primary);
+}
+
+.online-batch-card {
+  border-radius: 10px;
+}
+
+/* Detail and form surfaces use grouped facts rather than fake input controls. */
+.page-summary,
+.form-card {
+  padding: 16px;
+}
+
+.form-card {
+  gap: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.form-field {
+  min-height: 44px;
+  padding: 11px 14px;
+  border-color: #E5E7EB;
+  border-radius: 8px;
+  background: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.schedule-venue-link {
+  min-height: 36px;
+  padding: 0 4px;
+}
+
+.form-input,
+.form-textarea,
+.profile-field-view {
+  border-color: var(--border-neutral);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.profile-edit-input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, .12);
+}
+
+/* Scoring: controls stay visible above a safe-area-aware action bar. */
+#score-entry-view .score-entry-candidate-card {
+  border-top: 3px solid var(--brand-primary);
+}
+
+#score-entry-view .overall-rating-item {
+  padding: 14px;
+  border-color: var(--border-color);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#score-entry-view .overall-rating-option {
+  min-height: 40px;
+  border-color: var(--border-neutral);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#score-entry-view .overall-rating-option.is-selected {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+#score-entry-view .sticky-actions {
+  position: sticky;
+  z-index: 30;
+  margin: 16px -16px -24px;
+  padding: 12px 16px calc(16px + var(--safe-bottom));
+  border-top: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 -4px 14px rgba(16, 24, 40, .06);
+  backdrop-filter: blur(10px);
+}
+
+#score-entry-view .sticky-actions .action-row {
+  gap: 8px;
+}
+
+.primary-action,
+.ghost-action,
+.gold-action,
+.danger-action {
+  min-height: 44px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.primary-action {
+  border: 1px solid var(--brand-primary);
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+.primary-action:active {
+  background: var(--brand-primary-pressed);
+}
+
+.ghost-action {
+  border: 1px solid var(--border-neutral);
+  background: #fff;
+  color: var(--text-primary);
+}
+
+/* Login keeps the task app identity without looking like a separate product. */
+body.is-guest .app {
+  padding-bottom: 0;
+}
+
+#login-view.content {
+  padding: 0 16px 24px;
+}
+
+#login-view .login-page {
+  min-height: calc(100vh - var(--header-height));
+  display: block;
+  padding: 0 0 24px;
+  background: transparent;
+}
+
+#login-view .login-brand {
+  margin: 0;
+  padding: 32px 0 24px;
+  gap: 12px;
+}
+
+#login-view .login-brand-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--brand-primary);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(200, 16, 46, .18);
+}
+
+#login-view .login-brand h2 {
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+#login-view .login-card {
+  width: auto;
+  margin: 0;
+  padding: 20px;
+  gap: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+#login-view .login-navbar {
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+#login-view .login-navbar .weui-navbar__item {
+  padding: 10px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#login-view .login-navbar .weui-navbar__item.weui-bar__item_on {
+  background: #fff;
+  color: var(--brand-primary) !important;
+  box-shadow: 0 1px 4px rgba(16, 24, 40, .08);
+}
+
+#login-view .login-card .weui-cell__bd .weui-input {
+  border-color: var(--border-neutral);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#login-view .login-card .weui-cell__bd .weui-input:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, .12);
+}
+
+#login-view .login-card .login-code-row .weui-cell__ft .weui-btn {
+  border: 1px solid var(--border-neutral);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+#login-view .login-card .weui-btn_primary {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary) !important;
+  box-shadow: 0 5px 12px rgba(200, 16, 46, .18);
+}
+
+#login-view .login-card .weui-btn_primary:disabled,
+#login-view .login-card .weui-btn_primary.weui-btn_disabled {
+  border-color: #E4E7EC;
+  background: #E4E7EC !important;
+  color: #98A2B3 !important;
+  box-shadow: none;
+}
+
+#login-view .login-agreement {
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+/* Messages and profile: reduce card noise and keep actions scannable. */
+.message-card {
+  padding: 14px 16px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.message-card.unread {
+  border-left: 3px solid var(--brand-primary);
+}
+
+.message-category-schedule {
+  background: var(--brand-primary-light);
+  color: var(--brand-primary-dark);
+}
+
+.message-action {
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+#my-view .profile-card {
+  border-top: 3px solid var(--brand-primary);
+}
+
+#my-view .my-data-grid {
+  gap: 8px;
+}
+
+#my-view .my-data-item {
+  padding: 14px 8px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+#my-view .my-data-value {
+  color: var(--text-primary);
+}
+
+#my-view .my-menu {
+  box-shadow: none;
+}
+
+#my-view .demo-qualification-toggle {
+  display: none !important;
+}
+
+.tabbar {
+  height: calc(var(--tabbar-height) + var(--safe-bottom));
+  background: rgba(255, 255, 255, .98);
+  border-top: 1px solid var(--border-color);
+  box-shadow: var(--shadow-tab);
+  backdrop-filter: blur(12px);
+}
+
+.tab {
+  gap: 4px;
+  padding-top: 6px;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tab-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+}
+
+.tab.active {
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.tab.active::after {
+  width: 24px;
+  height: 2px;
+  background: var(--brand-primary);
+}
+
+.tab.active .tab-icon {
+  background: var(--brand-primary-light);
+}
+
+.tab-dot {
+  top: 2px;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(200, 16, 46, .26);
+  outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+  .content {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  #login-view.content {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  #score-entry-view .sticky-actions {
+    margin-right: -12px;
+    margin-left: -12px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}

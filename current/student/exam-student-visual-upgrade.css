@@ -1,0 +1,350 @@
+/* ===== 考生端视觉升级覆盖层 ===== */
+:root {
+  --brand-primary: #9E1730 !important;
+  --brand-primary-pressed: #7E142A !important;
+  --brand-primary-light: #C04A60 !important;
+  --brand-primary-dark: #741326 !important;
+  --brand-gold: #C9952E !important;
+  --brand-gold-pressed: #A8781F !important;
+  --brand-gold-light: #F5E7C3 !important;
+  --brand-gold-dark: #79561C !important;
+  --color-success: #2E7D5B !important;
+  --color-success-bg: rgba(46, 125, 91, .12) !important;
+  --color-danger: #B84A52 !important;
+  --color-danger-bg: rgba(184, 74, 82, .12) !important;
+  --color-info: #687078 !important;
+  --color-info-bg: rgba(104, 112, 120, .10) !important;
+  --text-primary: #25282D !important;
+  --text-secondary: #686D75 !important;
+  --text-light: #969BA3 !important;
+  --text-placeholder: #969BA3 !important;
+  --border-color: #E8E5DF !important;
+  --border-strong: #D5D0C8 !important;
+  --bg-body: #F7F7F5 !important;
+  --bg-card: #FFFFFF !important;
+  --bg-subtle: #FCFBF8 !important;
+  --shadow-card: 0 4px 18px rgba(37, 40, 45, .055) !important;
+  --shadow-hover: 0 8px 22px rgba(37, 40, 45, .10) !important;
+  --shadow-tab: 0 -4px 16px rgba(37, 40, 45, .08) !important;
+  --header-height: 52px !important;
+}
+
+html body {
+  background: var(--bg-body) !important;
+  color: var(--text-primary) !important;
+}
+
+html body .phone-shell {
+  background: var(--bg-body) !important;
+}
+
+html body .phone-shell .status-bar {
+  display: none !important;
+}
+
+html body .phone-shell .hero-header,
+html body .phone-shell .topbar {
+  background: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  box-shadow: 0 1px 0 rgba(37, 40, 45, .02) !important;
+}
+
+html body .phone-shell .topbar {
+  height: 52px !important;
+  align-items: center !important;
+  padding: 0 16px !important;
+}
+
+html body .phone-shell .topbar-title,
+html body .phone-shell .topbar-page-title {
+  color: var(--text-primary) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+html body .phone-shell .topbar-back {
+  color: var(--brand-primary) !important;
+}
+
+html body .phone-shell .brand-badge {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  background: var(--brand-primary) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+html body .phone-shell .content {
+  padding: 0 16px 16px !important;
+}
+
+html body .phone-shell .section {
+  margin-top: 20px !important;
+}
+
+html body .phone-shell .section-head {
+  margin-bottom: 10px !important;
+}
+
+html body .phone-shell .section-title {
+  color: var(--text-primary) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+html body .phone-shell .section-link {
+  color: var(--text-secondary) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* 首页主视觉保留原有三条内容，只重做背景、对比度和装饰。 */
+html body .phone-shell #home-view .home-carousel {
+  min-height: 168px !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: #7D1730 !important;
+  box-shadow: 0 8px 22px rgba(125, 23, 48, .16) !important;
+}
+
+html body .phone-shell #home-view .carousel-slide {
+  min-height: 168px !important;
+  padding: 20px 108px 20px 18px !important;
+  color: #FFFFFF !important;
+  background: linear-gradient(135deg, #7D1730 0%, #A62D48 68%, #C86560 100%) !important;
+}
+
+html body .phone-shell #home-view .carousel-slide:nth-child(2) {
+  background: linear-gradient(135deg, #244552 0%, #376A72 68%, #7E9B96 100%) !important;
+}
+
+html body .phone-shell #home-view .carousel-slide:nth-child(3) {
+  background: linear-gradient(135deg, #24503E 0%, #3E755B 68%, #91A27D 100%) !important;
+}
+
+html body .phone-shell #home-view .carousel-slide::before {
+  right: 0 !important;
+  top: 0 !important;
+  width: 104px !important;
+  height: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, .10) !important;
+  transform: none !important;
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%) !important;
+}
+
+html body .phone-shell #home-view .carousel-slide::after {
+  right: 22px !important;
+  bottom: 20px !important;
+  width: 58px !important;
+  height: 4px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .62) !important;
+}
+
+html body .phone-shell #home-view .carousel-kicker {
+  min-height: 22px !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, .15) !important;
+  color: #FFF1D0 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+html body .phone-shell #home-view .carousel-title {
+  color: #FFFFFF !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+html body .phone-shell #home-view .carousel-copy {
+  color: rgba(255, 255, 255, .86) !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+html body .phone-shell #home-view .carousel-dots span {
+  background: rgba(255, 255, 255, .40) !important;
+}
+
+html body .phone-shell #home-view .quick-actions {
+  gap: 10px !important;
+  padding: 0 !important;
+}
+
+html body .phone-shell #home-view .quick-btn {
+  min-height: 94px !important;
+  padding: 12px 4px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  background: var(--bg-card) !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+html body .phone-shell #home-view .quick-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: #F1EDEA !important;
+  color: var(--brand-primary) !important;
+  box-shadow: none !important;
+}
+
+html body .phone-shell #home-view .quick-btn:nth-child(2) .quick-icon {
+  background: #EAF1F0 !important;
+  color: #376A72 !important;
+}
+
+html body .phone-shell #home-view .quick-btn:nth-child(3) .quick-icon {
+  background: #F3EEE1 !important;
+  color: var(--brand-gold-dark) !important;
+}
+
+html body .phone-shell #home-view .quick-btn:nth-child(4) .quick-icon {
+  background: #E8F1EC !important;
+  color: var(--color-success) !important;
+}
+
+html body .phone-shell #home-view .article-list,
+html body .phone-shell #home-view .home-activity-list {
+  gap: 10px !important;
+}
+
+html body .phone-shell #home-view .article-card,
+html body .phone-shell #home-view .batch-card {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 14px !important;
+  background: var(--bg-card) !important;
+  box-shadow: none !important;
+}
+
+html body .phone-shell #home-view .article-card {
+  min-height: 82px !important;
+  padding: 10px !important;
+}
+
+html body .phone-shell #home-view .article-cover,
+html body .phone-shell #home-view .batch-cover {
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg, #5D2435, #A62D48) !important;
+}
+
+html body .phone-shell #home-view .batch-cover.online {
+  background: linear-gradient(135deg, #2C5964, #6E9994) !important;
+}
+
+html body .phone-shell #home-view .article-cover::before,
+html body .phone-shell #home-view .batch-cover::before {
+  opacity: .22 !important;
+}
+
+html body .phone-shell #home-view .article-card-title,
+html body .phone-shell #home-view .subject-name {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+}
+
+html body .phone-shell #home-view .article-card-time,
+html body .phone-shell #home-view .batch-deadline {
+  color: var(--text-secondary) !important;
+}
+
+html body .phone-shell #home-view .status-pill {
+  border-radius: 6px !important;
+  background: var(--color-success-bg) !important;
+  color: var(--color-success) !important;
+  font-size: 11px !important;
+}
+
+html body .phone-shell .tabbar {
+  background: rgba(255, 255, 255, .98) !important;
+  border-top: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-tab) !important;
+  backdrop-filter: none !important;
+}
+
+html body .phone-shell .tab {
+  color: var(--text-light) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  gap: 3px !important;
+}
+
+html body .phone-shell .tab.active {
+  color: var(--brand-primary) !important;
+  font-weight: 700 !important;
+}
+
+html body .phone-shell .tab.active::after {
+  width: 22px !important;
+  height: 2px !important;
+  background: var(--brand-gold) !important;
+}
+
+html body .phone-shell .tab-icon,
+html body .phone-shell .tab.active .tab-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .phone-shell #login-view .login-page {
+  background: var(--bg-body) !important;
+}
+
+html body .phone-shell #login-view .login-brand-logo {
+  background: var(--brand-primary) !important;
+  box-shadow: none !important;
+}
+
+html body .phone-shell #login-view .login-card {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+html body .phone-shell #login-view .primary-action {
+  border-radius: 10px !important;
+  background: var(--brand-primary) !important;
+}
+
+@media (max-width: 360px) {
+  html body .phone-shell .content {
+    padding-right: 12px !important;
+    padding-left: 12px !important;
+  }
+
+  html body .phone-shell #home-view .carousel-slide {
+    padding-right: 92px !important;
+  }
+
+  html body .phone-shell #home-view .carousel-title {
+    font-size: 17px !important;
+  }
+
+  html body .phone-shell #home-view .quick-actions {
+    gap: 7px !important;
+  }
+}
+
+html body .phone-shell #login-view .login-brand {
+  color: var(--text-primary) !important;
+}
+
+html body .phone-shell #login-view .login-brand .login-brand-subtitle {
+  color: var(--text-secondary) !important;
+}

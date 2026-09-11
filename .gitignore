@@ -1,0 +1,26 @@
+.DS_Store
+
+# 本仓库只收录可直接预览的原型文件
+*.docx
+*.xlsx
+*.xmind
+*.zip
+*.pdf
+*.inspect.ndjson
+
+# 内部资料与备份目录
+交付物/
+旧版本/
+历史版本/
+历史版本备份/
+.codex-work/
+outputs/
+
+# 工程产物
+node_modules/
+dist/
+__pycache__/
+.venv/
+.env
+.env.*
+!.env.example
