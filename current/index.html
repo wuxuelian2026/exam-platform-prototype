@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>考级子系统原型</title>
+<style>
+  :root {
+    --brand: #1677ff;
+    --ink: #1f2329;
+    --muted: #646a73;
+    --line: #e5e6eb;
+    --bg: #f5f6f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 64px 24px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: 0; }
+  .lede { margin: 0 0 32px; color: var(--muted); }
+  ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  li { border-bottom: 1px solid var(--line); }
+  a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 18px 4px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  a:hover .name { color: var(--brand); }
+  .name { font-size: 16px; font-weight: 600; }
+  .desc { color: var(--muted); font-size: 13px; }
+  footer { margin-top: 32px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>考级子系统原型</h1>
+  <p class="lede">请选择要查看的端。原型使用演示数据，用于产品评审与开发沟通，不代表最终生产系统。</p>
+  <ul>
+    <li><a href="./admin/"><span class="name">后台管理端</span><span class="desc">平台、承办单位、培训机构工作台</span></a></li>
+    <li><a href="./student/"><span class="name">考生端小程序</span><span class="desc">学生与家长端报名、考试、证书</span></a></li>
+    <li><a href="./judge/"><span class="name">考官端小程序</span><span class="desc">考官评分与考试任务</span></a></li>
+  </ul>
+  <footer>建议使用最新版 Chrome、Edge 或 Safari 访问。</footer>
+</main>
+</body>
+</html>
