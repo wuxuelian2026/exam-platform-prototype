@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>drill test</title>
+<style>html,body{margin:0;background:#000}iframe{width:1920px;height:1080px;border:0;display:block}</style>
+</head>
+<body>
+<iframe id="stage" src="./exam-dashboard-cockpit.html"></iframe>
+<script>
+(function () {
+  var depth = Number((location.search.match(/depth=(\d+)/) || [])[1] || 0);
+  var frame = document.getElementById("stage");
+  function click(selector) {
+    var node = frame.contentDocument.querySelector(selector);
+    if (!node) { console.log("missing target: " + selector); return false; }
+    node.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    return true;
+  }
+  frame.addEventListener("load", function () {
+    setTimeout(function () {
+      if (depth >= 1) click('[data-heat-city="wuhan"]');
+      setTimeout(function () {
+        if (depth >= 2) click('[data-heat-district="\u6d2a\u5c71\u533a"]');
+      }, 400);
+    }, 700);
+  });
+}());
+</script>
+</body>
+</html>

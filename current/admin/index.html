@@ -2142,7 +2142,7 @@
           <div class="menu-children">
             <button class="menu-item menu-child" type="button" data-jump="plans/batches"><span class="menu-label">批次计划管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="plans/batch-review" data-platform-only><span class="menu-label">批次计划审核</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="plans/rollback"><span class="menu-label">批次变更管理</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="plans/rollback" hidden><span class="menu-label">批次变更管理</span></button>
           </div>
         </div>
 
@@ -2250,8 +2250,8 @@
 
       <main class="content">
         <section class="page active" data-page="dashboard">
-          <div class="page-head"><div><h1 class="page-title">工作台</h1></div></div>
-          <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="overview" role="tab" aria-selected="false">总览</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
+          <div class="page-head"><div><h1 class="page-title">工作台</h1></div><div class="page-actions"><a class="btn" href="exam-dashboard-cockpit.html" target="_blank">进入大屏驾驶舱</a></div></div>
+          <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
           <div class="subview active" data-subview="workbench">
             <div class="grid-4">
               <div class="card metric" data-jump="batch-workbench/enroll">报名人数<strong>2,486</strong><span class="muted">当前报名中批次</span></div>
@@ -2268,7 +2268,6 @@
               </tbody></table></div>
             </div>
           </div>
-          <div class="subview" data-subview="overview"></div>
           <div class="subview" data-subview="batch-analysis"></div>
         </section>
 
@@ -2796,11 +2795,16 @@
             </div>
           </div>
           <div class="subview" data-subview="judges">
+            <div class="tabs" role="tablist" aria-label="考官库面板" style="margin-bottom:12px">
+              <button class="tab active" type="button" data-judge-panel-tab="library" role="tab" aria-selected="true">考官库</button>
+              <button class="tab" type="button" data-judge-panel-tab="cert-review" role="tab" aria-selected="false">考官证书审核 <span data-judge-cert-review-tab-count>0</span></button>
+            </div>
+            <div data-judge-panel="library">
             <div class="page-head"><div><h2 class="table-title">考官库</h2></div><div class="page-actions"><button class="btn success" data-drawer="judge-photo-import">导入照片</button><button class="btn success" data-drawer="judge-import">导入考官</button><button class="btn" data-judge-export>导出</button><button class="btn primary" data-drawer="judge-create">新增考官</button></div></div>
             <div class="grid-4">
               <div class="card metric">考官总数<strong data-judge-total-count>3</strong><span class="muted">按当前数据范围统计</span></div>
               <div class="card metric">有效<strong data-judge-employed-count>2</strong><span class="muted">可进入派遣资格筛选</span></div>
-              <div class="card metric">待审核<strong data-judge-review-count>1</strong><span class="muted">尚未设为有效</span></div>
+              <div class="card metric">证书待审核<strong data-judge-cert-pending-count>0</strong><span class="muted">需平台审核证书</span></div>
               <div class="card metric">证件将到期<strong data-judge-expiring-count>1</strong><span class="muted">30天内提醒</span></div>
             </div>
             <div class="filter-card">
@@ -2817,6 +2821,13 @@
               <tr data-judge-row data-judge-name="林晓涵" data-judge-id="420106********0819" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市 武昌区" data-judge-city="武汉市" data-judge-education="本科" data-judge-title="中级" data-judge-title-name="一级演员" data-judge-work-unit="湖北艺术职业学院" data-judge-phone="" data-judge-major="中国舞" data-judge-level="中级" data-judge-org="湖北艺术职业学院" data-judge-belong-org-id="platform" data-judge-exam-org-ids="inst-guanggu" data-judge-status="已聘用" data-judge-added-date="2023-08-21"><td>林晓涵</td><td>身份证 / 420106********0819</td><td>中国舞</td><td>1</td><td><span class="tag green">有效</span></td><td>2023-08-21</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button></div></td></tr>
               <tr data-judge-row data-judge-name="周明远" data-judge-id="420502********0626" data-judge-id-type="身份证" data-judge-region="湖北省 宜昌市 西陵区" data-judge-city="宜昌市" data-judge-education="硕士研究生" data-judge-title="副高级" data-judge-title-name="副教授" data-judge-work-unit="湖北省群众艺术馆" data-judge-phone="" data-judge-major="" data-judge-level="高级" data-judge-org="湖北省群众艺术馆" data-judge-belong-org-id="external-hbqyg" data-judge-exam-org-ids="org-yc|inst-yc" data-judge-status="待审核" data-judge-added-date="2026-08-12"><td>周明远</td><td>身份证 / 420502********0626</td><td>-</td><td>0</td><td><span class="tag orange">待审核</span></td><td>2026-08-12</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button><button class="btn link" data-drawer="judge-delete">删除</button></div></td></tr>
             </tbody></table></div></div>
+          </div>
+          <div data-judge-panel="cert-review" hidden>
+            <div class="table-card">
+              <div class="table-tools"><div class="major-table-title"><h2 class="table-title">考官证书审核</h2><span class="tag orange" data-judge-cert-review-count>0</span></div><span class="muted">证书新增、修改、注销逐条审核，不改变考官主档状态</span></div>
+              <div class="table-wrap"><table class="is-sticky-table has-sticky-action"><thead><tr><th>考官</th><th>证件号</th><th>证书编号</th><th>专业</th><th>有效期</th><th>变更类型</th><th>提交时间</th><th>审核状态</th><th>驳回原因</th><th>操作</th></tr></thead><tbody data-judge-cert-review-body></tbody></table></div>
+            </div>
+          </div>
           </div>
           <div class="subview" data-subview="users"><div class="filter-card"><div class="field"><label>账号/姓名</label><input class="input" data-user-keyword placeholder="请输入账号或姓名"></div><div class="field"><label>所属组织</label><select class="select" data-user-org><option>全部组织</option><option>武汉承办中心</option><option>宜昌承办中心</option><option>光谷少儿艺术中心</option><option>宜昌青少年美育中心</option></select></div><div class="field"><label>状态</label><select class="select" data-user-status><option>全部状态</option><option>启用</option><option>禁用</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-user-search>查询</button><button class="btn" data-user-reset>重置</button></div></div></div><div class="table-card"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">用户列表</h2></div><div class="page-actions"><button class="btn" data-toast="后台用户导入模板已打开">导入</button><button class="btn" data-toast="后台用户列表已导出">导出</button><button class="btn primary" data-toast="新增用户表单已打开">新增用户</button></div></div><div class="table-wrap"><table><thead><tr><th>账号</th><th>姓名</th><th>所属组织</th><th>角色</th><th>数据范围</th><th>状态</th><th>操作</th></tr></thead><tbody><tr data-user-row data-account="admin_wh" data-name="刘敏" data-org="武汉承办中心" data-status="启用"><td>admin_wh</td><td>刘敏</td><td>武汉承办中心</td><td>承办单位管理员</td><td>本单位及下级机构</td><td><span class="tag green">启用</span></td><td><button class="btn link">编辑</button><button class="btn link">分配角色</button><button class="btn link" data-toast="账号已禁用">禁用</button></td></tr><tr data-user-row data-account="schedule_wh" data-name="张老师" data-org="武汉承办中心" data-status="启用"><td>schedule_wh</td><td>张老师</td><td>武汉承办中心</td><td>考务编排员</td><td>本单位批次与考场</td><td><span class="tag green">启用</span></td><td><button class="btn link">编辑</button><button class="btn link">分配角色</button></td></tr><tr data-user-row data-account="admin_yc" data-name="陈静" data-org="宜昌承办中心" data-status="禁用"><td>admin_yc</td><td>陈静</td><td>宜昌承办中心</td><td>承办单位管理员</td><td>本单位及下级机构</td><td><span class="tag red">禁用</span></td><td><button class="btn link">编辑</button><button class="btn link">分配角色</button><button class="btn link" data-toast="账号已启用">启用</button></td></tr><tr data-user-row data-account="org_teacher" data-name="王芳" data-org="光谷少儿艺术中心" data-status="启用"><td>org_teacher</td><td>王芳</td><td>光谷少儿艺术中心</td><td>培训机构管理员</td><td>本机构</td><td><span class="tag green">启用</span></td><td><button class="btn link">编辑</button><button class="btn link">分配角色</button></td></tr></tbody></table></div></div></div>
           <div class="subview" data-subview="roles">
@@ -10072,9 +10083,10 @@
       if (toolbarHint) toolbarHint.textContent = "横轴：" + (xAxis ? xAxis.options[xAxis.selectedIndex].text : "考级批次") + " · 纵轴：" + analyticsStatisticsMetricLabel(metric);
     }
     function dashboardAnalyticsAggregate(batches) {
-      var result = { enrolled: 0, paid: 0, scheduled: 0, scorePublished: 0, passed: 0, certSubmitted: 0, batches: batches.length, activeBatches: 0 };
+      var result = { enrolled: 0, attempts: 0, paid: 0, scheduled: 0, scorePublished: 0, passed: 0, certSubmitted: 0, batches: batches.length, activeBatches: 0 };
       batches.forEach(function (item) {
         result.enrolled += Number(item.enrolled) || 0;
+        result.attempts += Number(item.attempts) || 0;
         result.paid += Number(item.paid) || 0;
         result.scheduled += Number(item.scheduled) || 0;
         result.scorePublished += Number(item.scorePublished) || 0;
@@ -10082,6 +10094,7 @@
         result.certSubmitted += Number(item.certSubmitted) || 0;
         if (["已发布", "已暂停"].indexOf(item.publishStatus) > -1) result.activeBatches += 1;
       });
+      if (!result.attempts) result.attempts = Math.round(result.enrolled * 1.08);
       result.paidRate = analyticsPercent(result.paid, result.enrolled);
       result.passRate = analyticsPercent(result.passed, result.scorePublished);
       result.certRate = analyticsPercent(result.certSubmitted, result.passed);
@@ -10192,6 +10205,25 @@
         analyticsStatisticsHtml() +
         '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布批次 · 统计周期：近一年 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
     }
+    function dashboardOverviewHtml(batch, publishedBatches) {
+      var role = dashboardTodoRole();
+      var scopeLabel = role === "platform" ? "全平台" : role === "organizer" ? "本承办单位及下级机构" : "本培训机构";
+      var scopedBatches = dashboardTodoBatchesForRole(role).filter(isPublishedBatch);
+      var aggregate = dashboardAnalyticsAggregate(scopedBatches);
+      var refreshTime = window.__analyticsOverviewUpdatedAt || "2026-08-21 14:30";
+      return '<div class="analytics-overview-shell" data-overview-root>' +
+        '<div class="overview-hero"><div class="overview-hero-copy"><span class="overview-eyebrow">' + escapeHtml(scopeLabel) + ' · 跨批次数据</span><h2>运营总览</h2><p>仅展示后台核心业务规模和待处理入口，复杂趋势、占比和排行请进入大屏驾驶舱。</p></div><div class="overview-hero-meta"><span>最后更新：' + refreshTime + '</span><button class="btn" type="button" data-overview-refresh>刷新数据</button></div></div>' +
+        '<div class="overview-kpi-grid">' +
+          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报名人数</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">当前角色范围内已发布批次</small></button>' +
+          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报考人次</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">按报名记录汇总</small></button>' +
+          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/grades"><span class="overview-kpi-label">总通过率</span><strong>' + aggregate.passRate + '</strong><small class="up">已发布成绩加权计算</small></button>' +
+          '<button class="card overview-kpi" type="button" data-jump="system/units"><span class="overview-kpi-label">活跃承办单位</span><strong>' + scopedBatches.map(function (item) { return item.org; }).filter(Boolean).filter(function (value, index, list) { return list.indexOf(value) === index; }).length + '</strong><small class="up">当前范围内有已发布批次</small></button>' +
+          '<button class="card overview-kpi" type="button" data-jump="plans/batches"><span class="overview-kpi-label">进行中批次</span><strong>' + formatDemoNumber(aggregate.activeBatches) + '</strong><small class="up">已发布</small></button>' +
+          '<button class="card overview-kpi" type="button" data-jump="certificates/library"><span class="overview-kpi-label">证书发放数</span><strong>' + formatDemoNumber(aggregate.certSubmitted) + '</strong><small class="up">已提交入库累计</small></button>' +
+        '</div>' +
+        '<div class="overview-two-column"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>大屏驾驶舱</h3><p>趋势、门类占比、专业排行、承办单位排行、通过率趋势和城市热力图统一在大屏查看。</p></div></div><div class="page-actions" style="padding:16px"><a class="btn primary" href="exam-dashboard-cockpit.html" target="_blank">进入大屏驾驶舱</a></div></section></div>' +
+        '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布批次 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
+    }
     function enhanceAnalyticsPage(page, batch) {
       if (!page || !batch) return;
       page.setAttribute("data-batch-id", batch.id);
@@ -10200,7 +10232,7 @@
       var board = page.querySelector('[data-subview="board"], [data-subview="overview"]');
       var exportView = page.querySelector('[data-subview="export"], [data-subview="batch-analysis"]');
       var publishedBatches = BATCH_DEMO_LIST.filter(isPublishedBatch);
-      if (board) board.innerHTML = analyticsOverviewHtml(batch, publishedBatches);
+      if (board) board.innerHTML = page.getAttribute("data-page") === "dashboard" ? dashboardOverviewHtml(batch, publishedBatches) : analyticsOverviewHtml(batch, publishedBatches);
       if (exportView) exportView.innerHTML = analyticsBatchAnalysisHtml(batch);
       page.querySelectorAll("button, a").forEach(function (node) { if (!node.hasAttribute("data-batch-id")) node.setAttribute("data-batch-id", batch.id); });
     }
@@ -10290,8 +10322,44 @@
       if (allNumbers.indexOf(number.value.trim()) > -1) { toast("证书编号已存在"); return; }
       var list = JUDGE_CERTIFICATE_DATA[row.dataset.judgeId] || [];
       var cert = editId.value && list.find(function (item) { return item.id === editId.value; });
+      var changeType = cert ? "UPDATE" : "CREATE";
+      var saveApi = adminExaminerCertificateApi();
+      if (saveApi) {
+        var judgeIdForSave = row.dataset.judgeId;
+        var examinerIdForSave = judgeExaminerId(judgeIdForSave);
+        var certificateName = (cert && cert.name) || ("社会艺术水平考级考官证（" + major.value + "）");
+        var savePayload = {
+          actorRole: "platform_admin",
+          actorId: "platform-demo",
+          examinerId: examinerIdForSave,
+          certificateNumber: number.value.trim(),
+          certificateName: certificateName,
+          certificateMajor: major.value,
+          validFromDate: String(start.value || "").replace(/-/g, ""),
+          validUntilDate: String(expire.value || "").replace(/-/g, "")
+        };
+        var savePromise;
+        if (cert && cert.id) {
+          savePayload.changeType = "UPDATE";
+          savePayload.objectVersion = cert.objectVersion;
+          savePromise = saveApi.requestExaminerCertificateChange(cert.id, savePayload);
+        } else {
+          savePromise = saveApi.createExaminerCertificate(savePayload);
+        }
+        savePromise.then(function () {
+          return refreshJudgeCertificates(judgeIdForSave);
+        }).then(function () {
+          window.__activeJudgeCertId = "";
+          reopenJudgeCertificateDrawer();
+          toast("证书申请已提交，等待平台审核");
+        }).catch(function (error) {
+          toast(judgeCertificateErrorMessage(error));
+        });
+        return;
+      }
       if (!cert) { cert = { id: "CERT-" + Date.now(), addedAt: new Date().toISOString().slice(0, 10) }; list.push(cert); }
-      cert.number = number.value.trim(); cert.major = major.value; cert.startDate = start.value; cert.expireDate = expire.value; cert.status = expire.value < new Date().toISOString().slice(0, 10) ? "失效" : "有效";
+      var expired = expire.value < new Date().toISOString().slice(0, 10);
+      cert.number = number.value.trim(); cert.major = major.value; cert.startDate = start.value; cert.expireDate = expire.value; cert.status = expired ? "失效" : "有效"; cert.reviewStatus = "APPROVED"; cert.validityStatus = expired ? "REVOKED" : "EFFECTIVE"; cert.changeType = changeType;
       JUDGE_CERTIFICATE_DATA[row.dataset.judgeId] = list;
       row.dataset.judgeCert = cert.number;
       row.dataset.judgeExpire = cert.expireDate;
@@ -10304,6 +10372,116 @@
       window.__activeJudgeCertId = "";
       openDrawer("judge-cert");
       toast("考官证书已保存");
+    }
+    function reopenJudgeCertificateDrawer() {
+      var row = window.__activeJudgeRow;
+      if (!row) return;
+      row.dataset.judgeMajor = judgeCertificateMajors(row).join("、");
+      row.dataset.judgeExpire = judgeCertificateExpireDate(row);
+      var table = document.querySelector('[data-subview="judges"] table');
+      if (table) table.dataset.judgeNormalized = "false";
+      normalizeJudgeLibraryRows();
+      filterJudges(false, true);
+      openDrawer("judge-cert");
+    }
+    function approveJudgeCertificate(certId, stayInline) {
+      var row = window.__activeJudgeRow;
+      if (!row) return;
+      var judgeId = row.dataset.judgeId;
+      var list = JUDGE_CERTIFICATE_DATA[judgeId] || [];
+      var cert = list.find(function (item) { return item.id === certId; });
+      if (!cert || cert.reviewStatus !== "PENDING_REVIEW") { toast("该证书申请已处理，请刷新列表"); return; }
+      var approveApi = adminExaminerCertificateApi();
+      if (approveApi && cert.id) {
+        approveApi.reviewExaminerCertificate(cert.id, {
+          decision: "APPROVE",
+          actorRole: "platform_admin",
+          reviewerId: "platform-demo",
+          objectVersion: cert.objectVersion
+        }).then(function () {
+          return refreshJudgeCertificates(judgeId);
+        }).then(function () {
+          reopenJudgeCertificateDrawer();
+          toast(cert.changeType === "DELETE" ? "证书注销已通过，旧证书已失效" : "证书审核已通过");
+        }).catch(function (error) {
+          toast(judgeCertificateErrorMessage(error));
+        });
+        return;
+      }
+      var today = new Date().toISOString().slice(0, 10);
+      cert.reviewStatus = "APPROVED";
+      cert.rejectReason = "";
+      if (cert.changeType === "DELETE") {
+        cert.validityStatus = "REVOKED";
+        cert.status = "已撤销";
+      } else {
+        var inDate = !cert.startDate || cert.startDate <= today && today <= cert.expireDate;
+        cert.validityStatus = inDate ? "EFFECTIVE" : "NOT_EFFECTIVE";
+        cert.status = inDate ? "有效" : "未生效";
+      }
+      cert.approvedAt = new Date().toISOString().slice(0, 10);
+      JUDGE_CERTIFICATE_DATA[row.dataset.judgeId] = list;
+      row.dataset.judgeMajor = judgeCertificateMajors(row).join("、");
+      row.dataset.judgeExpire = judgeCertificateExpireDate(row);
+      var table = document.querySelector('[data-subview="judges"] table');
+      if (table) table.dataset.judgeNormalized = "false";
+      normalizeJudgeLibraryRows();
+      filterJudges(false, true);
+      if (stayInline) {
+        renderJudgeCertificateReview();
+      } else {
+        openDrawer("judge-cert");
+      }
+      toast(cert.changeType === "DELETE" ? "证书注销已通过，旧证书已失效" : "证书审核已通过");
+    }
+    function rejectJudgeCertificate(certId, stayInline) {
+      var row = window.__activeJudgeRow;
+      if (!row) return;
+      var judgeId = row.dataset.judgeId;
+      var list = JUDGE_CERTIFICATE_DATA[judgeId] || [];
+      var cert = list.find(function (item) { return item.id === certId; });
+      if (!cert || cert.reviewStatus !== "PENDING_REVIEW") { toast("该证书申请已处理，请刷新列表"); return; }
+      var reason = window.prompt("请输入驳回原因（必填）", "");
+      if (!reason || !reason.trim()) { toast("驳回原因不能为空"); return; }
+      var rejectApi = adminExaminerCertificateApi();
+      if (rejectApi && cert.id) {
+        rejectApi.reviewExaminerCertificate(cert.id, {
+          decision: "REJECT",
+          reviewReason: reason.trim(),
+          actorRole: "platform_admin",
+          reviewerId: "platform-demo",
+          objectVersion: cert.objectVersion
+        }).then(function () {
+          return refreshJudgeCertificates(judgeId);
+        }).then(function () {
+          reopenJudgeCertificateDrawer();
+          toast("证书申请已驳回");
+        }).catch(function (error) {
+          toast(judgeCertificateErrorMessage(error));
+        });
+        return;
+      }
+      cert.reviewStatus = "REJECTED";
+      cert.rejectReason = reason.trim();
+      if (cert.changeType === "DELETE") {
+        cert.changeType = "CREATE";
+        cert.validityStatus = "EFFECTIVE";
+        cert.status = "有效";
+      } else {
+        cert.validityStatus = cert.validityStatus || "NOT_EFFECTIVE";
+        cert.status = "未生效";
+      }
+      JUDGE_CERTIFICATE_DATA[row.dataset.judgeId] = list;
+      var table = document.querySelector('[data-subview="judges"] table');
+      if (table) table.dataset.judgeNormalized = "false";
+      normalizeJudgeLibraryRows();
+      filterJudges(false, true);
+      if (stayInline) {
+        renderJudgeCertificateReview();
+      } else {
+        openDrawer("judge-cert");
+      }
+      toast("证书申请已驳回");
     }
     function filterJudgeDispatchRecords(reset) {
       var start = drawerBody.querySelector("[data-judge-dispatch-start]");
@@ -13678,6 +13856,7 @@
       if (!quiet) toast("已切换至 " + ((source && source.dataset.siteName) || code) + " 的考场列表");
     }
     var RESOURCE_PAGE_STATE = { sites: 1, rooms: 1, judges: 1 };
+    var RESOURCE_PAGE_SIZE = { sites: 5, rooms: 5, judges: 20 };
     function resourceListRoot(kind) {
       var sub = kind === "sites" ? "sites" : kind === "rooms" ? "rooms" : "judges";
       return document.querySelector('.page[data-page="org"] [data-subview="' + sub + '"]');
@@ -13688,7 +13867,7 @@
       var selector = kind === "sites" ? "[data-site-row]" : kind === "rooms" ? "[data-room-row]" : "[data-judge-row]";
       var rows = Array.from(root.querySelectorAll(selector));
       var filtered = rows.filter(function (row) { return row.dataset.resourceFilterMatch !== "false"; });
-      var pageSize = 5;
+      var pageSize = RESOURCE_PAGE_SIZE[kind] || 5;
       var pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
       RESOURCE_PAGE_STATE[kind] = Math.min(Math.max(1, RESOURCE_PAGE_STATE[kind] || 1), pageCount);
       var page = RESOURCE_PAGE_STATE[kind];
@@ -13702,7 +13881,7 @@
       empty.hidden = filtered.length > 0;
       var pager = root.querySelector('[data-resource-pager="' + kind + '"]');
       if (!pager) { pager = document.createElement("div"); pager.className = "page-actions resource-pagination"; pager.setAttribute("data-resource-pager", kind); root.appendChild(pager); }
-      pager.innerHTML = '<span class="muted">共 ' + filtered.length + ' 条，第 ' + page + ' / ' + pageCount + ' 页</span><button class="btn" data-resource-page="' + kind + '" data-resource-page-value="prev"' + (page <= 1 ? " disabled" : "") + '>上一页</button><button class="btn" data-resource-page="' + kind + '" data-resource-page-value="next"' + (page >= pageCount ? " disabled" : "") + '>下一页</button>';
+      pager.innerHTML = '<span class="muted">每页</span><select class="pager-select" data-resource-page-size-kind="' + kind + '" aria-label="每页条数"><option value="10"' + (pageSize === 10 ? " selected" : "") + '>10</option><option value="20"' + (pageSize === 20 ? " selected" : "") + '>20</option><option value="50"' + (pageSize === 50 ? " selected" : "") + '>50</option><option value="100"' + (pageSize === 100 ? " selected" : "") + '>100</option></select><span class="muted">共 ' + filtered.length + ' 条，第 ' + page + ' / ' + pageCount + ' 页</span><button class="btn" data-resource-page="' + kind + '" data-resource-page-value="prev"' + (page <= 1 ? " disabled" : "") + '>上一页</button><button class="btn" data-resource-page="' + kind + '" data-resource-page-value="next"' + (page >= pageCount ? " disabled" : "") + '>下一页</button>';
     }
     function filterExamSites(reset, quiet) {
       var keywordInput = document.querySelector("[data-site-keyword]");
@@ -14745,6 +14924,12 @@
       var status = statusInput.value || "全部状态";
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var organizerScope = role === "organizer" ? organizerAllowedOrgNames() : null;
+      var judgeTbody = document.querySelector('[data-subview="judges"] table tbody');
+      if (judgeTbody) {
+        Array.from(judgeTbody.querySelectorAll("[data-judge-row]")).sort(function (a, b) {
+          return String(b.dataset.judgeAddedDate || "").localeCompare(String(a.dataset.judgeAddedDate || ""));
+        }).forEach(function (row) { judgeTbody.appendChild(row); });
+      }
       var scopedCount = 0;
       var visibleCount = 0;
       var employedCount = 0;
@@ -14803,11 +14988,13 @@
       var reason = drawerBody.querySelector("textarea");
       var reasonText = reason ? reason.value.trim() : "";
       if (!reasonText) { toast("请填写批量状态操作原因"); return; }
-      var rows = Array.from(document.querySelectorAll('[data-subview="judges"] [data-judge-row]')).filter(function (row) { return !row.hidden; });
+      var allRows = Array.from(document.querySelectorAll('[data-subview="judges"] [data-judge-row]')).filter(function (row) { return !row.hidden; });
+      var selectedRows = allRows.filter(function (row) { var checkbox = row.querySelector("[data-judge-select]"); return checkbox && checkbox.checked; });
+      var rows = selectedRows.length ? selectedRows : allRows;
       if (!rows.length) { toast("当前筛选结果没有可操作的考官"); return; }
       var failed = [];
       rows.forEach(function (row) {
-        if (target === "有效" && !judgeHasValidCertificate(row)) { failed.push(row.dataset.judgeName || "未命名考官"); return; }
+        if (target === "有效" && !judgeHasValidCertificate(row)) { failed.push({ name: row.dataset.judgeName || "未命名考官", reason: "无有效证书" }); return; }
         row.dataset.judgeStatus = target;
         resourceAudit("批量设置考官状态", row, reasonText, target);
       });
@@ -14816,7 +15003,11 @@
       normalizeJudgeLibraryRows();
       filterJudges(false, true);
       closeDrawer();
-      toast(failed.length ? "已更新 " + (rows.length - failed.length) + " 名考官，" + failed.length + " 名因无有效证书未更新" : "已批量设置 " + rows.length + " 名考官为" + target);
+      var successCount = rows.length - failed.length;
+      var failedText = failed.length
+        ? "失败 " + failed.length + " 人：" + failed.slice(0, 5).map(function (item) { return item.name + "（" + item.reason + "）"; }).join("；") + (failed.length > 5 ? " 等" : "")
+        : "";
+      toast(failed.length ? "成功 " + successCount + " 人；" + failedText : "已批量设置 " + rows.length + " 名考官为" + target);
     }
     function judgeDispatchBlockReason(row) {
       if (!row) return "未找到考官记录";
@@ -14878,11 +15069,94 @@
       toast("排期已提交，已自动切换到考官派遣阶段");
     }
     var JUDGE_CERTIFICATE_DATA = {
-      "420111********0328": [{ id: "CERT-2018-0328", number: "HB-KG-2018-0328", major: "钢琴", startDate: "2018-09-01", expireDate: "2027-12-31", status: "有效", addedAt: "2018-09-01" }],
-      "420106********0819": [{ id: "CERT-2023-0819", number: "HB-KG-2023-0819", major: "中国舞", startDate: "2023-08-21", expireDate: "2026-08-20", status: "有效", addedAt: "2023-08-21" }],
-      "420502********0626": []
+      "420111********0328": [{ id: "CERT-2018-0328", number: "HB-KG-2018-0328", major: "钢琴", startDate: "2018-09-01", expireDate: "2027-12-31", status: "有效", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE", changeType: "CREATE", addedAt: "2018-09-01" }],
+      "420106********0819": [{ id: "CERT-2023-0819", number: "HB-KG-2023-0819", major: "中国舞", startDate: "2023-08-21", expireDate: "2026-08-20", status: "有效", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE", changeType: "CREATE", addedAt: "2023-08-21" }],
+      "420502********0626": [{ id: "CERT-2026-0626", number: "HB-KG-2026-0626", major: "声乐", startDate: "2026-09-01", expireDate: "2028-08-31", status: "未生效", reviewStatus: "PENDING_REVIEW", validityStatus: "NOT_EFFECTIVE", changeType: "CREATE", addedAt: "2026-08-12" }]
     };
     var JUDGE_PHOTO_DATA = {};
+    var JUDGE_EXAMINER_ACCOUNT = {
+      "420111********0328": "420111********0328",
+      "420106********0819": "420106********0819",
+      "420502********0626": "13247185696"
+    };
+    function adminExaminerCertificateApi() {
+      var api = window.HBYXExamApi;
+      return api && typeof api.listExaminerCertificates === "function" ? api : null;
+    }
+    function judgeExaminerId(judgeId) {
+      return JUDGE_EXAMINER_ACCOUNT[judgeId] || judgeId;
+    }
+    function judgeCertificateErrorMessage(error) {
+      var code = error && error.code;
+      if (code === "VERSION_CONFLICT") return "证书已被更新，请刷新后重试";
+      if (code === "DUPLICATE_CERTIFICATE_NUMBER") return "证书编号已存在";
+      if (code === "CHANGE_REQUEST_EXISTS") return "该证书已有待审核的变更或注销申请";
+      if (code === "FORBIDDEN") return "当前账号无权执行该操作";
+      if (code === "STATUS_NOT_ALLOWED") return (error && error.message) || "该证书申请已处理，请刷新列表";
+      if (code === "VALIDATION_ERROR") return (error && error.message) || "请检查证书信息";
+      return (error && error.message) || "证书操作失败，请重试";
+    }
+    function applyJudgeCertificateViews(judgeId, views) {
+      JUDGE_CERTIFICATE_DATA[judgeId] = (views || []).slice();
+      var table = document.querySelector('[data-subview="judges"] table');
+      if (table) table.dataset.judgeNormalized = "false";
+      normalizeJudgeLibraryRows();
+      filterJudges(false, true);
+      return JUDGE_CERTIFICATE_DATA[judgeId];
+    }
+    function refreshJudgeCertificates(judgeId) {
+      var api = adminExaminerCertificateApi();
+      if (!api) return Promise.resolve(JUDGE_CERTIFICATE_DATA[judgeId] || []);
+      return api.listExaminerCertificates({ examinerId: judgeExaminerId(judgeId) }).then(function (views) {
+        return applyJudgeCertificateViews(judgeId, views);
+      }).catch(function () {
+        return JUDGE_CERTIFICATE_DATA[judgeId] || [];
+      });
+    }
+    function seedJudgeCertificates(judgeId, examinerId) {
+      var api = adminExaminerCertificateApi();
+      var seeds = JUDGE_CERTIFICATE_DATA[judgeId] || [];
+      if (!api || !seeds.length) return Promise.resolve(seeds);
+      return seeds.reduce(function (chain, seed) {
+        return chain.then(function () {
+          return api.createExaminerCertificate({
+            examinerId: examinerId,
+            actorRole: "platform_admin",
+            actorId: "platform-demo",
+            certificateNumber: seed.number,
+            certificateName: seed.name || "社会艺术水平考级考官证（" + (seed.major || "") + "）",
+            certificateMajor: seed.major,
+            validFromDate: String(seed.startDate || "").replace(/-/g, ""),
+            validUntilDate: String(seed.expireDate || "").replace(/-/g, "")
+          }).then(function (response) {
+            if (seed.reviewStatus !== "APPROVED") return null;
+            return api.reviewExaminerCertificate(response.data.examinerCertificateId, {
+              decision: "APPROVE",
+              actorRole: "platform_admin",
+              reviewerId: "platform-demo",
+              objectVersion: response.data.objectVersion
+            });
+          });
+        });
+      }, Promise.resolve()).then(function () {
+        return api.listExaminerCertificates({ examinerId: examinerId });
+      });
+    }
+    function hydrateJudgeCertificates() {
+      var api = adminExaminerCertificateApi();
+      if (!api) return Promise.resolve();
+      return Object.keys(JUDGE_CERTIFICATE_DATA).reduce(function (chain, judgeId) {
+        return chain.then(function () {
+          var examinerId = judgeExaminerId(judgeId);
+          return api.listExaminerCertificates({ examinerId: examinerId }).then(function (views) {
+            if (views.length) return views;
+            return seedJudgeCertificates(judgeId, examinerId);
+          }).then(function (views) {
+            applyJudgeCertificateViews(judgeId, views);
+          }).catch(function () { /* keep the demo seed when the contract is unavailable */ });
+        });
+      }, Promise.resolve());
+    }
     var JUDGE_DISPATCH_DATA = {
       "420111********0328": [{ plan: "2026下半年 · 武汉", site: "湖北艺术职业学院光谷校区", major: "钢琴", examDate: "2026-08-18", session: "上午场" }],
       "420106********0819": [{ plan: "2026下半年 · 武汉", site: "湖北艺术职业学院光谷校区", major: "中国舞", examDate: "2026-08-20", session: "下午场" }],
@@ -14894,6 +15168,80 @@
     function judgeStatusTag(status) {
       var display = judgeDisplayStatus(status);
       return statusTagHtml(display);
+    }
+    function judgeCertificateReviewLabel(reviewStatus) {
+      if (reviewStatus === "PENDING_REVIEW") return "待审核";
+      if (reviewStatus === "APPROVED") return "已通过";
+      if (reviewStatus === "REJECTED") return "已驳回";
+      if (reviewStatus === "WITHDRAWN") return "已撤回";
+      if (reviewStatus === "DRAFT") return "草稿";
+      return "已通过";
+    }
+    function judgeCertificateValidityLabel(certificate) {
+      if (!certificate) return "-";
+      if (certificate.changeType === "DELETE" && certificate.reviewStatus === "PENDING_REVIEW") return "待删除";
+      if (certificate.validityStatus === "EFFECTIVE") return "有效";
+      if (certificate.validityStatus === "REVOKED") return "已撤销";
+      if (certificate.validityStatus === "NOT_EFFECTIVE") return "未生效";
+      if (certificate.status === "有效") return "有效";
+      if (certificate.status === "失效") return "已撤销";
+      return "未生效";
+    }
+    function judgeCertificateStateTag(label) {
+      var tagClass = label === "有效" || label === "已通过" ? "green"
+        : label === "已驳回" || label === "已撤销" || label === "待删除" ? "red"
+        : label === "待审核" ? "orange"
+        : "blue";
+      return '<span class="tag ' + tagClass + '">' + escapeHtml(label) + '</span>';
+    }
+    function judgeCertificateChangeTypeLabel(changeType) {
+      if (changeType === "DELETE") return "注销";
+      if (changeType === "UPDATE") return "修改";
+      return "新增";
+    }
+    function judgeCertificateActionHtml(certificate) {
+      if (certificate.reviewStatus === "PENDING_REVIEW") {
+        return '<button class="btn link primary-text" data-judge-cert-action="approve" data-cert-id="' + escapeHtml(certificate.id) + '">审核通过</button><button class="btn link danger-text" data-judge-cert-action="reject" data-cert-id="' + escapeHtml(certificate.id) + '">驳回</button>';
+      }
+      return '<button class="btn link" data-judge-cert-action="edit" data-cert-id="' + escapeHtml(certificate.id) + '">修改</button><button class="btn link danger-text" data-judge-cert-action="delete" data-cert-id="' + escapeHtml(certificate.id) + '">删除</button>';
+    }
+    function judgeCertificateRowHtml(certificate) {
+      return '<tr><td>' + escapeHtml(certificate.number) + '</td><td>' + escapeHtml(certificate.major) + '</td><td>' + escapeHtml(certificate.startDate) + '</td><td>' + escapeHtml(certificate.expireDate) + '</td><td>' + judgeCertificateStateTag(judgeCertificateValidityLabel(certificate)) + '</td><td>' + judgeCertificateStateTag(judgeCertificateReviewLabel(certificate.reviewStatus)) + '</td><td>' + escapeHtml(judgeCertificateChangeTypeLabel(certificate.changeType)) + '</td><td>' + escapeHtml(certificate.addedAt) + '</td><td><div class="operation">' + judgeCertificateActionHtml(certificate) + '</div></td></tr>';
+    }
+    function renderJudgeCertificateReview() {
+      var body = document.querySelector("[data-judge-cert-review-body]");
+      var countNode = document.querySelector("[data-judge-cert-review-count]");
+      var tabCountNode = document.querySelector("[data-judge-cert-review-tab-count]");
+      var metricCountNode = document.querySelector("[data-judge-cert-pending-count]");
+      if (!body) return;
+      var judgeRows = document.querySelectorAll('[data-subview="judges"] [data-judge-row]');
+      var pending = [];
+      Object.keys(JUDGE_CERTIFICATE_DATA).forEach(function (judgeId) {
+        var judgeRow = Array.prototype.slice.call(judgeRows).find(function (row) { return row.dataset.judgeId === judgeId; });
+        (JUDGE_CERTIFICATE_DATA[judgeId] || []).forEach(function (cert) {
+          if (cert.reviewStatus === "PENDING_REVIEW") {
+            pending.push({ judgeId: judgeId, judgeName: judgeRow ? judgeRow.dataset.judgeName : judgeId, certificate: cert });
+          }
+        });
+      });
+      var rows = pending.map(function (item) {
+        var cert = item.certificate;
+        return '<tr><td><strong>' + escapeHtml(item.judgeName) + '</strong></td><td>' + escapeHtml(item.judgeId) + '</td><td>' + escapeHtml(cert.number) + '</td><td>' + escapeHtml(cert.major) + '</td><td>' + escapeHtml(cert.startDate) + ' 至 ' + escapeHtml(cert.expireDate) + '</td><td>' + escapeHtml(judgeCertificateChangeTypeLabel(cert.changeType)) + '</td><td>' + escapeHtml(cert.submittedAt || cert.addedAt || "-") + '</td><td>' + judgeCertificateStateTag(judgeCertificateReviewLabel(cert.reviewStatus)) + '</td><td>' + escapeHtml(cert.rejectReason || "-") + '</td><td><div class="operation"><button class="btn link primary-text" data-judge-cert-review-action="approve" data-judge-id="' + escapeHtml(item.judgeId) + '" data-cert-id="' + escapeHtml(cert.id) + '">审核通过</button><button class="btn link danger-text" data-judge-cert-review-action="reject" data-judge-id="' + escapeHtml(item.judgeId) + '" data-cert-id="' + escapeHtml(cert.id) + '">驳回</button></div></td></tr>';
+      }).join("");
+      body.innerHTML = rows || '<tr><td colspan="10"><div class="empty-state">暂无待审核证书</div></td></tr>';
+      if (countNode) countNode.textContent = String(pending.length);
+      if (tabCountNode) tabCountNode.textContent = pending.length ? String(pending.length) : "";
+      if (metricCountNode) metricCountNode.textContent = String(pending.length);
+    }
+    function switchJudgePanel(panel) {
+      document.querySelectorAll('[data-judge-panel-tab]').forEach(function (button) {
+        button.classList.toggle("active", button.getAttribute("data-judge-panel-tab") === panel);
+        button.setAttribute("aria-selected", button.getAttribute("data-judge-panel-tab") === panel ? "true" : "false");
+      });
+      document.querySelectorAll('[data-judge-panel="library"], [data-judge-panel="cert-review"]').forEach(function (panelNode) {
+        panelNode.hidden = panelNode.getAttribute("data-judge-panel") !== panel;
+      });
+      if (panel === "cert-review") renderJudgeCertificateReview();
     }
     function judgeCertificateMajors(row) {
       var majors = judgeCertificateList(row).map(function (cert) { return cert.major; });
@@ -14911,7 +15259,14 @@
       return (JUDGE_DISPATCH_DATA[id] || []).slice();
     }
     function judgeHasValidCertificate(row) {
-      return judgeCertificateList(row).some(function (cert) { return cert.status === "有效" && (!cert.expireDate || cert.expireDate >= new Date().toISOString().slice(0, 10)); });
+      return judgeCertificateList(row).some(function (cert) {
+        if (typeof cert.dispatchEligible === "boolean") return cert.dispatchEligible;
+        var approved = cert.reviewStatus === "APPROVED";
+        var effective = cert.validityStatus === "EFFECTIVE" || (!cert.validityStatus && cert.status === "有效");
+        var notPendingDelete = cert.changeType !== "DELETE";
+        var inDate = !cert.expireDate || cert.expireDate >= new Date().toISOString().slice(0, 10);
+        return approved && effective && notPendingDelete && inDate;
+      });
     }
     function judgeHasDispatchRecords(row) {
       return judgeDispatchList(row).length > 0;
@@ -14928,7 +15283,7 @@
       var table = root && root.querySelector("table");
       if (!table) return;
       var header = table.tHead && table.tHead.rows[0];
-      if (header) header.innerHTML = "<th>考官姓名</th><th>证件号</th><th>专业</th><th>所持证书量</th><th>状态</th><th>添加日期</th><th>操作</th>";
+      if (header) header.innerHTML = '<th class="sticky-left-cell" style="width:44px"><input type="checkbox" data-judge-select-all aria-label="全选考官"></th><th>考官姓名</th><th>证件号</th><th>专业</th><th>所持证书量</th><th>状态</th><th>添加日期</th><th>操作</th>';
       table.querySelectorAll("tbody [data-judge-row]").forEach(function (row) {
         var id = row.dataset.judgeId;
         row.dataset.judgeStatus = judgeDisplayStatus(row.dataset.judgeStatus);
@@ -14945,12 +15300,12 @@
         var majors = judgeCertificateMajors(row);
         row.dataset.judgeMajor = majors.join("、");
         var dispatchButton = '<button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button>';
-        var certButton = '<button class="btn link" data-drawer="judge-cert">证书</button>';
         var target = row.dataset.judgeStatus === "有效" ? "无效" : "有效";
         var statusAction = '<button class="btn link" data-judge-status-action="' + target + '" data-platform-only>' + (target === "有效" ? "设为有效" : "设为无效") + '</button>';
         var deleteButton = judgeHasDispatchRecords(row) ? '<button class="btn link disabled" data-toast="存在派遣记录，不能删除">删除</button>' : '<button class="btn link danger-text" data-drawer="judge-delete">删除</button>';
-        row.innerHTML = '<td><strong>' + escapeHtml(row.dataset.judgeName) + '</strong></td><td>' + escapeHtml(id) + '</td><td>' + escapeHtml(row.dataset.judgeMajor || "-") + '</td><td><button class="btn link" data-drawer="judge-cert" title="查看证书列表">' + certs.length + '</button></td><td>' + judgeStatusTag(row.dataset.judgeStatus) + '</td><td>' + escapeHtml(row.dataset.judgeAddedDate) + '</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button>' + certButton + dispatchButton + statusAction + deleteButton + '</div></td>';
+        row.innerHTML = '<td><input type="checkbox" data-judge-select aria-label="选择考官"></td><td><strong>' + escapeHtml(row.dataset.judgeName) + '</strong></td><td>' + escapeHtml(id) + '</td><td>' + escapeHtml(row.dataset.judgeMajor || "-") + '</td><td><button class="btn link" data-drawer="judge-cert" title="查看证书列表">' + certs.length + '</button></td><td>' + judgeStatusTag(row.dataset.judgeStatus) + '</td><td>' + escapeHtml(row.dataset.judgeAddedDate) + '</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button>' + dispatchButton + statusAction + deleteButton + '</div></td>';
       });
+      renderJudgeCertificateReview();
       table.dataset.judgeNormalized = "true";
     }
     function exportJudgeLibrary() {
@@ -15103,15 +15458,15 @@
       var row = window.__activeJudgeRow;
       var judge = currentJudgeSnapshot();
       var certs = judgeCertificateList(row);
-      var rows = certs.map(function (cert) { return '<tr><td>' + escapeHtml(cert.number) + '</td><td>' + escapeHtml(cert.major) + '</td><td>' + escapeHtml(cert.startDate) + '</td><td>' + escapeHtml(cert.expireDate) + '</td><td>' + statusTagHtml(cert.status) + '</td><td>' + escapeHtml(cert.addedAt) + '</td><td><button class="btn link" data-judge-cert-action="edit" data-cert-id="' + escapeHtml(cert.id) + '">修改</button><button class="btn link danger-text" data-judge-cert-action="delete" data-cert-id="' + escapeHtml(cert.id) + '">删除</button></td></tr>'; }).join("");
-      return '<div class="batch-context-banner"><strong>' + escapeHtml(judge.name) + '</strong><span>只有存在有效证书的考官才可进入派遣选择器</span></div><div class="table-card"><div class="table-tools"><h2 class="table-title">证书列表</h2><span class="tag blue">共' + certs.length + '张</span></div><div class="table-wrap"><table><thead><tr><th>证书编号</th><th>专业</th><th>开始日期</th><th>失效日期</th><th>状态</th><th>添加时间</th><th>操作</th></tr></thead><tbody>' + (rows || '<tr><td colspan="7"><div class="empty-state">暂无证书，请新增证书后再参与派遣。</div></td></tr>') + '</tbody></table></div></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">新增/修改证书</h2><span class="muted">同一考官可维护多张不同专业证书</span></div><div style="padding:16px"><div class="field-row-2"><div class="field"><label>证书编号 *</label><input class="input" data-judge-cert-number></div><div class="field"><label>专业 *</label><select class="select" data-judge-cert-major>' + professionalOptionHtml(judge.major) + '</select></div></div><div class="field-row-2"><div class="field"><label>开始日期 *</label><input class="input" type="date" data-judge-cert-start></div><div class="field"><label>失效日期 *</label><input class="input" type="date" data-judge-cert-expire></div></div><input type="hidden" data-judge-cert-edit-id></div></div>';
+      var rows = certs.map(judgeCertificateRowHtml).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(judge.name) + '</strong><span>只有存在有效证书的考官才可进入派遣选择器</span></div><div class="table-card"><div class="table-tools"><h2 class="table-title">证书列表</h2><span class="tag blue">共' + certs.length + '张</span></div><div class="table-wrap"><table><thead><tr><th>证书编号</th><th>专业</th><th>开始日期</th><th>失效日期</th><th>有效状态</th><th>审核状态</th><th>变更类型</th><th>添加时间</th><th>操作</th></tr></thead><tbody>' + (rows || '<tr><td colspan="9"><div class="empty-state">暂无证书，请新增证书后再参与派遣。</div></td></tr>') + '</tbody></table></div></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">新增/修改证书</h2><span class="muted">同一考官可维护多张不同专业证书</span></div><div style="padding:16px"><div class="field-row-2"><div class="field"><label>证书编号 *</label><input class="input" data-judge-cert-number></div><div class="field"><label>专业 *</label><select class="select" data-judge-cert-major>' + professionalOptionHtml(judge.major) + '</select></div></div><div class="field-row-2"><div class="field"><label>开始日期 *</label><input class="input" type="date" data-judge-cert-start></div><div class="field"><label>失效日期 *</label><input class="input" type="date" data-judge-cert-expire></div></div><input type="hidden" data-judge-cert-edit-id></div></div>';
     }
     function judgeCertificateListBodyHtml() {
       var row = window.__activeJudgeRow;
       var judge = currentJudgeSnapshot();
       var certs = judgeCertificateList(row);
-      var rows = certs.map(function (cert) { return '<tr><td>' + escapeHtml(cert.number) + '</td><td>' + escapeHtml(cert.major) + '</td><td>' + escapeHtml(cert.startDate) + '</td><td>' + escapeHtml(cert.expireDate) + '</td><td>' + statusTagHtml(cert.status) + '</td><td>' + escapeHtml(cert.addedAt) + '</td><td><button class="btn link" data-judge-cert-action="edit" data-cert-id="' + escapeHtml(cert.id) + '">修改</button><button class="btn link danger-text" data-judge-cert-action="delete" data-cert-id="' + escapeHtml(cert.id) + '">删除</button></td></tr>'; }).join("");
-      return '<div class="batch-context-banner"><strong>' + escapeHtml(judge.name) + '</strong><span>只有存在有效证书的考官才可进入派遣选择器</span></div><div class="table-card"><div class="table-tools"><h2 class="table-title">证书列表</h2><div class="page-actions"><span class="tag blue">共' + certs.length + '张</span><button class="btn primary" data-drawer="judge-cert-form" data-cert-id="">新增证书</button></div></div><div class="table-wrap"><table><thead><tr><th>证书编号</th><th>专业</th><th>开始日期</th><th>失效日期</th><th>状态</th><th>添加时间</th><th>操作</th></tr></thead><tbody>' + (rows || '<tr><td colspan="7"><div class="empty-state">暂无证书，请新增证书后再参与派遣。</div></td></tr>') + '</tbody></table></div></div>';
+      var rows = certs.map(judgeCertificateRowHtml).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(judge.name) + '</strong><span>只有存在有效证书的考官才可进入派遣选择器</span></div><div class="table-card"><div class="table-tools"><h2 class="table-title">证书列表</h2><div class="page-actions"><span class="tag blue">共' + certs.length + '张</span><button class="btn primary" data-drawer="judge-cert-form" data-cert-id="">新增证书</button></div></div><div class="table-wrap"><table><thead><tr><th>证书编号</th><th>专业</th><th>开始日期</th><th>失效日期</th><th>有效状态</th><th>审核状态</th><th>变更类型</th><th>添加时间</th><th>操作</th></tr></thead><tbody>' + (rows || '<tr><td colspan="9"><div class="empty-state">暂无证书，请新增证书后再参与派遣。</div></td></tr>') + '</tbody></table></div></div>';
     }
     function judgeCertificateFormBodyHtml() {
       var judge = currentJudgeSnapshot();
@@ -18223,6 +18578,14 @@
         renderResourcePagination(pageKind);
         return;
       }
+      var resourcePageSize = event.target.closest("[data-resource-page-size-kind]");
+      if (resourcePageSize) {
+        var sizeKind = resourcePageSize.getAttribute("data-resource-page-size-kind");
+        RESOURCE_PAGE_SIZE[sizeKind] = Number(resourcePageSize.value) || 20;
+        RESOURCE_PAGE_STATE[sizeKind] = 1;
+        renderResourcePagination(sizeKind);
+        return;
+      }
       var siteConfirmAction = event.target.closest("[data-site-confirm-action]");
       if (siteConfirmAction) { requestResourceStatusChange("site-confirm", siteConfirmAction); return; }
       var siteStatusAction = event.target.closest("[data-site-status-action]");
@@ -19163,12 +19526,35 @@
       if (event.target.closest("[data-unit-review-approve-confirm]")) { approveUnitReviewRow(window.__activeUnitReviewRow); closeDrawer(); return; }
       if (event.target.closest("[data-unit-review-reject-confirm]")) { rejectUnitReviewRow(window.__activeUnitReviewRow); return; }
       if (event.target.closest("[data-resource-delete-confirm]")) { confirmResourceDelete(); return; }
+      var judgePanelTab = event.target.closest("[data-judge-panel-tab]");
+      if (judgePanelTab) { switchJudgePanel(judgePanelTab.getAttribute("data-judge-panel-tab")); return; }
+      var judgeSelectAll = event.target.closest("[data-judge-select-all]");
+      if (judgeSelectAll) {
+        document.querySelectorAll('[data-subview="judges"] [data-judge-select]').forEach(function (checkbox) { checkbox.checked = judgeSelectAll.checked; });
+        return;
+      }
+      var judgeCertReviewAction = event.target.closest("[data-judge-cert-review-action]");
+      if (judgeCertReviewAction) {
+        var reviewJudgeId = judgeCertReviewAction.getAttribute("data-judge-id");
+        var reviewCertId = judgeCertReviewAction.getAttribute("data-cert-id");
+        var reviewJudgeRow = Array.prototype.slice.call(document.querySelectorAll('[data-judge-row]')).find(function (row) { return row.dataset.judgeId === reviewJudgeId; });
+        if (reviewJudgeRow) window.__activeJudgeRow = reviewJudgeRow;
+        var reviewActionType = judgeCertReviewAction.getAttribute("data-judge-cert-review-action");
+        if (reviewActionType === "approve") approveJudgeCertificate(reviewCertId, true);
+        if (reviewActionType === "reject") rejectJudgeCertificate(reviewCertId, true);
+        return;
+      }
       var judgeCertAction = event.target.closest("[data-judge-cert-action]");
       if (judgeCertAction) {
         var certList = JUDGE_CERTIFICATE_DATA[window.__activeJudgeRow && window.__activeJudgeRow.dataset.judgeId] || [];
         var certId = judgeCertAction.getAttribute("data-cert-id");
         var certItem = certList.find(function (item) { return item.id === certId; });
-        if (judgeCertAction.getAttribute("data-judge-cert-action") === "delete") {
+        var judgeCertActionType = judgeCertAction.getAttribute("data-judge-cert-action");
+        if (judgeCertActionType === "approve") {
+          approveJudgeCertificate(certId);
+        } else if (judgeCertActionType === "reject") {
+          rejectJudgeCertificate(certId);
+        } else if (judgeCertActionType === "delete") {
           if (window.confirm("确认删除这张考官证书吗？")) {
             JUDGE_CERTIFICATE_DATA[window.__activeJudgeRow.dataset.judgeId] = certList.filter(function (item) { return item.id !== certId; });
             toast("考官证书已删除");
@@ -23162,6 +23548,7 @@
     renderResourceOrgTrees();
     syncResourceStatusModel();
     normalizeJudgeLibraryRows();
+    hydrateJudgeCertificates();
     enhanceJudgeBatchStatusActions();
     normalizeRoomLegacyCapacityFields();
     syncRoomDescriptionCells();

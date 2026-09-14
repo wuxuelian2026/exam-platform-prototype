@@ -2,6 +2,28 @@
   "use strict";
 
   var CONTRACT_KEY = "hbyx_exam_contract_v1";
+  var EXAMINER_CERTIFICATE_CONTRACT = {
+    contractId: "EXAM-CERT-REVIEW-DOWNSHIFT-20260911",
+    reviewDomain: "examinerCertificateReview",
+    validityDomain: "examinerCertificateValidity",
+    reviewStatuses: ["DRAFT", "PENDING_REVIEW", "APPROVED", "REJECTED", "WITHDRAWN"],
+    validityStatuses: ["NOT_EFFECTIVE", "EFFECTIVE", "REVOKED"],
+    changeTypes: ["CREATE", "UPDATE", "DELETE"],
+    endpoints: [
+      "GET /api/examiner-certificates",
+      "POST /api/examiner-certificates",
+      "POST /api/examiner-certificates/{examinerCertificateId}/change-request",
+      "POST /api/examiner-certificates/{examinerCertificateId}/withdraw",
+      "GET /api/examiner-certificates/{examinerCertificateId}/reviews",
+      "POST /api/examiner-certificates/{examinerCertificateId}/review",
+      "GET /api/examiner-certificates/dispatch-eligibility"
+    ]
+  };
+  var EXAMINER_CERTIFICATE_VALIDITY_LABEL = {
+    EFFECTIVE: "有效",
+    REVOKED: "已撤销",
+    NOT_EFFECTIVE: "未生效"
+  };
   var COLLECTION_KEYS = {
     brochures: "brochureId",
     batches: "batchId",
@@ -10,14 +32,23 @@
     tickets: "ticketId",
     scoreTasks: "scoreTaskId",
     scores: "scoreId",
-    certificates: "certificateId"
+    certificates: "certificateId",
+    examinerCertificates: "examinerCertificateId"
   };
   var API_BASE = String(global.HBYX_EXAM_API_BASE_URL || "").replace(/\/$/, "");
   var REQUEST_TIMEOUT = Number(global.HBYX_EXAM_API_TIMEOUT || 12000);
   var mock = !API_BASE;
+  var MOCK_SNAPSHOT_KEY = CONTRACT_KEY + ":mock-snapshot";
   var mockRequests = Object.create(null);
   var listeners = [];
   var snapshot = emptyContract();
+  var mockStorage = (function () {
+    try {
+      return global.localStorage || null;
+    } catch (error) {
+      return null;
+    }
+  })();
   var channel = typeof global.BroadcastChannel === "function" ? new global.BroadcastChannel("hbyx_exam_api_v1") : null;
 
   function emptyContract() {
@@ -33,12 +64,35 @@
       scoreTasks: [],
       scores: [],
       certificates: [],
+      examinerCertificates: [],
+      auditLogs: [],
+      notificationEvents: [],
       events: []
     };
   }
 
   function clone(value) {
     return value == null ? value : JSON.parse(JSON.stringify(value));
+  }
+
+  function restoreMockSnapshot() {
+    if (!mock || !mockStorage) return;
+    try {
+      var raw = mockStorage.getItem(MOCK_SNAPSHOT_KEY);
+      if (!raw) return;
+      snapshot = Object.assign(emptyContract(), JSON.parse(raw));
+    } catch (error) {
+      snapshot = emptyContract();
+    }
+  }
+
+  function persistMockSnapshot() {
+    if (!mock || !mockStorage) return;
+    try {
+      mockStorage.setItem(MOCK_SNAPSHOT_KEY, JSON.stringify(snapshot));
+    } catch (error) {
+      /* storage may be unavailable or full; the mock keeps working in memory */
+    }
   }
 
   function compactDateTimeToMs(date, time) {
@@ -111,6 +165,171 @@
     return (prefix || "exam") + "-" + seed;
   }
 
+  function parseQueryString(path) {
+    var query = {};
+    var text = String(path || "");
+    var index = text.indexOf("?");
+    if (index < 0) return query;
+    text.slice(index + 1).split("&").forEach(function (pair) {
+      if (!pair) return;
+      var parts = pair.split("=");
+      var key = decodeURIComponent(parts[0] || "");
+      if (!key) return;
+      query[key] = decodeURIComponent((parts.slice(1).join("=") || "").replace(/\+/g, " "));
+    });
+    return query;
+  }
+
+  function compactDate(value) {
+    var digits = String(value == null ? "" : value).replace(/[^0-9]/g, "");
+    return digits.length === 8 ? digits : "";
+  }
+
+  function isoDate(value) {
+    var digits = compactDate(value);
+    return digits ? digits.slice(0, 4) + "-" + digits.slice(4, 6) + "-" + digits.slice(6, 8) : "";
+  }
+
+  function examinerCertificateRows() {
+    if (!Array.isArray(snapshot.examinerCertificates)) snapshot.examinerCertificates = [];
+    return snapshot.examinerCertificates;
+  }
+
+  function examinerCertificateError(code, message, status, requestId, extra) {
+    var error = new Error(message);
+    error.status = status || 400;
+    error.code = code;
+    error.requestId = requestId;
+    error.retryable = Number(status || 400) >= 500;
+    if (extra) Object.assign(error, extra);
+    return error;
+  }
+
+  function examinerCertificateFind(id) {
+    if (!id) return null;
+    return examinerCertificateRows().filter(function (row) {
+      return row && row.examinerCertificateId === id;
+    })[0] || null;
+  }
+
+  function examinerCertificatePendingDelete(certificateId) {
+    return examinerCertificateRows().some(function (row) {
+      return row
+        && row.changeType === "DELETE"
+        && row.certificateReviewStatusCode === "PENDING_REVIEW"
+        && row.replacedCertificateId === certificateId;
+    });
+  }
+
+  function examinerCertificateInValidity(row, serverDate) {
+    if (!row) return false;
+    var from = compactDate(row.validFromDate);
+    var until = compactDate(row.validUntilDate);
+    if (!from || !until) return true;
+    return from <= serverDate && serverDate <= until;
+  }
+
+  function examinerCertificateIsDispatchEligible(row, serverDate) {
+    if (!row) return false;
+    return row.certificateReviewStatusCode === "APPROVED"
+      && row.certificateValidityStatusCode === "EFFECTIVE"
+      && examinerCertificateInValidity(row, serverDate)
+      && !examinerCertificatePendingDelete(row.examinerCertificateId);
+  }
+
+  function examinerCertificateView(row) {
+    if (!row) return null;
+    var clock = mockBusinessClock();
+    var pendingDelete = examinerCertificatePendingDelete(row.examinerCertificateId);
+    var inValidity = examinerCertificateInValidity(row, clock.serverDate);
+    var view = clone(row);
+    view.id = row.examinerCertificateId;
+    view.number = row.certificateNumber;
+    view.name = row.certificateName;
+    view.major = row.certificateMajor || "";
+    view.startDate = isoDate(row.validFromDate);
+    view.endDate = isoDate(row.validUntilDate);
+    view.expireDate = isoDate(row.validUntilDate);
+    view.reviewStatus = row.certificateReviewStatusCode;
+    view.validityStatus = row.certificateValidityStatusCode;
+    view.status = EXAMINER_CERTIFICATE_VALIDITY_LABEL[row.certificateValidityStatusCode] || "未生效";
+    view.addedAt = isoDate(row.createdDate);
+    view.pendingDelete = pendingDelete;
+    view.inValidityPeriod = inValidity;
+    view.dispatchEligible = examinerCertificateIsDispatchEligible(row, clock.serverDate);
+    return view;
+  }
+
+  function examinerCertificateDuplicate(number, excludeId) {
+    return examinerCertificateRows().some(function (row) {
+      return row
+        && row.examinerCertificateId !== excludeId
+        && row.certificateNumber === number
+        && ["REJECTED", "WITHDRAWN"].indexOf(row.certificateReviewStatusCode) < 0
+        && !row.replacementCertificateId;
+    });
+  }
+
+  function examinerCertificateAudit(action, row, actor, detail) {
+    var clock = mockBusinessClock();
+    if (!Array.isArray(snapshot.auditLogs)) snapshot.auditLogs = [];
+    var entry = {
+      auditId: createRequestId("audit"),
+      action: action,
+      businessObjectType: "EXAMINER_CERTIFICATE",
+      businessObjectId: row.examinerCertificateId,
+      examinerId: row.examinerId,
+      actorRole: (actor && actor.role) || "",
+      actorId: (actor && actor.id) || "",
+      detail: detail || "",
+      operationDate: clock.serverDate,
+      operationTime: clock.serverTime
+    };
+    snapshot.auditLogs.push(entry);
+    if (snapshot.auditLogs.length > 300) snapshot.auditLogs.splice(0, snapshot.auditLogs.length - 300);
+    row.auditEventIds = (row.auditEventIds || []).concat([entry.auditId]);
+    return entry;
+  }
+
+  function examinerCertificateNotify(eventType, row, templateVersion) {
+    var clock = mockBusinessClock();
+    if (!Array.isArray(snapshot.notificationEvents)) snapshot.notificationEvents = [];
+    var entry = {
+      notificationEventId: createRequestId("notify"),
+      eventType: eventType,
+      businessObjectType: "EXAMINER_CERTIFICATE",
+      businessObjectId: row.examinerCertificateId,
+      examinerId: row.examinerId,
+      templateVersion: templateVersion || "EXAMINER_CERT_REVIEW_V1",
+      recipientSnapshot: { role: "examiner", examinerId: row.examinerId },
+      channel: "IN_APP",
+      status: "PENDING",
+      retryCount: 0,
+      deliveryAttempts: [{ channel: "IN_APP", status: "PENDING", attemptedDate: clock.serverDate, attemptedTime: clock.serverTime }],
+      createdDate: clock.serverDate,
+      createdTime: clock.serverTime
+    };
+    snapshot.notificationEvents.push(entry);
+    if (snapshot.notificationEvents.length > 300) snapshot.notificationEvents.splice(0, snapshot.notificationEvents.length - 300);
+    row.notificationEventIds = (row.notificationEventIds || []).concat([entry.notificationEventId]);
+    return entry;
+  }
+
+  function examinerCertificateReviewEntry(row, decision, actor, reason, requestId) {
+    var clock = mockBusinessClock();
+    return {
+      reviewRequestId: row.reviewRequestId || createRequestId("review"),
+      objectVersion: row.objectVersion,
+      decision: decision,
+      reviewerId: (actor && actor.id) || "",
+      reviewerRole: (actor && actor.role) || "",
+      reason: reason || "",
+      reviewerRequestId: requestId || "",
+      reviewedDate: clock.serverDate,
+      reviewedTime: clock.serverTime
+    };
+  }
+
   function errorFromResponse(response, body, requestId) {
     var error = new Error((body && body.message) || response.statusText || "接口请求失败");
     error.status = response.status;
@@ -180,7 +399,289 @@
     snapshot.events = (snapshot.events || []).slice(-100);
     listeners.slice().forEach(function (listener) { listener(clone(snapshot)); });
     if (channel) channel.postMessage({ type: "contract-updated", contract: clone(snapshot) });
+    persistMockSnapshot();
     return clone(snapshot);
+  }
+
+  function mockExaminerCertificateRequest(path, method, body, requestId) {
+    var query = parseQueryString(path);
+    var segments = String(path || "").split("?")[0].split("/").filter(function (segment) { return segment; });
+    var certificateId = segments[1] || "";
+    var action = segments[2] || "";
+    var rows = examinerCertificateRows();
+    var clock = mockBusinessClock();
+
+    function succeed(data) {
+      var result = { data: data, requestId: requestId, contractVersion: EXAMINER_CERTIFICATE_CONTRACT.contractId };
+      mockRequests[requestId] = result;
+      publish(snapshot);
+      return Promise.resolve(clone(result));
+    }
+
+    function fail(error) {
+      mockRequests[requestId] = {
+        error: true,
+        status: error.status,
+        code: error.code,
+        message: error.message,
+        requestId: requestId,
+        retryable: !!error.retryable,
+        currentVersion: error.currentVersion,
+        currentStatus: error.currentStatus
+      };
+      return Promise.reject(error);
+    }
+
+    function operator(body, fallback) {
+      return {
+        id: String((body && (body.actorId || body.examinerId || body.reviewerId)) || ""),
+        role: String((body && body.actorRole) || fallback || "")
+      };
+    }
+
+    if (method === "GET" && certificateId === "dispatch-eligibility") {
+      var examinerIdForEligibility = String(query.examinerId || "").trim();
+      if (!examinerIdForEligibility) return fail(examinerCertificateError("VALIDATION_ERROR", "examinerId is required", 400, requestId));
+      var eligibleRow = rows.filter(function (row) {
+        return row.examinerId === examinerIdForEligibility && examinerCertificateIsDispatchEligible(row, clock.serverDate);
+      })[0] || null;
+      return succeed({
+        examinerId: examinerIdForEligibility,
+        eligible: !!eligibleRow,
+        serverDate: clock.serverDate,
+        reason: eligibleRow ? "" : "没有审核通过且在有效期内的证书",
+        examinerCertificateId: eligibleRow ? eligibleRow.examinerCertificateId : "",
+        certificateNumber: eligibleRow ? eligibleRow.certificateNumber : ""
+      });
+    }
+
+    if (method === "GET" && action === "reviews") {
+      var reviewRow = examinerCertificateFind(certificateId);
+      if (!reviewRow) return fail(examinerCertificateError("NOT_FOUND", "证书不存在", 404, requestId));
+      return succeed({
+        examinerCertificateId: reviewRow.examinerCertificateId,
+        examinerId: reviewRow.examinerId,
+        certificateReviewStatusCode: reviewRow.certificateReviewStatusCode,
+        certificateValidityStatusCode: reviewRow.certificateValidityStatusCode,
+        objectVersion: reviewRow.objectVersion,
+        reviewHistory: clone(reviewRow.reviewHistory || []),
+        auditEventIds: clone(reviewRow.auditEventIds || []),
+        notificationEventIds: clone(reviewRow.notificationEventIds || [])
+      });
+    }
+
+    if (method === "GET" && certificateId) {
+      var single = examinerCertificateFind(certificateId);
+      if (!single) return fail(examinerCertificateError("NOT_FOUND", "证书不存在", 404, requestId));
+      return succeed(examinerCertificateView(single));
+    }
+
+    if (method === "GET") {
+      var filterExaminerId = String(query.examinerId || "").trim();
+      var list = rows.filter(function (row) {
+        return !filterExaminerId || row.examinerId === filterExaminerId;
+      }).map(function (row) {
+        return examinerCertificateView(row);
+      });
+      return succeed(list);
+    }
+
+    if (method !== "POST") return fail(examinerCertificateError("METHOD_NOT_ALLOWED", "不支持的请求方法", 405, requestId));
+
+    if (action === "change-request") {
+      var target = examinerCertificateFind(certificateId);
+      if (!target) return fail(examinerCertificateError("NOT_FOUND", "证书不存在", 404, requestId));
+      var changeType = String(body.changeType || "").toUpperCase();
+      if (["UPDATE", "DELETE"].indexOf(changeType) < 0) {
+        return fail(examinerCertificateError("VALIDATION_ERROR", "changeType must be UPDATE or DELETE", 400, requestId));
+      }
+      if (Number(body.objectVersion) !== Number(target.objectVersion)) {
+        return fail(examinerCertificateError("VERSION_CONFLICT", "证书已被更新，请刷新后重试", 409, requestId, { currentVersion: target.objectVersion, currentStatus: target.certificateReviewStatusCode }));
+      }
+      if (target.certificateReviewStatusCode !== "APPROVED") {
+        return fail(examinerCertificateError("STATUS_NOT_ALLOWED", "仅已通过的证书可以发起变更或注销", 409, requestId, { currentStatus: target.certificateReviewStatusCode }));
+      }
+      var hasPendingChange = rows.some(function (row) {
+        return row.replacedCertificateId === target.examinerCertificateId && row.certificateReviewStatusCode === "PENDING_REVIEW";
+      });
+      if (hasPendingChange) {
+        return fail(examinerCertificateError("CHANGE_REQUEST_EXISTS", "该证书已有待审核的变更或注销申请", 409, requestId, { currentStatus: target.certificateReviewStatusCode }));
+      }
+      var nextNumber = changeType === "DELETE" ? target.certificateNumber : String(body.certificateNumber || target.certificateNumber).trim();
+      var nextName = changeType === "DELETE" ? target.certificateName : String(body.certificateName || target.certificateName).trim();
+      var nextMajor = changeType === "DELETE" ? (target.certificateMajor || "") : String(body.certificateMajor || body.major || target.certificateMajor || "").trim();
+      var nextFrom = changeType === "DELETE" ? compactDate(target.validFromDate) : compactDate(body.validFromDate || body.startDate || target.validFromDate);
+      var nextUntil = changeType === "DELETE" ? compactDate(target.validUntilDate) : compactDate(body.validUntilDate || body.endDate || body.expireDate || target.validUntilDate);
+      if (!nextNumber || !nextName || !nextFrom || !nextUntil) {
+        return fail(examinerCertificateError("VALIDATION_ERROR", "证书编号、名称和有效期不能为空", 400, requestId));
+      }
+      if (nextFrom > nextUntil) {
+        return fail(examinerCertificateError("VALIDATION_ERROR", "有效期开始日期不能晚于截止日期", 400, requestId));
+      }
+      if (changeType === "UPDATE" && examinerCertificateDuplicate(nextNumber, target.examinerCertificateId)) {
+        return fail(examinerCertificateError("DUPLICATE_CERTIFICATE_NUMBER", "证书编号已存在", 409, requestId));
+      }
+      var actor = operator(body, "examiner");
+      if (actor.role !== "examiner") return fail(examinerCertificateError("FORBIDDEN", "仅考官本人可以发起证书变更", 403, requestId));
+      var pending = {
+        examinerCertificateId: createRequestId("cert"),
+        examinerId: target.examinerId,
+        certificateNumber: nextNumber,
+        certificateName: nextName,
+        certificateMajor: nextMajor,
+        validFromDate: nextFrom,
+        validUntilDate: nextUntil,
+        certificateReviewStatusCode: "PENDING_REVIEW",
+        certificateValidityStatusCode: changeType === "DELETE" ? target.certificateValidityStatusCode : "NOT_EFFECTIVE",
+        changeType: changeType,
+        objectVersion: 1,
+        requestId: requestId,
+        replacedCertificateId: target.examinerCertificateId,
+        replacementCertificateId: "",
+        reviewRequestId: createRequestId("review"),
+        reviewReason: "",
+        reviewHistory: [],
+        auditEventIds: [],
+        notificationEventIds: [],
+        createdDate: clock.serverDate,
+        createdTime: clock.serverTime,
+        updatedDate: clock.serverDate,
+        updatedTime: clock.serverTime
+      };
+      rows.push(pending);
+      examinerCertificateAudit(changeType === "DELETE" ? "CERTIFICATE_DELETE_REQUESTED" : "CERTIFICATE_UPDATE_REQUESTED", pending, actor, "发起证书" + (changeType === "DELETE" ? "注销" : "变更") + "申请");
+      examinerCertificateNotify("EXAMINER_CERTIFICATE_PENDING_REVIEW", pending);
+      return succeed(examinerCertificateView(pending));
+    }
+
+    if (action === "withdraw") {
+      var withdrawRow = examinerCertificateFind(certificateId);
+      if (!withdrawRow) return fail(examinerCertificateError("NOT_FOUND", "证书申请不存在", 404, requestId));
+      var withdrawActor = operator(body, "examiner");
+      if (withdrawActor.role !== "examiner") return fail(examinerCertificateError("FORBIDDEN", "仅考官本人可以撤回证书申请", 403, requestId));
+      if (["PENDING_REVIEW", "DRAFT"].indexOf(withdrawRow.certificateReviewStatusCode) < 0) {
+        return fail(examinerCertificateError("STATUS_NOT_ALLOWED", "该证书申请已处理，不可撤回", 409, requestId, { currentStatus: withdrawRow.certificateReviewStatusCode }));
+      }
+      if (Number(body.objectVersion) !== Number(withdrawRow.objectVersion)) {
+        return fail(examinerCertificateError("VERSION_CONFLICT", "证书申请已被更新，请刷新后重试", 409, requestId, { currentVersion: withdrawRow.objectVersion, currentStatus: withdrawRow.certificateReviewStatusCode }));
+      }
+      withdrawRow.certificateReviewStatusCode = "WITHDRAWN";
+      withdrawRow.objectVersion = Number(withdrawRow.objectVersion) + 1;
+      withdrawRow.updatedDate = clock.serverDate;
+      withdrawRow.updatedTime = clock.serverTime;
+      withdrawRow.reviewHistory = (withdrawRow.reviewHistory || []).concat([examinerCertificateReviewEntry(withdrawRow, "WITHDRAWN", withdrawActor, "", requestId)]);
+      examinerCertificateAudit("CERTIFICATE_WITHDRAWN", withdrawRow, withdrawActor, "考官撤回证书申请");
+      examinerCertificateNotify("EXAMINER_CERTIFICATE_WITHDRAWN", withdrawRow);
+      return succeed(examinerCertificateView(withdrawRow));
+    }
+
+    if (action === "review") {
+      var reviewRowTarget = examinerCertificateFind(certificateId);
+      if (!reviewRowTarget) return fail(examinerCertificateError("NOT_FOUND", "证书申请不存在", 404, requestId));
+      var reviewActor = operator(body, "platform_admin");
+      if (reviewActor.role !== "platform_admin") return fail(examinerCertificateError("FORBIDDEN", "仅平台管理员可以审核考官证书", 403, requestId));
+      if (reviewRowTarget.certificateReviewStatusCode !== "PENDING_REVIEW") {
+        return fail(examinerCertificateError("STATUS_NOT_ALLOWED", "该证书申请已处理", 409, requestId, { currentStatus: reviewRowTarget.certificateReviewStatusCode }));
+      }
+      if (Number(body.objectVersion) !== Number(reviewRowTarget.objectVersion)) {
+        return fail(examinerCertificateError("VERSION_CONFLICT", "证书申请已被更新，请刷新后重试", 409, requestId, { currentVersion: reviewRowTarget.objectVersion, currentStatus: reviewRowTarget.certificateReviewStatusCode }));
+      }
+      var decision = String(body.decision || "").toUpperCase();
+      if (["APPROVE", "REJECT"].indexOf(decision) < 0) {
+        return fail(examinerCertificateError("VALIDATION_ERROR", "decision must be APPROVE or REJECT", 400, requestId));
+      }
+      var reviewReason = String(body.reviewReason || body.reason || "").trim();
+      if (decision === "REJECT" && !reviewReason) {
+        return fail(examinerCertificateError("VALIDATION_ERROR", "驳回原因不能为空", 400, requestId));
+      }
+      if (decision === "APPROVE") {
+        reviewRowTarget.certificateReviewStatusCode = "APPROVED";
+        reviewRowTarget.reviewReason = "";
+        if (reviewRowTarget.changeType === "DELETE") {
+          reviewRowTarget.certificateValidityStatusCode = "REVOKED";
+          var replacedForDelete = examinerCertificateFind(reviewRowTarget.replacedCertificateId);
+          if (replacedForDelete) {
+            replacedForDelete.certificateValidityStatusCode = "REVOKED";
+            replacedForDelete.updatedDate = clock.serverDate;
+            replacedForDelete.updatedTime = clock.serverTime;
+          }
+        } else {
+          reviewRowTarget.certificateValidityStatusCode = examinerCertificateInValidity(reviewRowTarget, clock.serverDate) ? "EFFECTIVE" : "NOT_EFFECTIVE";
+          if (reviewRowTarget.changeType === "UPDATE" && reviewRowTarget.replacedCertificateId) {
+            var previousVersion = examinerCertificateFind(reviewRowTarget.replacedCertificateId);
+            if (previousVersion) {
+              previousVersion.certificateValidityStatusCode = "REVOKED";
+              previousVersion.replacementCertificateId = reviewRowTarget.examinerCertificateId;
+              previousVersion.updatedDate = clock.serverDate;
+              previousVersion.updatedTime = clock.serverTime;
+            }
+          }
+        }
+        examinerCertificateAudit("CERTIFICATE_APPROVED", reviewRowTarget, reviewActor, "平台审核通过");
+        examinerCertificateNotify("EXAMINER_CERTIFICATE_APPROVED", reviewRowTarget);
+      } else {
+        reviewRowTarget.certificateReviewStatusCode = "REJECTED";
+        reviewRowTarget.reviewReason = reviewReason;
+        examinerCertificateAudit("CERTIFICATE_REJECTED", reviewRowTarget, reviewActor, reviewReason);
+        examinerCertificateNotify("EXAMINER_CERTIFICATE_REJECTED", reviewRowTarget);
+      }
+      reviewRowTarget.objectVersion = Number(reviewRowTarget.objectVersion) + 1;
+      reviewRowTarget.updatedDate = clock.serverDate;
+      reviewRowTarget.updatedTime = clock.serverTime;
+      reviewRowTarget.reviewHistory = (reviewRowTarget.reviewHistory || []).concat([examinerCertificateReviewEntry(reviewRowTarget, decision === "APPROVE" ? "APPROVED" : "REJECTED", reviewActor, reviewReason, requestId)]);
+      return succeed(examinerCertificateView(reviewRowTarget));
+    }
+
+    if (certificateId) return fail(examinerCertificateError("NOT_FOUND", "接口不存在", 404, requestId));
+
+    var createExaminerId = String(body.examinerId || "").trim();
+    var createNumber = String(body.certificateNumber || body.number || "").trim();
+    var createName = String(body.certificateName || body.name || "").trim();
+    var createMajor = String(body.certificateMajor || body.major || "").trim();
+    var createFrom = compactDate(body.validFromDate || body.startDate);
+    var createUntil = compactDate(body.validUntilDate || body.endDate || body.expireDate);
+    if (!createExaminerId || !createNumber || !createName || !createFrom || !createUntil) {
+      return fail(examinerCertificateError("VALIDATION_ERROR", "examinerId、证书编号、名称和有效期不能为空", 400, requestId));
+    }
+    if (createFrom > createUntil) {
+      return fail(examinerCertificateError("VALIDATION_ERROR", "有效期开始日期不能晚于截止日期", 400, requestId));
+    }
+    if (examinerCertificateDuplicate(createNumber, "")) {
+      return fail(examinerCertificateError("DUPLICATE_CERTIFICATE_NUMBER", "证书编号已存在", 409, requestId));
+    }
+    var createActor = operator(body, "examiner");
+    if (["examiner", "platform_admin"].indexOf(createActor.role) < 0) {
+      return fail(examinerCertificateError("FORBIDDEN", "当前角色无权新增考官证书", 403, requestId));
+    }
+    var created = {
+      examinerCertificateId: createRequestId("cert"),
+      examinerId: createExaminerId,
+      certificateNumber: createNumber,
+      certificateName: createName,
+      certificateMajor: createMajor,
+      validFromDate: createFrom,
+      validUntilDate: createUntil,
+      certificateReviewStatusCode: "PENDING_REVIEW",
+      certificateValidityStatusCode: "NOT_EFFECTIVE",
+      changeType: "CREATE",
+      objectVersion: 1,
+      requestId: requestId,
+      replacedCertificateId: "",
+      replacementCertificateId: "",
+      reviewRequestId: createRequestId("review"),
+      reviewReason: "",
+      reviewHistory: [],
+      auditEventIds: [],
+      notificationEventIds: [],
+      createdDate: clock.serverDate,
+      createdTime: clock.serverTime,
+      updatedDate: clock.serverDate,
+      updatedTime: clock.serverTime
+    };
+    rows.push(created);
+    examinerCertificateAudit("CERTIFICATE_CREATED", created, createActor, "提交新增证书申请");
+    examinerCertificateNotify("EXAMINER_CERTIFICATE_PENDING_REVIEW", created);
+    return succeed(examinerCertificateView(created));
   }
 
   function mockRequest(path, method, body, requestId) {
@@ -188,6 +689,9 @@
     if (mockRequests[requestId]) {
       if (mockRequests[requestId].error) return Promise.reject(Object.assign(new Error(mockRequests[requestId].message), mockRequests[requestId]));
       return Promise.resolve(clone(mockRequests[requestId]));
+    }
+    if (String(path || "").indexOf("examiner-certificates") > -1) {
+      return mockExaminerCertificateRequest(path, method, body, requestId);
     }
     var result = { data: {}, requestId: requestId };
     var collection;
@@ -294,7 +798,8 @@
       tickets: "/exam-tickets",
       scoreTasks: "/exam-score-tasks",
       scores: "/exam-scores",
-      certificates: "/exam-certificates"
+      certificates: "/exam-certificates",
+      examinerCertificates: "/examiner-certificates"
     }[collection];
     if (!endpoint) return Promise.reject(new Error("未知数据集合: " + collection));
     if (mock) {
@@ -347,11 +852,15 @@
     if (event.data && event.data.type === "contract-updated" && event.data.contract) {
       snapshot = Object.assign(emptyContract(), clone(event.data.contract));
       listeners.slice().forEach(function (listener) { listener(clone(snapshot)); });
+      persistMockSnapshot();
     }
   };
 
+  restoreMockSnapshot();
+
   global.HBYXExamApi = {
     contractKey: CONTRACT_KEY,
+    examinerCertificateContract: EXAMINER_CERTIFICATE_CONTRACT,
     baseUrl: API_BASE,
     isMock: mock,
     collections: COLLECTION_KEYS,
@@ -360,6 +869,49 @@
     write: write,
     requestStatus: requestStatus,
     getCollection: getCollection,
+    listExaminerCertificates: function (query) {
+      var params = query || {};
+      if (mock) {
+        var examinerId = String(params.examinerId || "").trim();
+        return Promise.resolve(clone(examinerCertificateRows().filter(function (row) {
+          return !examinerId || row.examinerId === examinerId;
+        }).map(function (row) {
+          return examinerCertificateView(row);
+        })));
+      }
+      var search = new URLSearchParams();
+      if (params.examinerId) search.set("examinerId", params.examinerId);
+      return request("/examiner-certificates" + (search.toString() ? "?" + search.toString() : ""), { method: "GET" }).then(function (response) {
+        return Array.isArray(response.data) ? response.data : (response.data.items || []);
+      });
+    },
+    getExaminerCertificate: function (examinerCertificateId) {
+      return request("/examiner-certificates/" + encodeURIComponent(examinerCertificateId), { method: "GET" }).then(function (response) {
+        return response.data;
+      });
+    },
+    createExaminerCertificate: function (payload, options) {
+      return write("/examiner-certificates", payload, options);
+    },
+    requestExaminerCertificateChange: function (examinerCertificateId, payload, options) {
+      return write("/examiner-certificates/" + encodeURIComponent(examinerCertificateId) + "/change-request", payload, options);
+    },
+    withdrawExaminerCertificate: function (examinerCertificateId, payload, options) {
+      return write("/examiner-certificates/" + encodeURIComponent(examinerCertificateId) + "/withdraw", payload, options);
+    },
+    reviewExaminerCertificate: function (examinerCertificateId, payload, options) {
+      return write("/examiner-certificates/" + encodeURIComponent(examinerCertificateId) + "/review", payload, options);
+    },
+    listExaminerCertificateReviews: function (examinerCertificateId, options) {
+      return request("/examiner-certificates/" + encodeURIComponent(examinerCertificateId) + "/reviews", Object.assign({ method: "GET" }, options || {})).then(function (response) {
+        return response.data;
+      });
+    },
+    examinerCertificateDispatchEligibility: function (examinerId) {
+      return request("/examiner-certificates/dispatch-eligibility?examinerId=" + encodeURIComponent(examinerId), { method: "GET" }).then(function (response) {
+        return response.data;
+      });
+    },
     readContract: readContract,
     mergeContract: mergeContract,
     upsert: upsert,
