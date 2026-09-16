@@ -6,8 +6,8 @@
     contractId: "EXAM-CERT-REVIEW-DOWNSHIFT-20260911",
     reviewDomain: "examinerCertificateReview",
     validityDomain: "examinerCertificateValidity",
-    reviewStatuses: ["DRAFT", "PENDING_REVIEW", "APPROVED", "REJECTED", "WITHDRAWN"],
-    validityStatuses: ["NOT_EFFECTIVE", "EFFECTIVE", "REVOKED"],
+    reviewStatuses: ["PENDING_REVIEW", "APPROVED", "REJECTED", "WITHDRAWN"],
+    validityStatuses: ["NOT_EFFECTIVE", "EFFECTIVE", "EXPIRED"],
     changeTypes: ["CREATE", "UPDATE", "DELETE"],
     endpoints: [
       "GET /api/examiner-certificates",
@@ -21,7 +21,7 @@
   };
   var EXAMINER_CERTIFICATE_VALIDITY_LABEL = {
     EFFECTIVE: "有效",
-    REVOKED: "已撤销",
+    EXPIRED: "已过期",
     NOT_EFFECTIVE: "未生效"
   };
   var COLLECTION_KEYS = {
@@ -229,10 +229,20 @@
     return from <= serverDate && serverDate <= until;
   }
 
+  function examinerCertificateValidityStatus(row, serverDate) {
+    if (!row) return "NOT_EFFECTIVE";
+    if (["EXPIRED", "REVOKED"].indexOf(row.certificateValidityStatusCode) > -1) return "EXPIRED";
+    var from = compactDate(row.validFromDate);
+    var until = compactDate(row.validUntilDate);
+    if (until && until < serverDate) return "EXPIRED";
+    if (from && serverDate < from) return "NOT_EFFECTIVE";
+    return row.certificateReviewStatusCode === "APPROVED" ? "EFFECTIVE" : "NOT_EFFECTIVE";
+  }
+
   function examinerCertificateIsDispatchEligible(row, serverDate) {
     if (!row) return false;
     return row.certificateReviewStatusCode === "APPROVED"
-      && row.certificateValidityStatusCode === "EFFECTIVE"
+      && examinerCertificateValidityStatus(row, serverDate) === "EFFECTIVE"
       && examinerCertificateInValidity(row, serverDate)
       && !examinerCertificatePendingDelete(row.examinerCertificateId);
   }
@@ -251,8 +261,8 @@
     view.endDate = isoDate(row.validUntilDate);
     view.expireDate = isoDate(row.validUntilDate);
     view.reviewStatus = row.certificateReviewStatusCode;
-    view.validityStatus = row.certificateValidityStatusCode;
-    view.status = EXAMINER_CERTIFICATE_VALIDITY_LABEL[row.certificateValidityStatusCode] || "未生效";
+    view.validityStatus = examinerCertificateValidityStatus(row, clock.serverDate);
+    view.status = EXAMINER_CERTIFICATE_VALIDITY_LABEL[view.validityStatus] || "未生效";
     view.addedAt = isoDate(row.createdDate);
     view.pendingDelete = pendingDelete;
     view.inValidityPeriod = inValidity;
@@ -598,10 +608,10 @@
         reviewRowTarget.certificateReviewStatusCode = "APPROVED";
         reviewRowTarget.reviewReason = "";
         if (reviewRowTarget.changeType === "DELETE") {
-          reviewRowTarget.certificateValidityStatusCode = "REVOKED";
+          reviewRowTarget.certificateValidityStatusCode = "EXPIRED";
           var replacedForDelete = examinerCertificateFind(reviewRowTarget.replacedCertificateId);
           if (replacedForDelete) {
-            replacedForDelete.certificateValidityStatusCode = "REVOKED";
+            replacedForDelete.certificateValidityStatusCode = "EXPIRED";
             replacedForDelete.updatedDate = clock.serverDate;
             replacedForDelete.updatedTime = clock.serverTime;
           }
@@ -610,7 +620,7 @@
           if (reviewRowTarget.changeType === "UPDATE" && reviewRowTarget.replacedCertificateId) {
             var previousVersion = examinerCertificateFind(reviewRowTarget.replacedCertificateId);
             if (previousVersion) {
-              previousVersion.certificateValidityStatusCode = "REVOKED";
+              previousVersion.certificateValidityStatusCode = "EXPIRED";
               previousVersion.replacementCertificateId = reviewRowTarget.examinerCertificateId;
               previousVersion.updatedDate = clock.serverDate;
               previousVersion.updatedTime = clock.serverTime;

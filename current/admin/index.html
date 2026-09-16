@@ -1716,7 +1716,7 @@
     .cert-print-size-option input { width: 15px; height: 15px; margin: 0; accent-color: var(--primary); }
     .cert-print-size-option span { display: grid; gap: 2px; }
     .cert-print-size-option small { color: var(--muted); font-size: 11px; }
-    .cert-asset-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .cert-asset-grid { display: grid; grid-template-columns: minmax(240px, 1fr); gap: 10px; }
     .cert-asset-card { min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 7px; background: #fff; display: grid; gap: 7px; }
     .cert-asset-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .cert-asset-card .input[type="file"] { width: 100%; font-size: 12px; }
@@ -1779,9 +1779,6 @@
     .cert-layout-canvas-wrap { display: grid; place-items: center; min-height: 610px; overflow: auto; padding: 20px; border: 1px dashed #b9c7d8; border-radius: 7px; background: #e9eef5; }
     .cert-layout-canvas { position: relative; width: 560px; height: 760px; flex: 0 0 auto; overflow: hidden; border: 12px double #c6a23a; background: #fffdf7; box-shadow: inset 0 0 0 8px #f8edc8, 0 12px 24px rgba(15,23,42,.08); transform-origin: center top; }
     .cert-layout-background { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
-    .cert-layout-logo { position: absolute; top: 6%; left: 7%; width: 15%; max-height: 14%; object-fit: contain; z-index: 3; pointer-events: none; }
-    .cert-layout-seal { position: absolute; right: 8%; bottom: 9%; width: 16%; max-height: 18%; object-fit: contain; z-index: 3; pointer-events: none; }
-    .cert-layout-director-signature { position: absolute; right: 28%; bottom: 9%; width: 20%; max-height: 12%; object-fit: contain; z-index: 3; pointer-events: none; }
     .cert-layout-canvas::before { content: ""; position: absolute; inset: 28px; border: 2px solid rgba(198,162,58,.72); pointer-events: none; }
     .cert-layout-canvas::after { content: "湖北艺术职业学院"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(198,162,58,.08); font-size: 28px; font-weight: 800; letter-spacing: 6px; transform: rotate(-22deg); pointer-events: none; }
     .cert-layout-element { position: absolute; z-index: 2; min-width: 20px; min-height: 18px; padding: 3px 5px; border: 1px solid transparent; color: #111827; font-family: SimSun, "Songti SC", serif; font-size: 14px; cursor: move; user-select: none; white-space: nowrap; }
@@ -1803,7 +1800,7 @@
     .cert-wizard-actions .page-actions { margin-left: auto; }
     @media (max-width: 1050px) { .cert-layout-workbench, .cert-basic-layout { grid-template-columns: 1fr; } .cert-layout-canvas-wrap { min-height: 520px; } .cert-element-list { max-height: 300px; } }
     @media (max-width: 720px) { .cert-wizard-steps { grid-template-columns: 1fr; } }
-    @media (max-width: 900px) { .cert-asset-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 900px) { .cert-asset-grid { grid-template-columns: minmax(0, 1fr); } }
     @media (max-width: 720px) { .cert-print-size-grid, .cert-asset-grid { grid-template-columns: 1fr; } }
     @media (max-width: 1100px) {
       .cert-template-editor { grid-template-columns: 1fr; }
@@ -2142,7 +2139,6 @@
           <div class="menu-children">
             <button class="menu-item menu-child" type="button" data-jump="plans/batches"><span class="menu-label">批次计划管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="plans/batch-review" data-platform-only><span class="menu-label">批次计划审核</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="plans/rollback" hidden><span class="menu-label">批次变更管理</span></button>
           </div>
         </div>
 
@@ -2813,13 +2809,13 @@
               <div class="field"><label>证件号码</label><input class="input" data-judge-id-number placeholder="请输入证件号码"></div>
               <div class="field"><label>所在城市</label><select class="select" data-judge-city><option>全部城市</option><option>武汉市</option><option>宜昌市</option></select></div>
               <div class="field"><label>执考专业</label><select class="select" data-judge-major data-base-professional-options></select></div>
-              <div class="field"><label>状态</label><select class="select" data-judge-status><option>全部状态</option><option>有效</option><option>无效</option><option>待审核</option></select></div>
+              <div class="field"><label>考官状态</label><select class="select" data-judge-status><option>全部考官状态</option><option>有效</option><option>无效</option></select></div>
               <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-judge-search>查询</button><button class="btn" data-judge-reset>重置</button></div></div>
             </div>
-            <div class="table-card"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">考官库列表</h2><span class="tag blue" data-judge-scope-tag>全平台</span></div><div class="page-actions"><button class="btn" data-drawer="judge-batch-status">批量设为有效/无效</button></div></div><div class="table-wrap"><table class="is-sticky-table has-sticky-action"><thead><tr><th class="sticky-left-cell">姓名</th><th class="sticky-left-cell">证件号</th><th>专业</th><th>所持证书量</th><th>状态</th><th>添加日期</th><th>操作</th></tr></thead><tbody>
-              <tr data-judge-row data-judge-name="杨婷婷" data-judge-id="420111********0328" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市 洪山区" data-judge-city="武汉市" data-judge-education="硕士研究生" data-judge-title="副高级" data-judge-title-name="教授" data-judge-work-unit="湖北艺术职业学院" data-judge-phone="" data-judge-major="钢琴" data-judge-level="高级" data-judge-org="湖北艺术职业学院" data-judge-belong-org-id="platform" data-judge-exam-org-ids="org-wh|org-yc" data-judge-status="已聘用" data-judge-added-date="2018-09-01"><td>杨婷婷</td><td>身份证 / 420111********0328</td><td>钢琴</td><td>1</td><td><span class="tag green">有效</span></td><td>2018-09-01</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button></div></td></tr>
-              <tr data-judge-row data-judge-name="林晓涵" data-judge-id="420106********0819" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市 武昌区" data-judge-city="武汉市" data-judge-education="本科" data-judge-title="中级" data-judge-title-name="一级演员" data-judge-work-unit="湖北艺术职业学院" data-judge-phone="" data-judge-major="中国舞" data-judge-level="中级" data-judge-org="湖北艺术职业学院" data-judge-belong-org-id="platform" data-judge-exam-org-ids="inst-guanggu" data-judge-status="已聘用" data-judge-added-date="2023-08-21"><td>林晓涵</td><td>身份证 / 420106********0819</td><td>中国舞</td><td>1</td><td><span class="tag green">有效</span></td><td>2023-08-21</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button></div></td></tr>
-              <tr data-judge-row data-judge-name="周明远" data-judge-id="420502********0626" data-judge-id-type="身份证" data-judge-region="湖北省 宜昌市 西陵区" data-judge-city="宜昌市" data-judge-education="硕士研究生" data-judge-title="副高级" data-judge-title-name="副教授" data-judge-work-unit="湖北省群众艺术馆" data-judge-phone="" data-judge-major="" data-judge-level="高级" data-judge-org="湖北省群众艺术馆" data-judge-belong-org-id="external-hbqyg" data-judge-exam-org-ids="org-yc|inst-yc" data-judge-status="待审核" data-judge-added-date="2026-08-12"><td>周明远</td><td>身份证 / 420502********0626</td><td>-</td><td>0</td><td><span class="tag orange">待审核</span></td><td>2026-08-12</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button><button class="btn link" data-drawer="judge-delete">删除</button></div></td></tr>
+            <div class="table-card"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">考官库列表</h2><span class="tag blue" data-judge-scope-tag>全平台</span></div><div class="page-actions"><button class="btn" data-drawer="judge-batch-status">批量设为有效/无效</button></div></div><div class="table-wrap"><table class="is-sticky-table has-sticky-action"><thead><tr><th class="sticky-left-cell">姓名</th><th class="sticky-left-cell">证件号</th><th>专业</th><th>所持证书量</th><th>考官状态</th><th>添加日期</th><th>操作</th></tr></thead><tbody>
+              <tr data-judge-row data-judge-name="杨婷婷" data-judge-id="420111********0328" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市 洪山区" data-judge-city="武汉市" data-judge-education="硕士研究生" data-judge-title="副高级" data-judge-title-name="教授" data-judge-work-unit="湖北艺术职业学院" data-judge-phone="" data-judge-major="钢琴" data-judge-level="高级" data-judge-org="湖北艺术职业学院" data-judge-belong-org-id="platform" data-judge-exam-org-ids="org-wh|org-yc" data-judge-status="有效" data-judge-added-date="2018-09-01"><td>杨婷婷</td><td>身份证 / 420111********0328</td><td>钢琴</td><td>1</td><td><span class="tag green">有效</span></td><td>2018-09-01</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button></div></td></tr>
+              <tr data-judge-row data-judge-name="林晓涵" data-judge-id="420106********0819" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市 武昌区" data-judge-city="武汉市" data-judge-education="本科" data-judge-title="中级" data-judge-title-name="一级演员" data-judge-work-unit="湖北艺术职业学院" data-judge-phone="" data-judge-major="中国舞" data-judge-level="中级" data-judge-org="湖北艺术职业学院" data-judge-belong-org-id="platform" data-judge-exam-org-ids="inst-guanggu" data-judge-status="有效" data-judge-added-date="2023-08-21"><td>林晓涵</td><td>身份证 / 420106********0819</td><td>中国舞</td><td>1</td><td><span class="tag green">有效</span></td><td>2023-08-21</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button></div></td></tr>
+              <tr data-judge-row data-judge-name="周明远" data-judge-id="420502********0626" data-judge-id-type="身份证" data-judge-region="湖北省 宜昌市 西陵区" data-judge-city="宜昌市" data-judge-education="硕士研究生" data-judge-title="副高级" data-judge-title-name="副教授" data-judge-work-unit="湖北省群众艺术馆" data-judge-phone="" data-judge-major="" data-judge-level="高级" data-judge-org="湖北省群众艺术馆" data-judge-belong-org-id="external-hbqyg" data-judge-exam-org-ids="org-yc|inst-yc" data-judge-status="无效" data-judge-added-date="2026-08-12"><td>周明远</td><td>身份证 / 420502********0626</td><td>-</td><td>0</td><td><span class="tag red">无效</span></td><td>2026-08-12</td><td><div class="operation"><button class="btn link" data-drawer="judge-create">编辑</button><button class="btn link" data-drawer="judge-cert">证书</button><button class="btn link" data-drawer="judge-dispatch-records">派遣记录</button><button class="btn link" data-drawer="judge-delete">删除</button></div></td></tr>
             </tbody></table></div></div>
           </div>
           <div data-judge-panel="cert-review" hidden>
@@ -10278,7 +10274,7 @@
       if (!active) {
         var tbody = document.querySelector('[data-subview="judges"] table tbody');
         if (!tbody) return;
-        tbody.insertAdjacentHTML("beforeend", '<tr data-judge-row data-judge-name="' + escapeHtml(name) + '" data-judge-id="' + escapeHtml(id) + '" data-judge-id-type="' + escapeHtml(idType) + '" data-judge-city="' + escapeHtml(root.querySelector("[data-judge-form-region]").value) + '" data-judge-region="' + escapeHtml(root.querySelector("[data-judge-form-region]").value) + '" data-judge-education="' + escapeHtml(root.querySelector("[data-judge-form-education]").value) + '" data-judge-title="' + escapeHtml(root.querySelector("[data-judge-form-title]").value) + '" data-judge-title-name="' + escapeHtml(root.querySelector("[data-judge-form-title-name]").value.trim()) + '" data-judge-work-unit="' + escapeHtml(root.querySelector("[data-judge-form-work-unit]").value.trim()) + '" data-judge-phone="' + escapeHtml(root.querySelector("[data-judge-form-phone]").value.trim()) + '" data-judge-photo-name="' + escapeHtml(photo ? photo.name : "") + '" data-judge-major="" data-judge-level="" data-judge-status="已解聘" data-judge-exam-org-ids="org-wh" data-judge-added-date="' + new Date().toISOString().slice(0, 10) + '"></tr>');
+        tbody.insertAdjacentHTML("beforeend", '<tr data-judge-row data-judge-name="' + escapeHtml(name) + '" data-judge-id="' + escapeHtml(id) + '" data-judge-id-type="' + escapeHtml(idType) + '" data-judge-city="' + escapeHtml(root.querySelector("[data-judge-form-region]").value) + '" data-judge-region="' + escapeHtml(root.querySelector("[data-judge-form-region]").value) + '" data-judge-education="' + escapeHtml(root.querySelector("[data-judge-form-education]").value) + '" data-judge-title="' + escapeHtml(root.querySelector("[data-judge-form-title]").value) + '" data-judge-title-name="' + escapeHtml(root.querySelector("[data-judge-form-title-name]").value.trim()) + '" data-judge-work-unit="' + escapeHtml(root.querySelector("[data-judge-form-work-unit]").value.trim()) + '" data-judge-phone="' + escapeHtml(root.querySelector("[data-judge-form-phone]").value.trim()) + '" data-judge-photo-name="' + escapeHtml(photo ? photo.name : "") + '" data-judge-major="" data-judge-level="" data-judge-status="无效" data-judge-exam-org-ids="org-wh" data-judge-added-date="' + new Date().toISOString().slice(0, 10) + '"></tr>');
         active = tbody.lastElementChild;
         JUDGE_CERTIFICATE_DATA[id] = [];
         JUDGE_DISPATCH_DATA[id] = [];
@@ -10412,12 +10408,12 @@
       cert.reviewStatus = "APPROVED";
       cert.rejectReason = "";
       if (cert.changeType === "DELETE") {
-        cert.validityStatus = "REVOKED";
-        cert.status = "已撤销";
+        cert.validityStatus = "EXPIRED";
+        cert.status = "已过期";
       } else {
         var inDate = !cert.startDate || cert.startDate <= today && today <= cert.expireDate;
-        cert.validityStatus = inDate ? "EFFECTIVE" : "NOT_EFFECTIVE";
-        cert.status = inDate ? "有效" : "未生效";
+        cert.validityStatus = inDate ? "EFFECTIVE" : cert.expireDate && cert.expireDate < today ? "EXPIRED" : "NOT_EFFECTIVE";
+        cert.status = inDate ? "有效" : cert.validityStatus === "EXPIRED" ? "已过期" : "未生效";
       }
       cert.approvedAt = new Date().toISOString().slice(0, 10);
       JUDGE_CERTIFICATE_DATA[row.dataset.judgeId] = list;
@@ -14650,7 +14646,7 @@
         if (row.cells[8]) row.cells[8].innerHTML = statusTagHtml(row.dataset.siteStatus || "停用");
       });
       document.querySelectorAll("[data-judge-row]").forEach(function (row) {
-        row.dataset.judgeMaterialStatus = row.dataset.judgeMaterialStatus || (row.dataset.judgeStatus === "待审核" ? "待审核" : "已通过");
+        row.dataset.judgeMaterialStatus = row.dataset.judgeMaterialStatus || "已通过";
       });
     }
     function resourceStatusConfirmBodyHtml() {
@@ -14914,14 +14910,14 @@
         idNumberInput.value = "";
         cityInput.value = "全部城市";
         majorInput.value = "全部专业";
-        statusInput.value = "全部状态";
+        statusInput.value = "全部考官状态";
       }
       var keyword = (keywordInput.value || "").trim().toLowerCase();
       var idType = idTypeInput.value || "全部证件类型";
       var idNumber = (idNumberInput.value || "").trim().toLowerCase();
       var city = cityInput.value || "全部城市";
       var major = majorInput.value || "全部专业";
-      var status = statusInput.value || "全部状态";
+      var status = statusInput.value || "全部考官状态";
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var organizerScope = role === "organizer" ? organizerAllowedOrgNames() : null;
       var judgeTbody = document.querySelector('[data-subview="judges"] table tbody');
@@ -14933,7 +14929,6 @@
       var scopedCount = 0;
       var visibleCount = 0;
       var employedCount = 0;
-      var reviewCount = 0;
       var expiringCount = 0;
       var today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -14944,7 +14939,6 @@
         if (scopeMatch) {
           scopedCount += 1;
           if (judgeDisplayStatus(row.dataset.judgeStatus) === "有效") employedCount += 1;
-          if (row.dataset.judgeStatus === "待审核") reviewCount += 1;
           var expireDate = new Date((judgeCertificateExpireDate(row) || row.dataset.judgeExpire || "") + "T00:00:00");
           if (!isNaN(expireDate.getTime()) && expireDate >= today && expireDate <= expiryLimit) expiringCount += 1;
         }
@@ -14957,14 +14951,13 @@
           && (!idNumber || certNumberSource.indexOf(idNumber) > -1)
           && (city === "全部城市" || row.dataset.judgeCity === city)
           && (major === "全部专业" || judgeCertificateMajors(row).indexOf(major) > -1)
-          && (status === "全部状态" || displayStatus === status);
+          && (status === "全部考官状态" || displayStatus === status);
         row.hidden = !visible;
         row.dataset.resourceFilterMatch = visible ? "true" : "false";
         if (visible) visibleCount += 1;
       });
       document.querySelectorAll("[data-judge-total-count]").forEach(function (item) { item.textContent = scopedCount; });
       document.querySelectorAll("[data-judge-employed-count]").forEach(function (item) { item.textContent = employedCount; });
-      document.querySelectorAll("[data-judge-review-count]").forEach(function (item) { item.textContent = reviewCount; });
       document.querySelectorAll("[data-judge-expiring-count]").forEach(function (item) { item.textContent = expiringCount; });
       if (reset) RESOURCE_PAGE_STATE.judges = 1;
       renderResourcePagination("judges");
@@ -15070,7 +15063,7 @@
     }
     var JUDGE_CERTIFICATE_DATA = {
       "420111********0328": [{ id: "CERT-2018-0328", number: "HB-KG-2018-0328", major: "钢琴", startDate: "2018-09-01", expireDate: "2027-12-31", status: "有效", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE", changeType: "CREATE", addedAt: "2018-09-01" }],
-      "420106********0819": [{ id: "CERT-2023-0819", number: "HB-KG-2023-0819", major: "中国舞", startDate: "2023-08-21", expireDate: "2026-08-20", status: "有效", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE", changeType: "CREATE", addedAt: "2023-08-21" }],
+      "420106********0819": [{ id: "CERT-2023-0819", number: "HB-KG-2023-0819", major: "中国舞", startDate: "2023-08-21", expireDate: "2026-08-20", status: "已过期", reviewStatus: "APPROVED", validityStatus: "EXPIRED", changeType: "CREATE", addedAt: "2023-08-21" }],
       "420502********0626": [{ id: "CERT-2026-0626", number: "HB-KG-2026-0626", major: "声乐", startDate: "2026-09-01", expireDate: "2028-08-31", status: "未生效", reviewStatus: "PENDING_REVIEW", validityStatus: "NOT_EFFECTIVE", changeType: "CREATE", addedAt: "2026-08-12" }]
     };
     var JUDGE_PHOTO_DATA = {};
@@ -15163,7 +15156,7 @@
       "420502********0626": []
     };
     function judgeDisplayStatus(status) {
-      return status === "已聘用" ? "有效" : status === "已解聘" ? "无效" : (status || "待审核");
+      return status === "已聘用" ? "有效" : status === "已解聘" ? "无效" : (status === "有效" ? "有效" : "无效");
     }
     function judgeStatusTag(status) {
       var display = judgeDisplayStatus(status);
@@ -15173,23 +15166,22 @@
       if (reviewStatus === "PENDING_REVIEW") return "待审核";
       if (reviewStatus === "APPROVED") return "已通过";
       if (reviewStatus === "REJECTED") return "已驳回";
-      if (reviewStatus === "WITHDRAWN") return "已撤回";
-      if (reviewStatus === "DRAFT") return "草稿";
+      if (reviewStatus === "WITHDRAWN") return "已撤销";
+      if (reviewStatus === "DRAFT") return "待审核";
       return "已通过";
     }
     function judgeCertificateValidityLabel(certificate) {
       if (!certificate) return "-";
-      if (certificate.changeType === "DELETE" && certificate.reviewStatus === "PENDING_REVIEW") return "待删除";
       if (certificate.validityStatus === "EFFECTIVE") return "有效";
-      if (certificate.validityStatus === "REVOKED") return "已撤销";
+      if (certificate.validityStatus === "EXPIRED" || certificate.validityStatus === "REVOKED") return "已过期";
       if (certificate.validityStatus === "NOT_EFFECTIVE") return "未生效";
       if (certificate.status === "有效") return "有效";
-      if (certificate.status === "失效") return "已撤销";
+      if (certificate.status === "失效" || certificate.status === "已过期") return "已过期";
       return "未生效";
     }
     function judgeCertificateStateTag(label) {
       var tagClass = label === "有效" || label === "已通过" ? "green"
-        : label === "已驳回" || label === "已撤销" || label === "待删除" ? "red"
+        : label === "已驳回" || label === "已撤销" || label === "已过期" ? "red"
         : label === "待审核" ? "orange"
         : "blue";
       return '<span class="tag ' + tagClass + '">' + escapeHtml(label) + '</span>';
@@ -15283,7 +15275,7 @@
       var table = root && root.querySelector("table");
       if (!table) return;
       var header = table.tHead && table.tHead.rows[0];
-      if (header) header.innerHTML = '<th class="sticky-left-cell" style="width:44px"><input type="checkbox" data-judge-select-all aria-label="全选考官"></th><th>考官姓名</th><th>证件号</th><th>专业</th><th>所持证书量</th><th>状态</th><th>添加日期</th><th>操作</th>';
+      if (header) header.innerHTML = '<th class="sticky-left-cell" style="width:44px"><input type="checkbox" data-judge-select-all aria-label="全选考官"></th><th>考官姓名</th><th>证件号</th><th>专业</th><th>所持证书量</th><th>考官状态</th><th>添加日期</th><th>操作</th>';
       table.querySelectorAll("tbody [data-judge-row]").forEach(function (row) {
         var id = row.dataset.judgeId;
         row.dataset.judgeStatus = judgeDisplayStatus(row.dataset.judgeStatus);
@@ -15370,7 +15362,7 @@
         var cells = item.cells;
         var name = cells[1].textContent.trim();
         var major = cells[2].textContent.trim();
-        tbody.insertAdjacentHTML("beforeend", '<tr data-judge-row data-judge-name="' + escapeHtml(name) + '" data-judge-id="' + escapeHtml(id) + '" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市" data-judge-city="武汉市" data-judge-education="本科" data-judge-title="中级" data-judge-title-name="讲师" data-judge-work-unit="" data-judge-phone="" data-judge-major="' + escapeHtml(major) + '" data-judge-level="中级" data-judge-status="已解聘" data-judge-exam-org-ids="org-wh" data-judge-added-date="' + new Date().toISOString().slice(0, 10) + '"></tr>');
+        tbody.insertAdjacentHTML("beforeend", '<tr data-judge-row data-judge-name="' + escapeHtml(name) + '" data-judge-id="' + escapeHtml(id) + '" data-judge-id-type="身份证" data-judge-region="湖北省 武汉市" data-judge-city="武汉市" data-judge-education="本科" data-judge-title="中级" data-judge-title-name="讲师" data-judge-work-unit="" data-judge-phone="" data-judge-major="' + escapeHtml(major) + '" data-judge-level="中级" data-judge-status="无效" data-judge-exam-org-ids="org-wh" data-judge-added-date="' + new Date().toISOString().slice(0, 10) + '"></tr>');
         JUDGE_CERTIFICATE_DATA[id] = [];
         added += 1;
       });
@@ -20145,15 +20137,9 @@
         var certAssetFile = certAssetInput.files && certAssetInput.files[0];
         var certAssetKey = certAssetInput.getAttribute("data-cert-asset-input");
         if (!certAssetFile) return;
-        var certAssetIsSeal = certAssetKey === "seal";
-        var certAssetLabel = certAssetKey === "directorSignature" ? "主任签名图片" : certAssetIsSeal ? "印章" : certAssetKey === "logo" ? "Logo" : "底部背景图";
+        var certAssetLabel = "底部背景图";
         var certAssetExtension = (certAssetFile.name.split(".").pop() || "").toLowerCase();
         var certAssetImageOk = ["jpg", "jpeg", "png", "webp"].indexOf(certAssetExtension) > -1 && (!certAssetFile.type || certAssetFile.type.indexOf("image/") === 0);
-        if (certAssetIsSeal && certAssetExtension !== "png") {
-          certAssetInput.value = "";
-          toast("印章仅支持 PNG 格式");
-          return;
-        }
         if (!certAssetImageOk) {
           certAssetInput.value = "";
           toast("素材仅支持 JPG、PNG、WEBP 图片");
@@ -20605,7 +20591,7 @@
     function certWizardSyncAssetPanels() {
       var root = drawerBody.querySelector('[data-cert-wizard]');
       if (!root) return;
-      ["background", "seal", "logo", "directorSignature"].forEach(function (key) {
+      ["background"].forEach(function (key) {
         var asset = certAssetConfig(certWizardState(), key);
         var status = root.querySelector('[data-cert-asset-status="' + key + '"]');
         var preview = root.querySelector('[data-cert-asset-preview="' + key + '"]');
@@ -20617,7 +20603,7 @@
     }
     function certWizardState() {
       if (!window.__certTemplateWizard) {
-        window.__certTemplateWizard = { step: 1, selected: "title-cn", zoom: "75%", printSize: "A4竖版", assets: { background: null, seal: null, logo: null, directorSignature: null }, fields: {}, elements: {} };
+        window.__certTemplateWizard = { step: 1, selected: "title-cn", zoom: "75%", printSize: "A4竖版", assets: { background: null }, fields: {}, elements: {} };
         CERT_TEMPLATE_ELEMENT_DEFS.forEach(function (item) {
           window.__certTemplateWizard.fields[item.id] = item.defaultVisible;
           window.__certTemplateWizard.elements[item.id] = { x: item.x, y: item.y, font: "宋体", size: 14, color: "#111827", bold: false, italic: false, align: "left", width: 100, height: 120 };
@@ -20640,13 +20626,7 @@
       var visualScale = Math.min(scaleX, scaleY);
       var assets = [];
       var background = certAssetConfig(state, "background");
-      var logo = certAssetConfig(state, "logo");
-      var seal = certAssetConfig(state, "seal");
-      var directorSignature = certAssetConfig(state, "directorSignature");
       if (background && background.url) assets.push('<img class="cert-layout-background" src="' + escapeHtml(background.url) + '" alt="底部背景图">');
-      if (logo && logo.url) assets.push('<img class="cert-layout-logo" src="' + escapeHtml(logo.url) + '" alt="证书Logo">');
-      if (seal && seal.url) assets.push('<img class="cert-layout-seal" src="' + escapeHtml(seal.url) + '" alt="证书印章">');
-      if (directorSignature && directorSignature.url) assets.push('<img class="cert-layout-director-signature" src="' + escapeHtml(directorSignature.url) + '" alt="主任签名图片">');
       return assets.concat(CERT_TEMPLATE_ELEMENT_DEFS.filter(function (item) { return state.fields[item.id]; }).map(function (item) {
         var prop = state.elements[item.id];
         var classes = 'cert-layout-element' + (item.type === 'image' ? ' image' : '') + (item.id === 'title-cn' ? ' emblem' : '') + (state.selected === item.id ? ' selected' : '');
@@ -20659,10 +20639,7 @@
       var state = certWizardState();
       var show = function (id) { return state.fields[id] ? '' : ' style="display:none"'; };
       var background = certAssetConfig(state, "background");
-      var logo = certAssetConfig(state, "logo");
-      var seal = certAssetConfig(state, "seal");
-      var directorSignature = certAssetConfig(state, "directorSignature");
-      var assetHtml = (background && background.url ? '<img class="cert-layout-background" src="' + escapeHtml(background.url) + '" alt="底部背景图">' : '') + (logo && logo.url ? '<img class="cert-layout-logo" src="' + escapeHtml(logo.url) + '" alt="证书Logo">' : '') + (seal && seal.url ? '<img class="cert-layout-seal" src="' + escapeHtml(seal.url) + '" alt="证书印章">' : '') + (directorSignature && directorSignature.url ? '<img class="cert-layout-director-signature" src="' + escapeHtml(directorSignature.url) + '" alt="主任签名图片">' : '');
+      var assetHtml = background && background.url ? '<img class="cert-layout-background" src="' + escapeHtml(background.url) + '" alt="底部背景图">' : '';
       return '<div class="cert-preview-panel" style="position:static;max-width:300px;margin:0 auto"><div class="cert-preview-canvas" aria-label="证书字段实时预览">' + assetHtml + '<div class="cert-emblem"' + show('title-cn') + '>★</div><div class="cert-preview-title"' + show('title-cn') + '>社会艺术水平考级<br>资格证书</div><div class="cert-preview-mode">当前模板：按批次考试方式匹配 · ' + escapeHtml(state.printSize) + '</div><div class="cert-preview-no"' + show('cert-number') + '>编　号　HB-CERT-2026-0001</div><div class="cert-preview-fields"><div class="cert-preview-field"' + show('name') + '><span>姓名</span><span>张同学</span></div><div class="cert-preview-field"' + show('gender') + '><span>性别</span><span>女</span></div><div class="cert-preview-field"' + show('nationality') + '><span>国籍</span><span>中国</span></div><div class="cert-preview-field"' + show('nation') + '><span>民族</span><span>汉族</span></div><div class="cert-preview-field"' + show('birth') + '><span>出生日期</span><span>2012-05-18</span></div><div class="cert-preview-field"' + show('major') + '><span>考级专业</span><span>钢琴</span></div><div class="cert-preview-field"' + show('level') + '><span>等级</span><span>8级</span></div><div class="cert-preview-field"' + show('issue-date') + '><span>发证时间</span><span>2026-08-30</span></div><div class="cert-preview-field"' + show('grade-range') + '><span>起止级</span><span>1级 - 8级</span></div></div><div class="cert-preview-qr"' + show('qrcode') + ' aria-hidden="true"></div><div class="cert-preview-signature"' + show('director-cn') + ' aria-label="主任签字水印"><span class="cert-preview-signature-mark">主任签名</span><span class="cert-preview-signature-label">DIRECTOR SIGNATURE</span></div><div class="cert-preview-org"' + show('org-cn') + '>湖北艺术职业学院 湖北省群众艺术馆</div><div class="cert-preview-committee"' + (state.fields['committee-cn'] || state.fields['committee-en'] ? '' : ' style="display:none"') + '><span' + show('committee-cn') + '>湖北艺术职业学院 湖北省群众艺术馆</span><span' + show('committee-en') + '>ARTS GRADE EXAMINATION COMMITTEE</span></div><div class="cert-preview-date"' + show('issue-date') + '>2026 年 08 月 30 日</div><div class="cert-preview-footer"' + show('supervise-cn') + '><span>中国文化市场网：http://www.ccm.gov.cn</span><span>文化和旅游部人才中心</span></div></div></div>';
     }
     function certWizardSyncPropertyPanel() {
@@ -20736,7 +20713,7 @@
         '<section class="cert-wizard-panel active" data-cert-wizard-panel="1">',
         '<div class="info-banner"><strong>默认字段：</strong>姓名、性别、国籍、民族、出生日期、考级专业、等级、发证时间、起止级、证书编号、主任签名、证书标题、发证机构、艺术考级委员会（中英文）、监制信息、二维码、照片。其他字段保留在字段库中，可按需添加。</div><div class="info-banner"><strong>配置规则：</strong>左侧按分组控制证书元素显示，可全选或清空；中间画布以左上角为坐标原点，右侧调整选中元素属性。元素支持添加、移除和拖拽。</div>',
         '<div class="drawer-section"><h3 class="drawer-section-title">打印尺寸 *</h3><div class="cert-print-size-grid">' + Object.keys(CERT_PRINT_SIZE_OPTIONS).map(function (size) { var config = CERT_PRINT_SIZE_OPTIONS[size]; return '<label class="cert-print-size-option"><input type="radio" name="certPrintSize" value="' + escapeHtml(size) + '" data-cert-print-size' + (certWizardState().printSize === size ? ' checked' : '') + '><span><strong>' + escapeHtml(size) + '</strong><small>' + config.width + ' × ' + config.height + ' px</small></span></label>'; }).join('') + '</div><span class="muted">打印尺寸将决定证书画布宽高和后续打印页面比例。</span></div>',
-        '<div class="drawer-section"><h3 class="drawer-section-title">证书视觉素材</h3><div class="cert-asset-grid">' + certWizardAssetCardHtml('background', '底部背景图', '.jpg,.jpeg,.png,.webp', '支持 JPG、PNG、WEBP，建议使用与打印尺寸相同比例的图片。') + certWizardAssetCardHtml('seal', '印章 PNG', '.png', '仅支持 PNG，建议使用透明背景图片。') + certWizardAssetCardHtml('logo', 'Logo', '.jpg,.jpeg,.png,.webp', '支持 JPG、PNG、WEBP，建议使用透明背景 PNG。') + certWizardAssetCardHtml('directorSignature', '主任签名图片', '.png,.jpg,.jpeg', '支持 PNG、JPG、JPEG，建议使用透明背景图片。') + '</div><span class="muted">素材仅用于证书模板预览与打印，单个文件不超过5MB。</span></div>',
+        '<div class="drawer-section"><h3 class="drawer-section-title">证书视觉素材</h3><div class="cert-asset-grid">' + certWizardAssetCardHtml('background', '底部背景图', '.jpg,.jpeg,.png,.webp', '支持 JPG、PNG、WEBP，建议使用与打印尺寸相同比例的图片。') + '</div><span class="muted">素材仅用于证书模板预览与打印，单个文件不超过5MB。</span></div>',
         '<div class="cert-layout-workbench">',
         '<aside class="cert-element-panel"><div class="cert-element-panel-head"><strong>可配置元素</strong><div class="page-actions"><button class="btn link" type="button" data-cert-field-global="all">全选</button><button class="btn link" type="button" data-cert-field-global="none">清空</button><span class="tag blue">' + CERT_TEMPLATE_ELEMENT_DEFS.length + '项</span></div></div><div class="cert-element-list" data-cert-element-list></div></aside>',
         '<div class="cert-layout-stage"><div class="cert-layout-stage-head"><div><strong>证书画布预览</strong><div class="muted" data-cert-canvas-size-label>画布尺寸 561 × 794 px</div></div><button class="btn" type="button" data-cert-layout-reset>还原默认</button></div><div class="cert-layout-canvas-wrap"><div class="cert-layout-canvas" data-cert-layout-canvas></div></div><div class="cert-zoom-bar"><span class="muted">缩放</span><button class="cert-zoom-button" type="button" data-cert-zoom="50%">50%</button><button class="cert-zoom-button active" type="button" data-cert-zoom="75%">75%</button><button class="cert-zoom-button" type="button" data-cert-zoom="100%">100%</button><button class="cert-zoom-button" type="button" data-cert-zoom="fit">自适应</button></div></div>',
@@ -21520,7 +21497,7 @@
       "judge-create": {
         title: window.__activeJudgeRow ? "编辑考官" : "新增考官",
         wide: true,
-        body: '<div style="display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:18px"><div style="display:grid;gap:12px"><div class="field"><label>关联后台用户 *</label><select class="select" data-resource-required data-resource-label="后台用户"><option value="">请选择已启用用户</option><option value="user-yang">杨婷婷 / judge_yang</option><option value="user-lin">林晓涵 / judge_lin</option></select></div><div class="field"><label>所属考级机构 *</label><select class="select" data-resource-required data-resource-label="所属考级机构" multiple><option selected>湖北艺术职业学院</option><option>湖北省群众艺术馆</option></select></div><div class="field"><label>考官姓名 *</label><input class="input" data-resource-required data-resource-label="考官姓名" placeholder="请输入考官姓名"></div><div class="field-row-2"><div class="field"><label>证件类型 *</label><select class="select"><option>身份证</option><option>护照</option></select></div><div class="field"><label>证件号码 *</label><input class="input" data-resource-required data-resource-label="证件号码" placeholder="请输入证件号码"></div></div><div class="field"><label>所属城市 *</label><div class="field-row-3"><select class="select"><option>湖北省</option></select><select class="select"><option>武汉市</option><option>宜昌市</option></select><select class="select"><option>洪山区</option><option>西陵区</option></select></div></div><div class="field-row-2"><div class="field"><label>学历 *</label><select class="select"><option>本科</option><option>硕士研究生</option><option>博士研究生</option></select></div><div class="field"><label>职称级别 *</label><select class="select" data-judge-title-level><option>中级</option><option>副高级</option><option selected>正高级</option></select></div></div><div class="field-row-2"><div class="field"><label>职称名称 *</label><select class="select" data-judge-title-name>' + judgeTitleOptionsHtml("正高级", "教授") + '</select></div><div class="field"><label>工作单位</label><input class="input"></div></div><div class="field"><label>执考资质 *</label><div data-judge-scope-list><div class="field-row-3" data-judge-scope-row><select class="select"><option>钢琴</option><option>中国舞</option><option>小提琴</option><option>古筝</option></select><select class="select"><option>1-5级</option><option>1-6级</option><option selected>1-10级</option></select><button class="btn link" type="button" data-judge-scope-remove>移除</button></div></div><button class="btn" type="button" data-judge-scope-add>新增专业资质</button></div><div class="field-row-2"><div class="field"><label>执考证件编号 *</label><input class="input" data-judge-credential-input data-resource-required data-resource-label="执考证件编号" placeholder="HB-KG-2026-0001"></div><div class="field"><label>证件有效期 *</label><input class="input" type="date" data-judge-expire-input data-resource-required data-resource-label="证件有效期"></div></div><div class="field-row-2"><div class="field"><label>聘用状态 *</label><select class="select"><option>待审核</option><option>已聘用</option><option>已解聘</option></select></div><div class="field"><label>单日场次上限</label><input class="input" type="number" min="1" value="4"></div></div></div><div style="display:grid;justify-items:center;gap:12px"><div class="avatar-box">考官照片</div><div class="page-actions"><button class="btn primary">上传</button><button class="btn">取消</button></div></div></div>',
+        body: judgeCreateBodyHtml,
         foot: '<button class="btn primary" data-resource-form-save="judge">保存</button><button class="btn" data-toast="表单已重置">重置</button>'
       },
       "judge-detail": { title: "考官详情", wide: true, body: judgeDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button><button class="btn" data-drawer="judge-create">编辑</button><button class="btn primary" data-jump="dispatch/list" data-close-drawer>去派遣</button>' },
@@ -22428,7 +22405,9 @@
     };
     DRAWER["judge-create"].foot = '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-resource-form-save="judge">保存考官</button>';
     DRAWER["judge-create"].title = "新增考官";
-    DRAWER["judge-cert"].body = judgeCertificateListBodyHtml;
+    DRAWER["judge-cert"].body = function () {
+      return judgeCertificateListBodyHtml().replace("<th>有效状态</th><th>审核状态</th>", "<th>证书有效状态</th><th>证书审核状态</th>");
+    };
     DRAWER["judge-cert"].foot = '<button class="btn" data-close-drawer>关闭</button>';
     DRAWER["judge-cert"].title = "考官证书管理";
     DRAWER["judge-cert-form"] = {

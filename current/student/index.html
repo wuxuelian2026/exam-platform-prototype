@@ -6226,6 +6226,7 @@
     .guest-menu-icon[data-menu-icon="candidate"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3'/%3E%3Cpath d='M3.5 19a5.5 5.5 0 0 1 11 0M16 7h5M18.5 4.5v5M16 14h5M16 18h3'/%3E%3C/svg%3E"); }
     .guest-menu-icon[data-menu-icon="registration"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5h6M9 3h6v4H9zM7 5H5v16h14V5h-2'/%3E%3Cpath d='m8 13 2 2 5-5M8 18h8'/%3E%3C/svg%3E"); }
     .guest-menu-icon[data-menu-icon="course"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z'/%3E%3Cpath d='M4 5.5v16M8 7h8M8 11h8M8 15h5'/%3E%3C/svg%3E"); }
+    .guest-menu-icon[data-menu-icon="training"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v14H4z'/%3E%3Cpath d='M8 5V3h8v2M8 9h8M8 13h5M8 17h4'/%3E%3C/svg%3E"); }
     .guest-menu-icon[data-menu-icon="score"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20V10M10 20V4M16 20v-7M22 20H2'/%3E%3Cpath d='m4 7 6-4 6 7 5-5'/%3E%3C/svg%3E"); }
     .guest-menu-icon[data-menu-icon="certificate"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h12v13H6zM9 7h6M9 11h4'/%3E%3Ccircle cx='15' cy='16' r='3'/%3E%3Cpath d='m13.5 18.5-.5 3 2-1 2 1-.5-3'/%3E%3C/svg%3E"); }
     .guest-menu-icon[data-menu-icon="message"] { --menu-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z'/%3E%3Cpath d='M8 9h8M8 13h5'/%3E%3C/svg%3E"); }
@@ -8141,6 +8142,112 @@
   <link rel="stylesheet" href="./exam-student-theme.css">
   <link rel="stylesheet" href="./exam-student-visual-upgrade.css?v=20260826">
   <style>
+    /* 培训模块 */
+    .training-page { display: grid; gap: 14px; padding-bottom: 14px; }
+    .training-carousel { position: relative; min-height: 156px; overflow: hidden; border-radius: 14px; background: linear-gradient(135deg, #0a1e3d 0%, #245687 58%, #c9a96e 100%); color: #fff; box-shadow: var(--shadow-card); }
+    .training-carousel::after { content: ""; position: absolute; width: 150px; height: 150px; right: -34px; top: -40px; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; box-shadow: 0 0 0 20px rgba(255,255,255,.06), 0 0 0 40px rgba(255,255,255,.04); }
+    .training-carousel-copy { position: relative; z-index: 1; display: grid; gap: 8px; max-width: 72%; padding: 22px 18px; }
+    .training-carousel-kicker { color: #e7cf9b; font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+    .training-carousel-title { margin: 0; font-size: 22px; line-height: 1.25; }
+    .training-carousel-text { margin: 0; color: rgba(255,255,255,.78); font-size: 12px; line-height: 1.55; }
+    .training-carousel-dots { position: absolute; left: 18px; bottom: 12px; z-index: 2; display: flex; gap: 5px; }
+    .training-carousel-dots span { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.45); }
+    .training-carousel-dots span:first-child { width: 16px; border-radius: 5px; background: #fff; }
+    .training-shortcuts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .training-shortcut { display: grid; justify-items: center; gap: 7px; min-width: 0; padding: 11px 3px 9px; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; color: var(--text-primary); text-decoration: none; font-size: 11px; font-weight: 800; }
+    .training-shortcut:active { background: #f6f8fb; transform: translateY(1px); }
+    .training-shortcut-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: rgba(10,30,61,.08); color: var(--brand-primary); }
+    .training-shortcut:nth-child(2) .training-shortcut-icon { background: rgba(201,169,110,.18); color: #9a742d; }
+    .training-shortcut:nth-child(3) .training-shortcut-icon { background: rgba(49,132,99,.12); color: #247454; }
+    .training-shortcut:nth-child(4) .training-shortcut-icon { background: rgba(176,82,73,.12); color: #a24e47; }
+    .training-shortcut-icon::before { content: ""; width: 19px; height: 19px; display: block; background: currentColor; -webkit-mask: var(--training-icon-mask) center / contain no-repeat; mask: var(--training-icon-mask) center / contain no-repeat; }
+    .training-shortcut-icon[data-training-icon="signup"] { --training-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16v16H4z'/%3E%3Cpath d='M8 8h8M8 12h5M8 16h4'/%3E%3C/svg%3E"); }
+    .training-shortcut-icon[data-training-icon="mine"] { --training-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v14H4z'/%3E%3Cpath d='M8 9h8M8 13h5'/%3E%3Cpath d='m15 16 2 2 3-4'/%3E%3C/svg%3E"); }
+    .training-shortcut-icon[data-training-icon="checkin"] { --training-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h12v18H6z'/%3E%3Cpath d='M9 7h6M9 11h6M9 15h3'/%3E%3Cpath d='m14 17 1.5 1.5L18 16'/%3E%3C/svg%3E"); }
+    .training-shortcut-icon[data-training-icon="assessment"] { --training-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 20V10M12 20V4M19 20v-7'/%3E%3Cpath d='M3 20h18'/%3E%3C/svg%3E"); }
+    .training-activity-list { display: grid; gap: 10px; }
+    .training-activity-card { display: grid; grid-template-columns: 104px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 10px; color: inherit; text-decoration: none; }
+    .training-activity-cover { position: relative; min-height: 76px; overflow: hidden; border-radius: 8px; background: linear-gradient(135deg, #1f4b76, #b88c4c); }
+    .training-activity-cover::before { content: attr(data-cover); position: absolute; left: 8px; bottom: 7px; color: rgba(255,255,255,.9); font-size: 11px; font-weight: 900; letter-spacing: .08em; }
+    .training-activity-cover.cover-green { background: linear-gradient(135deg, #225c50, #9aa75d); }
+    .training-activity-main { display: grid; gap: 7px; min-width: 0; }
+    .training-activity-title { overflow: hidden; color: var(--text-primary); font-size: 14px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+    .training-activity-meta { color: var(--text-secondary); font-size: 11px; line-height: 1.45; }
+    .training-detail-cover { min-height: 174px; display: grid; align-content: end; padding: 18px; border-radius: 12px; background: linear-gradient(135deg, #0a1e3d, #2d668a 58%, #c9a96e); color: #fff; }
+    .training-detail-cover.green { background: linear-gradient(135deg, #225c50, #738d58 58%, #c9a96e); }
+    .training-detail-cover small { color: #e7cf9b; font-weight: 800; }
+    .training-detail-cover h2 { margin: 8px 0 0; font-size: 22px; line-height: 1.3; }
+    .training-detail-status { margin-left: auto; }
+    .training-detail-info { display: grid; gap: 0; }
+    .training-detail-row { display: flex; justify-content: space-between; gap: 14px; min-height: 44px; padding: 11px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+    .training-detail-row:last-child { border-bottom: 0; }
+    .training-detail-row span { color: var(--text-secondary); }
+    .training-detail-row strong { color: var(--text-primary); text-align: right; }
+    .training-detail-row[data-training-fee-row][hidden] { display: none; }
+    .training-activity-fee { color: var(--brand-primary); font-size: 11px; font-weight: 800; }
+    .training-page-bottom { position: sticky; bottom: 0; z-index: 20; margin: 0 -12px; padding: 10px 12px calc(10px + var(--safe-bottom)); background: rgba(246,248,251,.94); backdrop-filter: blur(8px); }
+    .training-page-bottom .primary-action { width: 100%; display: flex; align-items: center; justify-content: center; }
+    .training-apply-candidate-field { display: grid; gap: 6px; margin: 12px 0 2px; }
+    .training-apply-candidate-field label { color: var(--text-secondary); font-size: 12px; font-weight: 800; }
+    .training-apply-candidate-field .form-input { width: 100%; }
+    .training-registration-detail-page { display: grid; gap: 12px; padding-bottom: 14px; }
+    .training-registration-detail-page .section { min-width: 0; }
+    .training-registration-detail-page .section > .ghost-action { display: flex; align-items: center; justify-content: center; }
+    .training-success-card { display: grid; gap: 14px; text-align: center; }
+    .training-success-icon { width: 56px; height: 56px; margin: 0 auto; display: grid; place-items: center; border-radius: 50%; background: var(--color-success); color: #fff; font-size: 28px; font-weight: 900; }
+    .training-success-card h2 { margin: 0; font-size: 20px; }
+    .training-success-copy { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.6; }
+    .training-success-payment { display: grid; gap: 6px; padding: 12px; border: 1px solid rgba(200,16,46,.18); border-radius: 10px; background: rgba(200,16,46,.06); color: var(--text-primary); text-align: left; }
+    .training-success-payment[hidden] { display: none; }
+    .training-success-payment p { margin: 0; font-size: 13px; line-height: 1.6; }
+    .training-success-payment strong { color: var(--brand-primary); }
+    .training-success-actions { display: grid; gap: 8px; }
+    .training-success-actions .primary-action { width: 100%; display: flex; align-items: center; justify-content: center; }
+    .training-my-page { display: grid; gap: 14px; padding-bottom: 14px; }
+    #my-training-view,
+    #my-training-view .training-my-page,
+    #my-training-view .section,
+    #my-training-view .training-registration-list,
+    #my-training-view .training-registration-card { min-width: 0; max-width: 100%; }
+    #my-training-view { overflow-x: hidden; }
+    #my-training-view .training-registration-card { width: 100%; overflow: hidden; }
+    .training-status-tabs { width: 100%; max-width: 100%; margin-top: 4px; gap: 16px; justify-content: flex-start; overflow-x: auto; }
+    .training-status-tabs .mini-tab { flex: 0 0 auto; min-width: 52px; min-height: 44px; padding: 0 6px; }
+    .training-registration-list { display: grid; gap: 10px; }
+    .training-registration-card { display: grid; gap: 12px; padding: 14px; }
+    .training-registration-head { display: flex; align-items: flex-start; justify-content: space-between; min-width: 0; gap: 8px; }
+    .training-registration-title { min-width: 0; overflow-wrap: anywhere; color: var(--text-primary); font-size: 15px; font-weight: 900; line-height: 1.45; }
+    .training-registration-head .status-pill { flex: 0 1 auto; max-width: 92px; white-space: normal; overflow-wrap: anywhere; text-align: center; }
+    .training-registration-info { display: grid; gap: 8px; }
+    .training-registration-row { display: flex; align-items: baseline; justify-content: space-between; min-width: 0; gap: 8px; font-size: 12px; line-height: 1.5; }
+    .training-registration-row span { color: var(--text-secondary); }
+    .training-registration-row strong { min-width: 0; max-width: 78%; color: var(--text-primary); text-align: right; overflow-wrap: anywhere; word-break: break-word; }
+    #training-view .training-activity-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto; gap: 8px 10px; padding: 16px; overflow: hidden; }
+    #training-view .training-activity-cover { grid-column: 1; grid-row: 1; width: 100%; min-height: 0; aspect-ratio: 16 / 9; align-self: start; }
+    #training-view .training-activity-main { grid-column: 2; grid-row: 1; align-self: start; }
+    #training-view .training-activity-title { display: -webkit-box; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    #training-view .training-activity-deadline { grid-column: 1; grid-row: 2; min-width: 0; overflow: hidden; color: var(--text-secondary); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    #training-view .training-activity-card > .status-pill { grid-column: 2; grid-row: 2; justify-self: end; }
+    .training-registration-order-row { display: flex; align-items: center; min-width: 0; gap: 3px; }
+    .training-registration-order-label { flex: 0 0 auto; color: var(--text-secondary); font-size: 12px; }
+    .training-registration-order-id { min-width: 0; overflow: hidden; color: var(--text-light); font-size: 12px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    .training-registration-order-row .status-pill { flex: 0 0 auto; margin-left: auto; }
+    .training-registration-main,
+    .training-registration-detail-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 10px; min-width: 0; }
+    .training-registration-cover { display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 0; border-radius: 8px; background: #FFC4C6; }
+    .training-registration-cover.green { background: #DCEFE2; }
+    .training-registration-card-body { display: grid; align-content: center; gap: 8px; min-width: 0; }
+    .training-registration-fee { color: var(--brand-primary); font-size: 15px; font-weight: 700; }
+    .training-registration-date { color: var(--text-secondary); font-size: 12px; white-space: nowrap; }
+    .training-registration-detail-title-row { display: flex; align-items: flex-start; min-width: 0; gap: 8px; }
+    .training-registration-detail-title-row .training-registration-title { flex: 1 1 auto; }
+    .training-registration-detail-status { flex: 0 0 auto; }
+    .tab-icon[data-icon="training"] { --tab-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h16v14H4z'/%3E%3Cpath d='M8 6V4h8v2M8 10h8M8 14h5'/%3E%3C/svg%3E"); }
+    @media (max-width: 360px) {
+      .training-activity-card { grid-template-columns: 88px minmax(0,1fr); }
+      .training-activity-card > .status-pill { grid-column: 2; justify-self: start; }
+    }
+
     /* 成绩详情由应用容器统一滚动，避免满高样式截断内容。 */
     .phone-shell:has(#score-view:not([hidden])) .app {
       overflow-y: auto !important;
@@ -12146,6 +12253,204 @@
         </div>
       </main>
 
+      <!-- 培训首页 -->
+      <main class="content screen-view" id="training-view" data-view="training" hidden>
+        <div class="training-page">
+          <section class="section" aria-label="培训活动列表">
+            <div class="training-activity-list">
+              <a class="card training-activity-card" href="#training-activity-detail?id=summer-camp" data-training-activity="summer-camp">
+                <span class="training-activity-cover" data-cover="SUMMER"></span>
+                <span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>2026暑期艺术综合素养营</strong><span class="training-activity-meta" data-training-activity-meta>音乐 · 舞蹈 · 美术<br>报名截止：2026.08.31</span><span class="training-activity-fee" data-training-card-fee></span></span>
+                <span class="status-pill" data-training-activity-status>报名中</span>
+                <span class="training-activity-deadline" data-training-activity-deadline>报名截止：2026.08.31</span>
+              </a>
+              <a class="card training-activity-card" href="#training-activity-detail?id=exam-coach" data-training-activity="exam-coach">
+                <span class="training-activity-cover cover-green" data-cover="COACH"></span>
+                <span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>社会艺术水平考级考前集训</strong><span class="training-activity-meta" data-training-activity-meta>考级专项训练<br>报名截止：2026.09.10</span><span class="training-activity-fee" data-training-card-fee></span></span>
+                <span class="status-pill muted" data-training-activity-status>未开始</span>
+                <span class="training-activity-deadline" data-training-activity-deadline>报名截止：2026.09.10</span>
+              </a>
+              <a class="card training-activity-card" href="#training-activity-detail?id=exam-review" data-training-activity="exam-review">
+                <span class="training-activity-cover" data-cover="REVIEW"></span>
+                <span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>秋季考级冲刺复习营</strong><span class="training-activity-meta" data-training-activity-meta>考级专项复习<br>报名截止：2026.08.24</span><span class="training-activity-fee" data-training-card-fee></span></span>
+                <span class="status-pill muted" data-training-activity-status>已截止</span>
+                <span class="training-activity-deadline" data-training-activity-deadline>报名截止：2026.08.24</span>
+              </a>
+              <a class="card training-activity-card" href="#training-activity-detail?id=summer-review" data-training-activity="summer-review">
+                <span class="training-activity-cover cover-green" data-cover="RECAP"></span>
+                <span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>暑期舞台表现集训</strong><span class="training-activity-meta" data-training-activity-meta>舞蹈与舞台表现<br>活动已结束</span><span class="training-activity-fee" data-training-card-fee></span></span>
+                <span class="status-pill muted" data-training-activity-status>已结束</span>
+                <span class="training-activity-deadline" data-training-activity-deadline>报名截止：2026.07.20</span>
+              </a>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- 培训活动列表 -->
+      <main class="content screen-view" id="training-activity-list-view" data-view="training-activity-list" hidden>
+        <section class="section">
+          <div class="section-head"><h2 class="section-title">培训报名</h2><span class="filter-note">4项活动</span></div>
+          <div class="training-activity-list">
+            <a class="card training-activity-card" href="#training-activity-detail?id=summer-camp" data-training-activity="summer-camp"><span class="training-activity-cover" data-cover="SUMMER"></span><span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>2026暑期艺术综合素养营</strong><span class="training-activity-meta" data-training-activity-meta>2026.09.05—09.07 · 武汉<br>音乐、舞蹈、美术综合训练</span><span class="training-activity-fee" data-training-card-fee></span></span><span class="status-pill" data-training-activity-status>报名中</span></a>
+            <a class="card training-activity-card" href="#training-activity-detail?id=exam-coach" data-training-activity="exam-coach"><span class="training-activity-cover cover-green" data-cover="COACH"></span><span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>社会艺术水平考级考前集训</strong><span class="training-activity-meta" data-training-activity-meta>2026.09.15—09.17 · 武汉<br>考级专业能力提升</span><span class="training-activity-fee" data-training-card-fee></span></span><span class="status-pill muted" data-training-activity-status>未开始</span></a>
+            <a class="card training-activity-card" href="#training-activity-detail?id=exam-review" data-training-activity="exam-review"><span class="training-activity-cover" data-cover="REVIEW"></span><span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>秋季考级冲刺复习营</strong><span class="training-activity-meta" data-training-activity-meta>2026.08.26—08.28 · 武汉<br>考级专项复习</span><span class="training-activity-fee" data-training-card-fee></span></span><span class="status-pill muted" data-training-activity-status>已截止</span></a>
+            <a class="card training-activity-card" href="#training-activity-detail?id=summer-review" data-training-activity="summer-review"><span class="training-activity-cover cover-green" data-cover="RECAP"></span><span class="training-activity-main"><strong class="training-activity-title" data-training-activity-title>暑期舞台表现集训</strong><span class="training-activity-meta" data-training-activity-meta>2026.07.25—07.27 · 武汉<br>活动已结束</span><span class="training-activity-fee" data-training-card-fee></span></span><span class="status-pill muted" data-training-activity-status>已结束</span></a>
+          </div>
+        </section>
+      </main>
+
+      <!-- 培训活动详情 -->
+      <main class="content screen-view" id="training-activity-detail-view" data-view="training-activity-detail" hidden>
+        <section class="section">
+          <div class="card form-card">
+            <div class="training-detail-cover" data-training-detail-cover><small data-training-detail-kicker>TRAINING PROGRAM</small><h2 data-training-detail-title>2026暑期艺术综合素养营</h2></div>
+            <div class="section-head" style="margin-top:14px;"><h2 class="section-title" data-training-detail-heading>基本信息</h2><span class="status-pill training-detail-status" data-training-detail-status>报名中</span></div>
+            <div class="training-detail-info">
+              <div class="training-detail-row"><span>培训时间</span><strong data-training-detail-time>2026.09.05—09.07</strong></div>
+              <div class="training-detail-row"><span>报名截止时间</span><strong data-training-detail-registration-end>2026.08.31 23:59</strong></div>
+              <div class="training-detail-row"><span>报名人数上限</span><strong data-training-detail-capacity>120人</strong></div>
+              <div class="training-detail-row"><span>培训地点</span><strong data-training-detail-location>武汉市青少年宫艺术中心</strong></div>
+              <div class="training-detail-row"><span>适合对象</span><strong data-training-detail-target>6—16岁艺术学习者</strong></div>
+              <div class="training-detail-row" data-training-fee-row><span>活动费用</span><strong data-training-detail-fee>¥ 1,980.00</strong></div>
+              <div class="training-detail-row"><span>承办组织</span><strong data-training-detail-org>湖北艺术职业学院</strong></div>
+            </div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="card form-card">
+            <h2 class="section-title">活动说明</h2>
+            <div class="detail-copy" data-training-detail-copy><p>围绕音乐、舞蹈、美术三个方向安排分组训练，帮助学员建立规范的练习方法和舞台表现基础。</p><p>活动包含专项课程、阶段展示和家长沟通环节，具体分组以报名后通知为准。</p></div>
+          </div>
+        </section>
+        <div class="training-page-bottom"><a class="primary-action" href="#training-apply?id=summer-camp" data-training-detail-action>立即报名</a></div>
+      </main>
+
+      <!-- 培训报名确认 -->
+      <main class="content screen-view" id="training-apply-view" data-view="training-apply" hidden>
+        <section class="section">
+          <div class="card form-card">
+            <h2 class="section-title">确认培训报名</h2>
+            <div class="training-detail-info">
+              <div class="training-detail-row"><span>培训活动</span><strong data-training-apply-title>2026暑期艺术综合素养营</strong></div>
+              <div class="training-apply-candidate-field">
+                <label for="training-apply-name">姓名</label>
+                <input id="training-apply-name" class="form-input" type="text" data-training-apply-name placeholder="请输入姓名" autocomplete="name" maxlength="20" aria-label="请输入姓名">
+              </div>
+              <div class="training-detail-row"><span>联系电话</span><strong data-training-apply-phone>132****5696</strong></div>
+            </div>
+            <p class="form-hint">提交后由培训机构联系确认分组、缴费和后续安排。</p>
+            <div class="action-row"><a class="ghost-action" href="#training-activity-detail?id=summer-camp">返回详情</a><a class="primary-action" href="#training-apply-success?id=summer-camp" data-training-apply-submit>提交报名</a></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 培训报名成功 -->
+      <main class="content screen-view" id="training-apply-success-view" data-view="training-apply-success" hidden>
+        <section class="section">
+          <div class="card form-card training-success-card">
+            <div class="training-success-icon" aria-hidden="true">✓</div>
+            <h2>报名成功</h2>
+            <p class="training-success-copy">您已成功提交 <strong data-training-success-title>2026暑期艺术综合素养营</strong> 报名。</p>
+            <div class="training-success-payment" data-training-success-payment>
+              <p data-training-success-payment-prompt>前往湖北艺术职业学院进行线下缴费！</p>
+              <p>联系人：<strong data-training-success-contact>王老师</strong></p>
+              <p>联系电话：<strong data-training-success-phone>027-8888-9999</strong></p>
+            </div>
+            <div class="training-success-actions">
+              <a class="primary-action" href="#my-training" data-training-success-my>查看我的培训报名</a>
+              <a class="ghost-action" href="#training">返回培训首页</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 我的培训报名 -->
+      <main class="content screen-view" id="my-training-view" data-view="my-training" hidden>
+        <div class="training-my-page">
+          <section class="section">
+            <div class="mini-tabs training-status-tabs" data-training-status-tabs role="tablist" aria-label="培训报名状态">
+              <button class="mini-tab active" type="button" data-training-status-tab="all" role="tab" aria-selected="true">全部</button>
+              <button class="mini-tab" type="button" data-training-status-tab="待缴费" role="tab" aria-selected="false">待缴费</button>
+              <button class="mini-tab" type="button" data-training-status-tab="已缴费" role="tab" aria-selected="false">已缴费</button>
+              <button class="mini-tab" type="button" data-training-status-tab="已取消" role="tab" aria-selected="false">已取消</button>
+              <button class="mini-tab" type="button" data-training-status-tab="待退款" role="tab" aria-selected="false">待退款</button>
+              <button class="mini-tab" type="button" data-training-status-tab="已退款" role="tab" aria-selected="false">已退款</button>
+            </div>
+          </section>
+          <section class="section" aria-label="培训报名记录">
+            <div class="training-registration-list" data-training-registration-list></div>
+            <div class="empty-state" data-training-registration-empty hidden>暂无符合条件的培训报名</div>
+          </section>
+        </div>
+      </main>
+
+      <main class="content screen-view" id="training-registration-detail-view" data-view="training-registration-detail" hidden>
+        <div class="training-registration-detail-page">
+          <section class="section">
+            <div class="card form-card training-registration-card training-registration-summary-card">
+              <div class="training-registration-detail-card">
+                <span class="training-registration-cover" data-training-registration-detail-cover aria-hidden="true"></span>
+                <div class="training-registration-card-body">
+                  <div class="training-registration-detail-title-row">
+                    <strong class="training-registration-title" data-training-registration-detail-title>2026暑期艺术综合素养营</strong>
+                    <span class="status-pill training-registration-detail-status" data-training-registration-detail-status>待缴费</span>
+                  </div>
+                  <strong class="training-registration-fee" data-training-registration-detail-card-fee>¥99.00</strong>
+                  <span class="training-registration-date" data-training-registration-detail-deadline>报名截止：2026.08.31 23:59</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="section">
+            <div class="card form-card training-registration-info-card">
+              <div class="section-head"><h2 class="section-title">报名信息</h2></div>
+              <div class="training-detail-info">
+                <div class="training-detail-row"><span>报名编号</span><strong data-training-registration-detail-id>—</strong></div>
+                <div class="training-detail-row"><span>姓名</span><strong data-training-registration-detail-name>—</strong></div>
+                <div class="training-detail-row"><span>联系电话</span><strong data-training-registration-detail-phone>—</strong></div>
+                <div class="training-detail-row"><span>报名费用</span><strong data-training-registration-detail-fee>—</strong></div>
+                <div class="training-detail-row"><span>报名时间</span><strong data-training-registration-detail-registered-at>—</strong></div>
+                <div class="training-detail-row"><span>缴费状态</span><strong data-training-registration-detail-payment-status>待缴费</strong></div>
+              </div>
+            </div>
+          </section>
+          <section class="section" data-training-registration-paid-panel hidden>
+            <div class="card form-card">
+              <h2 class="section-title">缴费信息</h2>
+              <div class="training-detail-info">
+                <div class="training-detail-row"><span>缴费时间</span><strong data-training-registration-paid-at>—</strong></div>
+                <div class="training-detail-row"><span>缴费凭证</span><span class="proof-image-placeholder" role="img" aria-label="缴费凭证图片占位">缴费凭证<br>图片占位</span></div>
+                <div class="training-detail-row"><span>流水号</span><strong data-training-registration-payment-serial>待生成</strong></div>
+              </div>
+            </div>
+          </section>
+          <section class="section" data-training-registration-cancel-panel hidden>
+            <div class="card form-card">
+              <h2 class="section-title">取消信息</h2>
+              <div class="training-detail-info">
+                <div class="training-detail-row"><span>取消时间</span><strong data-training-registration-cancelled-at>—</strong></div>
+                <div class="training-detail-row"><span>取消原因</span><strong data-training-registration-cancel-reason>—</strong></div>
+              </div>
+            </div>
+          </section>
+          <section class="section" data-training-registration-refund-panel hidden>
+            <div class="card form-card">
+              <h2 class="section-title">退款信息</h2>
+              <div class="training-detail-info">
+                <div class="training-detail-row"><span>退款时间</span><strong data-training-registration-refund-at>—</strong></div>
+                <div class="training-detail-row"><span>退款凭证</span><span class="proof-image-placeholder" role="img" aria-label="退款凭证图片占位">退款凭证<br>图片占位</span></div>
+                <div class="training-detail-row"><span>流水号</span><strong data-training-registration-refund-serial>待生成</strong></div>
+              </div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="ghost-action" type="button" data-training-registration-cancel hidden style="width:100%;text-align:center;margin-bottom:8px;">取消报名</button>
+            <a class="ghost-action" href="#my-training" data-training-registration-detail-back style="width:100%;text-align:center;">返回我的培训</a>
+          </section>
+        </div>
+      </main>
+
       <!-- 课程详情 -->
       <main class="content screen-view" id="course-detail-view" data-view="course-detail" hidden>
         <div class="course-detail-page">
@@ -12621,6 +12926,7 @@
           </div>
           <div class="weui-cells my-menu" style="margin-top:0;border-radius:var(--radius);overflow:hidden;">
             <a class="weui-cell weui-cell_access my-menu-link" href="#course-orders" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="course" aria-hidden="true"></span><span>我的课程订单</span></div><div class="weui-cell__ft"></div></a>
+            <a class="weui-cell weui-cell_access my-menu-link" href="#my-training" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="training" aria-hidden="true"></span><span>我的培训报名</span></div><div class="weui-cell__ft"></div></a>
             <a class="weui-cell weui-cell_access my-menu-link" href="#message" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="message" aria-hidden="true"></span><span>消息中心</span></div><div class="weui-cell__ft"><span class="badge">2</span></div></a>
             <a class="weui-cell weui-cell_access my-menu-link" href="#settings"><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="settings" aria-hidden="true"></span><span>设置</span></div><div class="weui-cell__ft"></div></a>
           </div>
@@ -12649,6 +12955,7 @@
           </div>
           <div class="weui-cells my-menu" style="margin-top:12px;border-radius:var(--radius);overflow:hidden;">
             <a class="weui-cell weui-cell_access my-menu-link" href="#course-orders" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="course" aria-hidden="true"></span><span>我的课程订单</span></div><div class="weui-cell__ft"></div></a>
+            <a class="weui-cell weui-cell_access my-menu-link" href="#my-training" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="training" aria-hidden="true"></span><span>我的培训报名</span></div><div class="weui-cell__ft"></div></a>
             <a class="weui-cell weui-cell_access my-menu-link" href="#message" data-require-login><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="message" aria-hidden="true"></span><span>消息中心</span></div><div class="weui-cell__ft"></div></a>
             <a class="weui-cell weui-cell_access my-menu-link" href="#settings"><div class="weui-cell__bd"><span class="guest-menu-icon" data-menu-icon="settings" aria-hidden="true"></span><span>设置</span></div><div class="weui-cell__ft"></div></a>
           </div>
@@ -12989,8 +13296,8 @@
             </div>
             <div class="card login-card">
               <div class="login-tablist" role="tablist" aria-label="登录方式">
-                <button class="login-tab is-active" type="button" data-login-tab="code" role="tab" aria-selected="true" aria-controls="login-pane-code">验证码登录</button>
-                <button class="login-tab" type="button" data-login-tab="password" role="tab" aria-selected="false" aria-controls="login-pane-password">密码登录</button>
+                <button class="login-tab" type="button" data-login-tab="code" role="tab" aria-selected="false" aria-controls="login-pane-code">验证码登录</button>
+                <button class="login-tab is-active" type="button" data-login-tab="password" role="tab" aria-selected="true" aria-controls="login-pane-password">密码登录</button>
               </div>
               <div class="login-pane" id="login-pane-code" data-login-pane="code">
                 <div class="login-field-row">
@@ -13008,14 +13315,14 @@
                 </label>
                 <button class="primary-action" type="button" data-login-code-submit style="width:100%;">登录</button>
               </div>
-              <div class="login-pane" id="login-pane-password" data-login-pane="password" hidden>
+              <div class="login-pane" id="login-pane-password" data-login-pane="password">
                 <div class="login-field-row">
                   <span class="login-field-label">账号</span>
-                  <input type="text" inputmode="numeric" autocomplete="username" aria-label="账号或手机号" placeholder="请输入账号/手机号" value="" data-login-password-account>
+                  <input type="text" inputmode="numeric" autocomplete="username" aria-label="账号或手机号" placeholder="请输入账号/手机号" value="13812342688" data-login-password-account>
                 </div>
                 <div class="login-field-row">
                   <span class="login-field-label">密码</span>
-                  <input type="password" autocomplete="current-password" aria-label="密码" placeholder="请输入密码" value="" data-login-password-value>
+                  <input type="password" autocomplete="current-password" aria-label="密码" placeholder="请输入密码" value="123456" data-login-password-value>
                 </div>
                 <label class="login-agree" data-login-agree-row="password">
                   <input type="checkbox" data-login-agree="password">
@@ -13268,6 +13575,9 @@
       </a>
       <a class="tab" href="#applications" data-tab="applications">
         <span class="tab-icon" data-icon="exam" aria-hidden="true"></span><span>考试</span>
+      </a>
+      <a class="tab" href="#training" data-tab="training">
+        <span class="tab-icon" data-icon="training" aria-hidden="true"></span><span>培训</span>
       </a>
       <a class="tab" href="#my" data-tab="my">
         <span class="tab-icon" data-icon="my" aria-hidden="true"></span><span>我的</span>
@@ -14564,6 +14874,10 @@
         applications: true,
         "registration-records": true,
         message: true,
+        "my-training": true,
+        "training-apply": true,
+        "training-apply-success": true,
+        "training-registration-detail": true,
         "exam-apply": true,
         "exam-start-check": true,
         "apply-confirm": true,
@@ -14650,6 +14964,12 @@
         "certificate-progress": { title: "证书生成进度", back: "#certificates" },
         message: { title: "消息中心", back: "#my" },
         "message-detail": { title: "消息详情", back: "#message" },
+        "training-activity-list": { title: "培训报名", back: "#training" },
+        "training-activity-detail": { title: "培训活动详情", back: "#training" },
+        "training-apply": { title: "培训报名", back: "#training-activity-detail?id=summer-camp" },
+        "training-apply-success": { title: "报名成功", back: "#training-apply?id=summer-camp" },
+        "my-training": { title: "我的培训", back: "#training" },
+        "training-registration-detail": { title: "培训报名详情", back: "#my-training" },
         "notice-detail": { title: "信息发布详情", back: "#exam-news-list" },
         "exam-guidebook-list": { title: "考级指南", back: "#home" },
         "exam-news-list": { title: "信息发布列表", back: "#home" },
@@ -14698,6 +15018,13 @@
         "course-pay-success": "learning",
         "course-orders": "my",
         "course-order-detail": "my",
+        training: "training",
+        "training-activity-list": "training",
+        "training-activity-detail": "training",
+        "my-training": "training",
+        "training-apply": "training",
+        "training-apply-success": "training",
+        "training-registration-detail": "training",
         subjects: "subjects",
         "major-select": "subjects",
         "apply-notice": "subjects",
@@ -14787,7 +15114,7 @@
       }
 
       var loginFlowState = {
-        mode: "code",
+        mode: "password",
         step: "login",
         pendingPhone: ""
       };
@@ -17261,6 +17588,338 @@
         }
       }
 
+      function trainingActivityKeyFromHash() {
+        var hash = window.location.hash || "";
+        var queryIndex = hash.indexOf("?");
+        var query = queryIndex >= 0 ? hash.slice(queryIndex + 1) : "";
+        var params = new URLSearchParams(query);
+        return trainingActivityRouteKeyById(params.get("id")) || "summer-camp";
+      }
+
+      function trainingActivityRouteKeyById(activityId) {
+        return Object.keys(trainingActivityData).find(function (key) {
+          return key === activityId || trainingActivityData[key].id === activityId;
+        }) || "";
+      }
+
+      function trainingActivityForId(activityId) {
+        var key = trainingActivityRouteKeyById(activityId);
+        return key ? trainingActivityData[key] : null;
+      }
+
+      function trainingActivityStatus(data) {
+        if (!data) return "已结束";
+        if (data.status === "已取消" || data.publishStatus !== "已发布" || data.manualClosed) return "已取消";
+        var now = new Date("2026-08-25T10:00:00+08:00").getTime();
+        var start = new Date(data.registrationStartAt || 0).getTime();
+        var end = new Date(data.registrationEndAt || 0).getTime();
+        var activityEnd = new Date(data.activityEndAt || 0).getTime();
+        if (Number.isFinite(activityEnd) && now > activityEnd) return "已结束";
+        if (Number.isFinite(start) && now < start) return "未开始";
+        if ((Number.isFinite(end) && now > end) || (Number(data.capacity) > 0 && Number(data.enrolled || 0) >= Number(data.capacity))) return "已截止";
+        return "报名中";
+      }
+
+      function trainingStatusClass(status) {
+        return status === "报名中" ? "" : " muted";
+      }
+
+      function formatTrainingDate(value) {
+        if (!value) return "—";
+        return String(value).replace("T", " ").replace(/:\d{2}(?:[+-]\d{2}:?\d{2})?$/, "");
+      }
+
+      function formatTrainingDateMinute(value) {
+        if (!value) return "—";
+        return String(value).slice(0, 16).replace("T", " ").replace(/-/g, ".");
+      }
+
+      function trainingRegistrationFeeText(record, data) {
+        if (!data || data.feeType !== "paid") return "免费";
+        var amount = Number(record && record.amount);
+        if (!Number.isFinite(amount) || amount <= 0) amount = Number(String(data.fee || "").replace(/[^0-9.]/g, "")) || 0;
+        return amount > 0 ? "¥" + amount.toFixed(2) : (data.fee || "待确认");
+      }
+
+      function normalizeTrainingRegistration(record) {
+        var data = trainingActivityForId(record && record.activityId) || {};
+        var normalized = Object.assign({
+          id: "TR-UNKNOWN",
+          candidate: "待选择",
+          activityId: "",
+          registeredAt: "",
+          status: data.feeType === "free" ? "已缴费" : "待缴费",
+          paidAt: null,
+          cancelledAt: null,
+          cancelReason: "",
+          refundRequestedAt: null,
+          refundReason: "",
+          refundedAt: null,
+          paymentSerialNumber: "",
+          refundSerialNumber: "",
+          amount: Number(String(data.fee || "").replace(/[^0-9.]/g, "")) || 0
+        }, record || {});
+        normalized.activityId = data.id || normalized.activityId;
+        if (normalized.status === "已报名") normalized.status = "已缴费";
+        if (typeof normalized.amount === "string") normalized.amount = Number(normalized.amount.replace(/[^0-9.]/g, "")) || 0;
+        if (normalized.status === "已缴费" && !normalized.paidAt) normalized.paidAt = normalized.registeredAt;
+        if (normalized.status === "已取消" && !normalized.cancelledAt) normalized.cancelledAt = normalized.registeredAt;
+        return normalized;
+      }
+
+      function loadTrainingRegistrations() {
+        try {
+          var stored = window.localStorage.getItem(TRAINING_REGISTRATION_STORAGE_KEY);
+          if (stored) {
+            var parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) trainingRegistrationRecords = parsed;
+          } else {
+            saveTrainingRegistrations(trainingRegistrationRecords);
+          }
+        } catch (error) { /* keep prototype data */ }
+        trainingRegistrationRecords = trainingRegistrationRecords.map(normalizeTrainingRegistration);
+        return trainingRegistrationRecords;
+      }
+
+      function saveTrainingRegistrations(records) {
+        trainingRegistrationRecords = Array.isArray(records) ? records.map(normalizeTrainingRegistration) : [];
+        try {
+          window.localStorage.setItem(TRAINING_REGISTRATION_STORAGE_KEY, JSON.stringify(trainingRegistrationRecords));
+        } catch (error) { /* prototype storage is optional */ }
+      }
+
+      function trainingRegistrationIdFromHash() {
+        var hash = window.location.hash || "";
+        var queryIndex = hash.indexOf("?");
+        var query = queryIndex >= 0 ? hash.slice(queryIndex + 1) : "";
+        return new URLSearchParams(query).get("id") || "";
+      }
+
+      function createTrainingRegistration(activityId, candidate) {
+        var data = trainingActivityForId(activityId);
+        if (!data || !candidate) return { error: "报名信息不完整" };
+        if (trainingActivityStatus(data) !== "报名中") return { error: "该培训活动当前不可报名" };
+        var records = loadTrainingRegistrations();
+        var existing = records.find(function (record) {
+          return trainingActivityRouteKeyById(record.activityId) === trainingActivityRouteKeyById(activityId) && record.candidate === candidate && ["待缴费", "已缴费", "待退款"].indexOf(record.status) > -1;
+        });
+        if (existing) return { record: existing, duplicate: true };
+        var profile = getChildProfile(candidate) || {};
+        var record = normalizeTrainingRegistration({
+          id: "BM" + Date.now().toString(36).toUpperCase(),
+          candidate: candidate,
+          activityId: data.id,
+          registeredAt: "2026.08.25 10:00",
+          status: data.feeType === "free" ? "已缴费" : "待缴费",
+          amount: data.feeType === "paid" ? Number(String(data.fee).replace(/[^0-9.]/g, "")) || 0 : 0,
+          phone: profile.contactPhone || ""
+        });
+        records.unshift(record);
+        saveTrainingRegistrations(records);
+        return { record: record, duplicate: false };
+      }
+
+      function trainingRegistrationFromHash() {
+        var id = trainingRegistrationIdFromHash();
+        return loadTrainingRegistrations().find(function (record) { return record.id === id; }) || null;
+      }
+
+      function syncTrainingActivityDetail() {
+        var data = trainingActivityData[trainingActivityKeyFromHash()];
+        if (!data) return;
+        var activityStatus = trainingActivityStatus(data);
+        var setText = function (selector, value) {
+          var el = document.querySelector(selector);
+          if (el) el.textContent = value;
+        };
+        setText("[data-training-detail-kicker]", data.kicker);
+        setText("[data-training-detail-title]", data.title);
+        setText("[data-training-detail-time]", data.time);
+        setText("[data-training-detail-registration-end]", formatTrainingDateMinute(data.registrationEndAt));
+        setText("[data-training-detail-capacity]", Number(data.capacity) > 0 ? Number(data.capacity) + "人" : "不限");
+        setText("[data-training-detail-location]", data.location);
+        setText("[data-training-detail-target]", data.target);
+        setText("[data-training-detail-fee]", data.fee);
+        setText("[data-training-detail-org]", data.organization);
+        var feeRow = document.querySelector("[data-training-fee-row]");
+        if (feeRow) feeRow.hidden = data.feeType !== "paid";
+        var status = document.querySelector("[data-training-detail-status]");
+        if (status) {
+          status.textContent = activityStatus;
+          status.className = "status-pill training-detail-status" + trainingStatusClass(activityStatus);
+        }
+        var cover = document.querySelector("[data-training-detail-cover]");
+        if (cover) cover.className = "training-detail-cover" + (data.coverClass ? " " + data.coverClass : "");
+        var copy = document.querySelector("[data-training-detail-copy]");
+        if (copy) copy.innerHTML = data.copy.split("\n").map(function (line) { return "<p>" + line + "</p>"; }).join("");
+        var action = document.querySelector("[data-training-detail-action]");
+        if (action) {
+          action.href = "#training-apply?id=" + encodeURIComponent(trainingActivityKeyFromHash());
+          action.textContent = activityStatus === "报名中" ? "立即报名" : (activityStatus === "未开始" ? "报名未开始" : (activityStatus === "已截止" ? "报名已截止" : "活动已结束"));
+          action.classList.toggle("is-disabled", activityStatus !== "报名中");
+          action.setAttribute("aria-disabled", activityStatus === "报名中" ? "false" : "true");
+        }
+      }
+
+      function syncTrainingActivityCards() {
+        document.querySelectorAll("[data-training-activity]").forEach(function (card) {
+          var data = trainingActivityData[card.getAttribute("data-training-activity")];
+          if (!data) return;
+          var activityStatus = trainingActivityStatus(data);
+          var title = card.querySelector("[data-training-activity-title]");
+          var meta = card.querySelector("[data-training-activity-meta]");
+          var fee = card.querySelector("[data-training-card-fee]");
+          var status = card.querySelector("[data-training-activity-status]");
+          var deadline = card.querySelector("[data-training-activity-deadline]");
+          if (title) title.textContent = data.title;
+          if (meta) meta.textContent = data.time + " · " + data.location;
+          if (fee) fee.textContent = data.feeType === "paid" ? String(data.fee || "").replace(/\s+/g, "") : "免费";
+          if (deadline) deadline.textContent = "报名截止：" + formatTrainingDate(data.registrationEndAt);
+          if (status) {
+            status.textContent = activityStatus;
+            status.className = "status-pill" + trainingStatusClass(activityStatus);
+          }
+        });
+      }
+
+      function syncTrainingApplyUI() {
+        var data = trainingActivityData[trainingActivityKeyFromHash()];
+        var activityStatus = trainingActivityStatus(data);
+        var title = document.querySelector("[data-training-apply-title]");
+        if (title && data) title.textContent = data.title;
+        var nameInput = document.querySelector("[data-training-apply-name]");
+        var names = childProfileNames();
+        if (nameInput && !nameInput.value.trim()) nameInput.value = currentChild && names.indexOf(currentChild) >= 0 ? currentChild : (names[0] || "");
+        var profile = getChildProfile(nameInput && nameInput.value.trim() || currentChild);
+        var phone = document.querySelector("[data-training-apply-phone]");
+        if (phone) phone.textContent = profile && profile.contactPhone ? maskPhone(profile.contactPhone) : "暂无联系方式";
+        document.querySelectorAll("[data-training-apply-submit]").forEach(function (link) {
+          link.href = "#training-apply-success?id=" + encodeURIComponent(trainingActivityKeyFromHash());
+          link.classList.toggle("is-disabled", activityStatus !== "报名中");
+          link.setAttribute("aria-disabled", activityStatus === "报名中" ? "false" : "true");
+        });
+      }
+
+      function syncTrainingApplySuccessUI() {
+        var data = trainingActivityData[trainingActivityKeyFromHash()];
+        if (!data) return;
+        var setText = function (selector, value) {
+          var el = document.querySelector(selector);
+          if (el) el.textContent = value;
+        };
+        setText("[data-training-success-title]", data.title);
+        setText("[data-training-success-contact]", data.contactName || "培训活动联系人");
+        setText("[data-training-success-phone]", data.contactPhone || "请联系报名机构");
+        var payment = document.querySelector("[data-training-success-payment]");
+        var prompt = document.querySelector("[data-training-success-payment-prompt]");
+        if (payment) payment.hidden = data.feeType !== "paid";
+        if (prompt) prompt.textContent = "前往" + (data.offlinePaymentLocation || data.organization) + "进行线下缴费！";
+      }
+
+      function syncTrainingRegistrationDetailUI() {
+        var record = trainingRegistrationFromHash();
+        if (!record) {
+          window.location.hash = "#my-training";
+          return;
+        }
+        var data = trainingActivityForId(record.activityId) || {};
+        var setText = function (selector, value) {
+          var el = document.querySelector(selector);
+          if (el) el.textContent = value || "—";
+        };
+        setText("[data-training-registration-detail-title]", data.title || "培训报名详情");
+        setText("[data-training-registration-detail-card-fee]", trainingRegistrationFeeText(record, data));
+        setText("[data-training-registration-detail-deadline]", data.registrationEndAt ? "报名截止：" + formatTrainingDateMinute(data.registrationEndAt) : "报名截止：待确认");
+        setText("[data-training-registration-detail-status]", record.status);
+        var status = document.querySelector("[data-training-registration-detail-status]");
+        if (status) status.className = "status-pill training-registration-detail-status" + (trainingRegistrationStatusClassMap[record.status] ? " " + trainingRegistrationStatusClassMap[record.status] : "");
+        var cover = document.querySelector("[data-training-registration-detail-cover]");
+        if (cover) cover.className = "training-registration-cover" + (data.coverClass ? " " + data.coverClass : "");
+        setText("[data-training-registration-detail-payment-status]", record.status);
+        setText("[data-training-registration-detail-id]", record.id);
+        setText("[data-training-registration-detail-name]", record.candidate);
+        var candidatePhone = record.phone || ((getChildProfile(record.candidate) || {}).contactPhone || "");
+        setText("[data-training-registration-detail-phone]", candidatePhone ? maskPhone(candidatePhone) : "暂无联系方式");
+        setText("[data-training-registration-detail-registered-at]", formatTrainingDate(record.registeredAt));
+        setText("[data-training-registration-detail-fee]", trainingRegistrationFeeText(record, data));
+        setText("[data-training-registration-paid-at]", formatTrainingDate(record.paidAt));
+        setText("[data-training-registration-payment-serial]", record.paymentSerialNumber || (["已缴费", "待退款", "已退款"].indexOf(record.status) > -1 ? "待生成" : "—"));
+        setText("[data-training-registration-cancelled-at]", formatTrainingDate(record.cancelledAt || record.refundRequestedAt));
+        setText("[data-training-registration-cancel-reason]", record.cancelReason || record.refundReason || "申请退款");
+        setText("[data-training-registration-refund-at]", formatTrainingDate(record.refundedAt || record.refundRequestedAt));
+        setText("[data-training-registration-refund-serial]", record.refundSerialNumber || "待生成");
+        var paidPanel = document.querySelector("[data-training-registration-paid-panel]");
+        var cancelPanel = document.querySelector("[data-training-registration-cancel-panel]");
+        var refundPanel = document.querySelector("[data-training-registration-refund-panel]");
+        var cancelAction = document.querySelector("[data-training-registration-cancel]");
+        if (paidPanel) paidPanel.hidden = ["已缴费", "待退款", "已退款"].indexOf(record.status) < 0;
+        if (cancelPanel) cancelPanel.hidden = ["已取消", "待退款", "已退款"].indexOf(record.status) < 0;
+        if (refundPanel) refundPanel.hidden = ["待退款", "已退款"].indexOf(record.status) < 0;
+        if (cancelAction) {
+          cancelAction.hidden = record.status !== "待缴费";
+          cancelAction.setAttribute("data-training-registration-cancel-id", record.id || "");
+        }
+      }
+
+      function createTrainingRegistrationCard(record) {
+        var data = trainingActivityForId(record.activityId) || {};
+        var article = document.createElement("article");
+        article.className = "card training-registration-card";
+        article.setAttribute("data-training-registration", record.id);
+        article.setAttribute("tabindex", "0");
+        article.setAttribute("role", "link");
+        article.setAttribute("aria-label", "查看" + (data.title || "培训活动") + "报名详情");
+        var orderRow = document.createElement("div");
+        orderRow.className = "training-registration-order-row";
+        orderRow.innerHTML = '<span class="training-registration-order-label">培训报名：</span><strong class="training-registration-order-id"></strong><span class="status-pill"></span>';
+        orderRow.querySelector(".training-registration-order-id").textContent = record.id || "—";
+        var status = orderRow.querySelector(".status-pill");
+        status.textContent = record.status;
+        status.className = "status-pill" + (trainingRegistrationStatusClassMap[record.status] ? " " + trainingRegistrationStatusClassMap[record.status] : "");
+        var main = document.createElement("div");
+        main.className = "training-registration-main";
+        var cover = document.createElement("span");
+        cover.className = "training-registration-cover" + (data.coverClass ? " " + data.coverClass : "");
+        cover.setAttribute("aria-hidden", "true");
+        var body = document.createElement("div");
+        body.className = "training-registration-card-body";
+        var title = document.createElement("strong");
+        title.className = "training-registration-title";
+        title.textContent = data.title || "培训活动";
+        var fee = document.createElement("strong");
+        fee.className = "training-registration-fee";
+        fee.textContent = trainingRegistrationFeeText(record, data);
+        var date = document.createElement("span");
+        date.className = "training-registration-date";
+        date.textContent = formatTrainingDate(record.registeredAt || "待确认");
+        body.appendChild(title);
+        body.appendChild(fee);
+        body.appendChild(date);
+        main.appendChild(cover);
+        main.appendChild(body);
+        article.appendChild(orderRow);
+        article.appendChild(main);
+        return article;
+      }
+
+      function syncMyTrainingUI() {
+        loadTrainingRegistrations();
+        document.querySelectorAll("[data-training-status-tab]").forEach(function (tab) {
+          var active = tab.getAttribute("data-training-status-tab") === trainingRegistrationStatusFilter;
+          tab.classList.toggle("active", active);
+          tab.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        var list = document.querySelector("[data-training-registration-list]");
+        var empty = document.querySelector("[data-training-registration-empty]");
+        if (!list) return;
+        var visibleRecords = trainingRegistrationRecords.filter(function (record) {
+          return trainingRegistrationStatusFilter === "all" || record.status === trainingRegistrationStatusFilter;
+        });
+        list.textContent = "";
+        visibleRecords.forEach(function (record) { list.appendChild(createTrainingRegistrationCard(record)); });
+        if (empty) empty.hidden = visibleRecords.length > 0;
+      }
+
       function syncOrgDetailUI(tabKey) {
         var key = tabKey === "venues" || tabKey === "rooms" ? tabKey : "org";
         activeOrgDetailTab = key;
@@ -19003,6 +19662,12 @@
         if (view === "course-pay-success") syncCoursePaySuccess();
         if (view === "course-orders") renderCourseOrders();
         if (view === "course-order-detail") syncCourseOrderDetail();
+        if (view === "training" || view === "training-activity-list") syncTrainingActivityCards();
+        if (view === "training-activity-detail") syncTrainingActivityDetail();
+        if (view === "training-apply") syncTrainingApplyUI();
+        if (view === "training-apply-success") syncTrainingApplySuccessUI();
+        if (view === "my-training") syncMyTrainingUI();
+        if (view === "training-registration-detail") syncTrainingRegistrationDetailUI();
         if (view === "org-detail") syncOrgDetailUI(activeOrgDetailTab);
         if (view === "venue-detail") syncVenueDetailUI();
         if (view === "room-detail") syncRoomDetailUI();
@@ -19868,6 +20533,81 @@
         });
       });
 
+      document.querySelectorAll("[data-training-detail-action]").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          var key = trainingActivityKeyFromHash();
+          var data = trainingActivityData[key];
+          if (data && trainingActivityStatus(data) !== "报名中") {
+            event.preventDefault();
+            showToast("该培训活动暂未开放报名");
+          }
+        });
+      });
+
+      document.querySelectorAll("[data-training-apply-submit]").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          var nameInput = document.querySelector("[data-training-apply-name]");
+          var candidateName = nameInput ? nameInput.value.trim() : "";
+          if (!candidateName) {
+            event.preventDefault();
+            showToast("请输入姓名");
+            return;
+          }
+          var activityId = trainingActivityKeyFromHash();
+          var result = createTrainingRegistration(activityId, candidateName);
+          if (result.error) {
+            event.preventDefault();
+            showToast(result.error);
+            return;
+          }
+          if (result.duplicate) {
+            event.preventDefault();
+            showToast("该考生已报名");
+            window.location.hash = "#training-registration-detail?id=" + encodeURIComponent(result.record.id);
+            return;
+          }
+          link.href = "#training-apply-success?id=" + encodeURIComponent(activityId) + "&registrationId=" + encodeURIComponent(result.record.id);
+        });
+      });
+
+      document.querySelectorAll("[data-training-status-tab]").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          trainingRegistrationStatusFilter = tab.getAttribute("data-training-status-tab") || "all";
+          syncMyTrainingUI();
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        var cancelAction = event.target.closest("[data-training-registration-cancel]");
+        if (!cancelAction) return;
+        var cancelId = cancelAction.getAttribute("data-training-registration-cancel-id") || trainingRegistrationIdFromHash();
+        var record = loadTrainingRegistrations().find(function (item) { return item.id === cancelId; });
+        if (!record || record.status !== "待缴费") return;
+        if (!window.confirm("确认取消该培训报名吗？")) return;
+        record.status = "已取消";
+        record.cancelledAt = new Date().toISOString();
+        record.cancelReason = "考生放弃报名";
+        saveTrainingRegistrations(trainingRegistrationRecords);
+        showToast("已取消报名");
+        window.location.hash = "#my-training";
+      });
+
+      var trainingRegistrationList = document.querySelector("[data-training-registration-list]");
+      if (trainingRegistrationList) {
+        trainingRegistrationList.addEventListener("click", function (event) {
+          var card = event.target.closest("[data-training-registration]");
+          if (!card || !trainingRegistrationList.contains(card)) return;
+          window.location.hash = "#training-registration-detail?id=" + encodeURIComponent(card.getAttribute("data-training-registration") || "");
+        });
+        trainingRegistrationList.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          var card = event.target.closest("[data-training-registration]");
+          if (!card || event.target !== card) return;
+          event.preventDefault();
+          window.location.hash = "#training-registration-detail?id=" + encodeURIComponent(card.getAttribute("data-training-registration") || "");
+        });
+      }
+
       document.querySelectorAll("[data-course-search]").forEach(function (input) {
         input.addEventListener("input", renderCourseList);
       });
@@ -20640,6 +21380,122 @@
 
       var RECENT_SUBJECT_BATCH = "2026h2-wuhan";
       var activeBatchKey = RECENT_SUBJECT_BATCH;
+      var trainingActivityData = {
+        "summer-camp": {
+          id: "PX202608101",
+          kicker: "TRAINING PROGRAM",
+          title: "2026暑期艺术综合素养营",
+          status: "报名中",
+          statusClass: "",
+          time: "2026.09.05—09.07",
+          capacity: 120,
+          registrationStartAt: "2026-08-20T00:00:00+08:00",
+          registrationEndAt: "2026-08-31T23:59:59+08:00",
+          activityStartAt: "2026-09-05T00:00:00+08:00",
+          activityEndAt: "2026-09-07T23:59:59+08:00",
+          location: "武汉市青少年宫艺术中心",
+          target: "6—16岁艺术学习者",
+          feeType: "paid",
+          fee: "¥ 1,980.00",
+          organization: "湖北艺术职业学院",
+          offlinePaymentLocation: "湖北艺术职业学院",
+          contactName: "王老师",
+          contactPhone: "027-8888-9999",
+          coverClass: "",
+          publishStatus: "已发布",
+          copy: "围绕音乐、舞蹈、美术三个方向安排分组训练，帮助学员建立规范的练习方法和舞台表现基础。\n活动包含专项课程、阶段展示和家长沟通环节，具体分组以报名后通知为准。"
+        },
+        "exam-coach": {
+          id: "PX202608102",
+          kicker: "EXAM PREP",
+          title: "社会艺术水平考级考前集训",
+          status: "未开始",
+          statusClass: " muted",
+          time: "2026.09.15—09.17",
+          capacity: 80,
+          registrationStartAt: "2026-09-01T00:00:00+08:00",
+          registrationEndAt: "2026-09-10T23:59:59+08:00",
+          activityStartAt: "2026-09-15T00:00:00+08:00",
+          activityEndAt: "2026-09-17T23:59:59+08:00",
+          location: "湖北艺术职业学院光谷校区",
+          target: "已报名社会艺术水平考级的考生",
+          feeType: "free",
+          fee: "",
+          organization: "光谷少儿艺术中心",
+          offlinePaymentLocation: "湖北艺术职业学院",
+          contactName: "李老师",
+          contactPhone: "027-8888-6666",
+          coverClass: "green",
+          publishStatus: "已发布",
+          copy: "针对考级考生安排考前专项训练，覆盖基本功、作品演绎和舞台表现等内容。\n报名将于2026.08.01开始，具体分组和课程安排以活动通知为准。"
+        },
+        "exam-review": {
+          id: "PX202608103",
+          kicker: "EXAM REVIEW",
+          title: "秋季考级冲刺复习营",
+          status: "已截止",
+          statusClass: " muted",
+          time: "2026.08.26—08.28",
+          capacity: 100,
+          registrationStartAt: "2026-08-01T00:00:00+08:00",
+          registrationEndAt: "2026-08-24T23:59:59+08:00",
+          activityStartAt: "2026-08-26T00:00:00+08:00",
+          activityEndAt: "2026-08-28T23:59:59+08:00",
+          location: "湖北艺术职业学院光谷校区",
+          target: "已报名社会艺术水平考级的考生",
+          feeType: "paid",
+          fee: "¥ 680.00",
+          organization: "湖北艺术职业学院",
+          offlinePaymentLocation: "湖北艺术职业学院",
+          contactName: "王老师",
+          contactPhone: "027-8888-9999",
+          coverClass: "",
+          publishStatus: "已发布",
+          copy: "围绕考试重点安排集中复习，帮助考生在考前完成动作规范、曲目表达和临场表现强化。"
+        },
+        "summer-review": {
+          id: "PX202608104",
+          kicker: "TRAINING RECAP",
+          title: "暑期舞台表现集训",
+          status: "已结束",
+          statusClass: " muted",
+          time: "2026.07.25—07.27",
+          capacity: 60,
+          registrationStartAt: "2026-07-01T00:00:00+08:00",
+          registrationEndAt: "2026-07-20T23:59:59+08:00",
+          activityStartAt: "2026-07-25T00:00:00+08:00",
+          activityEndAt: "2026-07-27T23:59:59+08:00",
+          location: "武汉市青少年宫艺术中心",
+          target: "6—16岁艺术学习者",
+          feeType: "free",
+          fee: "",
+          organization: "光谷少儿艺术中心",
+          offlinePaymentLocation: "光谷少儿艺术中心",
+          contactName: "李老师",
+          contactPhone: "027-8888-6666",
+          coverClass: "green",
+          publishStatus: "已发布",
+          copy: "暑期舞台表现综合训练已结束，可查看活动信息和历史报名记录。"
+        }
+      };
+      var TRAINING_REGISTRATION_STORAGE_KEY = "hbyx_training_registrations_v1";
+      var trainingRegistrationRecords = [
+        { id: "training-order-001", candidate: "小宝", activityId: "summer-camp", registeredAt: "2026.08.20 10:20", status: "待缴费" },
+        { id: "training-order-002", candidate: "小宝", activityId: "summer-camp", registeredAt: "2026.08.18 09:15", status: "已缴费", paidAt: "2026.08.18 10:05" },
+        { id: "training-order-003", candidate: "小宝", activityId: "exam-coach", registeredAt: "2026.08.16 14:20", status: "已取消", cancelledAt: "2026.08.17 09:30", cancelReason: "考生放弃报名" },
+        { id: "training-order-004", candidate: "小宝", activityId: "summer-camp", registeredAt: "2026.08.12 16:05", status: "待退款", refundRequestedAt: "2026.08.21 11:40", refundReason: "其他" },
+        { id: "training-order-005", candidate: "小宝", activityId: "summer-camp", registeredAt: "2026.08.08 11:40", status: "已退款", paidAt: "2026.08.08 12:10", refundRequestedAt: "2026.08.09 09:00", refundReason: "考生放弃报名", refundedAt: "2026.08.10 15:20" },
+        { id: "training-order-006", candidate: "豆豆", activityId: "summer-camp", registeredAt: "2026.08.19 15:30", status: "已缴费", paidAt: "2026.08.19 16:05" },
+        { id: "training-order-007", candidate: "豆豆", activityId: "exam-coach", registeredAt: "2026.08.17 10:05", status: "已缴费", paidAt: "2026.08.17 10:30" }
+      ];
+      var trainingRegistrationStatusFilter = "all";
+      var trainingRegistrationStatusClassMap = {
+        "待缴费": "warn",
+        "已缴费": "",
+        "已取消": "muted",
+        "待退款": "warn",
+        "已退款": "info"
+      };
       var batchRangeFilterState = {
         gate: "全部",
         category: "全部",

@@ -3949,18 +3949,16 @@
             : certificate.reviewStatus === "REJECTED"
               ? "已驳回"
               : certificate.reviewStatus === "DRAFT"
-                ? "草稿"
+                ? "待审核"
                 : certificate.reviewStatus === "WITHDRAWN"
-                  ? "已撤回"
+                  ? "已撤销"
                   : "已通过";
-          var validityLabel = certificate.changeType === "DELETE"
-            ? "待删除"
-            : certificate.validityStatus === "EFFECTIVE"
-              ? "有效"
-              : certificate.validityStatus === "REVOKED"
-                ? "已撤销"
-                : "未生效";
-          status.textContent = "审核状态：" + reviewLabel + " · 有效状态：" + validityLabel;
+          var validityLabel = certificate.validityStatus === "EFFECTIVE"
+            ? "有效"
+            : certificate.validityStatus === "EXPIRED" || certificate.validityStatus === "REVOKED"
+              ? "已过期"
+              : "未生效";
+          status.textContent = "证书审核状态：" + reviewLabel + " · 证书有效状态：" + validityLabel;
           card.appendChild(head);
           card.appendChild(meta);
           card.appendChild(status);
