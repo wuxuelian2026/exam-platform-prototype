@@ -11298,13 +11298,31 @@
               <span class="registration-record-meta">报名时间：2026-07-29 10:20:00</span>
               <span class="registration-record-fee-row"><span class="registration-record-meta">报名费用：360</span><span class="status-pill registration-record-status warn">待缴费</span></span>
             </a>
-            <a class="registration-record-card" href="#application-detail" data-registration-record data-registration-mode="online" data-registration-status="paid" data-application-key="schedule">
+            <a class="registration-record-card" href="#application-detail" data-registration-record data-registration-mode="online" data-registration-status="paid" data-application-key="online-ready-piano">
               <span class="registration-record-head">
-                <span class="registration-record-title-group" data-registration-title><strong class="registration-record-title" data-registration-name>张三</strong><span class="registration-record-subtitle" data-registration-subject-level>中国舞 · 01级</span></span>
+                <span class="registration-record-title-group" data-registration-title><strong class="registration-record-title" data-registration-name>张三</strong><span class="registration-record-subtitle" data-registration-subject-level>钢琴 · 5级</span></span>
                 <span class="registration-record-mode">线上考试</span>
               </span>
-              <span class="registration-record-meta">报名时间：2026-07-30 14:00:00</span>
-              <span class="registration-record-fee-row"><span class="registration-record-meta">报名费用：200</span><span class="status-pill registration-record-status">已缴费</span></span>
+              <span class="registration-record-meta">报名时间：2026-09-12 09:18:00</span>
+              <span class="registration-record-fee-row"><span class="registration-record-meta">报名费用：380</span><span class="status-pill registration-record-status">已缴费</span></span>
+              <span class="registration-record-actions" data-registration-card-actions></span>
+            </a>
+            <a class="registration-record-card" href="#application-detail" data-registration-record data-registration-mode="online" data-registration-status="paid" data-application-key="online-ready-guzheng" hidden>
+              <span class="registration-record-head">
+                <span class="registration-record-title-group" data-registration-title><strong class="registration-record-title" data-registration-name>张三</strong><span class="registration-record-subtitle" data-registration-subject-level>古筝 · 6级</span></span>
+                <span class="registration-record-mode">线上考试</span>
+              </span>
+              <span class="registration-record-meta">报名时间：2026-09-12 10:26:00</span>
+              <span class="registration-record-fee-row"><span class="registration-record-meta">报名费用：400</span><span class="status-pill registration-record-status">已缴费</span></span>
+              <span class="registration-record-actions" data-registration-card-actions></span>
+            </a>
+            <a class="registration-record-card" href="#application-detail" data-registration-record data-registration-mode="online" data-registration-status="paid" data-application-key="online-ready-recitation" hidden>
+              <span class="registration-record-head">
+                <span class="registration-record-title-group" data-registration-title><strong class="registration-record-title" data-registration-name>张三</strong><span class="registration-record-subtitle" data-registration-subject-level>朗诵 · 4级</span></span>
+                <span class="registration-record-mode">线上考试</span>
+              </span>
+              <span class="registration-record-meta">报名时间：2026-09-12 11:35:00</span>
+              <span class="registration-record-fee-row"><span class="registration-record-meta">报名费用：360</span><span class="status-pill registration-record-status">已缴费</span></span>
               <span class="registration-record-actions" data-registration-card-actions></span>
             </a>
             <a class="registration-record-card" href="#application-detail" data-registration-record data-registration-mode="online" data-registration-status="paid" data-application-key="paid-online-current" hidden>
@@ -13887,6 +13905,48 @@
           publish: "2026.08.02 18:10",
           dispatchStatus: "已指派"
         },
+        "online-ready-piano": {
+          mode: "online",
+          title: "社会艺术水平考级 · 钢琴 5级",
+          parentTitle: "社会艺术水平考级 · 小宝 · 钢琴 5级",
+          no: "ONLINE-20260917-0501",
+          enrollment: "EX202609120051",
+          candidate: "小宝",
+          time: "今天 00:00-23:59 可提交",
+          place: "线上考试 · 小程序录制上传",
+          room: "线上录制 · 无现场考场",
+          organizer: "光谷少儿艺术中心",
+          publish: "2026.09.16 18:00",
+          dispatchStatus: "已指派"
+        },
+        "online-ready-guzheng": {
+          mode: "online",
+          title: "社会艺术水平考级 · 古筝 6级",
+          parentTitle: "社会艺术水平考级 · 小宝 · 古筝 6级",
+          no: "ONLINE-20260917-0602",
+          enrollment: "EX202609120062",
+          candidate: "小宝",
+          time: "今天 00:00-23:59 可提交",
+          place: "线上考试 · 小程序录制上传",
+          room: "线上录制 · 无现场考场",
+          organizer: "武昌艺术培训学校",
+          publish: "2026.09.16 18:05",
+          dispatchStatus: "已指派"
+        },
+        "online-ready-recitation": {
+          mode: "online",
+          title: "社会艺术水平考级 · 朗诵 4级",
+          parentTitle: "社会艺术水平考级 · 小宝 · 朗诵 4级",
+          no: "ONLINE-20260917-0403",
+          enrollment: "EX202609120043",
+          candidate: "小宝",
+          time: "今天 00:00-23:59 可提交",
+          place: "线上考试 · 小程序录制上传",
+          room: "线上录制 · 无现场考场",
+          organizer: "江汉青少年艺术中心",
+          publish: "2026.09.16 18:10",
+          dispatchStatus: "已指派"
+        },
         "ended-pending": {
           mode: "offline",
           title: "社会艺术水平考级 · 素描 4级",
@@ -14125,6 +14185,135 @@
             { text: "查看缴费指引", href: "#apply-payment", variant: "primary" },
             { text: "取消报名", variant: "ghost", toast: "待缴费记录可联系报名机构取消（原型）" }
           ]
+        },
+        "online-ready-piano": {
+          categoryCode: "MUSIC",
+          subject: "钢琴",
+          level: "5级",
+          title: "钢琴 · 5级",
+          tracks: [
+            { group: "音阶", title: "C大调音阶与琶音" },
+            { group: "练习曲", title: "车尔尼599第45首" },
+            { group: "乐曲", title: "小奏鸣曲第一乐章" }
+          ],
+          status: "已缴费",
+          statusClass: "",
+          detailKind: "registration",
+          mode: "online",
+          ticketKey: "online-ready-piano",
+          organizationRegistration: false,
+          registrationNo: "EX202609120051",
+          registrationDate: "20260912",
+          registrationTime: "091800",
+          paymentSerialNumber: "PAY202609120051",
+          summary: "考生小宝 · 报名号 EX202609120051",
+          summaryParent: "考生小宝 · 报名号 EX202609120051",
+          info: "2026年9月份线上考级 · 钢琴 · 5级 · ¥380.00",
+          materials: "准考证照片已传 · 线上考试任务已开放",
+          pay: "已缴费 · 当前可开始线上考试",
+          cert: "考试通过后生成电子证书，纸质证书由学院（平台）线下发放",
+          timeline: [
+            { cls: "done", title: "报名已提交", body: "2026.09.12 09:18 报名信息已提交" },
+            { cls: "done", title: "已缴费", body: "2026.09.12 09:25 报名机构完成收款确认" },
+            { cls: "current", title: "考试中", body: "今日线上考试开放，可录制并提交最佳视频" },
+            { title: "成绩 / 证书", body: "视频评审完成后统一发布成绩，通过后进入证书服务" }
+          ],
+          examTime: "今天 00:00-23:59 可提交",
+          examDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartTime: "000000",
+          examEndDate: mockExamDateKey(0).replace(/-/g, ""),
+          examEndTime: "235959",
+          examPlace: "线上考试 · 小程序录制上传",
+          examSeat: "线上录制 · 无现场考场",
+          examNote: "今日为线上考试日，可进入录制准备并提交最佳视频。",
+          examHint: "当前状态为考试中，可开始完整录制；完成录制后进入预览并提交最佳视频。"
+        },
+        "online-ready-guzheng": {
+          categoryCode: "MUSIC",
+          subject: "古筝",
+          level: "6级",
+          title: "古筝 · 6级",
+          tracks: [
+            { group: "基本功", title: "四点练习与摇指练习" },
+            { group: "规定曲目", title: "战台风" },
+            { group: "自选曲目", title: "浏阳河" }
+          ],
+          status: "已缴费",
+          statusClass: "",
+          detailKind: "registration",
+          mode: "online",
+          ticketKey: "online-ready-guzheng",
+          organizationRegistration: false,
+          registrationNo: "EX202609120062",
+          registrationDate: "20260912",
+          registrationTime: "102600",
+          paymentSerialNumber: "PAY202609120062",
+          summary: "考生小宝 · 报名号 EX202609120062",
+          summaryParent: "考生小宝 · 报名号 EX202609120062",
+          info: "2026年9月份线上考级 · 古筝 · 6级 · ¥400.00",
+          materials: "准考证照片已传 · 线上考试任务已开放",
+          pay: "已缴费 · 当前可开始线上考试",
+          cert: "考试通过后生成电子证书，纸质证书由学院（平台）线下发放",
+          timeline: [
+            { cls: "done", title: "报名已提交", body: "2026.09.12 10:26 报名信息已提交" },
+            { cls: "done", title: "已缴费", body: "2026.09.12 10:34 报名机构完成收款确认" },
+            { cls: "current", title: "考试中", body: "今日线上考试开放，可录制并提交最佳视频" },
+            { title: "成绩 / 证书", body: "视频评审完成后统一发布成绩，通过后进入证书服务" }
+          ],
+          examTime: "今天 00:00-23:59 可提交",
+          examDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartTime: "000000",
+          examEndDate: mockExamDateKey(0).replace(/-/g, ""),
+          examEndTime: "235959",
+          examPlace: "线上考试 · 小程序录制上传",
+          examSeat: "线上录制 · 无现场考场",
+          examNote: "今日为线上考试日，可进入录制准备并提交最佳视频。",
+          examHint: "当前状态为考试中，可开始完整录制；完成录制后进入预览并提交最佳视频。"
+        },
+        "online-ready-recitation": {
+          categoryCode: "RECITATION",
+          subject: "朗诵",
+          level: "4级",
+          title: "朗诵 · 4级",
+          tracks: [
+            { group: "基本功", title: "普通话语音与气息训练" },
+            { group: "规定作品", title: "春天的消息" },
+            { group: "自选作品", title: "少年中国说（节选）" }
+          ],
+          status: "已缴费",
+          statusClass: "",
+          detailKind: "registration",
+          mode: "online",
+          ticketKey: "online-ready-recitation",
+          organizationRegistration: false,
+          registrationNo: "EX202609120043",
+          registrationDate: "20260912",
+          registrationTime: "113500",
+          paymentSerialNumber: "PAY202609120043",
+          summary: "考生小宝 · 报名号 EX202609120043",
+          summaryParent: "考生小宝 · 报名号 EX202609120043",
+          info: "2026年9月份线上考级 · 朗诵 · 4级 · ¥360.00",
+          materials: "准考证照片已传 · 线上考试任务已开放",
+          pay: "已缴费 · 当前可开始线上考试",
+          cert: "考试通过后生成电子证书，纸质证书由学院（平台）线下发放",
+          timeline: [
+            { cls: "done", title: "报名已提交", body: "2026.09.12 11:35 报名信息已提交" },
+            { cls: "done", title: "已缴费", body: "2026.09.12 11:42 报名机构完成收款确认" },
+            { cls: "current", title: "考试中", body: "今日线上考试开放，可录制并提交最佳视频" },
+            { title: "成绩 / 证书", body: "视频评审完成后统一发布成绩，通过后进入证书服务" }
+          ],
+          examTime: "今天 00:00-23:59 可提交",
+          examDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartDate: mockExamDateKey(0).replace(/-/g, ""),
+          examStartTime: "000000",
+          examEndDate: mockExamDateKey(0).replace(/-/g, ""),
+          examEndTime: "235959",
+          examPlace: "线上考试 · 小程序录制上传",
+          examSeat: "线上录制 · 无现场考场",
+          examNote: "今日为线上考试日，可进入录制准备并提交最佳视频。",
+          examHint: "当前状态为考试中，可开始完整录制；完成录制后进入预览并提交最佳视频。"
         },
         schedule: {
           title: "小提琴 · 3级",
@@ -16379,6 +16568,20 @@
           activeExamMode = "offline";
         }
         var data = examModeData[activeExamMode] || examModeData.offline;
+        var activeRecord = applicationRecords[activeApplicationKey];
+        if (activeExamMode === "online" && activeRecord && applicationIsOnline(activeRecord)) {
+          var activeParts = applicationTitleParts(activeRecord);
+          var activeTicket = ticketData[applicationTicketKey(activeApplicationKey, activeRecord)] || ticketData.online || {};
+          data = {
+            title: activeParts.subject + " · " + activeParts.level,
+            subtitle: "线上考级 · 报名号 " + applicationExamNumber(activeApplicationKey, activeRecord),
+            modeLabel: "线上录制",
+            time: applicationExamTimeText(activeRecord, activeTicket),
+            place: applicationExamPlaceText(activeRecord, activeTicket),
+            ticket: activeTicket.no || "—",
+            stage: activeRecord.videoSubmitted ? "已提交最佳视频" : "待完成录制"
+          };
+        }
         setTextAll("[data-exam-title]", data.title);
         setTextAll("[data-exam-subtitle]", data.subtitle);
         setTextAll("[data-exam-time]", data.time);
@@ -17543,6 +17746,10 @@
         var enrollmentViews = ["apply-notice", "exam-apply", "major-select", "apply-confirm", "apply-success", "apply-fail"];
         if (query) {
           var params = new URLSearchParams(query);
+          var applicationKey = params.get("application") || "";
+          if (applicationKey && typeof applicationRecords !== "undefined" && applicationRecords[applicationKey]) {
+            activeApplicationKey = applicationKey;
+          }
           if (view === "org-detail" && (params.get("tab") === "org" || params.get("tab") === "venues" || params.get("tab") === "rooms")) {
             activeOrgDetailTab = params.get("tab");
           }
@@ -18331,6 +18538,9 @@
         var map = {
           pay: "—",
           schedule: "2026-07-20 16:24",
+          "online-ready-piano": "2026-09-12 09:25",
+          "online-ready-guzheng": "2026-09-12 10:34",
+          "online-ready-recitation": "2026-09-12 11:42",
           "registration-offline": "2026-08-01 10:30",
           "exam-offline": "2026-08-01 10:30",
           "exam-online": "2026-08-01 09:45",
@@ -18906,7 +19116,11 @@
                   activeScoreKey = action.scoreKey;
                   syncScoreUI();
                 }
-                if (action.href) window.location.hash = action.href;
+                if (action.href) {
+                  window.location.hash = action.href === "#exam-start-check"
+                    ? action.href + "?application=" + encodeURIComponent(activeApplicationKey)
+                    : action.href;
+                }
               });
               cardActions.appendChild(actionEl);
             });
@@ -18922,12 +19136,14 @@
 
       function syncExamStartCheckUI() {
         var profile = applicationDetailProfile();
-        var ticket = ticketData.online || {};
+        var record = applicationRecords[activeApplicationKey] || applicationRecords["exam-online"] || {};
+        var ticket = ticketData[applicationTicketKey(activeApplicationKey, record)] || ticketData.online || {};
+        var parts = applicationTitleParts(record);
         setTextAll("[data-start-check-name]", profile.name || currentChild || "张三");
         setTextAll("[data-start-check-org]", ticket.organizer || "湖北职业艺术学院");
         setTextAll("[data-start-check-id-doc]", profile.idDocNo || DEFAULT_ID_DOC_NO);
-        setTextAll("[data-start-check-subject]", "舞蹈基本功");
-        setTextAll("[data-start-check-level]", "01级");
+        setTextAll("[data-start-check-subject]", record.subject || parts.subject || "考级专业");
+        setTextAll("[data-start-check-level]", record.level || parts.level || "—");
       }
 
       function syncApplicationListUI() {
