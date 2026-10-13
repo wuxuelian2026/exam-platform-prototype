@@ -5,836 +5,449 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>考级运营总览</title>
   <style>
-    :root {
-      --bg: #0b111b;
-      --panel: #121b28;
-      --line: #26384a;
-      --text: #e8f0f5;
-      --muted: #8fa3b5;
-      --cyan: #52e0d0;
-      --blue: #62a8ff;
-      --amber: #f5c36b;
-      --green: #77e6a5;
-      --coral: #ff8e7a;
+    :root { --bg:#0b111b; --panel:#121b28; --line:#26384a; --text:#e8f0f5; --muted:#8fa3b5; --cyan:#52e0d0; --green:#77e6a5; --blue:#62a8ff; --amber:#f5c36b; --coral:#ff8e7a; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font:14px/1.5 "PingFang SC","Microsoft YaHei",sans-serif; }
+    button { font:inherit; }
+    button:focus-visible { outline:2px solid var(--amber); outline-offset:3px; }
+    .cockpit { height:100vh; min-height:960px; padding:22px 28px 18px; display:grid; grid-template-rows:auto minmax(0,1fr) auto; gap:14px; }
+    .topbar,.brand,.top-actions { display:flex; align-items:center; gap:14px; }
+    .topbar { justify-content:space-between; gap:24px; }
+    .brand-mark { width:50px; height:50px; flex-shrink:0; border:1px solid #367a79; background:#10232b; color:var(--cyan); display:grid; place-items:center; font-size:24px; font-weight:800; }
+    h1 { margin:0; font-size:27px; line-height:1.2; }
+    .brand-sub { margin:4px 0 0; color:var(--muted); font-size:13px; }
+    .top-actions { color:var(--muted); font-size:12px; flex-wrap:wrap; justify-content:flex-end; }
+    .control { height:36px; padding:0 12px; background:var(--panel); color:var(--text); border:1px solid var(--line); cursor:pointer; }
+    .explain-dialog { position:fixed; inset:0; z-index:20; display:flex; justify-content:flex-end; background:rgba(3,8,15,.68); }
+    .explain-dialog[hidden] { display:none; }
+    .explain-panel { width:min(680px,94vw); height:100%; overflow:auto; padding:24px 28px 36px; border-left:1px solid var(--line); background:#101a27; box-shadow:-18px 0 40px rgba(0,0,0,.28); }
+    .explain-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+    .explain-head h2 { margin:0; font-size:20px; }
+    .explain-head p { margin:5px 0 0; color:var(--muted); font-size:12px; }
+    .explain-close { width:32px; height:32px; border:1px solid var(--line); background:transparent; color:var(--text); cursor:pointer; font-size:20px; line-height:1; }
+    .explain-section { padding:16px 0; border-bottom:1px solid var(--line); }
+    .explain-section:last-child { border-bottom:0; }
+    .explain-section h3 { margin:0 0 8px; color:var(--cyan); font-size:14px; }
+    .explain-section p { margin:5px 0; color:var(--muted); font-size:12px; line-height:1.7; }
+    .explain-section strong { color:var(--text); font-weight:600; }
+    .explain-list { display:grid; gap:7px; margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.65; }
+    .heat-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-bottom:1px solid var(--line); background:#101a27; }
+    .heat-metric { min-width:0; padding:8px 12px; border-right:1px solid var(--line); }
+    .heat-metric:last-child { border-right:0; }
+    .heat-metric .metric-label,.heat-metric .metric-foot { color:var(--muted); font-size:10px; }
+    .heat-metric .metric-value { display:block; margin:2px 0; color:var(--text); font-size:20px; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums; }
+    .main { min-height:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-template-rows:repeat(3,minmax(0,1fr)); gap:14px; }
+    .cell { min-width:0; min-height:0; display:grid; grid-template-rows:auto minmax(0,1fr); border:1px solid var(--line); background:var(--panel); }
+    .cell-pie { grid-area:1 / 1 / 2 / 2; }
+    .cell-ring { grid-area:2 / 1 / 3 / 2; }
+    .cell-bars { grid-area:3 / 1 / 4 / 2; }
+    .cell-heat { grid-area:1 / 2 / 3 / 4; grid-template-rows:auto auto minmax(0,1fr); }
+    .cell-trend { grid-area:3 / 2 / 4 / 4; }
+    .cell-years { grid-area:1 / 4 / 2 / 5; }
+    .cell-organizer { grid-area:2 / 4 / 3 / 5; }
+    .cell-training { grid-area:3 / 4 / 4 / 5; }
+    .panel-head { padding:10px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px 10px; min-height:43px; }
+    .panel-head h2 { margin:0; font-size:14px; line-height:1.4; }
+    .series-legend { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:11px; }
+    .series-legend span { display:inline-flex; align-items:center; gap:4px; }
+    .series-legend i { width:8px; height:8px; border-radius:2px; background:var(--cyan); }
+    .series-legend .cert { background:var(--green); }
+    .category-compare { min-height:0; padding:14px; display:grid; grid-template-columns:116px minmax(0,1fr); gap:12px; align-items:center; }
+    .double-donut { width:116px; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; }
+    .double-donut-inner { width:82px; aspect-ratio:1; border:7px solid var(--panel); border-radius:50%; display:grid; place-items:center; }
+    .double-donut-center { width:48px; aspect-ratio:1; border-radius:50%; background:var(--panel); display:grid; place-content:center; gap:1px; text-align:center; }
+    .double-donut-center span { color:var(--muted); font-size:10px; line-height:1.2; }
+    .double-donut-center b { font-size:10px; }
+    .category-legend { min-width:0; display:grid; gap:7px; }
+    .category-legend-head,.category-legend-row { display:grid; grid-template-columns:8px minmax(40px,1fr) 38px 38px; gap:5px; align-items:center; font-size:11px; }
+    .category-legend-head { color:var(--muted); padding-bottom:4px; border-bottom:1px solid var(--line); }
+    .category-legend-row { color:var(--muted); }
+    .category-legend-row i { width:8px; height:8px; background:var(--c); border-radius:2px; }
+    .category-legend-row strong,.category-legend-head span:nth-last-child(-n+2) { text-align:right; font-variant-numeric:tabular-nums; }
+    .category-legend-row strong { color:var(--text); font-weight:600; }
+    .ring-key { display:flex; flex-wrap:wrap; gap:6px 10px; font-size:10px; color:var(--muted); }
+    .major-body { padding:10px 14px; min-height:0; display:grid; grid-template-rows:minmax(0,1fr) auto; gap:7px; }
+    .major-list { display:grid; grid-template-rows:repeat(6,minmax(0,1fr)); gap:4px; }
+    .major-row { min-width:0; display:grid; grid-template-columns:76px minmax(48px,1fr) 124px; gap:8px; align-items:center; font-size:11px; }
+    .major-row strong { font-weight:600; line-height:1.2; overflow-wrap:anywhere; }
+    .major-track { height:10px; width:var(--enroll-width); min-width:2px; border-radius:3px; background:var(--cyan); position:relative; overflow:hidden; }
+    .major-track i { position:absolute; inset:0 auto 0 0; width:var(--cert-ratio); background:var(--green); }
+    .major-stats { display:grid; grid-template-columns:1fr 1fr; gap:3px; color:var(--muted); font-size:10px; text-align:right; font-variant-numeric:tabular-nums; }
+    .major-stats b { color:var(--text); }
+    .major-summary { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 8px; padding-top:7px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; }
+    .major-summary b { color:var(--text); font-weight:600; }
+    .chart { padding:8px 10px 6px; min-height:0; }
+    .chart svg { display:block; width:100%; height:100%; }
+    .chart-grid { stroke:var(--line); stroke-width:1; }
+    .chart-axis { stroke:#60758a; stroke-width:1; }
+    .chart-label { fill:var(--muted); font-size:11px; }
+    .chart-title { fill:var(--muted); font-size:10px; }
+    .chart-line { fill:none; stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
+    .table-wrap { min-height:0; padding:0 12px 8px; }
+    table { width:100%; border-collapse:collapse; table-layout:fixed; }
+    th,td { padding:7px 5px; border-bottom:1px solid var(--line); font-size:12px; text-align:left; }
+    th { color:var(--muted); font-weight:500; white-space:nowrap; }
+    th:first-child,td:first-child { width:35px; }
+    th:nth-last-child(-n+2),td:nth-last-child(-n+2) { width:72px; text-align:right; font-variant-numeric:tabular-nums; }
+    td:nth-child(2) { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    tbody tr:last-child td { border-bottom:0; }
+    .rank { color:var(--muted); }
+    tr:nth-child(-n+3) .rank { color:var(--amber); }
+    .heat-body { min-height:0; display:grid; grid-template-rows:minmax(0,1fr); }
+    .heat-canvas { position:relative; min-height:0; background:#0e1620; overflow:hidden; }
+    .heat-canvas svg { display:block; width:100%; height:100%; }
+    .heat-shape { stroke:#405467; stroke-width:.7; vector-effect:non-scaling-stroke; }
+    .heat-shape.is-hot { cursor:zoom-in; }
+    .heat-shape:hover,.heat-shape:focus-visible { stroke:var(--cyan); stroke-width:1.8; outline:none; }
+    .heat-shape.is-focus { stroke:var(--cyan); stroke-width:2; }
+    .heat-label { fill:var(--text); font-size:11px; paint-order:stroke; stroke:#0b111b; stroke-width:3; stroke-linejoin:round; pointer-events:none; }
+    .heat-overlay { position:absolute; left:12px; top:10px; }
+    .heat-scope { padding:4px 9px; border:1px solid var(--line); background:#0b111be8; font-size:11px; }
+    .heat-scope b { color:var(--cyan); }
+    .heat-tip { position:absolute; z-index:2; padding:8px 10px; min-width:130px; border:1px solid #367a79; background:#0b111bf5; color:var(--muted); font-size:11px; pointer-events:none; }
+    .heat-tip strong { display:block; color:var(--text); margin-bottom:4px; }
+    .heat-tip span { display:block; }
+    .heat-tip b { color:var(--text); }
+    .panel-tools,.heat-crumbs,.heat-tabs { display:flex; gap:5px; align-items:center; flex-wrap:wrap; }
+    .heat-crumb,.heat-tab { padding:4px 8px; min-height:28px; border:1px solid var(--line); background:transparent; color:var(--muted); font-size:11px; cursor:pointer; }
+    .heat-crumb.is-current,.heat-tab.active { border-color:#367a79; color:var(--cyan); background:#10232b; }
+    .heat-sep { color:var(--muted); }
+    .heat-foot { position:absolute; left:12px; bottom:10px; z-index:3; display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; max-width:calc(100% - 24px); padding:5px 8px; border:1px solid rgba(38,56,74,.9); background:rgba(11,17,27,.84); font-size:10px; color:var(--muted); }
+    .heat-legend { display:flex; gap:5px; align-items:center; }
+    .heat-ramp { width:80px; height:7px; background:linear-gradient(90deg,#174659,#278c9e,#52e0d0,#f5c36b); }
+    .heat-empty i { display:inline-block; width:8px; height:7px; margin-right:3px; border:1px solid #405467; background:#1a2534; }
+    .footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:5px 16px; color:var(--muted); font-size:11px; }
+    .refresh-status { color:var(--green); min-height:18px; }
+    [hidden] { display:none!important; }
+    @media (max-width:1600px) {
+      .cockpit { height:auto; min-height:100vh; padding:16px 20px; }
+      .metric-value { font-size:28px; }
+      .main { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:240px 260px 260px 300px 280px 260px; gap:12px; }
+      .cell-pie { grid-area:1 / 1 / 2 / 2; }
+      .cell-ring { grid-area:1 / 2 / 2 / 3; }
+      .cell-heat { grid-area:2 / 1 / 4 / 3; }
+      .cell-bars { grid-area:4 / 1 / 5 / 2; }
+      .cell-years { grid-area:4 / 2 / 5 / 3; }
+      .cell-trend { grid-area:5 / 1 / 6 / 3; }
+      .cell-organizer { grid-area:6 / 1 / 7 / 2; }
+      .cell-training { grid-area:6 / 2 / 7 / 3; }
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font: 14px/1.5 "PingFang SC", "Microsoft YaHei", sans-serif; }
-    .cockpit { width: 100%; height: 100vh; margin: 0 auto; padding: 22px 28px 18px; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 14px; overflow: hidden; }
-    .topbar { display: flex; justify-content: space-between; gap: 24px; align-items: center; }
-    .brand { display: flex; gap: 14px; align-items: center; }
-    .brand-mark { width: 50px; height: 50px; border: 1px solid rgba(82, 224, 208, .55); display: grid; place-items: center; color: var(--cyan); background: #10232b; font-size: 24px; font-weight: 800; }
-    .eyebrow { color: var(--cyan); font-size: 12px; letter-spacing: 2px; }
-    h1 { margin: 0; font-size: 27px; line-height: 1.15; }
-    .brand-sub { margin-top: 4px; color: var(--muted); font-size: 13px; }
-    .top-actions { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 13px; }
-    .live-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(119, 230, 165, .1); }
-    .control { height: 36px; padding: 0 14px; border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; }
-    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-    .metric { min-height: 118px; padding: 14px 16px; border: 1px solid var(--line); background: var(--panel); position: relative; overflow: hidden; }
-    .metric.key { border-color: rgba(82, 224, 208, .6); background: linear-gradient(145deg, #10232b, #121b28); }
-    .metric-label { color: var(--muted); font-size: 13px; }
-    .metric-value { display: block; margin-top: 10px; font-size: 34px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
-    .metric.key .metric-value { color: var(--cyan); }
-    .metric-foot { margin-top: 10px; color: var(--muted); font-size: 12px; }
-    .metric-foot b { color: var(--green); font-weight: 700; }
-    .main { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 14px; min-height: 0; }
-    .cell { min-width: 0; min-height: 0; border: 1px solid var(--line); background: var(--panel); display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
-    .cell-pie { grid-area: 1 / 1 / 2 / 2; }
-    .cell-ring { grid-area: 2 / 1 / 3 / 2; }
-    .cell-bars { grid-area: 3 / 1 / 4 / 2; }
-    .cell-heat { grid-area: 1 / 2 / 3 / 4; }
-    .cell-trend { grid-area: 3 / 2 / 4 / 4; }
-    .cell-years { grid-area: 1 / 4 / 2 / 5; }
-    .cell-organizer { grid-area: 2 / 4 / 3 / 5; }
-    .cell-training { grid-area: 3 / 4 / 4 / 5; }
-    .panel-head { padding: 12px 14px 9px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px 12px; align-items: flex-start; flex-wrap: wrap; }
-    .panel-head h2 { margin: 0; font-size: 15px; }
-    .panel-head p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
-    .panel-kicker { color: var(--cyan); font-size: 11px; white-space: nowrap; }
-    .tabs { display: inline-flex; gap: 5px; }
-    .tab { height: 28px; padding: 0 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
-    .tab.active { border-color: rgba(82, 224, 208, .7); color: var(--cyan); background: #10232b; }
-    .panel-tools { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
-    .heat-body { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
-    .heat-canvas { position: relative; min-height: 0; background: radial-gradient(120% 100% at 50% 0%, #17242f 0%, #0e1620 72%); }
-    .heat-canvas svg { display: block; width: 100%; height: 100%; }
-    .heat-national { position: absolute; inset: 0; pointer-events: none; }
-    .heat-national svg { display: block; width: 100%; height: 100%; }
-    .heat-national-grid { min-height: 0; padding: 12px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; align-content: center; }
-    .heat-tile { min-height: 66px; padding: 8px; display: grid; place-items: center; border: 1px solid var(--line); background: #172333; color: var(--text); text-align: center; }
-    .heat-tile.lv1 { background: #123c3c; }
-    .heat-tile.lv2 { background: #1f4a63; }
-    .heat-tile.lv3 { background: #4a3f20; }
-    .heat-tile.lv4 { background: #73392f; }
-    .heat-tile small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
-    .heat-shape { stroke: #0b111b; stroke-width: .7; vector-effect: non-scaling-stroke; transition: fill .18s ease, stroke .18s ease; }
-    .heat-shape.is-hot { cursor: zoom-in; }
-    .heat-shape.is-dim { opacity: .34; }
-    .heat-shape.is-focus { stroke: var(--cyan); stroke-width: 1.8; }
-    .heat-shape:hover { stroke: var(--cyan); stroke-width: 1.6; }
-    .heat-shape:focus-visible { outline: none; stroke: var(--amber); stroke-width: 2; }
-    .heat-dot { fill-opacity: .22; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-    .heat-dot:hover { fill-opacity: .42; stroke-width: 2; }
-    .heat-label { fill: var(--text); font-size: 11px; paint-order: stroke; stroke: #0b111b; stroke-width: 2.4; stroke-linejoin: round; pointer-events: none; }
-    .heat-label.sm { fill: var(--muted); font-size: 10px; }
-    .heat-overlay { position: absolute; left: 12px; top: 10px; display: flex; align-items: center; gap: 8px; }
-    .heat-scope { height: 26px; padding: 0 10px; display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: rgba(11, 17, 27, .84); color: var(--text); font-size: 11px; font-variant-numeric: tabular-nums; }
-    .heat-scope b { color: var(--cyan); font-weight: 700; }
-    .heat-crumbs { display: inline-flex; align-items: center; gap: 2px; }
-    .heat-crumb { height: 28px; padding: 0 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-size: 11px; }
-    .heat-crumb:hover { border-color: rgba(82, 224, 208, .6); color: var(--cyan); }
-    .heat-crumb.is-current { border-color: rgba(82, 224, 208, .7); background: #10232b; color: var(--cyan); cursor: default; }
-    .heat-sep { color: #46586c; font-size: 11px; }
-    .heat-tip { position: absolute; z-index: 6; min-width: 128px; padding: 8px 10px; border: 1px solid rgba(82, 224, 208, .45); background: rgba(11, 17, 27, .97); color: var(--text); font-size: 12px; white-space: nowrap; pointer-events: none; transform: translate(-50%, -112%); }
-    .heat-tip strong { display: block; margin-bottom: 3px; font-size: 12px; }
-    .heat-tip b { color: var(--cyan); font-variant-numeric: tabular-nums; }
-    .heat-tip span { color: var(--muted); font-size: 11px; }
-    .heat-foot { padding: 9px 14px 11px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .heat-legend { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-    .heat-ramp { width: 96px; height: 8px; border: 1px solid var(--line); background: linear-gradient(90deg, #16334c, #1f6f8f 35%, #52e0d0 65%, #f5c36b 85%, #ff8e7a); }
-    .heat-empty { display: inline-flex; align-items: center; gap: 5px; margin-left: 5px; }
-    .heat-empty i { width: 10px; height: 8px; border: 1px solid var(--line); background: #16202e; }
-    .heat-note { color: var(--muted); font-size: 11px; text-align: right; }
-    .pie-wrap { padding: 14px 16px; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; align-items: center; }
-    .pie { width: 108px; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(var(--cyan) 0 38%, var(--blue) 38% 66%, var(--amber) 66% 82%, var(--coral) 82% 92%, #60758a 92% 100%); display: grid; place-items: center; }
-    .pie::after { content: "门类\A 占比"; white-space: pre; display: grid; place-items: center; width: 60px; aspect-ratio: 1; border-radius: 50%; background: var(--panel); color: var(--muted); font-size: 11px; text-align: center; }
-    .legend-list { display: grid; gap: 9px; align-content: start; }
-    .legend-row { display: grid; grid-template-columns: 10px 72px 1fr auto; gap: 7px; align-items: center; color: var(--muted); font-size: 11px; }
-    .legend-row i { width: 9px; height: 9px; border-radius: 2px; background: var(--c, var(--cyan)); }
-    .legend-row strong { color: var(--text); text-align: right; }
-    .dual-pie-wrap { padding: 10px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
-    .mini-pie { display: grid; justify-items: center; gap: 6px; color: var(--muted); font-size: 11px; }
-    .pie.small { width: 76px; }
-    .mini-pie-label { color: var(--text); font-weight: 700; }
-    .bar-scroll { position: relative; min-height: 0; overflow: hidden; padding: 14px 16px; }
-    .bar-list { display: grid; gap: 13px; align-content: start; }
-    .bar-list.is-scrolling { animation: major-scroll 28s linear infinite; }
-    .bar-row { display: grid; grid-template-columns: 118px minmax(0, 1fr) 108px; gap: 9px; align-items: center; color: var(--muted); font-size: 12px; }
-    .bar-row strong { color: var(--text); font-weight: 600; line-height: 1.3; overflow-wrap: break-word; }
-    .bar { height: 8px; background: #253548; overflow: hidden; border-radius: 4px; }
-    .bar span { display: block; height: 100%; background: var(--bar-color, var(--cyan)); }
-    .bar-row b { color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
-    .major-pair { display: grid; gap: 5px; }
-    .major-pair i { display: block; height: 7px; border-radius: 3px; background: var(--bar-color, var(--cyan)); }
-    .major-pair i.cert { --bar-color: var(--green); }
-    .major-pair i.enroll { --bar-color: var(--blue); }
-    @keyframes major-scroll {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-50%); }
-    }
-    .major-legend { display: flex; justify-content: center; gap: 12px; color: var(--muted); font-size: 11px; }
-    .major-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 2px; }
-    .major-legend i.cert { background: var(--green); }
-    .major-legend i.enroll { background: var(--blue); }
-    .trend-chart { min-height: 0; padding: 12px 14px; }
-    .trend-chart svg { width: 100%; height: 100%; min-height: 170px; }
-    .year-chart { min-height: 0; padding: 12px 14px; display: flex; align-items: stretch; gap: 10px; }
-    .year-group { flex: 1; min-width: 0; display: grid; grid-template-rows: 1fr auto auto; gap: 6px; text-align: center; color: var(--muted); font-size: 11px; }
-    .year-pair { min-height: 0; display: flex; align-items: flex-end; justify-content: center; gap: 7px; border-bottom: 1px solid var(--line); }
-    .year-pair i { width: 16px; height: var(--h); border-radius: 3px 3px 0 0; background: var(--c, var(--blue)); }
-    .year-pair i.cert { --c: var(--green); }
-    .year-pair i.enroll { --c: var(--blue); }
-    .year-group b { color: var(--text); font-variant-numeric: tabular-nums; font-size: 10px; }
-    .year-legend { display: flex; justify-content: center; gap: 12px; color: var(--muted); font-size: 11px; }
-    .year-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 2px; }
-    .year-legend i.cert { background: var(--green); }
-    .year-legend i.enroll { background: var(--blue); }
-    .table-wrap { min-height: 0; overflow: auto; padding: 0 12px 8px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 9px 7px; border-bottom: 1px solid var(--line); text-align: left; font-size: 11px; white-space: nowrap; }
-    th { color: var(--muted); font-weight: 500; }
-    td { color: #dce7ed; }
-    tbody tr:last-child td { border-bottom: 0; }
-    .rank { display: inline-grid; width: 24px; height: 18px; place-items: center; color: var(--muted); border: 1px solid var(--line); }
-    .rank.top { color: var(--amber); border-color: rgba(245, 195, 107, .5); }
-    .footer { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 12px; }
-    .footer strong { color: var(--cyan); font-weight: 600; }
-    [hidden] { display: none !important; }
-    @media (min-width: 2200px) {
-      .cockpit { padding: 32px 42px 28px; gap: 20px; }
-      .brand-mark { width: 62px; height: 62px; font-size: 30px; }
-      h1 { font-size: 34px; }
-      .eyebrow { font-size: 14px; }
-      .brand-sub { font-size: 15px; }
-      .top-actions { font-size: 15px; }
-      .control { height: 42px; padding: 0 18px; font-size: 14px; }
-      .metric-grid, .main { gap: 18px; }
-      .metric { min-height: 142px; padding: 18px 20px; }
-      .metric-label { font-size: 15px; }
-      .metric-value { font-size: 42px; margin-top: 14px; }
-      .metric-foot { font-size: 14px; margin-top: 14px; }
-      .panel-head { padding: 16px 18px 12px; }
-      .panel-head h2 { font-size: 18px; }
-      .panel-head p { font-size: 13px; }
-      .tab { height: 34px; padding: 0 12px; font-size: 13px; }
-      .heat-tile { min-height: 118px; }
-      .pie-wrap { padding: 20px 24px; }
-      .pie { width: 132px; }
-      .pie::after { width: 76px; font-size: 12px; }
-      .legend-row { font-size: 13px; }
-      .bar-list { padding: 20px 24px; gap: 16px; }
-      .bar-row { font-size: 14px; }
-      .trend-chart { padding: 16px 20px; }
-      .year-chart { padding: 20px 24px; gap: 20px; }
-      .year-bar { font-size: 13px; }
-      th, td { font-size: 13px; padding: 11px 9px; }
-      .footer { font-size: 14px; }
-    }
-    @media (max-width: 1600px) {
-      .cockpit { padding: 16px 20px 14px; gap: 12px; }
-      .metric-grid { gap: 10px; }
-      .metric { min-height: 102px; padding: 12px 14px; }
-      .metric-value { font-size: 28px; }
-      .main { gap: 10px; }
-      .pie-wrap { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
-      .pie { width: 92px; }
-      .pie::after { width: 54px; }
-    }
-    @media (max-width: 1280px) {
-      .cockpit { height: auto; min-height: 100vh; overflow: visible; }
-      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .main { grid-template-columns: 1fr; grid-template-rows: auto; }
-      .main > .cell { grid-area: auto !important; min-height: 260px; }
-      .cell-heat { min-height: 360px; }
-      .heat-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .pie-wrap { grid-template-columns: 104px minmax(0, 1fr); }
-      .pie { width: 104px; }
-      .pie::after { width: 60px; }
-    }
-    @media (max-width: 720px) {
-      .cockpit { padding: 14px 12px 12px; gap: 10px; }
-      .topbar { display: grid; gap: 10px; }
-      .top-actions { justify-content: flex-start; flex-wrap: wrap; }
-      .brand-sub { font-size: 12px; }
-      h1 { font-size: 22px; }
-      .metric-grid { grid-template-columns: 1fr; }
-      .metric { min-height: 96px; }
-      .metric-value { font-size: 26px; }
-      .main { gap: 10px; }
-      .main > .cell { min-height: 230px; }
-      .cell-heat { min-height: 300px; }
-      .heat-map { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .heat-tile { min-height: 76px; }
-      .pie-wrap { grid-template-columns: 1fr; justify-items: center; gap: 10px; }
-      .legend-list { width: 100%; }
-      .legend-row { grid-template-columns: 10px 68px 1fr auto; }
-      .year-chart { gap: 8px; }
-      .footer { flex-direction: column; gap: 6px; }
+    @media (max-width:800px) {
+      .cockpit { padding:14px 12px; gap:12px; }
+      .topbar { align-items:flex-start; flex-direction:column; gap:10px; }
+      .top-actions { justify-content:flex-start; gap:8px; }
+      .heat-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .heat-metric:nth-child(2) { border-right:0; }
+      .heat-metric:nth-child(-n+2) { border-bottom:1px solid var(--line); }
+      h1 { font-size:23px; }
+      .heat-metric { padding:8px 10px; }
+      .main { display:flex; flex-direction:column; }
+      .main>.cell { min-height:260px; }
+      .main>.cell-heat { min-height:420px; order:-1; }
+      .main>.cell-bars { min-height:300px; }
+      .category-compare { grid-template-columns:112px minmax(0,1fr); padding:12px; gap:10px; }
+      .double-donut { width:112px; }
+      .major-row { grid-template-columns:72px minmax(36px,1fr) 118px; gap:6px; }
+      .table-wrap { padding:0 8px 8px; }
+      th,td { font-size:11px; }
+      th:nth-last-child(-n+2),td:nth-last-child(-n+2) { width:65px; }
+      .heat-foot { font-size:10px; }
     }
   </style>
 </head>
 <body>
   <div class="cockpit">
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">考</div>
-        <div><div class="eyebrow">EXAM OPERATIONS / LIVE VIEW</div><h1>考级运营总览</h1><p class="brand-sub">全平台考级业务运行态势 · 数据每 60 秒自动刷新</p></div>
-      </div>
-      <div class="top-actions"><strong><span class="live-dot"></span><span data-clock>2026-08-25 10:32:18</span></strong><button class="control" type="button" data-fullscreen>全屏</button></div>
+      <div class="brand"><div class="brand-mark">考</div><div><h1>考级运营总览</h1><p class="brand-sub">全平台 · 2026年度 · 截至10月13日</p></div></div>
+      <div class="top-actions"><span>数据更新时间：<time data-updated-at datetime="2026-10-13T10:07:00+08:00">2026-10-13 10:07</time></span><button class="control" type="button" data-refresh>刷新数据</button><button class="control" type="button" data-explain>页面说明</button><button class="control" type="button" data-fullscreen>全屏</button></div>
     </header>
-
-    <div class="metric-grid">
-      <article class="metric key"><span class="metric-label">累计报名人数</span><strong class="metric-value">22,280</strong><div class="metric-foot"><span>今日新增 1,284</span><b>+8.6%</b></div></article>
-      <article class="metric key"><span class="metric-label">获证人数</span><strong class="metric-value">3,428</strong><div class="metric-foot"><span>待生成 612</span><b>+12.1%</b></div></article>
-      <article class="metric"><span class="metric-label">成绩通过率</span><strong class="metric-value">85.2%</strong><div class="metric-foot"><span>已发布成绩加权计算</span></div></article>
-      <article class="metric"><span class="metric-label">进行中批次</span><strong class="metric-value">21</strong><div class="metric-foot"><span>线上 6 · 线下 15</span></div></article>
-    </div>
-
     <main class="main">
-      <section class="cell cell-pie">
-        <div class="panel-head"><div><h2>门类饼图</h2><p>报名门类占比</p></div></div>
-        <div class="dual-pie-wrap">
-          <div class="mini-pie"><div class="pie small"></div><span class="mini-pie-label">报名</span></div>
-          <div class="mini-pie"><div class="pie small" style="background:conic-gradient(var(--cyan) 0 36%, var(--blue) 36% 62%, var(--amber) 62% 78%, var(--coral) 78% 88%, #60758a 88% 100%)"></div><span class="mini-pie-label">获证</span></div>
-        </div>
-        <div class="legend-list">
-          <div class="legend-row"><i style="--c:var(--cyan)"></i><span>音乐类</span><strong>38% / 36%</strong></div>
-          <div class="legend-row"><i style="--c:var(--blue)"></i><span>舞蹈类</span><strong>28% / 26%</strong></div>
-          <div class="legend-row"><i style="--c:var(--amber)"></i><span>美术类</span><strong>15% / 16%</strong></div>
-          <div class="legend-row"><i style="--c:var(--coral)"></i><span>朗诵类</span><strong>7% / 10%</strong></div>
-        </div>
-      </section>
-
-      <section class="cell cell-ring">
-        <div class="panel-head"><div><h2>大类环形图</h2><p>获证人数占比</p></div></div>
-        <div class="dual-pie-wrap">
-          <div class="mini-pie"><div class="pie small" style="background:conic-gradient(var(--cyan) 0 44%, var(--blue) 44% 72%, var(--amber) 72% 88%, var(--coral) 88% 100%)"></div><span class="mini-pie-label">报名</span></div>
-          <div class="mini-pie"><div class="pie small" style="background:conic-gradient(var(--cyan) 0 40%, var(--blue) 40% 70%, var(--amber) 70% 86%, var(--coral) 86% 100%)"></div><span class="mini-pie-label">获证</span></div>
-        </div>
-        <div class="legend-list">
-          <div class="legend-row"><i style="--c:var(--cyan)"></i><span>音乐类</span><strong>44% / 40%</strong></div>
-          <div class="legend-row"><i style="--c:var(--blue)"></i><span>舞蹈类</span><strong>28% / 30%</strong></div>
-          <div class="legend-row"><i style="--c:var(--amber)"></i><span>美术类</span><strong>16% / 16%</strong></div>
-          <div class="legend-row"><i style="--c:var(--coral)"></i><span>朗诵类</span><strong>12% / 14%</strong></div>
-        </div>
-      </section>
-
+      <section class="cell cell-pie"><div class="panel-head"><h2>报名与获证人次门类占比</h2></div><div class="category-compare" data-category-chart></div></section>
+      <section class="cell cell-ring"><div class="panel-head"><h2>报名与获证人次级别分布</h2></div><div class="category-compare" data-level-chart></div></section>
       <section class="cell cell-bars">
-        <div class="panel-head"><div><h2>专业条形图</h2><p>报名人数与获证人数</p></div><div class="major-legend"><span><i class="cert"></i>获证</span><span><i class="enroll"></i>报名</span></div></div>
-        <div class="bar-scroll" data-major-scroll>
-          <div class="bar-list" data-major-list></div>
-        </div>
+        <div class="panel-head"><h2>重点专业报名与获证情况</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div>
+        <div class="major-body"><div class="major-list" data-major-list></div><div class="major-summary" data-major-summary></div></div>
       </section>
-
       <section class="cell cell-heat">
-        <div class="panel-head">
-          <div><h2>区域热力地图</h2><p>点击地图逐级下钻</p></div>
-          <div class="panel-tools">
-            <nav class="heat-crumbs" data-heat-crumbs aria-label="区域下钻路径"></nav>
-            <div class="tabs" role="tablist" aria-label="统计指标"><button class="tab active" data-heat-metric="enroll" type="button">报名</button><button class="tab" data-heat-metric="cert" type="button">获证</button></div>
-          </div>
+        <div class="panel-head"><h2>区域热力地图</h2><div class="panel-tools"><nav class="heat-crumbs" data-heat-crumbs aria-label="区域下钻路径"></nav><div class="heat-tabs" role="group" aria-label="地图统计指标"><button class="heat-tab active" type="button" data-heat-metric="enroll" aria-pressed="true">报名</button><button class="heat-tab" type="button" data-heat-metric="cert" aria-pressed="false">获证</button></div></div></div>
+        <div class="heat-metrics" aria-label="区域热力地图核心指标">
+          <article class="heat-metric"><span class="metric-label">年度报名人次</span><strong class="metric-value" data-total-enroll></strong><div class="metric-foot">有效报名记录数</div></article>
+          <article class="heat-metric"><span class="metric-label">年度获证人次</span><strong class="metric-value" data-total-cert></strong><div class="metric-foot">有效获证结果</div></article>
+          <article class="heat-metric"><span class="metric-label">覆盖培训机构数</span><strong class="metric-value" data-total-training></strong><div class="metric-foot">本年度有报名</div></article>
+          <article class="heat-metric"><span class="metric-label">开展批次数</span><strong class="metric-value" data-total-batches></strong><div class="metric-foot">本年度实际开展</div></article>
         </div>
-        <div class="heat-body">
-          <div class="heat-canvas" data-heat-canvas>
-            <svg data-heat-svg role="img" aria-label="全国区域报名热力地图"></svg>
-            <div class="heat-national" data-heat-national hidden></div>
-            <div class="heat-overlay">
-              <span class="heat-scope" data-heat-scope></span>
-            </div>
-            <div class="heat-tip" data-heat-tip hidden></div>
-          </div>
-          <div class="heat-foot">
-            <div class="heat-legend"><span data-heat-min></span><i class="heat-ramp" aria-hidden="true"></i><span data-heat-max></span><span class="heat-empty"><i aria-hidden="true"></i>无数据</span></div>
-            <div class="heat-note" data-heat-note></div>
-          </div>
-        </div>
+        <div class="heat-body"><div class="heat-canvas" data-heat-canvas><svg data-heat-svg role="group" aria-label="全国报名热力地图"></svg><div class="heat-overlay"><span class="heat-scope" data-heat-scope></span></div><div class="heat-tip" data-heat-tip hidden></div><div class="heat-foot"><div class="heat-legend"><span data-heat-min></span><i class="heat-ramp" aria-hidden="true"></i><span data-heat-max></span><span class="heat-empty"><i></i>无数据</span></div><span data-heat-note></span></div></div></div>
       </section>
-
-      <section class="cell cell-trend">
-        <div class="panel-head"><div><h2>本年度报名与获证趋势</h2><p>报名人数 · 获证人数</p></div></div>
-        <div class="trend-chart">
-          <svg viewBox="0 0 900 220" preserveAspectRatio="none" aria-label="本年度报名与获证趋势">
-            <polyline points="20,180 120,150 220,162 320,120 420,96 520,112 620,72 720,48 820,60 880,34" fill="none" stroke="#52e0d0" stroke-width="4" vector-effect="non-scaling-stroke"></polyline>
-            <polyline points="20,195 120,180 220,186 320,160 420,150 520,158 620,130 720,110 820,120 880,95" fill="none" stroke="#f5c36b" stroke-width="3" vector-effect="non-scaling-stroke"></polyline>
-          </svg>
-        </div>
-      </section>
-
-      <section class="cell cell-years">
-        <div class="panel-head"><div><h2>近五年对比</h2><p>获证人数与报名人数</p></div><div class="year-legend"><span><i class="cert"></i>获证</span><span><i class="enroll"></i>报名</span></div></div>
-        <div class="year-chart" data-year-chart>
-          <div class="year-group"><div class="year-pair"><i class="cert" style="--h:100%"></i><i class="enroll" style="--h:82%"></i></div><b>3,428 / 22,280</b><span>2026</span></div>
-          <div class="year-group"><div class="year-pair"><i class="cert" style="--h:86%"></i><i class="enroll" style="--h:69%"></i></div><b>2,960 / 20,900</b><span>2025</span></div>
-          <div class="year-group"><div class="year-pair"><i class="cert" style="--h:74%"></i><i class="enroll" style="--h:74%"></i></div><b>2,540 / 21,600</b><span>2024</span></div>
-          <div class="year-group"><div class="year-pair"><i class="cert" style="--h:63%"></i><i class="enroll" style="--h:61%"></i></div><b>2,180 / 19,800</b><span>2023</span></div>
-          <div class="year-group"><div class="year-pair"><i class="cert" style="--h:54%"></i><i class="enroll" style="--h:54%"></i></div><b>1,860 / 18,400</b><span>2022</span></div>
-        </div>
-      </section>
-
-      <section class="cell cell-organizer">
-        <div class="panel-head"><div><h2>承办单位排行</h2><p>按报名人数</p></div></div>
-        <div class="table-wrap"><table><thead><tr><th>排名</th><th>承办单位</th><th>报名人数</th><th>获证人数</th></tr></thead><tbody>
-          <tr><td><span class="rank top">01</span></td><td>武汉承办中心</td><td>9,480</td><td>1,688</td></tr>
-          <tr><td><span class="rank top">02</span></td><td>宜昌承办中心</td><td>6,920</td><td>842</td></tr>
-          <tr><td><span class="rank top">03</span></td><td>襄阳承办中心</td><td>4,180</td><td>612</td></tr>
-        </tbody></table></div>
-      </section>
-
-      <section class="cell cell-training">
-        <div class="panel-head"><div><h2>培训机构排行</h2><p>按报名人数</p></div></div>
-        <div class="table-wrap"><table><thead><tr><th>排名</th><th>培训机构</th><th>报名人数</th><th>获证人数</th></tr></thead><tbody>
-          <tr><td><span class="rank top">01</span></td><td>光谷少儿艺术中心</td><td>2,480</td><td>486</td></tr>
-          <tr><td><span class="rank top">02</span></td><td>宜昌青少年美育中心</td><td>1,920</td><td>318</td></tr>
-          <tr><td><span class="rank top">03</span></td><td>武昌美育中心</td><td>1,680</td><td>276</td></tr>
-        </tbody></table></div>
-      </section>
+      <section class="cell cell-trend"><div class="panel-head"><h2>本年度月度报名与获证人次</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-month-chart><svg role="img" aria-label="2026年度每月新增报名与获证人次"></svg></div></section>
+      <section class="cell cell-years"><div class="panel-head"><h2>近五年报名与获证对比</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-year-chart><svg role="img" aria-label="2022年至2026年报名与获证人次，2026年截至10月13日"></svg></div></section>
+      <section class="cell cell-organizer"><div class="panel-head"><h2>承办单位报名人次排行</h2><span class="series-legend">Top 5</span></div><div class="table-wrap"><table><thead><tr><th>排名</th><th>承办单位</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-organizer-rows></tbody></table></div></section>
+      <section class="cell cell-training"><div class="panel-head"><h2>培训机构报名人次排行</h2><span class="series-legend">Top 5</span></div><div class="table-wrap"><table><thead><tr><th>排名</th><th>培训机构</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-training-rows></tbody></table></div></section>
     </main>
-
-    <footer class="footer"><span>数据范围：全平台考级业务演示数据</span><strong>只读驾驶舱 · 不承载业务操作</strong></footer>
+    <footer class="footer"><span>演示数据 · 地区按批次所属组织归属 · 线上报名不归入培训机构</span><span class="refresh-status" role="status" aria-live="polite" data-refresh-status></span><span>快照日期：2026-10-13</span></footer>
   </div>
-
+  <div class="explain-dialog" data-explain-dialog hidden>
+    <aside class="explain-panel" role="dialog" aria-modal="true" aria-labelledby="explain-title">
+      <div class="explain-head"><div><h2 id="explain-title">考级运营总览页面说明</h2><p>指标口径、数据来源、计算规则与交互说明</p></div><button class="explain-close" type="button" data-explain-close aria-label="关闭页面说明">×</button></div>
+      <section class="explain-section"><h3>一、页面范围与通用口径</h3><p><strong>数据范围：</strong>全平台考级业务；当前原型使用本地演示数据，正式系统应替换为后端统计接口。</p><p><strong>统计周期：</strong>年度口径为当前年度，截至页面标注的快照日期；历史年度按自然年统计。</p><p><strong>人次定义：</strong>以有效报名记录为统计单位。同一考生报名多个专业、级别或批次时，按多条报名记录计数，不按自然人去重。</p><p><strong>有效记录：</strong>纳入已提交且未取消的报名记录；待缴费、已取消记录不计入报名人次。</p></section>
+      <section class="explain-section"><h3>二、区域热力地图内核心指标</h3><ul class="explain-list"><li><strong>年度报名人次：</strong>定义为当前年度有效报名记录数；来源为报名记录的 registration、year、报名状态字段；公式为 COUNT(有效报名记录)。</li><li><strong>年度获证人次：</strong>定义为当前年度已形成有效获证结果的报名记录数；来源为成绩/证书结果关联的 registration 与 certMonth；公式为 COUNT(有效报名记录且已获证)。</li><li><strong>覆盖培训机构数：</strong>定义为当前年度存在有效报名的培训机构去重数量；来源为报名记录 training 字段；公式为 COUNT(DISTINCT training)，平台直属或无培训机构归属不计入机构数。</li><li><strong>开展批次数：</strong>定义为当前年度实际开展考试的批次去重数量；来源为报名记录 batch 字段及批次实际开展状态；公式为 COUNT(DISTINCT batch)。</li></ul></section>
+      <section class="explain-section"><h3>三、门类占比与级别分布</h3><p><strong>门类占比：</strong>外环为报名人次，内环为获证人次；按音乐类、美术类、舞蹈类、朗诵类分组。各类占比 = 本类人次 ÷ 全部有效人次 × 100%，百分比按展示精度四舍五入，合计可能因四舍五入出现 1 个百分点误差。</p><p><strong>级别分布：</strong>按 1–3 级、4–6 级、7–10 级分组，计算方式与门类一致。图例、悬浮提示和中心文字用于区分报名与获证两个口径，无点击下钻。</p></section>
+      <section class="explain-section"><h3>四、重点专业报名与获证情况</h3><p>按专业报名人次降序展示 Top 6；蓝绿色底条表示报名人次相对最大专业的比例，绿色覆盖部分表示获证人次占该专业报名人次的比例。右侧展示报名人次与获证人次。其余专业合并为“其他专业”，只展示汇总数，不参与 Top 6 条形排名。</p><p><strong>获证率：</strong>获证人次 ÷ 报名人次 × 100%。当前页面以数值和条形覆盖表达规模与转化关系，不承载专业筛选或点击跳转。</p></section>
+      <section class="explain-section"><h3>五、区域热力地图</h3><p><strong>数据来源：</strong>报名记录的 province、city、district 与报名/获证结果字段；地图颜色按当前选中的报名或获证口径计算区域值，颜色越亮表示人数越多。</p><ul class="explain-list"><li>默认展示全国省级地图，点击湖北省进入省级市州地图。</li><li>点击市州进入市级区县地图，点击区县进入区县聚焦视图。</li><li>面包屑支持返回全国、省、市任一层级；“报名/获证”按钮切换地图统计口径。</li><li>无下级地理边界资源的地区只展示当前层级，不伪造市县地图；无数据区域显示为无数据。</li></ul></section>
+      <section class="explain-section"><h3>六、趋势、近五年与排行</h3><p><strong>本年度月度趋势：</strong>按报名月份统计报名人次，按获证月份统计获证人次；横轴为月份，纵轴为人次。未到月份不绘制数据，避免把未来月份误显示为 0。</p><p><strong>近五年对比：</strong>按自然年对比报名人次、获证人次和获证率；当前年度按快照日期统计，历史年度按完整年度统计。报名与获证使用同一人数轴，获证率使用右侧百分比轴。</p><p><strong>承办单位/培训机构排行：</strong>按报名人次降序取 Top 5，同时展示对应获证人次；承办单位按报名记录 organiser 归属，培训机构按 training 归属。线上报名无培训机构归属，不纳入培训机构排行。</p></section>
+      <section class="explain-section"><h3>七、刷新与权限</h3><p><strong>刷新数据：</strong>当前为原型演示按钮，点击后重新计算本地演示数据并更新更新时间；正式系统应调用驾驶舱统计接口后再更新页面。</p><p><strong>页面权限：</strong>驾驶舱只读，不提供报名、成绩、证书等业务操作；正式系统应按平台、承办单位和培训机构的数据权限返回可见范围。</p></section>
+    </aside>
+  </div>
   <script src="./exam-dashboard-china-geo.js"></script>
   <script src="./exam-dashboard-hubei-geo.js"></script>
   <script>
     (function () {
-      var clock = document.querySelector("[data-clock]");
-      function pad(value) { return String(value).padStart(2, "0"); }
-      function formatClock() {
-        var now = new Date();
-        if (clock) clock.textContent = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate()) + " " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
-      }
-      var fullscreen = document.querySelector("[data-fullscreen]");
-      var root = document.querySelector(".cockpit");
-      if (fullscreen && root) fullscreen.addEventListener("click", function () {
-        if (!document.fullscreenElement && root.requestFullscreen) root.requestFullscreen();
-        else if (document.exitFullscreen) document.exitFullscreen();
-      });
-      var heatData = {
-        province: [["湖北省", 22280], ["武汉市", 9480], ["宜昌市", 6920], ["襄阳市", 4180], ["黄石市", 2340], ["荆州市", 1120]],
-        city: [["武汉市", 9480], ["宜昌市", 6920], ["襄阳市", 4180], ["黄石市", 2340], ["荆州市", 1120], ["十堰市", 820]],
-        district: [["洪山区", 3820], ["武昌区", 2980], ["光谷", 1680], ["宜昌西陵区", 1240], ["襄阳樊城区", 960], ["黄石港区", 720]]
-      };
-      var certHeatData = {
-        province: [["湖北省", 3428], ["武汉市", 1688], ["宜昌市", 842], ["襄阳市", 612], ["黄石市", 356], ["荆州市", 210]],
-        city: [["武汉市", 1688], ["宜昌市", 842], ["襄阳市", 612], ["黄石市", 356], ["荆州市", 210], ["十堰市", 148]],
-        district: [["洪山区", 690], ["武昌区", 420], ["光谷", 246], ["宜昌西陵区", 188], ["襄阳樊城区", 136], ["黄石港区", 96]]
-      };
-      var nationData = {
-        enroll: [["湖北省", 22280], ["湖南省", 16800], ["广东省", 21400], ["河南省", 19200], ["浙江省", 17400], ["四川省", 14800], ["江苏省", 18600], ["山东省", 17100], ["河北省", 12300], ["安徽省", 11800], ["江西省", 9800], ["福建省", 9200]],
-        cert: [["湖北省", 3428], ["湖南省", 2460], ["广东省", 3120], ["河南省", 2740], ["浙江省", 2580], ["四川省", 2180], ["江苏省", 2960], ["山东省", 2510], ["河北省", 1680], ["安徽省", 1640], ["江西省", 1320], ["福建省", 1240]]
-      };
-      var HEAT_CITIES = { "武汉市": "wuhan", "黄石市": "huangshi", "十堰市": "shiyan", "宜昌市": "yichang", "襄阳市": "xiangyang", "荆州市": "jingzhou" };
-      var HEAT_SCOPE_NAME = { "hubei": "湖北省", "wuhan": "武汉市", "huangshi": "黄石市", "shiyan": "十堰市", "yichang": "宜昌市", "xiangyang": "襄阳市", "jingzhou": "荆州市" };
-      var PROVINCE_CITY_NAMES = {
-        "北京市": ["东城区", "西城区", "朝阳区", "海淀区", "丰台区", "通州区"],
-        "上海市": ["黄浦区", "徐汇区", "长宁区", "静安区", "浦东新区", "闵行区"],
-        "天津市": ["和平区", "河东区", "河西区", "南开区", "河北区", "滨海新区"],
-        "重庆市": ["渝中区", "江北区", "南岸区", "九龙坡区", "沙坪坝区", "渝北区"],
-        "湖北省": ["武汉市", "黄石市", "十堰市", "宜昌市", "襄阳市", "荆州市", "荆门市", "鄂州市", "孝感市", "黄冈市", "咸宁市", "随州市", "恩施州"],
-        "湖南省": ["长沙市", "株洲市", "湘潭市", "衡阳市", "岳阳市", "常德市"],
-        "广东省": ["广州市", "深圳市", "珠海市", "佛山市", "东莞市", "惠州市"],
-        "河南省": ["郑州市", "开封市", "洛阳市", "平顶山市", "安阳市", "南阳市"],
-        "浙江省": ["杭州市", "宁波市", "温州市", "嘉兴市", "湖州市", "绍兴市"],
-        "四川省": ["成都市", "自贡市", "攀枝花市", "泸州市", "德阳市", "绵阳市"],
-        "江苏省": ["南京市", "无锡市", "徐州市", "常州市", "苏州市", "南通市"],
-        "山东省": ["济南市", "青岛市", "淄博市", "枣庄市", "东营市", "烟台市"],
-        "河北省": ["石家庄市", "唐山市", "秦皇岛市", "邯郸市", "邢台市", "保定市"],
-        "安徽省": ["合肥市", "芜湖市", "蚌埠市", "淮南市", "马鞍山市", "安庆市"],
-        "江西省": ["南昌市", "景德镇市", "萍乡市", "九江市", "新余市", "赣州市"],
-        "福建省": ["福州市", "厦门市", "莆田市", "三明市", "泉州市", "漳州市"]
-      };
-      var GENERIC_CITY_NAMES = ["中心城区", "东城区", "西城区", "南城区", "北城区"];
-      var GENERIC_DISTRICT_NAMES = ["中心街道", "东部片区", "西部片区", "南部片区", "北部片区"];
-      var HEAT_POINT_FALLBACK = { "光谷": { scope: "wuhan", lon: 114.4163, lat: 30.4782 } };
-      var HEAT_RAMP = [[0, [22, 51, 76]], [0.35, [31, 111, 143]], [0.65, [82, 224, 208]], [0.85, [245, 195, 107]], [1, [255, 142, 122]]];
-      var heatGeo = window.HBYX_HUBEI_GEO || null;
+      "use strict";
+      var SNAPSHOT_YEAR = 2026, SNAPSHOT_MONTH = 10;
       var chinaGeo = window.HBYX_CHINA_GEO || [];
-      var heatCanvas = document.querySelector("[data-heat-canvas]");
-      var heatSvg = document.querySelector("[data-heat-svg]");
-      var heatNational = document.querySelector("[data-heat-national]");
-      var heatTip = document.querySelector("[data-heat-tip]");
-      var heatScope = document.querySelector("[data-heat-scope]");
-      var heatCrumbs = document.querySelector("[data-heat-crumbs]");
-      var heatNote = document.querySelector("[data-heat-note]");
-      var heatMin = document.querySelector("[data-heat-min]");
-      var heatMax = document.querySelector("[data-heat-max]");
-      var heatState = { path: [], metric: "enroll" };
-
-      function heatFormat(value) {
-        return Number(value).toLocaleString("zh-CN");
-      }
-
-      function heatColor(ratio) {
-        var t = Math.max(0, Math.min(1, ratio));
-        for (var i = 1; i < HEAT_RAMP.length; i++) {
-          var lo = HEAT_RAMP[i - 1];
-          var hi = HEAT_RAMP[i];
-          if (t <= hi[0]) {
-            var k = (t - lo[0]) / ((hi[0] - lo[0]) || 1);
-            return "rgb(" + lo[1].map(function (channel, index) {
-              return Math.round(channel + (hi[1][index] - channel) * k);
-            }).join(",") + ")";
-          }
-        }
-        return "rgb(" + HEAT_RAMP[HEAT_RAMP.length - 1][1].join(",") + ")";
-      }
-
-      function heatEl(tag, attrs) {
-        var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
-        Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+      var heatGeo = window.HBYX_HUBEI_GEO || {};
+      var CITY_SCOPES = { "武汉市":"wuhan", "宜昌市":"yichang", "襄阳市":"xiangyang", "黄石市":"huangshi", "十堰市":"shiyan", "荆州市":"jingzhou" };
+      var CITY_WEIGHTS = [["武汉市",10],["宜昌市",5],["襄阳市",4],["黄石市",2],["十堰市",2],["荆州市",2]];
+      var REGION_WEIGHTS = [["湖北省",8200],["湖南省",1800],["广东省",2800],["河南省",1900],["浙江省",1400],["四川省",1100],["江苏省",1800],["山东省",1200],["河北省",700],["安徽省",600],["江西省",480],["福建省",300]];
+      var MONTH_WEIGHTS = [8,6,7,10,12,11,13,12,14,7];
+      var CATEGORY_COLORS = ["#52e0d0","#f5c36b","#62a8ff","#ff8e7a"];
+      var MAJORS = [
+        ["钢琴","音乐类",9480,1688],["中国舞","舞蹈类",7610,1220],["小提琴","音乐类",4620,620],["素描","美术类",2960,356],["音乐基础知识","音乐类",2860,432],["古筝","音乐类",2780,428],
+        ["二胡","音乐类",1920,296],["声乐（民族）","音乐类",1880,288],["声乐（通俗）","音乐类",1760,270],["电子琴","音乐类",1480,226],["少儿歌唱","音乐类",1420,216],
+        ["竹笛","音乐类",1260,194],["葫芦丝","音乐类",1180,182],["民谣吉他","音乐类",1060,162],["古典吉他","音乐类",980,150],["长笛","音乐类",920,140],["单簧管","音乐类",760,116],
+        ["萨克斯管","音乐类",680,104],["手风琴","音乐类",620,94],["大提琴","音乐类",560,86],["小号","音乐类",480,72],["电吉他","音乐类",460,70],["爵士鼓","音乐类",420,64],
+        ["国际标准舞","舞蹈类",1580,242],["芭蕾舞","舞蹈类",1120,172],["硬笔书法","美术类",1680,258],["软笔书法","美术类",1420,218],["儿童画","美术类",1380,212],["速写","美术类",1080,166],
+        ["水粉画","美术类",880,134],["水彩画","美术类",760,116],["漫画","美术类",680,104],["人物","美术类",620,94],["山水","美术类",560,86],["花鸟","美术类",480,74],["朗诵","朗诵类",1980,304]
+      ];
+      var YEAR_SEEDS = [[2022,18400,1860],[2023,19800,2180],[2024,21600,2540],[2025,20900,2960],[2026,22280,3428]];
+      function fmt(value) { return Number(value).toLocaleString("zh-CN"); }
+      function esc(value) { return String(value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+      function svgEl(tag,attrs,text) {
+        var node=document.createElementNS("http://www.w3.org/2000/svg",tag);
+        Object.keys(attrs||{}).forEach(function(k){node.setAttribute(k,attrs[k]);});
+        if(text!==undefined) node.textContent=text;
         return node;
       }
-
-      function heatMatch(label, features) {
-        var i;
-        for (i = 0; i < features.length; i++) if (features[i].n === label) return features[i];
-        for (i = 0; i < features.length; i++) {
-          var name = features[i].n;
-          if (label.length > name.length && label.slice(-name.length) === name) return features[i];
-        }
-        return null;
+      // Largest remainder allocation keeps every generated dimension total exact.
+      function allocate(total,weights) {
+        var sum=weights.reduce(function(a,b){return a+b;},0);
+        var parts=weights.map(function(w,index){var raw=total*w/sum;return {index:index,value:Math.floor(raw),remainder:raw%1};});
+        var left=total-parts.reduce(function(s,p){return s+p.value;},0);
+        parts.slice().sort(function(a,b){return b.remainder-a.remainder||a.index-b.index;}).slice(0,left).forEach(function(p){p.value++;});
+        return parts.map(function(p){return p.value;});
       }
-
-      function heatPointFor(label, scopeKey) {
-        var known = HEAT_POINT_FALLBACK[label];
-        if (known) return (scopeKey === "hubei" || known.scope === scopeKey) ? [known.lon, known.lat] : null;
-        var order = ["wuhan", "huangshi", "shiyan", "yichang", "xiangyang", "jingzhou"];
-        for (var i = 0; i < order.length; i++) {
-          var feature = heatMatch(label, (heatGeo && heatGeo[order[i]]) || []);
-          if (feature && feature.c) return (scopeKey === "hubei" || scopeKey === order[i]) ? feature.c : null;
-        }
-        return null;
+      function slots(quotas,values) {
+        var result=[];
+        quotas.forEach(function(count,index){for(var i=0;i<count;i++) result.push(values[index]);});
+        return result;
       }
-
-      function heatProjection(features, width, height, pad) {
-        var minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
-        features.forEach(function (feature) {
-          feature.p.forEach(function (poly) {
-            poly.forEach(function (ring) {
-              ring.forEach(function (pt) {
-                if (pt[0] < minLon) minLon = pt[0];
-                if (pt[0] > maxLon) maxLon = pt[0];
-                if (pt[1] < minLat) minLat = pt[1];
-                if (pt[1] > maxLat) maxLat = pt[1];
-              });
-            });
-          });
-        });
-        var kx = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
-        var spanX = ((maxLon - minLon) * kx) || 1;
-        var spanY = (maxLat - minLat) || 1;
-        var scale = Math.min((width - pad * 2) / spanX, (height - pad * 2) / spanY);
-        var offX = (width - spanX * scale) / 2;
-        var offY = (height - spanY * scale) / 2;
-        return function (lon, lat) {
-          return [offX + (lon - minLon) * kx * scale, offY + (maxLat - lat) * scale];
-        };
+      function gcd(a,b) { while(b){var t=b;b=a%b;a=t;}return a; }
+      function stepFor(total,start) { while(gcd(total,start)!==1) start++;return start; }
+      function cityFor(index) {
+        var slot=(index*7)%25, cursor=0;
+        for(var i=0;i<CITY_WEIGHTS.length;i++){cursor+=CITY_WEIGHTS[i][1];if(slot<cursor)return CITY_WEIGHTS[i][0];}
       }
-
-      function heatPath(feature, project) {
-        var d = "";
-        feature.p.forEach(function (poly) {
-          poly.forEach(function (ring) {
-            for (var i = 0; i < ring.length; i++) {
-              var pt = project(ring[i][0], ring[i][1]);
-              d += (i === 0 ? "M" : "L") + pt[0].toFixed(1) + " " + pt[1].toFixed(1);
+      // Multiple registrations may share a candidate and batch; each result belongs to one registration.
+      // These are view-only facts, not an API or education-standard field dictionary.
+      function buildFacts() {
+        var facts=[];
+        YEAR_SEEDS.forEach(function(seed) {
+          var year=seed[0],total=seed[1];
+          var enrollQuotas=allocate(total,MAJORS.map(function(m){return m[2];}));
+          var certQuotas=allocate(seed[2],MAJORS.map(function(m){return m[3];}));
+          var regions=slots(allocate(total,REGION_WEIGHTS.map(function(r){return r[1];})),REGION_WEIGHTS.map(function(r){return r[0];}));
+          var months=slots(allocate(total,year===SNAPSHOT_YEAR?MONTH_WEIGHTS:MONTH_WEIGHTS.concat([9,8])),year===SNAPSHOT_YEAR?[1,2,3,4,5,6,7,8,9,10]:[1,2,3,4,5,6,7,8,9,10,11,12]);
+          var regionStep=stepFor(total,9973),monthStep=stepFor(total,7919),serial=0;
+          MAJORS.forEach(function(major,majorIndex) {
+            for(var j=0;j<enrollQuotas[majorIndex];j++,serial++){
+              var cohortIndex=Math.floor(serial/2);
+              var province=regions[(cohortIndex*regionStep)%total];
+              var city=province==="湖北省"?cityFor(cohortIndex):province.replace(/省$/,"");
+              var scope=CITY_SCOPES[city],districts=heatGeo[scope]||[];
+              var district=districts.length?districts[(cohortIndex*3)%districts.length].n:"";
+              var organiser=city.replace(/市$/,"")+"承办中心";
+              var online=cohortIndex%4===0, training=null;
+              if(!online){
+                var schoolIndex=Math.floor(cohortIndex/4)%3;
+                training=city==="武汉市"?["光谷少儿艺术中心","武昌美育中心","武汉青少年艺术中心"][schoolIndex]:city.replace(/市$/,"")+"艺术培训"+(schoolIndex+1)+"校";
+              }
+              var month=months[(serial*monthStep)%total],issued=j<certQuotas[majorIndex];
+              facts.push({registration:year*100000+serial,candidate:year*100000+cohortIndex,year:year,month:month,certMonth:issued?Math.min(year===SNAPSHOT_YEAR?10:12,month+1):null,province:province,city:city,district:district,organiser:organiser,training:training,category:major[1],major:major[0],level:(serial+majorIndex)%10+1,batch:year+"-"+organiser+"-"+(online?"线上":"线下")+"-"+(cohortIndex%3+1)});
             }
-            d += "Z";
           });
         });
-        return d;
+        return facts;
       }
-
-      function heatCenter(feature, project) {
-        if (feature.c) return project(feature.c[0], feature.c[1]);
-        var ring = feature.p[0] && feature.p[0][0];
-        if (!ring || !ring.length) return null;
-        var sumLon = 0, sumLat = 0;
-        ring.forEach(function (pt) { sumLon += pt[0]; sumLat += pt[1]; });
-        return project(sumLon / ring.length, sumLat / ring.length);
+      var facts=buildFacts();
+      var current=facts.filter(function(r){return r.year===SNAPSHOT_YEAR;});
+      function counts(rows) {
+        var enrolled=new Set(),certified=new Set();
+        rows.forEach(function(r){enrolled.add(r.registration);if(r.certMonth!==null)certified.add(r.registration);});
+        return {enroll:enrolled.size,cert:certified.size};
       }
-
-      function heatShortName(name) {
-        return String(name).replace(/(土家族苗族自治州|林区|市|区|县)$/, "");
+      function groupRows(rows,key) {
+        var buckets=new Map();
+        rows.forEach(function(r){var name=typeof key==="function"?key(r):r[key];if(!name)return;if(!buckets.has(name))buckets.set(name,[]);buckets.get(name).push(r);});
+        return Array.from(buckets,function(pair){var c=counts(pair[1]);return {name:pair[0],enroll:c.enroll,cert:c.cert};});
       }
-
-      function heatTipPlace(event) {
-        if (!heatTip || !heatCanvas || !event) return;
-        var box = heatCanvas.getBoundingClientRect();
-        heatTip.style.left = Math.max(76, Math.min(box.width - 76, event.clientX - box.left)) + "px";
-        heatTip.style.top = Math.max(62, event.clientY - box.top) + "px";
+      function ordered(rows) { return rows.slice().sort(function(a,b){return b.enroll-a.enroll||a.name.localeCompare(b.name,"zh-CN");}); }
+      function shares(rows,key) { return allocate(1000,rows.map(function(r){return r[key];})).map(function(v){return v/10;}); }
+      function renderDonut(selector,rows,label,colors) {
+        var container=document.querySelector(selector),enrollPct=shares(rows,"enroll"),certPct=shares(rows,"cert");
+        function gradient(pct){var end=0;return "conic-gradient("+pct.map(function(p,i){var start=end;end+=p;return colors[i]+" "+start+"% "+end+"%";}).join(",")+")";}
+        container.innerHTML='<div class="double-donut" role="img" aria-label="'+label+'：外环报名，内环获证" style="background:'+gradient(enrollPct)+'"><div class="double-donut-inner" style="background:'+gradient(certPct)+'"><div class="double-donut-center"><span>'+label+'</span><b>占比</b></div></div></div><div class="category-legend"><div class="category-legend-head"><span></span><span>'+label+'</span><span>报名</span><span>获证</span></div>'+rows.map(function(r,i){return '<div class="category-legend-row"><i style="--c:'+colors[i]+'"></i><span>'+esc(r.name)+'</span><strong>'+enrollPct[i].toFixed(1)+'%</strong><strong>'+certPct[i].toFixed(1)+'%</strong></div>';}).join("")+'<div class="ring-key"><span>外环：报名</span><span>内环：获证</span></div></div>';
       }
-
-      function heatTipShow(target, event) {
-        if (!heatTip || !target || !target.getAttribute) return;
-        var name = target.getAttribute("data-name");
-        if (!name) return;
-        var raw = target.getAttribute("data-value");
-        heatTip.innerHTML = "<strong>" + name + "</strong>" + (raw
-          ? "<span>" + heatMetricLabel() + " <b>" + heatFormat(raw) + "</b> 人</span>"
-          : "<span>暂无数据</span>");
-        heatTip.hidden = false;
-        heatTipPlace(event);
+      function renderMajorList() {
+        var groups=ordered(groupRows(current,"major")),top=groups.slice(0,6),max=top[0].enroll;
+        document.querySelector("[data-major-list]").innerHTML=top.map(function(r){
+          return '<div class="major-row"><strong>'+esc(r.name)+'</strong><div class="major-track" role="img" aria-label="'+esc(r.name)+'报名'+r.enroll+'人次，获证'+r.cert+'人次" style="--enroll-width:'+(r.enroll/max*100)+'%;--cert-ratio:'+(r.cert/r.enroll*100)+'%"><i></i></div><div class="major-stats"><span>报名 <b>'+fmt(r.enroll)+'</b></span><span>获证 <b>'+fmt(r.cert)+'</b></span></div></div>';
+        }).join("");
+        var rest=groups.slice(6).reduce(function(s,r){s.enroll+=r.enroll;s.cert+=r.cert;return s;},{enroll:0,cert:0});
+        document.querySelector("[data-major-summary]").innerHTML='<span>其他专业</span><span>报名 <b>'+fmt(rest.enroll)+'</b> · 获证 <b>'+fmt(rest.cert)+'</b></span>';
       }
-
-      function heatMetricLabel() {
-        return heatState.metric === "cert" ? "获证" : "报名";
+      function renderRanking(selector,key) {
+        document.querySelector(selector).innerHTML=ordered(groupRows(current,key)).slice(0,5).map(function(r,i){return '<tr><td><span class="rank">'+(i+1)+'</span></td><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td>'+fmt(r.enroll)+'</td><td>'+fmt(r.cert)+'</td></tr>';}).join("");
       }
-
-      function heatCrumbsRender() {
-        if (!heatCrumbs) return;
-        var parts = [];
-        var depth = heatState.path.length;
-        if (!depth) {
-          parts.push('<span class="heat-crumb is-current" aria-current="true">全国</span>');
-        } else {
-          parts.push('<button class="heat-crumb" type="button" data-heat-crumb="-1">全国</button>');
-          heatState.path.forEach(function (node, index) {
-            parts.push('<span class="heat-sep" aria-hidden="true">&#8250;</span>');
-            parts.push(index === depth - 1
-              ? '<span class="heat-crumb is-current" aria-current="true">' + node.name + '</span>'
-              : '<button class="heat-crumb" type="button" data-heat-crumb="' + index + '">' + node.name + '</button>');
+      function chartFrame(selector,max,units) {
+        var svg=document.querySelector(selector+" svg"),box=svg.getBoundingClientRect(),w=Math.max(280,box.width),h=Math.max(170,box.height);
+        svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+w+" "+h);
+        var plot={svg:svg,w:w,h:h,left:48,right:w-14,top:20,bottom:h-36,max:max};
+        plot.y=function(v){return plot.bottom-v/max*(plot.bottom-plot.top);};
+        for(var i=0;i<=4;i++){var value=max*i/4,y=plot.y(value);svg.appendChild(svgEl("line",{x1:plot.left,y1:y,x2:plot.right,y2:y,class:"chart-grid"}));svg.appendChild(svgEl("text",{x:plot.left-7,y:y+4,"text-anchor":"end",class:"chart-label"},fmt(value)));}
+        svg.appendChild(svgEl("line",{x1:plot.left,y1:plot.top,x2:plot.left,y2:plot.bottom,class:"chart-axis"}));
+        svg.appendChild(svgEl("line",{x1:plot.left,y1:plot.bottom,x2:plot.right,y2:plot.bottom,class:"chart-axis"}));
+        svg.appendChild(svgEl("text",{x:3,y:11,class:"chart-title"},units||"人次"));
+        return plot;
+      }
+      function renderCharts() {
+        var monthRows=[];
+        for(var m=1;m<=12;m++){monthRows.push({month:m,enroll:current.filter(function(r){return r.month===m;}).length,cert:current.filter(function(r){return r.certMonth===m;}).length});}
+        var max=Math.ceil(Math.max.apply(null,monthRows.map(function(r){return r.enroll;}))/1000)*1000;
+        var plot=chartFrame("[data-month-chart]",max),step=(plot.right-plot.left)/12;
+        monthRows.forEach(function(r,i){plot.svg.appendChild(svgEl("text",{x:plot.left+step*(i+.5),y:plot.bottom+19,"text-anchor":"middle",class:"chart-label",style:plot.w<400?"font-size:9px":"",opacity:r.month>SNAPSHOT_MONTH?.45:1},r.month+"月"));});
+        ["enroll","cert"].forEach(function(key){
+          var color=key==="enroll"?"#52e0d0":"#77e6a5",available=monthRows.slice(0,SNAPSHOT_MONTH);
+          plot.svg.appendChild(svgEl("polyline",{points:available.map(function(r,i){return (plot.left+step*(i+.5))+","+plot.y(r[key]);}).join(" "),stroke:color,class:"chart-line"}));
+          available.forEach(function(r,i){var dot=svgEl("circle",{cx:plot.left+step*(i+.5),cy:plot.y(r[key]),r:3,fill:color});dot.appendChild(svgEl("title",{},r.month+"月"+(key==="enroll"?"报名":"获证")+" "+fmt(r[key])+"人次"));plot.svg.appendChild(dot);});
+        });
+        plot.svg.appendChild(svgEl("text",{x:plot.right,y:plot.h-4,"text-anchor":"end",class:"chart-title"},"10月截至13日；11–12月未发生"));
+        var years=YEAR_SEEDS.map(function(seed){var c=counts(facts.filter(function(r){return r.year===seed[0];}));return {year:seed[0],enroll:c.enroll,cert:c.cert};});
+        var annual=chartFrame("[data-year-chart]",24000),group=(annual.right-annual.left)/5,bar=Math.min(18,group*.26);
+        years.forEach(function(r,i){
+          var x=annual.left+group*(i+.5);
+          ["enroll","cert"].forEach(function(key,index){
+            var value=r[key],rect=svgEl("rect",{x:x+(index?2:-bar-2),y:annual.y(value),width:bar,height:annual.bottom-annual.y(value),fill:index?"#77e6a5":"#52e0d0",rx:2});
+            rect.appendChild(svgEl("title",{},r.year+(r.year===SNAPSHOT_YEAR?"（截至10月13日）":"")+" "+(index?"获证":"报名")+" "+fmt(value)+"人次"));annual.svg.appendChild(rect);
           });
-        }
-        heatCrumbs.innerHTML = parts.join("");
+          annual.svg.appendChild(svgEl("text",{x:x,y:annual.bottom+19,"text-anchor":"middle",class:"chart-label"},r.year+(r.year===SNAPSHOT_YEAR?"*":"")));
+        });
+        annual.svg.appendChild(svgEl("text",{x:annual.right,y:annual.h-4,"text-anchor":"end",class:"chart-title"},"*2026截至10月13日"));
       }
-
-      function heatDrill(target) {
-        if (!target || !target.getAttribute) return false;
-        var city = target.getAttribute("data-heat-city");
-        if (city && heatGeo && heatGeo[city]) {
-          heatState.path = [{ name: HEAT_SCOPE_NAME[city] || city, scope: city }];
-          renderHeat();
-          return true;
-        }
-        var district = target.getAttribute("data-heat-district");
-        var cityNode = heatState.path[0];
-        if (district && cityNode) {
-          heatState.path = [cityNode, { name: district, scope: cityNode.scope }];
-          renderHeat();
-          return true;
-        }
-        return false;
+      var heatCanvas=document.querySelector("[data-heat-canvas]"),heatSvg=document.querySelector("[data-heat-svg]"),heatTip=document.querySelector("[data-heat-tip]");
+      var heatState={path:[],metric:"enroll"};
+      function projectMap(features,w,h,pad) {
+        var minLon=Infinity,maxLon=-Infinity,minLat=Infinity,maxLat=-Infinity;
+        features.forEach(function(f){f.p.forEach(function(poly){poly.forEach(function(ring){ring.forEach(function(p){minLon=Math.min(minLon,p[0]);maxLon=Math.max(maxLon,p[0]);minLat=Math.min(minLat,p[1]);maxLat=Math.max(maxLat,p[1]);});});});});
+        var k=Math.cos((minLat+maxLat)/2*Math.PI/180),sx=(maxLon-minLon)*k||1,sy=maxLat-minLat||1,scale=Math.min((w-pad*2)/sx,(h-pad*2)/sy),ox=(w-sx*scale)/2,oy=(h-sy*scale)/2;
+        return function(lon,lat){return [ox+(lon-minLon)*k*scale,oy+(maxLat-lat)*scale];};
       }
-
-      function renderNationalHeat() {
-        if (!heatNational) return;
-        var source = heatState.metric === "cert" ? nationData.cert : nationData.enroll;
-        var max = Math.max.apply(null, source.map(function (item) { return item[1]; }).concat([1]));
-        heatNational.innerHTML = '<div class="heat-national-grid">' + source.map(function (item) {
-          var ratio = item[1] / max;
-          var level = ratio >= .78 ? "lv1" : ratio >= .55 ? "lv2" : ratio >= .32 ? "lv3" : "lv4";
-          return '<div class="heat-tile ' + level + '"><strong>' + item[0] + '</strong><small>' + heatFormat(item[1]) + ' 人</small></div>';
-        }).join("") + '</div>';
-        heatNational.hidden = false;
-        if (heatSvg) heatSvg.style.display = "none";
-        if (heatScope) heatScope.innerHTML = "全国 · " + heatMetricLabel() + " <b>" + heatFormat(source.reduce(function (sum, item) { return sum + item[1]; }, 0)) + "</b> 人";
-        if (heatNote) heatNote.textContent = "默认全国视图，报名或获证热力分布";
+      function mapPath(feature,project) {
+        return feature.p.map(function(poly){return poly.map(function(ring){return ring.map(function(p,i){var xy=project(p[0],p[1]);return (i?"L":"M")+xy[0].toFixed(1)+" "+xy[1].toFixed(1);}).join("")+"Z";}).join("");}).join("");
+      }
+      function heatColor(t) {
+        var colors=[[23,70,89],[39,140,158],[82,224,208],[245,195,107]],index=Math.min(2,Math.floor(t*3)),f=t*3-index;
+        return "rgb("+colors[index].map(function(v,i){return Math.round(v+(colors[index+1][i]-v)*f);}).join(",")+")";
+      }
+      function heatRows() {
+        var path=heatState.path;
+        return current.filter(function(r){return (!path[0]||r.province===path[0])&&(!path[1]||r.city===path[1])&&(!path[2]||r.district===path[2]);});
       }
       function renderHeat() {
-        if (!heatSvg || !heatCanvas) return;
-        heatCrumbsRender();
-        var depth = heatState.path.length;
-        if (!depth) { renderNationalHeat(); return; }
-        if (heatNational) heatNational.hidden = true;
-        heatSvg.style.display = "";
-        var cityNode = depth ? heatState.path[0] : null;
-        var scopeKey = cityNode ? cityNode.scope : "hubei";
-        var focusName = depth === 2 ? heatState.path[1].name : "";
-        var features = (heatGeo && heatGeo[scopeKey]) || [];
-        if (!features.length) {
-          heatSvg.innerHTML = "";
-          if (heatScope) heatScope.textContent = "地理数据未加载";
-          return;
-        }
-        var focusFeature = focusName ? features.filter(function (item) { return item.n === focusName; })[0] : null;
-        var box = heatCanvas.getBoundingClientRect();
-        var width = Math.max(320, Math.round(box.width));
-        var height = Math.max(200, Math.round(box.height));
-        heatSvg.setAttribute("viewBox", "0 0 " + width + " " + height);
-        heatSvg.setAttribute("aria-label", (depth === 0 ? "湖北省" : HEAT_SCOPE_NAME[scopeKey]) + heatMetricLabel() + "热力地图");
-        heatSvg.innerHTML = "";
-        var group = heatEl("g", {});
-        heatSvg.appendChild(group);
-        var project = heatProjection(focusFeature ? [focusFeature] : features, width, height, depth === 0 ? 16 : 26);
-        var source = heatState.metric === "cert" ? certHeatData : heatData;
-        var rows = depth === 0 ? (source.province || []) : (source.district || []);
-        var values = {};
-        var points = [];
-        var aggregate = 0;
-
-        rows.forEach(function (row) {
-          var label = row[0];
-          var value = Number(row[1]);
-          var feature = heatMatch(label, features);
-          if (feature) { values[feature.n] = value; return; }
-          if (label === "湖北省") { aggregate = value; return; }
-          var point = heatPointFor(label, scopeKey);
-          if (point) points.push({ label: label, value: value, lon: point[0], lat: point[1] });
+        var depth=heatState.path.length,rows=heatRows(),key=depth===0?"province":depth===1?"city":"district";
+        var features=depth===0?chinaGeo:depth===1?(heatGeo.hubei||[]):(heatGeo[CITY_SCOPES[heatState.path[1]]]||[]);
+        if(depth===3)features=features.filter(function(f){return f.n===heatState.path[2];});
+        heatTip.hidden=true;
+        document.querySelector("[data-heat-crumbs]").innerHTML=["全国"].concat(heatState.path).map(function(name,i){return (i?'<span class="heat-sep">›</span>':"")+(i===depth?'<span class="heat-crumb is-current" aria-current="location">'+esc(name)+'</span>':'<button class="heat-crumb" type="button" data-heat-crumb="'+i+'">'+esc(name)+'</button>');}).join("");
+        var total=counts(rows),name=depth?heatState.path[depth-1]:"全国";
+        document.querySelector("[data-heat-scope]").innerHTML=esc(name)+' · 报名 <b>'+fmt(total.enroll)+'</b> · 获证 <b>'+fmt(total.cert)+'</b>';
+        document.querySelector("[data-heat-note]").textContent=depth===0?"省级分布":depth===1?"市级分布":depth===2?"区县分布":"区县边界";
+        heatSvg.innerHTML="";
+        if(!features.length){heatSvg.appendChild(svgEl("text",{x:20,y:50,class:"chart-label"},"暂无地理边界"));return;}
+        var box=heatCanvas.getBoundingClientRect(),w=Math.max(280,box.width),h=Math.max(200,box.height),project=projectMap(features,w,h,26);
+        heatSvg.setAttribute("viewBox","0 0 "+w+" "+h);heatSvg.setAttribute("aria-label",name+(heatState.metric==="enroll"?"报名":"获证")+"热力地图");
+        var groups=groupRows(rows,key),lookup=new Map(groups.map(function(r){return [r.name,r];})),max=Math.max.apply(null,groups.map(function(r){return r[heatState.metric];}).concat([1]));
+        document.querySelector("[data-heat-min]").textContent="0";
+        document.querySelector("[data-heat-max]").textContent=fmt(max)+"人次";
+        var labelCandidates=[];
+        features.forEach(function(feature) {
+          var value=lookup.get(feature.n),drill=depth===0?feature.n==="湖北省":depth===1?!!heatGeo[CITY_SCOPES[feature.n]]:depth===2;
+          var path=svgEl("path",{d:mapPath(feature,project),fill:value?heatColor(value[heatState.metric]/max):"#1a2534","fill-rule":"evenodd",class:"heat-shape"+(drill?" is-hot":"")+(depth===3?" is-focus":""),"data-name":feature.n,"data-enroll":value?value.enroll:"","data-cert":value?value.cert:"","aria-label":feature.n+(value?" 报名"+value.enroll+"人次，获证"+value.cert+"人次":" 暂无数据")});
+          if(drill){path.setAttribute("data-drill",feature.n);path.setAttribute("tabindex","0");path.setAttribute("role","button");}
+          else path.appendChild(svgEl("title",{},feature.n+(value?" 报名"+fmt(value.enroll)+"人次，获证"+fmt(value.cert)+"人次":" 暂无数据")));
+          heatSvg.appendChild(path);
+          if(value&&feature.c){var at=project(feature.c[0],feature.c[1]);labelCandidates.push({x:at[0],y:at[1],text:feature.n.replace(/省$|市$|区$|县$/,"")+" "+fmt(value[heatState.metric]),value:value[heatState.metric]});}
         });
-
-        if (depth === 2) points = [];
-        var magnitudes = [];
-        Object.keys(values).forEach(function (key) { magnitudes.push(values[key]); });
-        points.forEach(function (point) { magnitudes.push(point.value); });
-        var max = magnitudes.length ? Math.max.apply(null, magnitudes) : 1;
-        var min = magnitudes.length ? Math.min.apply(null, magnitudes) : 0;
-        var span = (max - min) || 1;
-
-        features.forEach(function (feature) {
-          var known = Object.prototype.hasOwnProperty.call(values, feature.n);
-          var path = heatEl("path", {
-            d: heatPath(feature, project),
-            fill: "#1a2534",
-            "fill-rule": "evenodd",
-            "data-name": feature.n,
-            "data-value": known ? String(values[feature.n]) : ""
-          });
-          if (known) path.setAttribute("fill", heatColor((values[feature.n] - min) / span));
-          var classes = ["heat-shape"];
-          var drillCity = depth === 0 ? HEAT_CITIES[feature.n] : null;
-          if (drillCity && heatGeo[drillCity]) {
-            classes.push("is-hot");
-            path.setAttribute("data-heat-city", drillCity);
-            path.setAttribute("tabindex", "0");
-            path.setAttribute("role", "button");
-          } else if (depth > 0) {
-            classes.push("is-hot");
-            path.setAttribute("data-heat-district", feature.n);
-            path.setAttribute("tabindex", "0");
-            path.setAttribute("role", "button");
-            if (depth === 2) classes.push(feature.n === focusName ? "is-focus" : "is-dim");
-          }
-          path.setAttribute("class", classes.join(" "));
-          path.setAttribute("aria-label", feature.n + (known ? " " + heatMetricLabel() + " " + heatFormat(values[feature.n]) + " 人" : " 暂无数据"));
-          group.appendChild(path);
-        });
-
-        points.forEach(function (point) {
-          var at = project(point.lon, point.lat);
-          var ratio = (point.value - min) / span;
-          var radius = 5 + 11 * ratio;
-          point.x = at[0];
-          point.y = at[1];
-          point.radius = radius;
-          group.appendChild(heatEl("circle", {
-            cx: at[0].toFixed(1),
-            cy: at[1].toFixed(1),
-            r: radius.toFixed(1),
-            fill: heatColor(ratio),
-            stroke: heatColor(ratio),
-            "class": "heat-dot",
-            "data-name": point.label,
-            "data-value": String(point.value)
-          }));
-        });
-
-        var labels = [];
-        features.forEach(function (feature) {
-          if (!Object.prototype.hasOwnProperty.call(values, feature.n)) return;
-          if (depth === 2 && feature.n !== focusName) return;
-          var at = heatCenter(feature, project);
-          if (!at) return;
-          labels.push({ x: at[0], y: at[1], value: values[feature.n], text: heatShortName(feature.n) + " " + heatFormat(values[feature.n]), cls: "heat-label" });
-        });
-        points.forEach(function (point) {
-          labels.push({ x: point.x, y: point.y - point.radius - 5, value: point.value, text: heatShortName(point.label) + " " + heatFormat(point.value), cls: "heat-label sm" });
-        });
-
-        labels.sort(function (a, b) { return b.value - a.value; });
-        var placed = [];
-        var verticalOffsets = [0, -13, 13, -26, 26, -39, 39];
-        labels.forEach(function (item) {
-          var halfWidth = (item.text.length * 6.4 + 8) / 2;
-          for (var i = 0; i < verticalOffsets.length; i++) {
-            var cx = item.x;
-            var cy = item.y + verticalOffsets[i];
-            var box = { left: cx - halfWidth, right: cx + halfWidth, top: cy - 12, bottom: cy + 4 };
-            if (box.left < 2 || box.right > width - 2 || box.top < 2 || box.bottom > height - 2) continue;
-            var clash = placed.some(function (other) {
-              return !(box.right < other.left || box.left > other.right || box.bottom < other.top || box.top > other.bottom);
-            });
-            if (clash) continue;
-            placed.push(box);
-            var text = heatEl("text", { x: cx.toFixed(1), y: cy.toFixed(1), "text-anchor": "middle", "class": item.cls });
-            text.textContent = item.text;
-            group.appendChild(text);
-            return;
+        var placed=[];
+        labelCandidates.sort(function(a,b){return b.value-a.value;}).forEach(function(label){
+          var half=Array.from(label.text).reduce(function(width,c){return width+(/[\u4e00-\u9fff]/.test(c)?11:6);},0)/2+3;
+          for(var i=0;i<5;i++){
+            var y=label.y+[0,-14,14,-28,28][i],b={l:label.x-half,r:label.x+half,t:y-11,b:y+3};
+            if(b.l<4||b.r>w-4||b.t<44||b.b>h-5||placed.some(function(p){return !(b.r<p.l||b.l>p.r||b.b<p.t||b.t>p.b);}))continue;
+            heatSvg.appendChild(svgEl("text",{x:label.x,y:y,"text-anchor":"middle",class:"heat-label"},label.text));placed.push(b);break;
           }
         });
-
-        if (heatScope) {
-          if (depth === 0) heatScope.innerHTML = "全省" + heatMetricLabel() + "合计 <b>" + heatFormat(aggregate) + "</b> 人";
-          else if (depth === 1) heatScope.innerHTML = HEAT_SCOPE_NAME[scopeKey] + " · <b>" + magnitudes.length + "</b> 个区县有数据";
-          else heatScope.innerHTML = focusName + " · " + heatMetricLabel() + " <b>" + (Object.prototype.hasOwnProperty.call(values, focusName) ? heatFormat(values[focusName]) : "暂无") + "</b> 人";
-        }
-        if (heatNote) {
-          heatNote.textContent = depth === 0
-            ? "颜色越深，" + heatMetricLabel() + "人数越多；点击市州可继续下钻"
-            : depth === 1
-              ? "点击区县可继续下钻，点击上方路径可返回"
-              : "已到最细层级，点击其他区县可切换";
-        }
-        if (heatMin) heatMin.textContent = heatFormat(min);
-        if (heatMax) heatMax.textContent = heatFormat(max);
       }
-
-      if (heatSvg) {
-        heatSvg.addEventListener("mouseover", function (event) { heatTipShow(event.target, event); });
-        heatSvg.addEventListener("mousemove", function (event) { if (heatTip && !heatTip.hidden) heatTipPlace(event); });
-        heatSvg.addEventListener("mouseout", function () { if (heatTip) heatTip.hidden = true; });
-        heatSvg.addEventListener("focusin", function (event) {
-          var box = event.target.getBoundingClientRect ? event.target.getBoundingClientRect() : null;
-          if (box) heatTipShow(event.target, { clientX: box.left + box.width / 2, clientY: box.top });
-        });
-        heatSvg.addEventListener("focusout", function () { if (heatTip) heatTip.hidden = true; });
-        heatSvg.addEventListener("click", function (event) {
-          var target = event.target && event.target.closest ? (event.target.closest("[data-heat-city]") || event.target) : event.target;
-          heatDrill(target);
-        });
-        heatSvg.addEventListener("keydown", function (event) {
-          if (event.key !== "Enter" && event.key !== " ") return;
-          var target = event.target && event.target.closest ? (event.target.closest("[data-heat-city]") || event.target) : event.target;
-          if (heatDrill(target)) event.preventDefault();
-        });
+      function drill(target) {
+        var name=target&&target.getAttribute("data-drill");
+        if(!name)return false;
+        if(heatState.path.length===0&&name==="湖北省")heatState.path=[name];
+        else if(heatState.path.length===1&&CITY_SCOPES[name])heatState.path.push(name);
+        else if(heatState.path.length===2)heatState.path.push(name);
+        else return false;
+        renderHeat();return true;
       }
-
-      if (heatCrumbs) heatCrumbs.addEventListener("click", function (event) {
-        var button = event.target && event.target.closest ? event.target.closest("[data-heat-crumb]") : null;
-        if (!button) return;
-        var depth = Number(button.getAttribute("data-heat-crumb"));
-        heatState.path = depth < 0 ? [] : heatState.path.slice(0, depth + 1);
-        renderHeat();
-      });
-      document.querySelectorAll("[data-heat-metric]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          document.querySelectorAll("[data-heat-metric]").forEach(function (item) { item.classList.remove("active"); });
-          button.classList.add("active");
-          heatState.metric = button.getAttribute("data-heat-metric");
-          renderHeat();
-        });
-      });
-
-      var heatFrame = 0;
-      function heatScheduleRender() {
-        if (heatFrame) return;
-        heatFrame = window.requestAnimationFrame(function () {
-          heatFrame = 0;
-          renderHeat();
-        });
+      function showTip(target,event) {
+        var name=target&&target.getAttribute("data-name");if(!name)return;
+        var enrol=target.getAttribute("data-enroll"),cert=target.getAttribute("data-cert"),box=heatCanvas.getBoundingClientRect();
+        heatTip.innerHTML="<strong>"+esc(name)+"</strong>"+(enrol===""?"暂无数据":"<span>报名 <b>"+fmt(enrol)+"</b> 人次</span><span>获证 <b>"+fmt(cert)+"</b> 人次</span>");
+        heatTip.hidden=false;
+        heatTip.style.left=Math.max(4,Math.min(box.width-heatTip.offsetWidth-4,event.clientX-box.left+10))+"px";
+        heatTip.style.top=Math.max(4,Math.min(box.height-heatTip.offsetHeight-4,event.clientY-box.top+10))+"px";
       }
-      if (window.ResizeObserver && heatCanvas) new ResizeObserver(heatScheduleRender).observe(heatCanvas);
-      else window.addEventListener("resize", heatScheduleRender);
-
-      var MAJOR_DATA = [
-        { name: "钢琴", enroll: 9480, cert: 1688 },
-        { name: "中国舞", enroll: 7610, cert: 1220 },
-        { name: "小提琴", enroll: 4620, cert: 620 },
-        { name: "素描", enroll: 2960, cert: 356 },
-        { name: "音乐基础知识", enroll: 2860, cert: 432 },
-        { name: "古筝", enroll: 2780, cert: 428 },
-        { name: "二胡", enroll: 1920, cert: 296 },
-        { name: "声乐（民族）", enroll: 1880, cert: 288 },
-        { name: "声乐（通俗）", enroll: 1760, cert: 270 },
-        { name: "电子琴（单、双排键）", enroll: 1480, cert: 226 },
-        { name: "少儿歌唱", enroll: 1420, cert: 216 },
-        { name: "竹笛", enroll: 1260, cert: 194 },
-        { name: "葫芦丝", enroll: 1180, cert: 182 },
-        { name: "民谣吉他", enroll: 1060, cert: 162 },
-        { name: "古典吉他", enroll: 980, cert: 150 },
-        { name: "长笛", enroll: 920, cert: 140 },
-        { name: "单簧管", enroll: 760, cert: 116 },
-        { name: "萨克斯管", enroll: 680, cert: 104 },
-        { name: "手风琴", enroll: 620, cert: 94 },
-        { name: "大提琴", enroll: 560, cert: 86 },
-        { name: "小号", enroll: 480, cert: 72 },
-        { name: "电吉他", enroll: 460, cert: 70 },
-        { name: "爵士鼓/电爵士鼓", enroll: 420, cert: 64 },
-        { name: "国际标准舞", enroll: 1580, cert: 242 },
-        { name: "芭蕾舞", enroll: 1120, cert: 172 },
-        { name: "硬笔书法", enroll: 1680, cert: 258 },
-        { name: "软笔书法", enroll: 1420, cert: 218 },
-        { name: "儿童画", enroll: 1380, cert: 212 },
-        { name: "速写", enroll: 1080, cert: 166 },
-        { name: "水粉画", enroll: 880, cert: 134 },
-        { name: "水彩画", enroll: 760, cert: 116 },
-        { name: "漫画", enroll: 680, cert: 104 },
-        { name: "人物", enroll: 620, cert: 94 },
-        { name: "山水", enroll: 560, cert: 86 },
-        { name: "花鸟", enroll: 480, cert: 74 },
-        { name: "朗诵", enroll: 1980, cert: 304 }
-      ];
-
-      function renderMajorList() {
-        var list = document.querySelector("[data-major-list]");
-        var scroll = document.querySelector("[data-major-scroll]");
-        if (!list) return;
-        var maxEnroll = 0;
-        MAJOR_DATA.forEach(function (item) { maxEnroll = Math.max(maxEnroll, item.enroll); });
-        var rows = MAJOR_DATA.map(function (item) {
-          var enrollWidth = (item.enroll / maxEnroll * 100).toFixed(1);
-          var certWidth = (item.cert / maxEnroll * 100).toFixed(1);
-          return '<div class="bar-row"><strong>' + item.name + '</strong><div class="major-pair"><i class="cert" style="width:' + certWidth + '%"></i><i class="enroll" style="width:' + enrollWidth + '%"></i></div><b>' + item.cert.toLocaleString("zh-CN") + ' / ' + item.enroll.toLocaleString("zh-CN") + '</b></div>';
-        });
-        list.innerHTML = rows.join("") + rows.join("");
-        if (scroll && list.scrollHeight > scroll.clientHeight) list.classList.add("is-scrolling");
-        else list.classList.remove("is-scrolling");
+      heatSvg.addEventListener("click",function(event){drill(event.target);});
+      heatSvg.addEventListener("keydown",function(event){if((event.key==="Enter"||event.key===" ")&&drill(event.target))event.preventDefault();});
+      heatSvg.addEventListener("mouseover",function(event){showTip(event.target,event);});
+      heatSvg.addEventListener("mousemove",function(event){showTip(event.target,event);});
+      heatSvg.addEventListener("mouseleave",function(){heatTip.hidden=true;});
+      heatSvg.addEventListener("focusin",function(event){var b=event.target.getBoundingClientRect();showTip(event.target,{clientX:b.left+b.width/2,clientY:b.top});});
+      heatSvg.addEventListener("focusout",function(){heatTip.hidden=true;});
+      document.querySelector("[data-heat-crumbs]").addEventListener("click",function(event){var button=event.target.closest("[data-heat-crumb]");if(button){heatState.path=heatState.path.slice(0,Number(button.getAttribute("data-heat-crumb")));renderHeat();}});
+      document.querySelectorAll("[data-heat-metric]").forEach(function(button){button.addEventListener("click",function(){heatState.metric=button.getAttribute("data-heat-metric");document.querySelectorAll("[data-heat-metric]").forEach(function(b){var active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active);});renderHeat();});});
+      function renderDashboard() {
+        var totals=counts(current);
+        document.querySelector("[data-total-enroll]").textContent=fmt(totals.enroll);
+        document.querySelector("[data-total-cert]").textContent=fmt(totals.cert);
+        document.querySelector("[data-total-training]").textContent=fmt(new Set(current.map(function(r){return r.training;}).filter(Boolean)).size);
+        document.querySelector("[data-total-batches]").textContent=fmt(new Set(current.map(function(r){return r.batch;})).size);
+        var categories=groupRows(current,"category"),categoryOrder=["音乐类","美术类","舞蹈类","朗诵类"];
+        renderDonut("[data-category-chart]",categoryOrder.map(function(name){return categories.find(function(r){return r.name===name;});}),"门类",CATEGORY_COLORS);
+        var levels=groupRows(current,function(r){return r.level<=3?"1–3级":r.level<=6?"4–6级":"7–10级";});
+        renderDonut("[data-level-chart]",["1–3级","4–6级","7–10级"].map(function(name){return levels.find(function(r){return r.name===name;});}),"级别",["#62a8ff","#f5c36b","#ff8e7a"]);
+        renderMajorList();renderRanking("[data-organizer-rows]","organiser");renderRanking("[data-training-rows]","training");renderCharts();renderHeat();
       }
-
-      renderHeat();
-      renderMajorList();
-      setInterval(formatClock, 1000);
-      formatClock();
+      var resizeFrame=0;
+      function resizeCharts(){if(resizeFrame)return;resizeFrame=requestAnimationFrame(function(){resizeFrame=0;renderCharts();renderHeat();});}
+      if(window.ResizeObserver){var observer=new ResizeObserver(resizeCharts);observer.observe(heatCanvas);document.querySelectorAll(".chart").forEach(function(node){observer.observe(node);});}
+      else window.addEventListener("resize",resizeCharts);
+      var statusTimer;
+      document.querySelector("[data-refresh]").addEventListener("click",function(){renderDashboard();clearTimeout(statusTimer);document.querySelector("[data-refresh-status]").textContent="演示数据已重新加载";statusTimer=setTimeout(function(){document.querySelector("[data-refresh-status]").textContent="";},3000);});
+      var explainDialog=document.querySelector("[data-explain-dialog]"),explainOpen=document.querySelector("[data-explain]"),explainClose=document.querySelector("[data-explain-close]");
+      function closeExplain(){if(explainDialog)explainDialog.hidden=true;}
+      if(explainOpen)explainOpen.addEventListener("click",function(){explainDialog.hidden=false;explainClose.focus();});
+      if(explainClose)explainClose.addEventListener("click",closeExplain);
+      if(explainDialog)explainDialog.addEventListener("click",function(event){if(event.target===explainDialog)closeExplain();});
+      document.addEventListener("keydown",function(event){if(event.key==="Escape"&&explainDialog&&!explainDialog.hidden)closeExplain();});
+      document.querySelector("[data-fullscreen]").addEventListener("click",function(){var root=document.querySelector(".cockpit");if(!document.fullscreenElement&&root.requestFullscreen)root.requestFullscreen();else if(document.exitFullscreen)document.exitFullscreen();});
+      renderDashboard();
     }());
   </script>
 </body>
