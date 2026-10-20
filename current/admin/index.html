@@ -141,6 +141,8 @@
     .switch-control input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .2); transition: .16s; }
     .switch-control input:checked { background: var(--primary); }
     .switch-control input:checked::after { transform: translateX(14px); }
+    .course-navigation-settings { justify-content: flex-end; margin-bottom: 14px; }
+    .course-navigation-settings input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
     .btn { height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); color: var(--text); cursor: pointer; }
     .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
     .btn.success { background: var(--success); border-color: var(--success); color: #fff; }
@@ -3988,6 +3990,7 @@
         <section class="page" data-page="courses">
           <div class="page-head"><div><h1 class="page-title" data-page-heading>课程发布</h1></div></div>
           <div class="subview" data-subview="publish">
+            <div class="page-actions course-navigation-settings" data-platform-only><label class="switch-control"><span>小程序底部“学习”导航</span><input type="checkbox" role="switch" aria-label="显示小程序底部学习导航" data-learning-navigation-switch checked><span data-learning-navigation-status>显示</span></label></div>
             <div class="grid-4"><div class="card metric">已发布课程<strong>18</strong><span class="muted">当前可报名</span></div><div class="card metric">报名学员<strong>1,286</strong><span class="muted">累计报名人数</span></div><div class="card metric">今日新增订单<strong>42</strong><span class="muted">较昨日 +8</span></div><div class="card metric">待完善课程<strong>3</strong><span class="muted">待完善课程内容</span></div></div>
             <div class="filter-card"><div class="field"><label>课程名称</label><input class="input" placeholder="请输入课程名称"></div><div class="field"><label>课程分类</label><select class="select"><option>全部分类</option><option>考级基础课</option><option>专项提升课</option><option>考前辅导课</option></select></div><div class="field"><label>发布状态</label><select class="select"><option>全部状态</option><option>已上架</option><option>已下架</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-toast="已按当前条件查询课程">查询</button><button class="btn" data-toast="课程筛选条件已重置">重置</button></div></div></div>
             <div class="table-card"><div class="table-tools"><div><h2 class="table-title">课程列表</h2><span class="muted">统一维护课程内容、上架状态和报名入口。</span></div><div class="page-actions"><button class="btn primary" data-drawer="course-create" data-platform-only>新增课程</button></div></div><div class="table-wrap"><table><thead><tr><th>课程编号</th><th>课程名称</th><th>课程分类</th><th>适用专业/级别</th><th>课时</th><th>售价</th><th>购买人数</th><th>发布状态</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-course-row data-course-id="KC202608001" data-course-name="钢琴考级 6 级专项提升" data-course-category="专项提升课" data-course-scope="钢琴 / 6级" data-course-hours="16" data-course-price="399" data-course-status="已上架"><td>KC202608001</td><td>钢琴考级 6 级专项提升</td><td>专项提升课</td><td>钢琴 / 6级</td><td>16课时</td><td>¥399</td><td>186</td><td><span class="tag green">已上架</span></td><td>2026-08-24 16:20</td><td><div class="operation"><button class="btn link" data-drawer="course-detail">查看</button><button class="btn link" data-drawer="course-edit" data-platform-only>编辑</button><button class="btn link" data-toast="课程已下架" data-platform-only>下架</button></div></td></tr><tr data-course-row data-course-id="KC202608002" data-course-name="中国舞考级基本功训练" data-course-category="考级基础课" data-course-scope="中国舞 / 1-3级" data-course-hours="12" data-course-price="269" data-course-status="已上架"><td>KC202608002</td><td>中国舞考级基本功训练</td><td>考级基础课</td><td>中国舞 / 1-3级</td><td>12课时</td><td>¥269</td><td>328</td><td><span class="tag green">已上架</span></td><td>2026-08-22 10:35</td><td><div class="operation"><button class="btn link" data-drawer="course-detail">查看</button><button class="btn link" data-drawer="course-edit" data-platform-only>编辑</button><button class="btn link" data-toast="课程已下架" data-platform-only>下架</button></div></td></tr><tr data-course-row data-course-id="KC202608003" data-course-name="美术素描考前辅导" data-course-category="考前辅导课" data-course-scope="素描 / 7-9级" data-course-hours="8" data-course-price="198" data-course-status="已下架"><td>KC202608003</td><td>美术素描考前辅导</td><td>考前辅导课</td><td>素描 / 7-9级</td><td>8课时</td><td>¥198</td><td>0</td><td><span class="tag">已下架</span></td><td>2026-08-25 09:12</td><td><div class="operation"><button class="btn link" data-drawer="course-detail">查看</button><button class="btn link" data-drawer="course-edit" data-platform-only>编辑</button><button class="btn link" data-toast="课程已上架" data-platform-only>上架</button></div></td></tr><tr data-course-list-empty hidden><td colspan="10"><div class="empty-state"><strong>未查询到匹配课程</strong><span>请调整课程名称、分类或发布状态后重试。</span></div></td></tr></tbody></table></div></div>
@@ -4153,6 +4156,7 @@
   <div class="toast" id="toast">已保存</div>
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
+  <script src="../shared/hbyx-exam-navigation.js"></script>
   <script>
     // Keep every route page inside the scrollable main content region. This also
     // repairs browser HTML parsing differences caused by the large prototype DOM.
@@ -22513,6 +22517,7 @@
     function prepareCoursePublishRows(page) {
       var root = page || document.querySelector('[data-page="courses"]');
       if (!root) return;
+      syncLearningNavigationSwitch();
       var statusFilter = root.querySelectorAll(".filter-card select")[1];
       if (statusFilter && !Array.from(statusFilter.options).some(function (option) { return option.value === "草稿" || option.textContent === "草稿"; })) {
         statusFilter.insertAdjacentHTML("beforeend", '<option value="草稿">草稿</option>');
@@ -22568,6 +22573,40 @@
     var COURSE_VIDEO_DEMO_URL = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
     var COURSE_CATALOG_STORAGE_KEY = "hbyx_course_catalog_v1";
     var COURSE_SHARED_ORDER_STORAGE_KEY = "hbyx_course_order_status_v1";
+
+    function syncLearningNavigationSwitch() {
+      var input = document.querySelector("[data-learning-navigation-switch]");
+      var status = document.querySelector("[data-learning-navigation-status]");
+      var visible = window.HBYXExamNavigation.getLearningVisible();
+      if (input) {
+        input.checked = visible;
+        input.disabled = !AUTH_SESSION || AUTH_SESSION.role !== "platform";
+      }
+      if (status) status.textContent = visible ? "显示" : "隐藏";
+    }
+    function saveLearningNavigationSwitch(input) {
+      if (!AUTH_SESSION || AUTH_SESSION.role !== "platform") {
+        syncLearningNavigationSwitch();
+        toast("仅平台可设置小程序学习导航");
+        return;
+      }
+      try {
+        window.HBYXExamNavigation.setLearningVisible(input.checked);
+      } catch (error) {
+        syncLearningNavigationSwitch();
+        toast("设置保存失败，请检查浏览器存储后重试");
+        return;
+      }
+      syncLearningNavigationSwitch();
+      toast(input.checked ? "小程序底部学习导航已显示" : "小程序底部学习导航已隐藏");
+    }
+    document.addEventListener("change", function (event) {
+      if (event.target.matches("[data-learning-navigation-switch]")) saveLearningNavigationSwitch(event.target);
+    });
+    window.addEventListener("storage", function (event) {
+      if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) syncLearningNavigationSwitch();
+    });
+    window.addEventListener("focus", syncLearningNavigationSwitch);
 
     function courseDefaultLessons(editing, courseId) {
       if (!editing) return [{ id: "lesson-" + Date.now(), title: "", duration: "", summary: "", videoName: "", videoAssetId: "", videoStatus: "未上传", playbackUrl: "", previewEnabled: true, previewSeconds: 300 }];

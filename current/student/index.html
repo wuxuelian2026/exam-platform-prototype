@@ -2346,6 +2346,7 @@
       padding-top: 6px;
     }
     .tab.active { color: var(--brand-primary); }
+    .tabbar.learning-hidden { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .tab.active::after {
       content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
       width: 18px; height: 2px; background: var(--brand-gold); border-radius: 2px;
@@ -13606,6 +13607,7 @@
   </div>
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
+  <script src="../shared/hbyx-exam-navigation.js"></script>
   <script>
     (function () {
       var shell = document.querySelector(".phone-shell");
@@ -19809,10 +19811,27 @@
         syncApplicationDetail();
       }
 
+      function syncLearningNavigation() {
+        var visible = window.HBYXExamNavigation.getLearningVisible();
+        var tab = document.querySelector('.tabbar [data-tab="learning"]');
+        var tabbar = document.querySelector(".tabbar");
+        if (tab) tab.hidden = !visible;
+        if (tabbar) tabbar.classList.toggle("learning-hidden", !visible);
+        return visible;
+      }
+
+      function refreshLearningNavigation() {
+        if (!syncLearningNavigation() && currentView() === "learning") activateView();
+      }
+
       function activateView() {
         var currentRouteHash = window.location.hash || "#home";
         var previousRouteHash = lastRouteHash;
         var view = currentView();
+        if (!syncLearningNavigation() && view === "learning") {
+          window.location.hash = "#home";
+          return;
+        }
         if (previousRouteHash && previousRouteHash !== currentRouteHash && !secondaryBackNavigation && previousRouteHash !== "#login") {
           routeSourceByHash[currentRouteHash] = previousRouteHash;
         }
@@ -24450,6 +24469,7 @@
 
       window.addEventListener("hashchange", handleOnlineExamHashChange);
       window.addEventListener("storage", function (event) {
+        if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) refreshLearningNavigation();
         if (event.key === COURSE_CATALOG_STORAGE_KEY) {
           refreshCourseCatalogFromShared();
           syncCourseListUI();
@@ -24461,6 +24481,10 @@
         }
       });
       var savedRole = "学生";
+      window.addEventListener("focus", refreshLearningNavigation);
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") refreshLearningNavigation();
+      });
       try { savedRole = localStorage.getItem(ROLE_STORAGE_KEY) || "学生"; } catch (e) {}
       restoreAuthFromStorage();
       loginLockTimer = window.setInterval(updatePasswordLoginLockUI, 1000);
