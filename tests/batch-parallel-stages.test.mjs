@@ -42,6 +42,7 @@ function fixture(overrides = {}, role = "organizer") {
     schedulePhaseOf: (item) => item.schedulePhaseStatus || item.status,
     scheduleRoleCanWrite: (name, phase) => ["organizer", "training"].includes(name) && phase === "编排中",
     scheduleStepState: () => ({ done: [true] }),
+    scheduleEntryBatchErrors: () => [],
     batchChangeIsFrozen: () => false, closeDrawer() {}, showPage() {},
     syncBatchMetric() {}, syncBatchStageVisibility() {}, renderBatchWorkbenchState() {}, setBatchTag() {},
     appendBatchChangeRecord() {}, refreshBatchChangeView() {}, resourceAudit() {}, formatDateTime: () => "2026-10-20 12:00:00",

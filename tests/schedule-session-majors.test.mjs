@@ -229,7 +229,7 @@ test("preview lists each assigned candidate's own major instead of every session
   assert.ok(rendered.includes("钢琴、中国舞"));
   assert.ok(rendered.includes("钢琴考生"));
   assert.ok(rendered.includes("舞蹈考生"));
-  assert.ok(rendered.includes("钢琴 3级"));
-  assert.ok(rendered.includes("中国舞 4级"));
+  assert.ok(rendered.includes("钢琴</td><td>3级"));
+  assert.ok(rendered.includes("中国舞</td><td>4级"));
   assert.ok(!rendered.includes("钢琴、中国舞 3级"));
 });

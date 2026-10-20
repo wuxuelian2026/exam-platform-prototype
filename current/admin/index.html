@@ -525,6 +525,14 @@
     .schedule-role-table td { vertical-align: middle; }
     .schedule-role-table .schedule-owner-cell { white-space: normal; min-width: 190px; line-height: 1.45; }
     .schedule-role-table .schedule-owner-cell span { display: block; color: var(--muted); font-size: 12px; }
+    .schedule-entry-workbench .drawer-section { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 12px 0; margin: 0; background: transparent; }
+    .schedule-entry-workbench .table-tools { padding: 8px 0; flex-wrap: wrap; gap: 8px; }
+    .schedule-entry-workbench h3 { font-size: 14px; margin: 8px 0; }
+    .schedule-entry-workbench .page-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+    .schedule-entry-workbench .select { width: auto; min-width: 140px; flex: 0 1 200px; }
+    .schedule-entry-workbench .table-wrap table { min-width: 0 !important; width: 100%; table-layout: fixed; }
+    .schedule-entry-workbench th, .schedule-entry-workbench td { position: static !important; min-width: 0 !important; width: auto !important; padding: 8px 10px; white-space: normal; overflow-wrap: anywhere; }
+    .schedule-entry-workbench td:last-child { white-space: nowrap; }
     .schedule-published-tools { justify-content: flex-start; border-bottom: 0; padding-bottom: 8px; }
     .schedule-published-table { min-width: 1460px; table-layout: fixed; }
     .schedule-published-table th, .schedule-published-table td { white-space: normal; vertical-align: middle; }
@@ -9089,7 +9097,7 @@
       if (!panel) return;
       var selectors = {
         enroll: '[data-drawer="enroll-create"], [data-drawer="enroll-import"], [data-drawer="payment-confirm"], [data-drawer="payment-batch-confirm"], [data-drawer="enroll-cancel"], [data-enroll-confirm-paid], [data-enroll-cancel], [data-enroll-batch-paid], [data-enroll-refund-request], [data-enroll-refund-confirm]',
-        schedule: '[data-drawer="schedule-assign"], [data-drawer="schedule-candidate-assign"], [data-drawer="schedule-group"], [data-drawer="schedule-publish"], [data-drawer="schedule-exception"], [data-schedule-step-create], [data-schedule-step-edit], [data-schedule-candidate-assign], [data-schedule-step-delete], [data-schedule-step2-bulk], [data-schedule-step2-clear], [data-schedule-submit], [data-schedule-review-publish], [data-schedule-org-arrange], [data-schedule-org-preview]',
+        schedule: '[data-drawer="schedule-assign"], [data-drawer="schedule-candidate-assign"], [data-drawer="schedule-group"], [data-drawer="schedule-publish"], [data-drawer="schedule-exception"], [data-schedule-step-create], [data-schedule-step-edit], [data-schedule-candidate-assign], [data-schedule-entry-groups], [data-entry-action], [data-schedule-step-delete], [data-schedule-step2-bulk], [data-schedule-step2-clear], [data-schedule-submit], [data-schedule-review-publish], [data-schedule-org-arrange], [data-schedule-org-preview]',
         grades: '[data-result-action], [data-drawer="result-entry"], [data-drawer="result-batch-entry"], [data-drawer="result-adjust"], [data-drawer="result-return"], [data-drawer="result-publish"]',
         certificates: '[data-drawer="cert-batch-generate"], [data-drawer="cert-clear-numbers"], [data-drawer="cert-submit"], [data-drawer="cert-void"], [data-drawer="cert-void-confirm"]',
         tickets: '[data-ticket-async-generate], [data-ticket-generate], [data-ticket-publish]'
@@ -12072,7 +12080,8 @@
         var examinerHtml = session.examinerDetails && session.examinerDetails.length ? session.examinerDetails.map(function (item) { return '<div class="dispatch-assigned-examiner"><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.phone) + '</span></div>'; }).join("") : '<span class="muted">待指派</span>';
         var statusTagClass = session.status === "待指派" ? "orange" : session.status === "已发布" ? "green" : "blue";
         var mainRow = '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-room-date="' + escapeHtml(session.date) + '"' + hidden + '><td>' + sessionDetailButton + '</td><td>' + escapeHtml(session.date) + '</td><td>' + escapeHtml(session.time) + '</td><td>' + escapeHtml(session.major || "-") + '</td><td><button type="button" class="btn link schedule-preview-assigned-toggle" data-schedule-preview-session-toggle="' + escapeHtml(session.id) + '" aria-expanded="false" aria-controls="' + escapeHtml(detailId) + '"><strong>' + escapeHtml(String(assigned)) + '</strong><em data-schedule-preview-toggle-text>展开</em></button></td><td>' + examinerHtml + '</td><td>' + batchTagHtml("green", "无冲突") + '</td><td>' + batchTagHtml(statusTagClass, session.status) + '</td><td><button type="button" class="btn link" data-drawer="judge-assign" data-dispatch-session-action="true"' + dispatchAttrs + '>派遣考官</button></td></tr>';
-        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="9"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 报考考生名单"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 报考考生名单</strong><span>已缴费 ' + escapeHtml(String(assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + (useAssignedCandidates ? ' 条报名数据' : ' 条 mock 数据') + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>报名状态</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div></div></td></tr>';
+        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="9"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 报考考生名单"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 报考考生名单</strong><span>已缴费 ' + escapeHtml(String(assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + ' 条 mock 数据' + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>报名状态</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div>' + scheduleEntryRosterHtml(batch, session) + '</div></td></tr>';
+        if ((session.candidateIds || []).length) detailRow = scheduleEntryDetailRow(batch, session, detailId, 9);
         return mainRow + detailRow;
       }).join("");
       var initialSessionCount = sessions.filter(function (session) { return scheduleRoomKey(session.site, session.room) === selectedKey && (!selectedDate || session.date === selectedDate); }).length;
@@ -12130,6 +12139,8 @@
     function dispatchPublishedCandidateListBodyHtml() {
       var session = window.__activeDispatchSession || {};
       var batch = currentBatchContext();
+      var savedSession = (batch.scheduleSessionRecords || []).find(function (item) { return item.id === session.id; });
+      if (savedSession && (savedSession.candidateIds || []).length) return '<h3>' + escapeHtml(session.id + " · 考生入场名单") + '</h3>' + scheduleEntryRosterHtml(batch, savedSession);
       var names = ["王欣怡", "李梓涵", "张子墨", "陈思妍", "周昊宇", "赵语桐"];
       var organizations = ["光谷少儿艺术中心", "汉口美育培训学校", "汉口美育培训学校"];
       var count = Math.min(Math.max(Number(session.students) || 0, 0), names.length);
@@ -14028,7 +14039,7 @@
         drawerBody.innerHTML = ticketPreviewBodyHtml(window.__activeTicket, ticketBatch);
         drawerFoot.innerHTML = '<button class="btn" data-close-drawer>关闭</button>' + (window.__activeTicket.status === "已生成" ? '<button class="btn primary" data-toast="当前准考证 PDF 已下载">下载 PDF</button>' : '');
       }
-      if (drawerBatch && ["schedule-assign", "schedule-candidate-assign"].indexOf(key) > -1) {
+      if (drawerBatch && ["schedule-assign", "schedule-candidate-assign", "schedule-entry-groups"].indexOf(key) > -1) {
         drawerBody.insertAdjacentHTML("afterbegin", '<div class="batch-context-banner"><strong>' + escapeHtml(drawerBatch.name) + '</strong><span>批次 ID：' + escapeHtml(drawerBatch.id) + ' · 场次及考生分配范围已锁定</span></div>');
       }
       if (drawerBatch && key === "schedule-publish") {
@@ -19466,6 +19477,10 @@
         openDrawer("schedule-candidate-assign");
         return;
       }
+      var entryGroupsButton = event.target.closest("[data-schedule-entry-groups]");
+      if (entryGroupsButton) { openScheduleEntryGroups(entryGroupsButton.getAttribute("data-schedule-entry-groups")); return; }
+      var entryActionButton = event.target.closest("[data-entry-action]");
+      if (entryActionButton) { handleScheduleEntryAction(entryActionButton); return; }
       var scheduleStepEdit = event.target.closest("[data-schedule-step-edit]");
       if (scheduleStepEdit) {
         if (batchChangeIsFrozen(currentBatchContext(), "schedule") || scheduleDirectMutationBlocked(currentBatchContext())) return;
@@ -19684,7 +19699,7 @@
       }
       if (event.target.closest("[data-schedule-step2-assign]")) { window.__scheduleDrawerMode = "edit"; openDrawer("schedule-assign"); return; }
       if (event.target.closest("[data-schedule-recheck]")) { toast("已重新校验当前批次场次、考场资源和时间冲突"); return; }
-      if (event.target.closest("[data-schedule-export]")) { toast("当前批次排期数据已按权限范围导出"); return; }
+      if (event.target.closest("[data-schedule-export]")) { scheduleEntryExport(currentBatchContext()); return; }
       var publishedViewButton = event.target.closest("[data-schedule-published-view]");
       if (publishedViewButton) {
         var publishedViewPanel = publishedViewButton.closest('[data-schedule-role-panel="published"]');
@@ -19733,7 +19748,7 @@
         return;
       }
       if (event.target.closest("[data-schedule-save-candidates]")) {
-        saveScheduleCandidateAssignment();
+        saveScheduleCandidateAssignment(event.target.closest("[data-schedule-save-candidates]").hasAttribute("data-save-and-group"));
         return;
       }
       if (event.target.closest("[data-schedule-save-session]")) {
@@ -23287,11 +23302,203 @@
       return scheduleSessionRows(batch);
     }
     function scheduleWizardCandidateSource(batch) {
-      return Array.isArray(batch.scheduleCandidatePool) ? batch.scheduleCandidatePool : [
+      if (Array.isArray(batch.scheduleCandidatePool)) return batch.scheduleCandidatePool;
+      var candidates = [
         { id: batch.id + "-EN001", code: "EN202608210001", name: "李同学", organization: "光谷少儿艺术中心", site: batch.site || "湖北艺术职业学院光谷校区", major: "钢琴", level: "3级" },
         { id: batch.id + "-EN002", code: "EN202608210002", name: "张同学", organization: "光谷少儿艺术中心", site: "中央艺术考点", major: "中国舞", level: "4级" },
         { id: batch.id + "-EN003", code: "EN202608210003", name: "王同学", organization: "汉口美育培训学校", site: "武汉音乐学院合作考点", major: "小提琴", level: "5级" }
       ];
+      if (batch.id === "batch-demo-05") {
+        candidates[1] = Object.assign({}, candidates[1], { level: "2级", site: batch.site, name: "舞蹈考生01" });
+        for (var index = 2; index <= 10; index += 1) candidates.push({ id: batch.id + "-D" + index, code: "DANCE" + String(index).padStart(3, "0"), name: "舞蹈考生" + String(index).padStart(2, "0"), organization: "光谷少儿艺术中心", site: batch.site, subjectCode: "02001", major: "中国舞", level: index <= 3 ? "2级" : index <= 7 ? "3级" : "5级" });
+        candidates.push({ id: batch.id + "-BALLET", code: "BALLET001", name: "芭蕾考生01", organization: "光谷少儿艺术中心", site: batch.site, subjectCode: "02003", major: "芭蕾舞", level: "3级" });
+      }
+      return candidates;
+    }
+    function scheduleEntrySubject(candidate) {
+      var catalog = typeof baseProfessionalCatalog === "function" ? baseProfessionalCatalog() : [];
+      return catalog.find(function (subject) { return candidate.subjectCode ? subject.code === candidate.subjectCode : subject.name === candidate.major; });
+    }
+    function scheduleEntryDanceCandidates(batch, session) {
+      if (isOnlineBatch(batch)) return [];
+      return scheduleWizardCandidateSource(batch).filter(function (candidate) {
+        var subject = scheduleEntrySubject(candidate);
+        return (session.candidateIds || []).indexOf(candidate.id) > -1 && subject && subject.categoryCode === "DANCE";
+      });
+    }
+    function scheduleEntryGroupsReconcile(groups, candidateIds) {
+      return (groups || []).map(function (group) {
+        return Object.assign({}, group, { candidateIds: (group.candidateIds || []).filter(function (id) { return candidateIds.indexOf(id) > -1; }) });
+      }).filter(function (group) { return group.candidateIds.length; });
+    }
+    function scheduleEntryValidation(batch, session, groups, requireComplete) {
+      if (isOnlineBatch(batch)) return { errors: [], ungrouped: [], total: 0 };
+      var candidates = scheduleEntryDanceCandidates(batch, session), seen = [], groupIds = [], errors = [];
+      (groups || []).forEach(function (group, index) {
+        var label = "第" + (index + 1) + "组";
+        if (!group.id || groupIds.indexOf(group.id) > -1) errors.push(label + "编号重复或缺失");
+        groupIds.push(group.id);
+        if (!Array.isArray(group.candidateIds) || !group.candidateIds.length) errors.push(label + "不能为空");
+        var subjectCode = "";
+        (group.candidateIds || []).forEach(function (id) {
+          var candidate = candidates.find(function (item) { return item.id === id; });
+          if (!candidate) { errors.push(label + "含非本场次舞蹈考生"); return; }
+          var subject = scheduleEntrySubject(candidate);
+          if (seen.indexOf(id) > -1) errors.push("考生重复分组：" + candidate.name);
+          if (subjectCode && subjectCode !== subject.code) errors.push(label + "不能跨专业");
+          subjectCode = subject.code;
+          seen.push(id);
+        });
+      });
+      var ungrouped = candidates.filter(function (candidate) { return seen.indexOf(candidate.id) === -1; });
+      if (requireComplete && ungrouped.length) errors.push("尚有" + ungrouped.length + "名舞蹈考生未分组");
+      if (requireComplete && Number(session.assigned || 0) !== (session.candidateIds || []).length && scheduleSessionMajors(session).some(function (major) {
+        var subject = scheduleEntrySubject({ major: major });
+        return subject && subject.categoryCode === "DANCE";
+      })) errors.push("舞蹈场次考生明细不完整，请重新保存考生分配");
+      return { errors: errors, ungrouped: ungrouped, total: candidates.length };
+    }
+    function scheduleEntryBatchErrors(batch) {
+      return scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).reduce(function (errors, session) {
+        return errors.concat(scheduleEntryValidation(batch, session, session.entryGroups, true).errors.map(function (message) { return session.id + "：" + message; }));
+      }, []);
+    }
+    function scheduleEntryRoster(batch, session) {
+      var pool = scheduleWizardCandidateSource(batch), rows = [], included = [];
+      (session.entryGroups || []).forEach(function (group, groupIndex) {
+        (group.candidateIds || []).forEach(function (id, index) {
+          var candidate = pool.find(function (item) { return item.id === id; });
+          if (candidate && (session.candidateIds || []).indexOf(id) > -1 && included.indexOf(id) === -1) {
+            rows.push({ candidate: candidate, group: groupIndex + 1, order: index + 1 }); included.push(id);
+          }
+        });
+      });
+      (session.candidateIds || []).forEach(function (id) {
+        var candidate = pool.find(function (item) { return item.id === id; });
+        if (candidate && included.indexOf(id) === -1) rows.push({ candidate: candidate, group: "", order: "" });
+      });
+      return rows;
+    }
+    function scheduleEntryPublishedRows(batch, role) {
+      if (!batch.scheduleSessionRecordsInitialized) return schedulePublishedRows(role);
+      var rows = [];
+      (batch.scheduleSessionRecords || []).forEach(function (session) {
+        scheduleEntryRoster(batch, session).forEach(function (row) {
+          var candidate = row.candidate;
+          rows.push([candidate.organization || "-", "", candidate.name, candidate.code || candidate.id, candidate.major, candidate.level, candidate.organization || "-", "", session.site, session.room, session.date, session.time, String((session.candidateIds || []).indexOf(candidate.id) + 1).padStart(2, "0"), row.group ? "第" + row.group + "组" : "-", row.order || "-", session.id]);
+        });
+      });
+      return rows;
+    }
+    function scheduleEntryRosterHtml(batch, session) {
+      var rows = scheduleEntryRoster(batch, session);
+      if (!rows.length) return "";
+      return '<div class="table-wrap"><table><thead><tr><th>入场组</th><th>组内顺序</th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th><th>报名机构</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + rows.map(function (row) {
+        return '<tr><td>' + escapeHtml(row.group ? "第" + row.group + "组" : scheduleEntryDanceCandidates(batch, session).some(function (candidate) { return candidate.id === row.candidate.id; }) ? "未分组" : "单人入场") + '</td><td>' + escapeHtml(String(row.order || "-")) + '</td><td>' + escapeHtml(row.candidate.code || row.candidate.id) + '</td><td>' + escapeHtml(row.candidate.name) + '</td><td>' + escapeHtml(row.candidate.major) + '</td><td>' + escapeHtml(row.candidate.level) + '</td><td>' + escapeHtml(row.candidate.organization || "-") + '</td><td>' + String((session.candidateIds || []).indexOf(row.candidate.id) + 1).padStart(2, "0") + '</td><td><button class="btn link" data-toast="考生排期详情已打开">查看</button></td></tr>';
+      }).join("") + '</tbody></table></div>';
+    }
+    function scheduleEntryDetailRow(batch, session, detailId, colspan) {
+      return '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="' + colspan + '"><div class="schedule-preview-candidate-subtable"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 考生入场名单</strong><span>共' + (session.candidateIds || []).length + '人 · ' + (session.entryGroups || []).length + '组</span></div>' + scheduleEntryRosterHtml(batch, session) + '</div></td></tr>';
+    }
+    function scheduleEntryWritable(batch) {
+      if (batchChangeIsFrozen(batch, "schedule") || scheduleDirectMutationBlocked(batch)) return false;
+      var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
+      if (!scheduleRoleCanWrite(role, schedulePhaseOf(batch))) { toast("当前角色或阶段不允许维护入场分组"); return false; }
+      return true;
+    }
+    function scheduleEntrySession(batch, id) {
+      return scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).find(function (session) { return session.id === id; });
+    }
+    function openScheduleEntryGroups(id) {
+      var batch = currentBatchContext();
+      if (!scheduleEntryWritable(batch)) return;
+      var session = scheduleEntrySession(batch, id);
+      if (!session || !scheduleEntryDanceCandidates(batch, session).length) { toast("请先分配舞蹈类考生"); return; }
+      window.__scheduleEntryGroupDraft = { batchId: batch.id, sessionId: id, original: JSON.stringify(session), groups: JSON.parse(JSON.stringify(session.entryGroups || [])) };
+      openDrawer("schedule-entry-groups");
+    }
+    function scheduleEntryGroupsHtml() {
+      var batch = currentBatchContext(), draft = window.__scheduleEntryGroupDraft;
+      var session = draft && scheduleEntrySession(batch, draft.sessionId);
+      if (!session) return '<div class="empty-state">场次不存在</div>';
+      var validation = scheduleEntryValidation(batch, session, draft.groups, false);
+      var pool = scheduleEntryDanceCandidates(batch, session);
+      var ungroupedRows = validation.ungrouped.map(function (candidate) {
+        return '<tr><td><input type="checkbox" data-entry-candidate value="' + escapeHtml(candidate.id) + '" aria-label="选择 ' + escapeHtml(candidate.name) + '"></td><td>' + escapeHtml(candidate.code || candidate.id) + '</td><td>' + escapeHtml(candidate.name) + '</td><td>' + escapeHtml(candidate.major) + '</td><td>' + escapeHtml(candidate.level) + '</td></tr>';
+      }).join("");
+      var groupsHtml = draft.groups.map(function (group, groupIndex) {
+        var members = group.candidateIds.map(function (id, index) {
+          var candidate = pool.find(function (item) { return item.id === id; });
+          if (!candidate) return "";
+          return '<tr><td>' + (index + 1) + '</td><td>' + escapeHtml(candidate.name) + '</td><td>' + escapeHtml(candidate.major) + '</td><td>' + escapeHtml(candidate.level) + '</td><td><button class="btn link" title="上移考生" aria-label="上移 ' + escapeHtml(candidate.name) + '" data-entry-action="member-up" data-entry-group="' + groupIndex + '" data-entry-member="' + index + '"' + (index ? '' : ' disabled') + '>↑</button><button class="btn link" title="下移考生" aria-label="下移 ' + escapeHtml(candidate.name) + '" data-entry-action="member-down" data-entry-group="' + groupIndex + '" data-entry-member="' + index + '"' + (index < group.candidateIds.length - 1 ? '' : ' disabled') + '>↓</button><button class="btn link" data-entry-action="remove" data-entry-group="' + groupIndex + '" data-entry-member="' + index + '">移出</button></td></tr>';
+        }).join("");
+        return '<section class="drawer-section"><div class="table-tools"><h3>第' + (groupIndex + 1) + '组 · ' + escapeHtml(pool.find(function (candidate) { return candidate.id === group.candidateIds[0]; })?.major || "") + ' · ' + group.candidateIds.length + '人</h3><div class="page-actions"><button class="btn" title="上移分组" aria-label="上移第' + (groupIndex + 1) + '组" data-entry-action="group-up" data-entry-group="' + groupIndex + '"' + (groupIndex ? '' : ' disabled') + '>↑</button><button class="btn" title="下移分组" aria-label="下移第' + (groupIndex + 1) + '组" data-entry-action="group-down" data-entry-group="' + groupIndex + '"' + (groupIndex < draft.groups.length - 1 ? '' : ' disabled') + '>↓</button><button class="btn" data-entry-action="dissolve" data-entry-group="' + groupIndex + '">解散分组</button></div></div><div class="table-wrap"><table><thead><tr><th>顺序</th><th>考生</th><th>专业</th><th>级别</th><th>操作</th></tr></thead><tbody>' + members + '</tbody></table></div></section>';
+      }).join("");
+      return '<div class="schedule-entry-workbench"><div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>舞蹈考生 ' + validation.total + ' 人 · 已分组 ' + (validation.total - validation.ungrouped.length) + ' 人 · 未分组 ' + validation.ungrouped.length + ' 人 · 共 ' + draft.groups.length + ' 组</span></div><section class="drawer-section"><h3>未分组考生</h3><div class="page-actions"><button class="btn primary" data-entry-action="create">勾选成组</button><select class="select" data-entry-target aria-label="目标分组"><option value="">选择已有分组</option>' + draft.groups.map(function (group, index) { return '<option value="' + index + '">第' + (index + 1) + '组</option>'; }).join("") + '</select><button class="btn" data-entry-action="add">加入所选组</button></div><div class="table-wrap"><table><thead><tr><th>选择</th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th></tr></thead><tbody>' + (ungroupedRows || '<tr><td colspan="5">全部已分组</td></tr>') + '</tbody></table></div></section>' + groupsHtml + '</div>';
+    }
+    function scheduleEntryApplyAction(batch, session, groups, action, ids, groupIndex, memberIndex) {
+      var next = JSON.parse(JSON.stringify(groups || []));
+      var group = next[groupIndex];
+      if (action === "create" || action === "add") {
+        if (!ids.length) return { error: "请勾选未分组考生" };
+        if (action === "create") next.push({ id: "G-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8), candidateIds: ids.slice() });
+        else if (!group) return { error: "请选择目标分组" };
+        else group.candidateIds = group.candidateIds.concat(ids);
+      } else if (!group) return { error: "分组不存在" };
+      else if (action === "dissolve") next.splice(groupIndex, 1);
+      else if (action === "remove") {
+        group.candidateIds.splice(memberIndex, 1);
+        if (!group.candidateIds.length) next.splice(groupIndex, 1);
+      } else {
+        var items = action.indexOf("member-") === 0 ? group.candidateIds : next;
+        var from = items === next ? groupIndex : memberIndex;
+        var to = from + (action.endsWith("up") ? -1 : 1);
+        if (to >= 0 && to < items.length) { var item = items.splice(from, 1)[0]; items.splice(to, 0, item); }
+      }
+      var errors = scheduleEntryValidation(batch, session, next, false).errors;
+      return errors.length ? { error: errors[0] } : { groups: next };
+    }
+    function handleScheduleEntryAction(button) {
+      var batch = currentBatchContext(), draft = window.__scheduleEntryGroupDraft;
+      if (!draft || draft.batchId !== batch.id || !scheduleEntryWritable(batch)) return;
+      var session = scheduleEntrySession(batch, draft.sessionId);
+      if (!session || JSON.stringify(session) !== draft.original) { toast("场次已变更，请关闭后重新打开分组"); return; }
+      var action = button.getAttribute("data-entry-action");
+      if (action === "save") {
+        var errors = scheduleEntryValidation(batch, session, draft.groups, false).errors;
+        if (errors.length) { toast(errors[0]); return; }
+        batch.scheduleSessionRecords = scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).map(function (record) { return record.id === session.id ? Object.assign({}, record, { entryGroups: JSON.parse(JSON.stringify(draft.groups)) }) : record; });
+        batch.scheduleSessionRecordsInitialized = true;
+        syncBatchDemo(batch);
+        appendBatchChangeRecord("场次局部调整", batch, { objectType: "入场分组", objectLabel: session.id, before: "共" + (session.entryGroups || []).length + "组", after: "共" + draft.groups.length + "组", reason: "人工维护舞蹈考生入场分组", impact: "不改变逐人评分及其他场次。", snapshots: { before: [JSON.stringify(session.entryGroups || [])], after: [JSON.stringify(draft.groups)] } });
+        closeDrawer(); window.__scheduleEntryGroupDraft = null; refreshBatchChangeView(); toast("入场分组已保存"); return;
+      }
+      var ids = Array.from(drawerBody.querySelectorAll("[data-entry-candidate]:checked")).map(function (input) { return input.value; });
+      var target = drawerBody.querySelector("[data-entry-target]");
+      var index = action === "add" ? Number(target && target.value !== "" ? target.value : -1) : Number(button.getAttribute("data-entry-group"));
+      var result = scheduleEntryApplyAction(batch, session, draft.groups, action, ids, index, Number(button.getAttribute("data-entry-member")));
+      if (result.error) { toast(result.error); return; }
+      draft.groups = result.groups;
+      drawerBody.innerHTML = scheduleEntryGroupsHtml();
+    }
+    function scheduleEntryExport(batch) {
+      var rows = [["批次", "场次", "考试日期", "时段", "考点", "考场", "报名编号", "考生", "报名机构", "专业", "级别", "入场组", "组内顺序"]];
+      var organization = new URLSearchParams(location.search).get("scheduleOrg");
+      var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
+      var scope = role !== "platform" ? roleOrganizationDataScope(role) : null;
+      scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).forEach(function (session) {
+        scheduleEntryRoster(batch, session).forEach(function (row) {
+          var candidate = row.candidate;
+          if (scope && !scope.names[candidate.organization]) return;
+          if (organization && candidate.organization !== organization) return;
+          rows.push([batch.name, session.id, session.date, session.time, session.site, session.room, candidate.code, candidate.name, candidate.organization, candidate.major, candidate.level, row.group ? "第" + row.group + "组" : "", row.order]);
+        });
+      });
+      if (rows.length === 1) { toast("当前范围暂无已分配考生明细可导出"); return; }
+      var csv = rows.map(function (row) { return row.map(function (value) { var text = String(value == null ? "" : value); if (/^[=+@\-\t\r]/.test(text)) text = "'" + text; return '"' + text.replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
+      var url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
+      var link = document.createElement("a"); link.href = url; link.download = "排期入场名单.csv"; link.click(); setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      toast("排期入场名单已导出");
     }
     function scheduleSessionMajors(session) {
       var values = Array.isArray((session || {}).majors) ? session.majors : (session || {}).major ? [session.major] : [];
@@ -23694,7 +23901,7 @@
       window.__scheduleSessionWizard = null;
       toast(wizard.editingSessionId ? "场次基本信息已保存" : "场次已创建，请在操作列分配考生");
     }
-    function saveScheduleCandidateAssignment() {
+    function saveScheduleCandidateAssignment(openGroups) {
       var batch = currentBatchContext();
       if (batchChangeIsFrozen(batch, "schedule")) return;
       var wizard = window.__scheduleSessionWizard || {};
@@ -23713,7 +23920,7 @@
       var current = records[index];
       var oldIds = Array.isArray(current.candidateIds) ? current.candidateIds.slice() : [];
       var oldAssigned = Number(current.assigned || oldIds.length || 0);
-      records[index] = Object.assign({}, current, { assigned: selectedIds.length, candidateIds: selectedIds.slice() });
+      records[index] = Object.assign({}, current, { assigned: selectedIds.length, candidateIds: selectedIds.slice(), entryGroups: scheduleEntryGroupsReconcile(current.entryGroups, selectedIds) });
       batch.scheduleSessionRecords = records;
       batch.scheduleSessionRecordsInitialized = true;
       batch.scheduled = Math.max(0, (Number(batch.scheduled) || 0) - oldAssigned + selectedIds.length);
@@ -23725,6 +23932,7 @@
       closeDrawer();
       window.__scheduleSessionWizard = null;
       toast("已保存场次考生分配");
+      if (openGroups) openScheduleEntryGroups(current.id);
     }
     function renderScheduleSessionWizard(step) {
       var batch = currentBatchContext();
@@ -23733,7 +23941,7 @@
       window.__scheduleSessionWizard = wizard;
       wizard.separateDialog = true;
       drawerBody.innerHTML = scheduleSessionWizardHtml(batch, wizard);
-      drawerFoot.innerHTML = wizard.step === 1 ? '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-save-basic>保存场次</button>' : '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-save-candidates>保存分配</button>';
+      drawerFoot.innerHTML = wizard.step === 1 ? '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-save-basic>保存场次</button>' : '<button class="btn" data-close-drawer>取消</button><button class="btn" data-schedule-save-candidates data-save-and-group>保存并分组</button><button class="btn primary" data-schedule-save-candidates>保存分配</button>';
     }
     function scheduleRoleStep1Html(role, batch) {
       var state = scheduleStepState(batch);
@@ -23797,7 +24005,7 @@
       var rowHtml = rows.map(function (row) {
         var key = scheduleRoomKey(row.site, row.room);
         var hidden = key === selectedKey ? "" : " hidden";
-        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(scheduleSessionMajors(row).join("、")) + '" data-schedule-session-majors="' + escapeHtml(JSON.stringify(scheduleSessionMajors(row))) + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(scheduleSessionMajors(row).join("、") || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button><button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
+        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(scheduleSessionMajors(row).join("、")) + '" data-schedule-session-majors="' + escapeHtml(JSON.stringify(scheduleSessionMajors(row))) + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(scheduleSessionMajors(row).join("、") || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button>' + (scheduleEntryDanceCandidates(batch, row).length && scheduleRoleCanWrite(role, state.phase) ? '<button type="button" class="btn link" data-schedule-entry-groups="' + escapeHtml(row.id) + '">入场分组（' + (row.entryGroups || []).length + '组）</button>' : '') + '<button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
       }).join("");
       var initialCount = roomCounts[selectedKey] || 0;
       var selectedLabel = selectedSite && selectedRoom ? selectedSite + " / " + selectedRoom : "未选择考场";
@@ -23896,7 +24104,8 @@
           return '<tr><td>' + escapeHtml(enrollmentCode) + '</td><td><strong>' + escapeHtml(assignedCandidate ? assignedCandidate.name : candidateNames[poolIndex]) + '</strong><br><span class="muted">' + escapeHtml(maskedId) + '</span></td><td>' + escapeHtml(assignedCandidate ? assignedCandidate.organization || organizationName || "报名机构" : organizationName || "报名机构") + '</td><td>' + escapeHtml(majorLevel[0] + " " + majorLevel[1]) + '</td><td>' + escapeHtml(String(candidateIndex + 1).padStart(2, "0")) + '</td><td><button type="button" class="btn link" data-toast="考生排期详情已打开">查看</button></td></tr>';
         }).join("");
         var mainRow = '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-room-date="' + escapeHtml(session.date) + '"' + hidden + '><td>' + escapeHtml(session.id) + '</td><td>' + escapeHtml(session.date) + '</td><td>' + escapeHtml(session.time) + '</td><td>' + escapeHtml(session.major || "-") + '</td><td><button type="button" class="btn link schedule-preview-assigned-toggle" data-schedule-preview-session-toggle="' + escapeHtml(session.id) + '" aria-expanded="false" aria-controls="' + escapeHtml(detailId) + '"><strong>' + escapeHtml(String(session.assigned) + "/" + String(session.capacity)) + '</strong><em data-schedule-preview-toggle-text>展开</em></button></td><td>' + batchTagHtml(session.result === "无冲突" ? "green" : "orange", session.result) + '</td><td>' + batchTagHtml("blue", session.status) + '</td><td><button class="btn link" data-toast="场次排期详情已打开">查看</button></td></tr>';
-        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已分配考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已分配考生</strong><span>共 ' + escapeHtml(String(session.assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + (useAssignedCandidates ? ' 条报名数据' : ' 条 mock 数据') + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + mockCandidateRows + '</tbody></table></div></div></td></tr>';
+        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已分配考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已分配考生</strong><span>共 ' + escapeHtml(String(session.assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + (useAssignedCandidates ? ' 条报名数据' : ' 条 mock 数据') + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + mockCandidateRows + '</tbody></table></div>' + scheduleEntryRosterHtml(batch, session) + '</div></td></tr>';
+        if ((session.candidateIds || []).length) detailRow = scheduleEntryDetailRow(batch, session, detailId, 8);
         return mainRow + detailRow;
       }).join("");
       var initialSessionCount = sessions.filter(function (session) { return scheduleRoomKey(session.site, session.room) === selectedKey && (!selectedDate || session.date === selectedDate); }).length;
@@ -24005,20 +24214,20 @@
     }
     function schedulePublishedCalendarHtml(role, batch) {
       var hasPublishedData = ["待排期", "编排中", "待复核"].indexOf(batch.status) === -1;
-      var publishedRows = hasPublishedData ? schedulePublishedRows(role) : [];
+      var publishedRows = hasPublishedData ? scheduleEntryPublishedRows(batch, role) : [];
       var sessionMap = {};
       var sessions = [];
       publishedRows.forEach(function (row) {
-        var key = [row[0], row[8], row[9], row[10], row[11], row[4], row[5]].join("||");
+        var key = row[15] || [row[0], row[8], row[9], row[10], row[11], row[4], row[5]].join("||");
         var session = sessionMap[key];
         if (!session) {
           session = {
-            id: "P-" + batchSessionSuffix(batch) + "-" + String(sessions.length + 1).padStart(2, "0"),
+            id: row[15] || "P-" + batchSessionSuffix(batch) + "-" + String(sessions.length + 1).padStart(2, "0"),
             date: row[10],
             time: row[11],
             site: row[8],
             room: scheduleRoomName(row[9]),
-            major: row[4] + " " + row[5],
+            major: row[15] ? scheduleSessionMajors(scheduleEntrySession(batch, row[15]) || {}).join("、") : row[4] + " " + row[5],
             candidates: []
           };
           sessionMap[key] = session;
@@ -24055,10 +24264,10 @@
         var assigned = session.candidates.length;
         var detailId = "schedule-published-assigned-" + String(session.id || sessionIndex).replace(/[^A-Za-z0-9_-]/g, "-");
         var candidateRows = session.candidates.map(function (row) {
-          return '<tr><td>' + escapeHtml(row[3]) + '</td><td><strong>' + escapeHtml(row[2]) + '</strong><br><span class="muted">' + escapeHtml(row[3]) + '</span></td><td>' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[4] + " " + row[5]) + '</td><td>' + escapeHtml(row[12]) + '</td><td><button type="button" class="btn link" data-toast="已发布考生排期详情已打开">查看</button></td></tr>';
+          return '<tr><td>' + escapeHtml(row[3]) + '</td><td><strong>' + escapeHtml(row[2]) + '</strong><br><span class="muted">' + escapeHtml(row[3]) + '</span></td><td>' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[4] + " " + row[5]) + '</td><td>' + escapeHtml(row[12]) + '</td><td>' + escapeHtml(String(row[13] || "-")) + '</td><td>' + escapeHtml(String(row[14] || "-")) + '</td><td><button type="button" class="btn link" data-toast="已发布考生排期详情已打开">查看</button></td></tr>';
         }).join("");
         var mainRow = '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-room-date="' + escapeHtml(session.date) + '"' + hidden + '><td>' + escapeHtml(session.id) + '</td><td>' + escapeHtml(session.date) + '</td><td>' + escapeHtml(session.time) + '</td><td>' + escapeHtml(session.major) + '</td><td><button type="button" class="btn link schedule-preview-assigned-toggle" data-schedule-preview-session-toggle="' + escapeHtml(session.id) + '" aria-expanded="false" aria-controls="' + escapeHtml(detailId) + '"><strong>' + escapeHtml(String(assigned) + "/" + String(assigned)) + '</strong><em data-schedule-preview-toggle-text>展开</em></button></td><td>' + batchTagHtml("green", "无冲突") + '</td><td>' + batchTagHtml("green", "已发布") + '</td><td><button type="button" class="btn link" data-toast="已发布场次详情已打开">查看</button></td></tr>';
-        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已发布考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已发布考生</strong><span>共 ' + escapeHtml(String(assigned)) + ' 人</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div></div></td></tr>';
+        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已发布考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已发布考生</strong><span>共 ' + escapeHtml(String(assigned)) + ' 人</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>入场组</th><th>组内顺序</th><th>操作</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div></div></td></tr>';
         return mainRow + detailRow;
       }).join("");
       var initialSessionCount = sessions.filter(function (session) { return scheduleRoomKey(session.site, session.room) === selectedKey && (!selectedDate || session.date === selectedDate); }).length;
@@ -24068,10 +24277,10 @@
     }
     function scheduleRolePublishedHtml(role, batch) {
       var hasPublishedData = ["待排期", "编排中", "待复核"].indexOf(batch.status) === -1;
-      var rows = hasPublishedData ? schedulePublishedRows(role).slice(0, 6) : [];
-      var publishedRowsHtml = rows.length ? rows.map(function (row) { return '<tr data-schedule-published-row data-schedule-published-text="' + escapeHtml(row.join(" ")) + '"><td>' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[2]) + '<br><span class="muted">' + escapeHtml(row[3]) + '</span></td><td>' + escapeHtml(row[4]) + '</td><td>' + escapeHtml(row[5]) + '</td><td>' + escapeHtml(row[8]) + '</td><td>' + escapeHtml(row[9]) + '</td><td>' + escapeHtml(row[10] + " " + row[11]) + '</td><td>' + escapeHtml(row[12]) + '</td></tr>'; }).join("") : '<tr><td colspan="8"><div class="empty-state"><strong>当前批次暂无已发布排期</strong><span>批次完成排期并发布后，这里才会显示排期数据。</span></div></td></tr>';
+      var rows = hasPublishedData ? scheduleEntryPublishedRows(batch, role) : [];
+      var publishedRowsHtml = rows.length ? rows.map(function (row) { return '<tr data-schedule-published-row data-schedule-published-text="' + escapeHtml(row.join(" ")) + '"><td>' + escapeHtml(row[0]) + '</td><td>' + escapeHtml(row[2]) + '<br><span class="muted">' + escapeHtml(row[3]) + '</span></td><td>' + escapeHtml(row[4]) + '</td><td>' + escapeHtml(row[5]) + '</td><td>' + escapeHtml(row[8]) + '</td><td>' + escapeHtml(row[9]) + '</td><td>' + escapeHtml(row[10] + " " + row[11]) + '</td><td>' + escapeHtml(row[12]) + '</td><td>' + escapeHtml(String(row[13] || "-")) + '</td><td>' + escapeHtml(String(row[14] || "-")) + '</td></tr>'; }).join("") : '<tr><td colspan="10"><div class="empty-state"><strong>当前批次暂无已发布排期</strong><span>批次完成排期并发布后，这里才会显示排期数据。</span></div></td></tr>';
       var publishedStatusTag = hasPublishedData ? '<span class="tag green">已发布</span>' : '<span class="tag">暂无数据</span>';
-      return '<div class="filter-card schedule-role-filter" data-schedule-published-filter><div class="field"><label>报名机构</label><input class="input" data-schedule-published-organization placeholder="全部报名机构"></div><div class="field"><label>考点</label><select class="select"><option>全部考点</option><option>' + escapeHtml(batch.site || "湖北艺术职业学院光谷校区") + '</option><option>中央艺术考点</option></select></div><div class="field"><label>考场</label><input class="input" placeholder="全部考场"></div><div class="field"><label>专业</label><select class="select"><option>全部专业</option><option>钢琴</option><option>中国舞</option><option>小提琴</option><option>巴乌</option></select></div><div class="field"><label>姓名/证件号</label><input class="input" data-schedule-published-keyword placeholder="姓名/证件号"></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-schedule-published-search>查询</button><button class="btn" data-schedule-export>导出排期表</button></div></div></div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">已发布排期表</h2><span class="muted">只读查询 · 权限范围：' + (role === "platform" ? '全平台' : role === "organizer" ? '本组织及下级' : '本机构') + '</span></div>' + publishedStatusTag + '</div><div class="table-wrap"><table class="schedule-published-table"><thead><tr><th>报名机构</th><th>考生</th><th>专业</th><th>级别</th><th>考点</th><th>考场</th><th>考试日期时间</th><th>座位号</th></tr></thead><tbody>' + publishedRowsHtml + '</tbody></table></div></div>';
+      return '<div class="filter-card schedule-role-filter" data-schedule-published-filter><div class="field"><label>报名机构</label><input class="input" data-schedule-published-organization placeholder="全部报名机构"></div><div class="field"><label>考点</label><select class="select"><option>全部考点</option><option>' + escapeHtml(batch.site || "湖北艺术职业学院光谷校区") + '</option><option>中央艺术考点</option></select></div><div class="field"><label>考场</label><input class="input" placeholder="全部考场"></div><div class="field"><label>专业</label><select class="select"><option>全部专业</option><option>钢琴</option><option>中国舞</option><option>小提琴</option><option>巴乌</option></select></div><div class="field"><label>姓名/证件号</label><input class="input" data-schedule-published-keyword placeholder="姓名/证件号"></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-schedule-published-search>查询</button><button class="btn" data-schedule-export>导出排期表</button></div></div></div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">已发布排期表</h2><span class="muted">只读查询 · 权限范围：' + (role === "platform" ? '全平台' : role === "organizer" ? '本组织及下级' : '本机构') + '</span></div>' + publishedStatusTag + '</div><div class="table-wrap"><table class="schedule-published-table"><thead><tr><th>报名机构</th><th>考生</th><th>专业</th><th>级别</th><th>考点</th><th>考场</th><th>考试日期时间</th><th>座位号</th><th>入场组</th><th>组内顺序</th></tr></thead><tbody>' + publishedRowsHtml + '</tbody></table></div></div>';
     }
     function scheduleRoleArrangePageHtml(role, batch, organizationName, entryMode, initialView) {
       var organization = organizationName || "报名机构";
@@ -24106,19 +24315,26 @@
       title: "分配考生",
       wide: true,
       body: function () { var wizard = window.__scheduleSessionWizard || { step: 2, basic: {}, selectedIds: [] }; wizard.step = 2; wizard.separateDialog = true; window.__scheduleSessionWizard = wizard; return scheduleSessionWizardHtml(currentBatchContext(), wizard); },
-      foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-save-candidates>保存分配</button>'
+      foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-schedule-save-candidates data-save-and-group>保存并分组</button><button class="btn primary" data-schedule-save-candidates>保存分配</button>'
+    };
+    DRAWER["schedule-entry-groups"] = {
+      title: "舞蹈考生入场分组", wide: true, body: scheduleEntryGroupsHtml,
+      foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-entry-action="save">保存分组</button>'
     };
     DRAWER["schedule-publish"] = {
       title: "排期流程确认",
       wide: true,
-      body: function () { var batch = currentBatchContext(); var mode = window.__schedulePublishMode || "submit"; var isPublish = mode === "publish"; return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>当前动作：' + (isPublish ? '发布排期表' : '提交排期') + '</span></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">最终校验结果</h2><span class="tag ' + (Number(batch.pendingSchedule || 0) || Number(batch.conflicts || 0) ? 'orange' : 'green') + '">' + (Number(batch.pendingSchedule || 0) || Number(batch.conflicts || 0) ? '需处理' : '校验通过') + '</span></div><div class="schedule-role-action-list"><div class="schedule-role-action-item"><div><strong>考生覆盖</strong><span>已缴费考生全部进入场次分配</span></div><span class="tag ' + (!Number(batch.pendingSchedule || 0) ? 'green' : 'orange') + '">' + (!Number(batch.pendingSchedule || 0) ? '通过' : '待排期') + '</span></div><div class="schedule-role-action-item"><div><strong>资源和时间冲突</strong><span>考场、日期、时段以及考生重复排期校验</span></div><span class="tag ' + (!Number(batch.conflicts || 0) ? 'green' : 'orange') + '">' + (!Number(batch.conflicts || 0) ? '通过' : '待处理') + '</span></div></div></div><div class="info-banner" style="margin-top:14px"><strong>生效边界：</strong>提交或复核阶段仅保存内部排期数据；发布前不影响考生、准考证、派遣、评分任务和消息通知。已发布排期如需调整，必须从批次变更审批发起“场次局部调整”。</div><div class="field" style="margin-top:14px"><label>说明</label><textarea class="textarea" data-schedule-submit-note maxlength="200">' + (isPublish ? '确认当前排期无误，发布为最终排期表。' : '确认本责任范围排期完整，提交承办单位复核。') + '</textarea></div>'; },
+      body: function () { var batch = currentBatchContext(); var mode = window.__schedulePublishMode || "submit"; var isPublish = mode === "publish"; var groupErrors = scheduleEntryBatchErrors(batch); return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>当前动作：' + (isPublish ? '发布排期表' : '提交排期') + '</span></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">最终校验结果</h2><span class="tag ' + (Number(batch.pendingSchedule || 0) || Number(batch.conflicts || 0) || groupErrors.length ? 'orange' : 'green') + '">' + (Number(batch.pendingSchedule || 0) || Number(batch.conflicts || 0) || groupErrors.length ? '需处理' : '校验通过') + '</span></div><div class="schedule-role-action-list"><div class="schedule-role-action-item"><div><strong>舞蹈入场分组</strong><span>' + escapeHtml(groupErrors.length ? groupErrors.join('；') : '分组校验通过') + '</span></div><span class="tag ' + (groupErrors.length ? 'orange' : 'green') + '">' + (groupErrors.length ? '待处理' : '通过') + '</span></div><div class="schedule-role-action-item"><div><strong>考生覆盖</strong><span>已缴费考生全部进入场次分配</span></div><span class="tag ' + (!Number(batch.pendingSchedule || 0) ? 'green' : 'orange') + '">' + (!Number(batch.pendingSchedule || 0) ? '通过' : '待排期') + '</span></div><div class="schedule-role-action-item"><div><strong>资源和时间冲突</strong><span>考场、日期、时段以及考生重复排期校验</span></div><span class="tag ' + (!Number(batch.conflicts || 0) ? 'green' : 'orange') + '">' + (!Number(batch.conflicts || 0) ? '通过' : '待处理') + '</span></div></div></div><div class="info-banner" style="margin-top:14px"><strong>生效边界：</strong>提交或复核阶段仅保存内部排期数据；发布前不影响考生、准考证、派遣、评分任务和消息通知。已发布排期如需调整，必须从批次变更审批发起“场次局部调整”。</div><div class="field" style="margin-top:14px"><label>说明</label><textarea class="textarea" data-schedule-submit-note maxlength="200">' + (isPublish ? '确认当前排期无误，发布为最终排期表。' : '确认本责任范围排期完整，提交承办单位复核。') + '</textarea></div>'; },
       foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-publish-confirm>' + (window.__schedulePublishMode === "publish" ? '确认发布排期表' : '确认提交排期') + '</button>'
     };
     function confirmSchedulePublish() {
       var batch = currentBatchContext();
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var mode = window.__schedulePublishMode || "submit";
+      if (batchChangeIsFrozen(batch, "schedule")) return;
       if (role === "platform") { toast("平台仅可查看和导出，不能提交或发布排期"); return; }
+      var entryErrors = scheduleEntryBatchErrors(batch);
+      if (entryErrors.length) { toast("入场分组校验未通过：" + entryErrors[0]); return; }
       if (mode === "submit") {
         if (!scheduleRoleCanWrite(role, schedulePhaseOf(batch))) { toast("当前角色或阶段不允许提交排期"); return; }
         if (Number(batch.pendingSchedule || 0) > 0 || Number(batch.conflicts || 0) > 0 || !scheduleStepState(batch).done[0]) { toast("提交已阻断：请完成考生全覆盖、场次完整和冲突校验"); return; }
