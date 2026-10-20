@@ -5060,7 +5060,7 @@
         assignedSessions = sessions;
         pendingDispatch = 0;
       }
-      var ticketAvailable = stageIndex >= 4 ? scheduled : 0;
+      var ticketAvailable = stageIndex >= 3 ? scheduled : 0;
       var ticketsGenerated = 0;
       var ticketsRegenerate = status.status.indexOf("重生成") > -1 ? Math.ceil(ticketAvailable * 0.12) : 0;
       if (status.stage === "tickets") {
@@ -8705,7 +8705,10 @@
       batch.assignedSessions = 0;
       batch.pendingConfirm = 0;
       batch.risks = 0;
-      batch.summary = "排期已发布，系统自动进入考官派遣待指派。";
+      batch.dispatchPhaseStatus = "待指派";
+      batch.ticketPhaseStatus = "待生成";
+      batch.ticketAvailable = Math.max(0, Number(batch.scheduled) || 0);
+      batch.summary = "排期已发布，考官派遣与准考证阶段同时开放，可并行处理。";
       batch.__autoAdvancedFromSchedule = true;
       return true;
     }
@@ -8868,8 +8871,8 @@
         overview: batch.stage === "overview" ? batch.status : "已发布",
         enroll: stageIndex < 1 ? "报名未开始" : (batch.stage === "enroll" ? batch.status : "已缴费 " + formatDemoNumber(batch.paid)),
         schedule: online ? "线上考试不适用" : (stageIndex < 2 ? "等待已缴费名单" : (batch.stage === "schedule" ? batch.status : "已排期 " + formatDemoNumber(batch.scheduled))),
-        dispatch: stageIndex < order.indexOf("dispatch") ? (online ? "等待已录制视频" : "等待排期提交") : (batch.stage === "dispatch" ? batch.status : "已指派 " + formatDemoNumber(batch.assignedSessions) + "人"),
-        tickets: online ? (stageIndex < order.indexOf("tickets") ? "等待缴费" : (batch.stage === "tickets" ? batch.status : "已提交视频 " + formatDemoNumber(batch.videoSubmitted) + "人")) : (stageIndex < 4 ? "等待排期提交" : (batch.stage === "tickets" ? batch.status : "准考证 " + formatDemoNumber(batch.ticketsGenerated))),
+        dispatch: online ? (stageIndex < order.indexOf("dispatch") ? "等待已录制视频" : (batch.stage === "dispatch" ? batch.status : "已指派 " + formatDemoNumber(batch.assignedSessions) + "人")) : batchStageStatusView(batch, "dispatch").text,
+        tickets: online ? (stageIndex < order.indexOf("tickets") ? "等待缴费" : (batch.stage === "tickets" ? batch.status : "已提交视频 " + formatDemoNumber(batch.videoSubmitted) + "人")) : batchStageStatusView(batch, "tickets").text,
         grades: stageIndex < order.indexOf("grades") ? (online ? "等待考官派遣" : "等待考试结束") : (batch.stage === "grades" ? batch.status : "成绩已发布"),
         certificates: stageIndex < order.indexOf("certificates") ? "等待成绩发布" : (batch.stage === "certificates" ? batch.status : "入库 " + formatDemoNumber(batch.certLibrary)),
         reports: "进入运营分析"
@@ -8879,12 +8882,18 @@
           node.textContent = summaries[key];
         });
       });
+      document.querySelectorAll("[data-flow-step]").forEach(function (step) {
+        var phase = batchStagePhase(batch, step.getAttribute("data-flow-step"));
+        step.dataset.stagePhase = phase;
+        step.classList.toggle("is-done", phase === "done");
+        step.classList.toggle("is-pending", phase === "pending");
+      });
     }
     var BATCH_STAGE_FLOW_META = {
       enroll: { input: "已发布批次、报名二维码、报名机构", output: "已缴费名单", action: "处理报名", jump: "batch-workbench/enroll" },
       schedule: { input: "已缴费名单、考点考场资源", output: "排期表", action: "进入排期", jump: "batch-workbench/schedule" },
       dispatch: { input: "已发布排期场次、考官库", output: "考官派遣记录", action: "指派考官", jump: "batch-workbench/dispatch" },
-      tickets: { input: "已提交排期、准考证配置", output: "准考证文件", action: "生成准考证", jump: "batch-workbench/tickets" },
+      tickets: { input: "已发布排期、准考证配置", output: "准考证文件", action: "生成准考证", jump: "batch-workbench/tickets" },
       grades: { input: "考试记录、评分记录", output: "已发布成绩", action: "处理成绩", jump: "batch-workbench/grades" },
       certificates: { input: "已发布且通过成绩", output: "电子证书入库", action: "处理制证", jump: "batch-workbench/certificates" },
       reports: { input: "全流程业务数据", output: "批次分析", action: "进入运营分析", jump: "analytics/board" }
@@ -8900,14 +8909,36 @@
       tickets: "已开放下载", grades: "成绩已发布", certificates: "证书已入库", reports: "批次归档"
     };
     var BATCH_STAGE_PENDING_STATUS = {
-      overview: "待发布", enroll: "报名未开始", schedule: "等待报名机构提交", dispatch: "等待排期提交",
-      tickets: "等待排期提交", grades: "等待考试结束", certificates: "等待成绩发布", reports: "等待归档"
+      overview: "待发布", enroll: "报名未开始", schedule: "等待报名机构提交", dispatch: "等待排期发布",
+      tickets: "等待排期发布", grades: "等待考试结束", certificates: "等待成绩发布", reports: "等待归档"
     };
+    function offlineScheduleIsPublished(batch) {
+      if (!batch || isOnlineBatch(batch)) return false;
+      if (batch.schedulePhaseStatus) return batch.schedulePhaseStatus === "已发布";
+      return batch.stage === "schedule" && batch.status === "已发布" || batchProgressIndex(batch) >= BATCH_OFFLINE_STAGE_ORDER.indexOf("dispatch");
+    }
+    function offlineParallelStageStatus(batch, stage) {
+      var explicit = stage === "dispatch" ? batch.dispatchPhaseStatus : batch.ticketPhaseStatus;
+      if (explicit) return explicit;
+      if (stage === "dispatch") return batch.stage === "dispatch" ? batch.status : batchProgressIndex(batch) > BATCH_OFFLINE_STAGE_ORDER.indexOf("dispatch") ? "已发布" : "待指派";
+      if (batch.stage === "tickets") return batch.status;
+      if (batchProgressIndex(batch) > BATCH_OFFLINE_STAGE_ORDER.indexOf("tickets")) return "已开放下载";
+      if (Number(batch.ticketsRegenerate) > 0) return "待重生成";
+      if (Number(batch.ticketsGenerated) > 0) return Number(batch.ticketsGenerated) >= Number(batch.ticketAvailable) ? "生成后" : "部分已生成";
+      return "待生成";
+    }
     function batchStagePhase(batch, stage) {
       var order = batchStageOrder(batch);
       var currentIndex = batchProgressIndex(batch);
       var stageIndex = order.indexOf(stage);
       if (stageIndex < 0) return "not-applicable";
+      if (!isOnlineBatch(batch) && (stage === "dispatch" || stage === "tickets")) {
+        if (!offlineScheduleIsPublished(batch)) return "pending";
+        if (currentIndex > order.indexOf("tickets")) return "done";
+        var status = offlineParallelStageStatus(batch, stage);
+        return (stage === "dispatch" ? status === "已发布" : status === "已开放下载" || status === "考试待开始") ? "done" : "current";
+      }
+      if (stage === "schedule" && offlineScheduleIsPublished(batch)) return "done";
       if (stageIndex < currentIndex) return "done";
       if (stageIndex > currentIndex) return "pending";
       return "current";
@@ -8915,6 +8946,10 @@
     function batchStageStatusView(batch, stage) {
       var phase = batchStagePhase(batch, stage);
       if (phase === "not-applicable") return { text: "不适用", tag: "" };
+      if (!isOnlineBatch(batch) && (stage === "dispatch" || stage === "tickets") && phase !== "pending") {
+        var status = offlineParallelStageStatus(batch, stage);
+        return { text: status, tag: phase === "done" ? "green" : status === "待指派" || status === "待生成" ? "orange" : "blue" };
+      }
       if (phase === "current") return { text: batch.status, tag: batch.statusTag || "blue" };
       if (phase === "done") return { text: isOnlineBatch(batch) && stage === "tickets" ? "视频已录制" : BATCH_STAGE_DONE_STATUS[stage] || "已完成", tag: "green" };
       return { text: BATCH_STAGE_PENDING_STATUS[stage] || "未开始", tag: "" };
@@ -9163,7 +9198,7 @@
           checks: [
             "已缴费名单 " + formatDemoNumber(batch.paid) + " 人，已排期 " + formatDemoNumber(batch.scheduled) + " 人。",
             "待排期 " + formatDemoNumber(batch.pendingSchedule) + " 人，冲突 " + formatDemoNumber(batch.conflicts) + " 项。",
-            batch.conflicts ? "需先处理冲突，才能提交排期。" : "全部报名机构提交后可进入考官派遣和准考证生成。"
+            batch.conflicts ? "需先处理冲突，才能提交排期。" : "排期发布后，考官派遣与准考证生成同时开放。"
           ]
         },
         next: { title: "快捷动作", actions: [{ text: "自动排期", kind: "primary", drawer: "schedule-group" }, { text: "提交排期", drawer: "schedule-publish" }, { text: "进入考官派遣", jump: "batch-workbench/dispatch" }] }
@@ -9174,7 +9209,7 @@
       if (isOnlineBatch(batch)) return onlineDispatchStageView(batch, status);
       if (batchStagePhase(batch, "dispatch") === "pending") return pendingStageView(batch, "dispatch");
       if (batchStagePhase(batch, "dispatch") === "done") return completedStageView(batch, "dispatch");
-      var dispatchCode = batch.dispatchStatusCode || (batch.status === "待指派" ? "PENDING_ASSIGNMENT" : batch.status === "已指派" ? "ASSIGNED" : "PUBLISHED");
+      var dispatchCode = batch.dispatchStatusCode || (status.text === "待指派" ? "PENDING_ASSIGNMENT" : status.text === "已指派" ? "ASSIGNED" : "PUBLISHED");
       var assigned = dispatchCode === "ASSIGNED" || dispatchCode === "PUBLISHED";
       var rows = dispatchCode === "PENDING_ASSIGNMENT"
         ? [["A201 上午场", "钢琴 1-5级", "待指派", batchTagHtml("orange", "待校验"), batchTagHtml("", "待指派"), "完成资格校验后指派", '<button class="btn link" data-drawer="judge-assign">指派</button><button class="btn link" data-drawer="judge-smart-match">智能匹配</button>']]
@@ -9231,10 +9266,10 @@
       var generated = splitDemoCounts(batch.ticketsGenerated, [0.48, 0.31, 0.21]);
       var printed = splitDemoCounts(batch.ticketsPrinted, [0.50, 0.30, 0.20]);
       var rows = orgs.map(function (org, index) {
-        var regen = batch.status === "待重生成" && index === 1 ? Math.max(1, batch.ticketsRegenerate) : 0;
-        var rowStatus = batch.status === "准考证生成中" ? batchTagHtml("blue", "生成中") : (regen ? batchTagHtml("orange", "待重生成") : (generated[index] >= available[index] && generated[index] ? batchTagHtml("green", "已生成") : batchTagHtml("orange", "待生成")));
-        if (batch.status === "生成后") rowStatus = batchTagHtml("green", "已生成");
-        if (batch.status === "已开放下载" || batch.status === "考试待开始") rowStatus = batchTagHtml("green", "已开放下载");
+        var regen = status.text === "待重生成" && index === 1 ? Math.max(1, batch.ticketsRegenerate) : 0;
+        var rowStatus = status.text === "准考证生成中" ? batchTagHtml("blue", "生成中") : (regen ? batchTagHtml("orange", "待重生成") : (generated[index] >= available[index] && generated[index] ? batchTagHtml("green", "已生成") : batchTagHtml("orange", "待生成")));
+        if (status.text === "生成后") rowStatus = batchTagHtml("green", "已生成");
+        if (status.text === "已开放下载" || status.text === "考试待开始") rowStatus = batchTagHtml("green", "已开放下载");
         var action = regen ? '<button class="btn link" data-toast="准考证已重生成">重生成</button>' : (generated[index] ? '<button class="btn link" data-drawer="ticket-preview">查看</button><button class="btn link" data-toast="准考证文件已下载">下载</button>' : '<button class="btn link" data-toast="准考证已生成">生成</button>');
         return [escapeHtml(org), formatDemoNumber(available[index]), formatDemoNumber(generated[index]), formatDemoNumber(printed[index]), formatDemoNumber(regen), rowStatus, action];
       });
@@ -9583,9 +9618,9 @@
       var generated = Math.max(0, Number(batch.ticketsGenerated) || 0);
       var regenerate = Math.max(0, Number(batch.ticketsRegenerate) || 0);
       return names.slice(0, count).map(function (name, index) {
-        var generatedForRow = batch.stage !== "tickets" || batch.status === "生成后" || (generated > 0 && index < Math.ceil(count * generated / Math.max(available, 1)));
+        var generatedForRow = generated > 0 && index < Math.ceil(count * generated / Math.max(available, 1));
         var rowStatus = regenerate && index === 1 ? "待重生成" : (generatedForRow ? "已生成" : "待生成");
-        if (batch.status === "准考证生成中") rowStatus = "生成中";
+        if (offlineParallelStageStatus(batch, "tickets") === "准考证生成中") rowStatus = "生成中";
         var date = dates[index % 2] || dates[0] || "待定";
         return {
           id: "EN-" + String(batch.id).slice(-4) + "-" + padDemoNumber(index + 1),
@@ -9849,12 +9884,10 @@
         });
         batch.ticketsGenerated = isFullBatch ? batch.ticketAvailable : Math.min(batch.ticketAvailable, (Number(batch.ticketsGenerated) || 0) + targets.length);
         batch.ticketsRegenerate = isFullBatch ? 0 : Math.max(0, (Number(batch.ticketsRegenerate) || 0) - targets.length);
-        if (batch.ticketsGenerated >= batch.ticketAvailable && !batch.ticketsRegenerate) {
-          batch.status = "生成后";
-          batch.statusTag = "green";
-        } else {
-          batch.status = "部分已生成";
-          batch.statusTag = "blue";
+        batch.ticketPhaseStatus = batch.ticketsGenerated >= batch.ticketAvailable && !batch.ticketsRegenerate ? "生成后" : "部分已生成";
+        if (batch.stage === "tickets") {
+          batch.status = batch.ticketPhaseStatus;
+          batch.statusTag = batch.ticketPhaseStatus === "生成后" ? "green" : "blue";
         }
         if (status) status.innerHTML = batchTagHtml("green", "已完成");
         appendBatchChangeRecord("准考证局部重生成", batch, { objectType: "准考证", objectLabel: targets.map(function (row) { return row.getAttribute("data-ticket-number") || row.cells[0] && row.cells[0].textContent.trim() || "考生"; }).join("、"), objectCount: targets.length, before: "已发布 / 原版本有效", after: "新版本已生成 / 原版本已作废", reason: "根据排期或考官调整，仅重生成受影响考生准考证。", snapshots: { before: ["处理对象：" + targets.length + "名考生", "原准考证：已发布", "原版本：有效"], after: ["新版本：已生成", "原版本：已作废并保留历史记录", "未受影响准考证：继续有效"] }, impact: "仅影响选中受影响考生，其他准考证保持有效。" });
@@ -9863,6 +9896,7 @@
         syncBatchMetric("ticketsGenerated", batch.ticketsGenerated);
         syncBatchMetric("ticketsRegenerate", batch.ticketsRegenerate);
         syncBatchFlowSummaries(batch);
+        syncBatchDemo(batch);
           toast(batch.name + "准考证生成任务已完成，可批量打印/下载");
         }, 600);
       }).catch(function (error) {
@@ -9870,6 +9904,30 @@
         if (status) status.innerHTML = batchTagHtml("red", "生成失败");
         var state = window.HBYXExamApi.errorState(error);
         toast(state.forbidden ? "当前无权生成准考证" : state.retryable ? "生成超时，可重试并会先查询原请求" : "准考证生成失败");
+      });
+    }
+    function publishBatchTickets(ticketPublish) {
+      var ticketBatch = currentBatchContext();
+      if (batchChangeIsFrozen(ticketBatch, "tickets")) return;
+      if (isOnlineBatch(ticketBatch) || batchStagePhase(ticketBatch, "tickets") !== "current") { toast("排期发布后才可发布准考证，已完成阶段仅支持查看"); return; }
+      if (!(Number(ticketBatch.ticketAvailable) > 0) || Number(ticketBatch.ticketsGenerated || 0) < Number(ticketBatch.ticketAvailable) || Number(ticketBatch.ticketsRegenerate || 0) > 0) { toast("请先完成当前批次准考证生成后再发布"); return; }
+      var ticketId = ticketPublish.getAttribute("data-ticket-id") || "ticket-batch-" + ticketBatch.id;
+      var ticketRequestId = window.HBYXExamApi.createRequestId("ticket-publish");
+      ticketPublish.disabled = true;
+      ticketPublish.textContent = "发布中";
+      return window.HBYXExamApi.write("/exam-tickets/" + encodeURIComponent(ticketId) + "/publish", { ticketId: ticketId, batchId: ticketBatch.id, objectVersion: Number(ticketBatch.objectVersion || ticketBatch.version) || 1, snapshotVersion: ticketBatch.ticketSnapshotVersion || "ticket-v1" }, { requestId: ticketRequestId }).then(function () {
+        ticketPublish.textContent = "已发布";
+        ticketBatch.ticketPhaseStatus = "已开放下载";
+        if (ticketBatch.stage === "tickets") { ticketBatch.status = "已开放下载"; ticketBatch.statusTag = "green"; }
+        appendBatchChangeRecord("准考证局部重生成", ticketBatch, { objectType: "准考证发布", objectLabel: ticketBatch.name, before: "待发布", after: "准考证已发布", reason: "批次准考证发布确认。", snapshots: { before: ["准考证任务：已生成", "发布状态：待发布"], after: ["发布状态：已发布", "发布范围：当前批次生成结果"] }, impact: "当前发布动作仅发布已生成版本，历史版本和审计记录保留。", requestId: ticketRequestId });
+        refreshBatchChangeView();
+        syncBatchDemo(ticketBatch);
+        toast("准考证已发布");
+      }).catch(function (error) {
+        ticketPublish.disabled = false;
+        ticketPublish.textContent = "发布";
+        var state = window.HBYXExamApi.errorState(error);
+        toast(state.code === "VERSION_CONFLICT" ? "准考证数据已更新，请刷新后重新确认" : state.forbidden ? "当前无权发布准考证" : state.retryable ? "发布超时，可重试并会先查询原请求" : "准考证发布失败");
       });
     }
     function createTicketDownloadTask(button, mode) {
@@ -11128,6 +11186,7 @@
     }
     function syncBatchDemo(batch) {
       if (!batch) return;
+      if (offlineScheduleIsPublished(batch)) batch.ticketAvailable = Math.max(0, Number(batch.scheduled) || 0);
       var selector = document.querySelector("[data-batch-selector]");
       if (selector && selector.value !== batch.id) selector.value = batch.id;
       var title = document.querySelector("[data-batch-title]");
@@ -11137,6 +11196,9 @@
       var currentStage = document.querySelector("[data-batch-current-stage]");
       if (currentStage) {
         currentStage.textContent = "当前阶段：" + batchStageLabel(batch, batch.stage) + " · " + batch.status;
+        if (offlineScheduleIsPublished(batch) && batchProgressIndex(batch) <= BATCH_OFFLINE_STAGE_ORDER.indexOf("tickets")) {
+          currentStage.textContent = ["dispatch", "tickets"].map(function (stage) { return batchStageLabel(batch, stage) + " · " + batchStageStatusView(batch, stage).text; }).join(" / ");
+        }
         setBatchTag(currentStage, batch.statusTag || "blue");
       }
       var constraint = document.querySelector("[data-batch-constraint]");
@@ -11835,7 +11897,7 @@
         var examinerDetails = assignedExaminer === "待指派" ? [] : (index % 3 === 0 ? [{ name: assignedExaminer, phone: dispatchExaminerPhone(assignedExaminer) }, { name: assignedExaminer === "李文浩" ? "杨婷婷" : "李文浩", phone: dispatchExaminerPhone(assignedExaminer === "李文浩" ? "杨婷婷" : "李文浩") }] : [{ name: assignedExaminer, phone: dispatchExaminerPhone(assignedExaminer) }]);
         return Object.assign({}, session, {
           room: scheduleRoomName(session.room),
-          status: assignedExaminer === "待指派" ? "待指派" : "已指派",
+          status: offlineParallelStageStatus(batch, "dispatch") === "已发布" ? "已发布" : assignedExaminer === "待指派" ? "待指派" : "已指派",
           examiner: assignedExaminer,
           examinerCount: examinerCount || examinerDetails.length,
           examinerDetails: examinerDetails,
@@ -12270,15 +12332,10 @@
       syncBatchDemo(batch);
       renderScheduleRoleWorkbench();
       var activeSub = order.indexOf(sub) > -1 && sub !== "overview" ? sub : (batch && batch.stage || "enroll");
-      var activeIndex = order.indexOf(activeSub);
       document.querySelectorAll("[data-flow-step]").forEach(function (step) {
         var stepSub = step.getAttribute("data-flow-step");
-        var stepIndex = order.indexOf(stepSub);
-        var isAvailable = stepIndex > -1 && !step.hidden;
         var isCurrent = stepSub === activeSub;
         step.classList.toggle("is-current", isCurrent);
-        step.classList.toggle("is-done", isAvailable && stepIndex < activeIndex);
-        step.classList.toggle("is-pending", isAvailable && stepIndex > activeIndex);
         if (isCurrent) step.setAttribute("aria-current", "step");
         else step.removeAttribute("aria-current");
       });
@@ -12895,6 +12952,8 @@
     function publishDispatchAssignmentRows(button) {
       var root = button && button.closest(".dispatch-dashboard");
       if (!root) return;
+      var batch = currentBatchContext();
+      if (!isOnlineBatch(batch) && batchStagePhase(batch, "dispatch") !== "current") { toast("排期发布后才可处理考官派遣，已完成阶段仅支持查看"); return; }
       button.textContent = "已发布";
       button.disabled = true;
       root.querySelectorAll('[data-dispatch-panel="assignment"] [data-schedule-room-session]').forEach(function (row) {
@@ -12902,6 +12961,12 @@
         if (statusCell) statusCell.innerHTML = batchTagHtml("green", "已发布");
         row.querySelectorAll("[data-dispatch-session-action]").forEach(function (action) { action.setAttribute("data-session-status", "已发布"); });
       });
+      if (!isOnlineBatch(batch)) {
+        batch.dispatchPhaseStatus = "已发布";
+        batch.dispatchStatusCode = "PUBLISHED";
+        if (batch.stage === "dispatch") { batch.status = "已发布"; batch.statusTag = "green"; }
+        syncBatchDemo(batch);
+      }
       toast("考官派遣结果已发布");
     }
     function tagHtml(className, text) {
@@ -15464,8 +15529,11 @@
       dispatchBatch.pendingDispatch = Math.max(0, (Number(dispatchBatch.pendingDispatch) || 0) - assignedDelta);
       dispatchBatch.assignedSessions = Math.min(Number(dispatchBatch.sessions) || assignedDelta, (Number(dispatchBatch.assignedSessions) || 0) + assignedDelta);
         dispatchBatch.pendingConfirm = 0;
+      if (!isOnlineBatch(dispatchBatch)) { dispatchBatch.dispatchPhaseStatus = "已指派"; dispatchBatch.dispatchStatusCode = "ASSIGNED"; }
+      if (isOnlineBatch(dispatchBatch) || dispatchBatch.stage === "dispatch") {
         dispatchBatch.status = "已指派";
-      dispatchBatch.statusTag = "blue";
+        dispatchBatch.statusTag = "blue";
+      }
         dispatchBatch.summary = "考官已指派，待后台发布派遣结果。";
       window.__dispatchQualificationSnapshots = window.__dispatchQualificationSnapshots || [];
         window.__dispatchQualificationSnapshots.push({ batchId: dispatchBatch.id, sessionId: activeSession.id || "S-" + batchSessionSuffix(dispatchBatch) + "-01", operator: "当前用户", time: formatDateTime(new Date()), checks: ["专业匹配", "职级/级别覆盖", "职称/资质", "聘用与证件", "时段与工作量"] });
@@ -19721,26 +19789,7 @@
       if (event.target.closest("[data-ticket-bulk-download]")) { createTicketDownloadTask(event.target.closest("[data-ticket-bulk-download]"), "download"); return; }
       if (event.target.closest("[data-ticket-bulk-print]")) { createTicketDownloadTask(event.target.closest("[data-ticket-bulk-print]"), "print"); return; }
       var ticketPublish = event.target.closest("[data-ticket-publish]");
-      if (ticketPublish) {
-        var ticketBatch = currentBatchContext();
-        if (batchChangeIsFrozen(ticketBatch, "tickets")) return;
-        var ticketId = ticketPublish.getAttribute("data-ticket-id") || "ticket-batch-" + ticketBatch.id;
-        var ticketRequestId = window.HBYXExamApi.createRequestId("ticket-publish");
-        ticketPublish.disabled = true;
-        ticketPublish.textContent = "发布中";
-        window.HBYXExamApi.write("/exam-tickets/" + encodeURIComponent(ticketId) + "/publish", { ticketId: ticketId, batchId: ticketBatch.id, objectVersion: Number(ticketBatch.objectVersion || ticketBatch.version) || 1, snapshotVersion: ticketBatch.ticketSnapshotVersion || "ticket-v1" }, { requestId: ticketRequestId }).then(function () {
-          ticketPublish.textContent = "已发布";
-          appendBatchChangeRecord("准考证局部重生成", ticketBatch, { objectType: "准考证发布", objectLabel: ticketBatch.name, before: "待发布", after: "准考证已发布", reason: "批次准考证发布确认。", snapshots: { before: ["准考证任务：已生成", "发布状态：待发布"], after: ["发布状态：已发布", "发布范围：当前批次生成结果"] }, impact: "当前发布动作仅发布已生成版本，历史版本和审计记录保留。", requestId: ticketRequestId });
-          refreshBatchChangeView();
-          toast("准考证已发布");
-        }).catch(function (error) {
-          ticketPublish.disabled = false;
-          ticketPublish.textContent = "发布";
-          var state = window.HBYXExamApi.errorState(error);
-          toast(state.code === "VERSION_CONFLICT" ? "准考证数据已更新，请刷新后重新确认" : state.forbidden ? "当前无权发布准考证" : state.retryable ? "发布超时，可重试并会先查询原请求" : "准考证发布失败");
-        });
-        return;
-      }
+      if (ticketPublish) { publishBatchTickets(ticketPublish); return; }
       if (event.target.closest("[data-analytics-export]")) { createAnalyticsExportTask(event.target.closest("[data-analytics-export]")); return; }
       if (event.target.closest("[data-analytics-download]")) { toast("当前批次运营分析报表下载中"); return; }
       if (event.target.closest("[data-analytics-retry]")) { createAnalyticsExportTask(event.target.closest("[data-analytics-retry]")); return; }
@@ -23818,13 +23867,16 @@
         batch.assignedSessions = 0;
         batch.pendingConfirm = 0;
         batch.risks = 0;
-        batch.summary = "排期表已发布，系统自动推进考官派遣。";
+        batch.dispatchPhaseStatus = "待指派";
+        batch.ticketPhaseStatus = "待生成";
+        batch.ticketAvailable = Math.max(0, Number(batch.scheduled) || 0);
+        batch.summary = "排期表已发布，考官派遣与准考证阶段同时开放，可并行处理。";
         currentBatchDemoId = batch.id;
         window.__activeBatchId = batch.id;
         closeDrawer();
         syncBatchDemo(batch);
         showPage("batch-workbench", "dispatch", batch.id);
-        toast("排期表已发布，已自动进入考官派遣");
+        toast("排期表已发布，考官派遣与准考证阶段已同时开启");
       }
     }
     var PAGINATION_DEFAULT_SIZE = 20;
