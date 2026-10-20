@@ -72,12 +72,30 @@ function fixture(role = "platform") {
 
 const ownerIds = (f) => Array.from(f.context.batchOwnerUnits(), (unit) => unit.id);
 
-test("platform may select itself, organizers and training organizations", () => {
+test("platform owner tree includes and defaults to the selectable root organization", () => {
   const f = fixture();
   assert.deepEqual(ownerIds(f), f.units.map((unit) => unit.id));
   const options = f.context.batchOwnerOptionsHtml();
-  for (const type of ["平台", "承办单位", "培训机构"]) assert.ok(options.includes(`<optgroup label="${type}">`));
+  assert.ok(!options.includes("<optgroup"));
+  for (const type of ["平台", "承办单位", "培训机构"]) assert.ok(!options.includes(`>${type}<`));
   assert.ok(options.includes('<option value="platform" selected>湖北艺术职业学院</option>'));
+  assert.ok(!options.includes('<option value="platform" disabled'));
+  assert.ok(options.indexOf('value="platform"') < options.indexOf('value="org-wh"'));
+});
+
+test("owner options follow parent-child order rather than organization type or row order", () => {
+  const f = fixture();
+  f.units.reverse();
+  const options = f.context.batchOwnerOptionsHtml();
+  const labels = Array.from(options.matchAll(/<option value="[^"]+"[^>]*>(.*?)<\/option>/g), (match) => match[1]);
+  assert.deepEqual(labels, [
+    "湖北艺术职业学院",
+    "　├─ 省直属培训点",
+    "　├─ 宜昌承办中心",
+    "　│　└─ 宜昌青少年美育中心",
+    "　└─ 武汉承办中心",
+    "　　└─ 光谷少儿艺术中心"
+  ]);
 });
 
 test("organizer cannot select its parent, peers or unrelated training organizations", () => {
@@ -87,7 +105,8 @@ test("organizer cannot select its parent, peers or unrelated training organizati
   assert.ok(!options.includes('value="platform"'));
   assert.ok(!options.includes('value="org-yc"'));
   assert.ok(!options.includes('value="inst-direct"'));
-  assert.ok(options.includes('<option value="org-wh" selected>'));
+  assert.ok(options.includes('<option value="org-wh" selected>武汉承办中心</option>'));
+  assert.ok(options.includes('<option value="inst-guanggu">　└─ 光谷少儿艺术中心</option>'));
 });
 
 test("training organization can select only itself and actual descendants", () => {
@@ -105,15 +124,29 @@ test("scope uses the session organization ID and follows the full hierarchy", ()
   f.units.push({ id: "dept", parent: "inst-yc", name: "教务部", type: "部门" });
   f.units.push({ id: "branch", parent: "dept", name: "下级培训点", type: "培训机构" });
   assert.deepEqual(ownerIds(f), ["org-yc", "inst-yc", "branch"]);
+  const options = f.context.batchOwnerOptionsHtml();
+  assert.ok(options.includes('<option value="dept" disabled>　　└─ 教务部</option>'));
+  assert.ok(options.includes('<option value="branch">　　　└─ 下级培训点</option>'));
+  f.owner.value = "dept";
+  assert.equal(f.context.batchSelectedOwnerUnit(f.root), null);
 });
 
 test("missing organization fails closed and options escape organization names", () => {
   const f = fixture();
   f.context.AUTH_SESSION.orgId = "missing";
   assert.deepEqual(ownerIds(f), []);
+  assert.equal(f.context.batchOwnerOptionsHtml(), '<option value="">请选择所属单位</option>');
   f.context.AUTH_SESSION.orgId = "platform";
   f.units[0].name = '<平台 "A"> &';
   assert.ok(f.context.batchOwnerOptionsHtml().includes('&lt;平台 &quot;A&quot;&gt; &amp;'));
+});
+
+test("hierarchy traversal does not repeat nodes when organization links contain a cycle", () => {
+  const f = fixture();
+  f.units[0].parent = "inst-guanggu";
+  const options = f.context.batchOwnerOptionsHtml();
+  assert.equal((options.match(/value="platform"/g) || []).length, 1);
+  assert.equal((options.match(/value="inst-guanggu"/g) || []).length, 1);
 });
 
 test("selected owner is resolved by ID and rejects blank, unknown and out-of-scope units", () => {

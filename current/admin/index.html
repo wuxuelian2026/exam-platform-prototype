@@ -8317,14 +8317,25 @@
     }
     function batchOwnerOptionsHtml() {
       var units = batchOwnerUnits();
-      var currentId = roleOrganizationDataScope().rootOrgId;
-      return '<option value="">请选择所属单位</option>' + ["平台", "承办单位", "培训机构"].map(function (type) {
-        var options = units.filter(function (unit) { return unit.type === type; });
-        if (!options.length) return "";
-        return '<optgroup label="' + type + '">' + options.map(function (unit) {
-          return '<option value="' + escapeHtml(unit.id) + '"' + (unit.id === currentId ? ' selected' : '') + '>' + escapeHtml(unit.name) + '</option>';
-        }).join("") + '</optgroup>';
-      }).join("");
+      var scope = roleOrganizationDataScope();
+      var nodes = Array.from(document.querySelectorAll('[data-subview="units"] [data-unit-row]')).map(function (row) {
+        return { id: row.getAttribute("data-unit-id"), parent: row.getAttribute("data-unit-parent"), name: row.getAttribute("data-unit-name") };
+      }).filter(function (unit) { return scope.ids[unit.id]; });
+      var visited = new Set();
+      function renderNode(unit, prefix, branch, isLast) {
+        if (visited.has(unit.id)) return "";
+        visited.add(unit.id);
+        var selectable = units.some(function (item) { return item.id === unit.id; });
+        var html = '<option value="' + escapeHtml(unit.id) + '"' + (!selectable ? ' disabled' : unit.id === scope.rootOrgId ? ' selected' : '') + '>' + prefix + branch + escapeHtml(unit.name) + '</option>';
+        var children = nodes.filter(function (item) { return item.parent === unit.id; });
+        var childPrefix = prefix + (!branch || isLast ? '　' : '│　');
+        return html + children.map(function (child, index) {
+          var last = index === children.length - 1;
+          return renderNode(child, childPrefix, last ? '└─ ' : '├─ ', last);
+        }).join("");
+      }
+      var root = nodes.find(function (unit) { return unit.id === scope.rootOrgId; });
+      return '<option value="">请选择所属单位</option>' + (root ? renderNode(root, "", "", true) : "");
     }
     function batchSelectedOwnerUnit(root) {
       var select = root && root.querySelector("[data-batch-form-org]");
