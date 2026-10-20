@@ -9,6 +9,9 @@ const source = [
   between("    var AUTH_ROLE_CONFIG =", "    var AUTH_DEMO_ACCOUNTS ="),
   between("    function roleOrganizationDataScope(", "    function organizerAllowedOrgNames("),
   between("    function batchOwnerUnits(", "    function batchCreateBasicHtml("),
+  between("    var BROCHURE_SECTION_DEFINITIONS =", "    var BROCHURE_REVIEW_TAB ="),
+  between("    function brochurePlatformTemplates(", "    function brochureTemplateSectionValue("),
+  between("    function batchBrochurePickerHtml(", "    function batchFilterBrochureOptions("),
   between("    function batchValidationResult(", "    function batchGetCoverImage("),
   between("    function batchFormSnapshot(", "    function hydrateBatchCreateForm(")
 ].join("\n");
@@ -31,6 +34,7 @@ function fixture(role = "platform") {
   fields.set("[data-batch-contact-name]", { value: "周老师" });
   fields.set("[data-batch-contact-phone]", { value: "027-87561234" });
   const brochure = {
+    value: "BR-2026-001",
     disabled: false,
     closest: () => ({ textContent: "原型简章 已发布", getAttribute: () => "原型简章" })
   };
@@ -60,6 +64,7 @@ function fixture(role = "platform") {
     batchById: (id) => context.BATCH_DEMO_LIST.find((batch) => batch.id === id)
   });
   vm.runInContext(source, context);
+  root.__batchBrochureDraft = context.batchBrochureDraftFromTemplate(context.BROCHURE_DATA[0]);
   context.AUTH_SESSION.orgId = context.AUTH_ROLE_CONFIG[role].orgId;
   fields.get("[data-batch-form-org]").value = context.AUTH_SESSION.orgId;
   return { context, units, root, fields, owner: fields.get("[data-batch-form-org]") };

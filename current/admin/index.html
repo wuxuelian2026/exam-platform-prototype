@@ -2236,8 +2236,6 @@
           <button class="menu-item menu-parent" type="button" data-toggle-sub="info" data-default-sub="platform-brochures"><span class="menu-icon">章</span><span class="menu-label">考级简章管理</span><span class="menu-arrow" aria-hidden="true">+</span></button>
           <div class="menu-children">
             <button class="menu-item menu-child" type="button" data-jump="info/platform-brochures"><span class="menu-label">平台考级简章</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="info/org-brochures"><span class="menu-label">机构考级简章</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="info/brochure-review" data-platform-only><span class="menu-label">考级简章审核</span></button>
           </div>
         </div>
         <div class="menu-sub" data-domain="exam" data-menu-root="certificate-library">
@@ -4193,7 +4191,7 @@
           "dashboard",
           "org/sites", "org/site-review", "org/rooms", "org/judges",
           "plans/batches", "plans/batch-create", "plans/batch-detail", "plans/rollback",
-          "info/review", "info/list", "info/platform-brochures", "info/org-brochures", "plans/guides", "exam/guides",
+          "info/review", "info/list", "info/platform-brochures", "plans/guides", "exam/guides",
           "config/subjects", "config/fee-standard", "config/score-dimension", "config/notice-config", "config/ticket-config", "config/cert-tpl", "config/cert-segment",
           "batch-workbench/overview", "batch-workbench/enroll", "batch-workbench/schedule", "batch-workbench/dispatch",
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
@@ -4213,7 +4211,7 @@
         routes: [
           "dashboard",
           "org/sites", "org/rooms",
-          "info/list", "info/platform-brochures", "info/org-brochures", "plans/batch-detail",
+          "info/list", "info/platform-brochures", "plans/batch-detail",
           "batch-workbench/overview", "batch-workbench/enroll", "batch-workbench/schedule", "batch-workbench/dispatch",
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
           "enroll/list", "exam/schedule", "exam/tickets", "grades/list", "certificates/library",
@@ -4470,7 +4468,7 @@
       if (view === "plans" && sub === "batch-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (view === "org" && sub === "site-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (view === "info" && sub === "review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
-      if (view === "info" && sub === "brochure-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
+      if (view === "info" && ["org-brochures", "brochure-review"].indexOf(sub) > -1) return false;
       if (view === "config" && (sub === "ticket-config" || sub === "cert-tpl" || sub === "cert-segment")) return (AUTH_SESSION && AUTH_SESSION.role) !== "training";
       if (view === "system" && sub === "unit-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (!config.routes) return true;
@@ -8121,7 +8119,94 @@
       return batchExecutionTableHtml();
     }
     function batchBrochurePickerHtml() {
-      return '<div class="field"><label for="batch-brochure-search">关联考级简章 * <span class="muted">单选，仅可选择一份已发布简章</span></label><div class="batch-brochure-picker" data-batch-brochure-picker><input class="input batch-brochure-search" id="batch-brochure-search" type="search" data-batch-brochure-search placeholder="搜索简章名称" autocomplete="off" aria-controls="batch-brochure-options" aria-label="搜索关联考级简章"><div class="batch-brochure-options" id="batch-brochure-options" role="listbox" aria-label="已发布考级简章"><label class="batch-brochure-option" data-batch-brochure-option data-brochure-name="《2026年社会艺术水平考级简章》"><input type="radio" name="batch-brochure" value="info-2026-001" data-batch-brochure-check checked><span class="batch-brochure-option-name">《2026年社会艺术水平考级简章》</span><span class="tag green">已发布</span></label><label class="batch-brochure-option is-muted" data-batch-brochure-option data-brochure-name="《2026宜昌戏曲戏剧考级简章》"><input type="radio" name="batch-brochure" value="info-2026-002" data-batch-brochure-check disabled><span class="batch-brochure-option-name">【历史归档，不可选】《2026宜昌戏曲戏剧考级简章》</span><span class="tag orange">历史归档，不可选</span></label><label class="batch-brochure-option is-muted" data-batch-brochure-option data-brochure-name="《2026年秋季美术考级简章》"><input type="radio" name="batch-brochure" value="info-2026-draft" data-batch-brochure-check disabled><span class="batch-brochure-option-name">《2026年秋季美术考级简章》</span><span class="tag orange">草稿，不可选</span></label><div class="batch-brochure-empty" data-batch-brochure-empty hidden>未找到匹配的已发布简章</div></div><div class="muted batch-brochure-summary" data-batch-brochure-summary>已选择： 《2026年社会艺术水平考级简章》；批次将读取该简章的专业、级别和时间范围</div></div></div>';
+      var templates = brochurePlatformTemplates();
+      var options = templates.map(function (item, index) {
+        return '<label class="batch-brochure-option" data-batch-brochure-option data-brochure-name="' + escapeHtml(item.title) + '"><input type="radio" name="batch-brochure" value="' + escapeHtml(item.id) + '" data-batch-brochure-check' + (index === 0 ? ' checked' : '') + '><span class="batch-brochure-option-name">' + escapeHtml(item.title) + '</span><span class="tag green">平台已发布</span></label>';
+      }).join("");
+      return '<div class="field"><label for="batch-brochure-search">关联考级简章 * <span class="muted">仅限平台已发布简章</span></label><div class="batch-brochure-picker" data-batch-brochure-picker><input class="input batch-brochure-search" id="batch-brochure-search" type="search" data-batch-brochure-search placeholder="搜索简章名称" autocomplete="off" aria-controls="batch-brochure-options" aria-label="搜索关联考级简章"><div class="batch-brochure-options" id="batch-brochure-options" role="radiogroup" aria-label="平台已发布考级简章">' + options + '<div class="batch-brochure-empty" data-batch-brochure-empty' + (templates.length ? ' hidden' : '') + '>未找到匹配的已发布平台简章</div></div><div class="muted batch-brochure-summary" data-batch-brochure-summary></div></div></div>';
+    }
+    function batchBrochureTemplate(root) {
+      var selected = root && root.querySelector("[data-batch-brochure-check]:checked");
+      return selected && brochurePlatformTemplates().find(function (item) { return item.id === selected.value; }) || null;
+    }
+    function batchBrochureDraftFromTemplate(template) {
+      if (!template) return null;
+      var sections = {};
+      BROCHURE_SECTION_DEFINITIONS.forEach(function (section) {
+        var custom = template.sectionContents || {};
+        sections[section[0]] = Object.prototype.hasOwnProperty.call(custom, section[0]) ? custom[section[0]] : section[1];
+      });
+      if (template.content) sections["其他说明"] += "\n" + template.content;
+      return { brochureId: template.id, brochureVersionId: template.brochureVersionId || template.id + "-v1", sourceTitle: template.title, sourceOrg: template.org, title: template.title, sectionContents: sections, attachments: JSON.parse(JSON.stringify(template.attachments || [])) };
+    }
+    function batchReadBrochureDraft(root) {
+      if (!root || !root.__batchBrochureDraft) return null;
+      var draft = JSON.parse(JSON.stringify(root.__batchBrochureDraft));
+      var title = root.querySelector("[data-batch-brochure-title]");
+      if (title) draft.title = title.value.trim();
+      root.querySelectorAll("[data-batch-brochure-section]").forEach(function (editor) {
+        var name = editor.getAttribute("data-batch-brochure-section");
+        if (BROCHURE_TEMPLATE_LOCKED_SECTIONS.indexOf(name) === -1) draft.sectionContents[name] = editor.value;
+      });
+      return draft;
+    }
+    function batchBrochureEditorHtml(draft) {
+      if (!draft) return '<div class="table-card"><div class="empty-state">请先在基础信息中选择平台已发布简章</div></div>';
+      var editors = BROCHURE_SECTION_DEFINITIONS.map(function (section, index) {
+        var locked = BROCHURE_TEMPLATE_LOCKED_SECTIONS.indexOf(section[0]) > -1;
+        var id = "batch-brochure-section-" + index;
+        return '<div class="brochure-section' + (locked ? ' is-template-locked' : '') + '"><div class="table-tools"><label for="' + id + '" class="table-title">' + escapeHtml(section[0]) + ' *</label>' + (locked ? '<span class="tag blue">只读</span>' : '<span class="tag">可编辑</span>') + '</div><textarea class="textarea" id="' + id + '" data-batch-brochure-section="' + escapeHtml(section[0]) + '"' + (locked ? ' readonly' : '') + '>' + escapeHtml(draft.sectionContents[section[0]] || "") + '</textarea></div>';
+      }).join("");
+      return '<div class="batch-brochure-editor"><div class="table-tools"><h2 class="table-title">考级简章</h2><span class="tag blue">' + escapeHtml(draft.brochureVersionId) + '</span></div><div style="padding:16px;display:grid;gap:16px"><div class="muted">来源：' + escapeHtml(draft.sourceOrg + " · " + draft.sourceTitle) + '</div><div class="field"><label for="batch-brochure-title">简章标题 *</label><input class="input" id="batch-brochure-title" data-batch-brochure-title maxlength="100" value="' + escapeHtml(draft.title) + '" required></div>' + editors + '<div class="brochure-section"><h3 class="table-title">附件</h3><div data-batch-brochure-attachments>' + batchBrochureAttachmentsHtml(draft, true) + '</div><div class="field"><label for="batch-brochure-files">添加附件</label><input id="batch-brochure-files" type="file" data-batch-brochure-files multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"><span class="muted">PDF、Word 或图片，单文件不超过20MB。</span></div></div></div></div>';
+    }
+    function batchBrochureAttachmentNames(draft) {
+      var names = Array.isArray(draft.attachments) ? draft.attachments.map(function (item) { return typeof item === "string" ? item : item.name; }) : [];
+      if (!Array.isArray(draft.attachments)) {
+        for (var i = 0; i < Number(draft.attachments || 0); i += 1) names.push(i === 0 ? "2026考级报名材料清单.pdf" : "考级报名须知.docx");
+      }
+      return names;
+    }
+    function batchBrochureAttachmentsHtml(draft, editable) {
+      var names = batchBrochureAttachmentNames(draft);
+      return '<div class="attachment-list">' + (names.length ? names.map(function (name, index) { return '<div class="attachment-item"><span>' + escapeHtml(name) + '</span><span class="page-actions"><button type="button" class="btn link" data-toast="已打开附件预览：' + escapeHtml(name) + '">预览</button>' + (editable ? '<button type="button" class="btn link danger-text" data-batch-brochure-remove-attachment="' + index + '">移除</button>' : '') + '</span></div>'; }).join("") : '<span class="muted">无附件</span>') + '</div>';
+    }
+    function batchUpdateBrochureAttachments(root, files, removeIndex) {
+      if (!root || !root.__batchBrochureDraft) return;
+      var invalid = Array.from(files || []).some(function (file) { return !/\.(pdf|doc|docx|jpg|jpeg|png)$/i.test(file.name) || file.size > 20 * 1024 * 1024; });
+      if (invalid) { toast("附件仅支持PDF、Word或图片，单文件不超过20MB"); return; }
+      var draft = root.__batchBrochureDraft;
+      var attachments = Array.isArray(draft.attachments) ? draft.attachments.slice() : batchBrochureAttachmentNames(draft);
+      if (Number.isInteger(removeIndex) && removeIndex >= 0) attachments.splice(removeIndex, 1);
+      Array.from(files || []).forEach(function (file) { attachments.push(file.name); });
+      draft.attachments = attachments;
+      var list = root.querySelector("[data-batch-brochure-attachments]");
+      if (list) list.innerHTML = batchBrochureAttachmentsHtml(draft, true);
+    }
+    function batchSyncBrochureEditor(root, savedDraft) {
+      if (!root) return;
+      var template = batchBrochureTemplate(root);
+      var previous = root.__batchBrochureDraft;
+      if (!savedDraft && previous && template && previous.brochureId === template.id) return;
+      if (!savedDraft && previous && JSON.stringify(batchReadBrochureDraft(root)) !== root.__batchBrochureInitialSignature && !window.confirm("更换简章将替换当前批次的简章修改，是否继续？")) {
+        root.querySelectorAll("[data-batch-brochure-check]").forEach(function (input) { input.checked = input.value === previous.brochureId; });
+        return;
+      }
+      root.__batchBrochureDraft = savedDraft && (!template || savedDraft.brochureId === template.id) ? JSON.parse(JSON.stringify(savedDraft)) : batchBrochureDraftFromTemplate(template);
+      root.__batchBrochureInitialSignature = JSON.stringify(root.__batchBrochureDraft);
+      var panel = root.querySelector('[data-batch-page-panel="brochure"]');
+      if (panel) panel.innerHTML = batchBrochureEditorHtml(root.__batchBrochureDraft);
+    }
+    function batchBrochureValidationResult(root, action) {
+      var template = batchBrochureTemplate(root);
+      if (!template) return { ok: false, message: "请选择一份平台已发布的考级简章" };
+      var draft = batchReadBrochureDraft(root);
+      if (!draft || draft.brochureId !== template.id) return { ok: false, message: "请重新载入所选考级简章内容" };
+      if (!draft.title || draft.title.length > 100) return { ok: false, message: "请填写100字以内的简章标题" };
+      if (action !== "draft") {
+        var empty = BROCHURE_SECTION_DEFINITIONS.find(function (section) { return !String(draft.sectionContents[section[0]] || "").trim(); });
+        if (empty) return { ok: false, message: "请完善考级简章的“" + empty[0] + "”" };
+      }
+      return { ok: true };
     }
     function batchFilterBrochureOptions(sourceNode) {
       var picker = sourceNode && sourceNode.closest ? sourceNode.closest("[data-batch-brochure-picker]") : null;
@@ -8138,14 +8223,15 @@
       var empty = picker.querySelector("[data-batch-brochure-empty]");
       if (empty) empty.hidden = visibleCount > 0;
     }
-    function batchSyncBrochureSummary(sourceNode) {
+    function batchSyncBrochureSummary(sourceNode, savedDraft) {
       var picker = sourceNode && sourceNode.closest ? sourceNode.closest("[data-batch-brochure-picker]") : null;
       if (!picker && sourceNode && sourceNode.querySelector) picker = sourceNode.querySelector("[data-batch-brochure-picker]");
       if (!picker) return;
+      batchSyncBrochureEditor(picker.closest('[data-batch-page="create"]'), savedDraft);
       var selected = picker.querySelector("[data-batch-brochure-check]:checked");
       var summary = picker.querySelector("[data-batch-brochure-summary]");
       var selectedName = selected && selected.closest("[data-batch-brochure-option]") ? selected.closest("[data-batch-brochure-option]").getAttribute("data-brochure-name") : "";
-      if (summary) summary.textContent = selectedName ? "已选择： " + selectedName + "；批次将读取该简章的专业、级别和时间范围" : "请选择一份已发布简章";
+      if (summary) summary.textContent = selectedName ? "已选择： " + selectedName : "请选择一份平台已发布简章";
     }
     function batchDateTimeInputValue(value, defaultTime) {
       var raw = String(value || "").trim().replace(" ", "T");
@@ -8197,11 +8283,12 @@
         : "";
     }
     function batchCreateTabsHtml() {
-      return '<div class="tabs batch-page-tabs" role="tablist" aria-label="新增考级批次分组"><button class="tab active" type="button" data-batch-page-tab="basic" role="tab" aria-selected="true">基础信息</button><button class="tab" type="button" data-batch-page-tab="org" data-batch-mode-section="offline" role="tab" aria-selected="false">报名机构</button><button class="tab" type="button" data-batch-page-tab="site" data-batch-mode-section="offline" role="tab" aria-selected="false">考点与考场</button><button class="tab" type="button" data-batch-page-tab="execution" role="tab" aria-selected="false">执行专业与标准</button></div>';
+      return '<div class="tabs batch-page-tabs" role="tablist" aria-label="新增考级批次分组"><button class="tab active" type="button" data-batch-page-tab="basic" role="tab" aria-selected="true">基础信息</button><button class="tab" type="button" data-batch-page-tab="brochure" role="tab" aria-selected="false">考级简章</button><button class="tab" type="button" data-batch-page-tab="org" data-batch-mode-section="offline" role="tab" aria-selected="false">报名机构</button><button class="tab" type="button" data-batch-page-tab="site" data-batch-mode-section="offline" role="tab" aria-selected="false">考点与考场</button><button class="tab" type="button" data-batch-page-tab="execution" role="tab" aria-selected="false">执行专业与标准</button></div>';
     }
     function batchCreatePanelsHtml() {
       return [
         '<div class="batch-page-panel active" data-batch-page-panel="basic">' + batchCreateBasicHtml() + '</div>',
+        '<div class="batch-page-panel" data-batch-page-panel="brochure">' + batchBrochureEditorHtml(null) + '</div>',
         '<div class="batch-page-panel" data-batch-page-panel="org" data-batch-mode-panel="offline">' + batchSectionNoteHtml("报名机构", "线下批次管理二维码入口和报名主体，决定考生从哪个组织进入报名。", ['<span class="tag blue">二维码入口</span>', '<span class="tag">默认考点</span>', '<span class="tag green">组织锁定</span>']) + batchOrgPickerHtml() + '</div>',
         '<div class="batch-page-panel" data-batch-page-panel="site" data-batch-mode-panel="offline">' + batchSectionNoteHtml("考点与考场", "线下批次管理考试落地点和可用资源，排期阶段仅校验资源状态、时段和冲突。", ['<span class="tag blue">场地资源</span>', '<span class="tag">考点 / 考场</span>', '<span class="tag green">平台确认</span>']) + batchSitePickerHtml() + '</div>',
         '<div class="batch-page-panel" data-batch-page-panel="execution">' + batchExecutionPickerHtml() + '</div>'
@@ -8311,8 +8398,9 @@
       if (!name || !name.value.trim()) return { ok: false, message: "请填写批次名称" };
       if (!mode || !mode.value) return { ok: false, message: "请选择考试方式" };
       if (!batchSelectedOwnerUnit(root)) return { ok: false, message: "请选择本单位或下级单位作为所属单位" };
-      if (brochureChecks.length !== 1) return { ok: false, message: "请选择一份已发布简章" };
-      if (brochureChecks.some(function (item) { var option = item.closest("[data-batch-brochure-option]"); return item.disabled || !option || option.textContent.indexOf("已发布") === -1; })) return { ok: false, message: "批次只能关联已发布简章" };
+      if (brochureChecks.length !== 1 || brochureChecks[0].disabled) return { ok: false, message: "请选择一份平台已发布的考级简章" };
+      var brochureValidation = batchBrochureValidationResult(root, action);
+      if (!brochureValidation.ok) return brochureValidation;
       if (!enrollStart.date || !enrollStart.time || !enrollEnd.date || !enrollEnd.time) return { ok: false, message: "请完整填写报名日期和时间" };
       if ((enrollStart.date + enrollStart.time) > (enrollEnd.date + enrollEnd.time)) return { ok: false, message: "报名开始时间不能晚于报名截止时间" };
       var onlineSubmitDays = root.querySelector("[data-batch-online-submit-days]");
@@ -8366,7 +8454,6 @@
       var ownerUnit = batchSelectedOwnerUnit(root);
       if (!ownerUnit) return null;
       var mode = root.querySelector("[data-batch-exam-mode]");
-      var selectedBrochure = root.querySelector("[data-batch-brochure-check]:checked");
       var selectedSites = mode.value === "online" ? [] : Array.from(root.querySelectorAll('[data-batch-picker="site"] [data-batch-select]:checked')).map(function (item) { return item.closest("[data-batch-row]").querySelector("td:nth-child(2)").textContent.trim(); });
       var selectedExecution = root.querySelectorAll('[data-batch-picker="execution"] [data-batch-select]:checked').length;
       var id = root.getAttribute("data-batch-edit-id") || "batch-demo-draft-" + Date.now();
@@ -8383,7 +8470,12 @@
       batch.coverImage = batchGetCoverImage(root);
       batch.examMode = mode.value === "online" ? "线上考试" : "线下考试";
       batch.mode = batch.examMode;
-      batch.brochureName = selectedBrochure ? selectedBrochure.closest("[data-batch-brochure-option]").getAttribute("data-brochure-name") : "";
+      var brochureDraft = batchReadBrochureDraft(root);
+      if (!brochureDraft) return null;
+      batch.brochureId = brochureDraft.brochureId;
+      batch.brochureVersionId = brochureDraft.brochureVersionId;
+      batch.brochureName = brochureDraft.title;
+      batch.brochureSnapshot = brochureDraft;
       var enrollStart = batchDateTimeFieldValues(root, "enroll-start");
       var enrollEnd = batchDateTimeFieldValues(root, "enroll-end");
       batch.registrationStartDate = enrollStart.date;
@@ -8419,7 +8511,8 @@
     function hydrateBatchCreateForm() {
       var root = batchCreateRoot();
       var batch = root && batchById(root.getAttribute("data-batch-edit-id"));
-      if (!root || !batch) return;
+      if (!root) return;
+      if (!batch) { batchSyncBrochureSummary(root); return; }
       var mode = root.querySelector("[data-batch-exam-mode]");
       if (mode) mode.value = batch.examMode === "线上考试" ? "online" : "offline";
       var isOnline = mode && mode.value === "online";
@@ -8445,9 +8538,9 @@
       if (onlineSubmitDays && batch.onlineSubmitWindowDays) onlineSubmitDays.value = batch.onlineSubmitWindowDays;
       batchSyncCoverImagePreview(root, batch.coverImage || null);
       var brochureChecks = Array.from(root.querySelectorAll("[data-batch-brochure-check]"));
-      var selectedBrochure = brochureChecks.find(function (item) { var option = item.closest("[data-batch-brochure-option]"); return option && batch.brochureName.indexOf(option.getAttribute("data-brochure-name") || "") > -1; });
-      if (selectedBrochure) selectedBrochure.checked = true;
-      batchSyncBrochureSummary(root);
+      var selectedBrochure = brochureChecks.find(function (item) { var option = item.closest("[data-batch-brochure-option]"); return batch.brochureId ? item.value === batch.brochureId : option && batch.brochureName === option.getAttribute("data-brochure-name"); });
+      brochureChecks.forEach(function (input) { input.checked = input === selectedBrochure; });
+      batchSyncBrochureSummary(root, batch.brochureSnapshot);
       batchHydrateOrgFeeConfig(root, batch);
     }
     function saveBatchFormAction(action) {
@@ -11614,6 +11707,10 @@
       openDrawer("batch-brochure-detail");
     }
     function batchBrochureDetailBodyHtml(batch) {
+      if (batch.brochureSnapshot) {
+        var snapshot = batch.brochureSnapshot;
+        return '<div class="info-banner"><strong>' + escapeHtml(batch.name) + '</strong><br>简章来源：' + escapeHtml(snapshot.sourceOrg + " · " + snapshot.brochureVersionId) + '</div><h2>' + escapeHtml(snapshot.title) + '</h2>' + BROCHURE_SECTION_DEFINITIONS.map(function (section) { return '<section class="brochure-preview-section"><h3 class="brochure-preview-section-title">' + escapeHtml(section[0]) + '</h3><p class="brochure-preview-section-content">' + escapeHtml(snapshot.sectionContents[section[0]] || "") + '</p></section>'; }).join("") + '<h3 class="table-title">附件</h3>' + batchBrochureAttachmentsHtml(snapshot);
+      }
       return '<div class="info-banner"><strong>' + escapeHtml(batch.brochureName) + '</strong><br><span class="muted">已绑定到批次 ' + escapeHtml(batch.id) + '</span></div><dl class="kv"><dt>简章状态</dt><dd><span class="tag green">已发布</span></dd><dt>关联规划</dt><dd>' + escapeHtml(batch.planCode) + '</dd><dt>所属单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名窗口</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>批次约束</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">简章在本批次中的作用</h2><span class="tag blue">发布快照</span></div><p class="muted" style="padding:0 16px 16px;margin:0;line-height:1.7">批次发布时锁定简章内容、报名窗口、考试时间和开考范围；后续简章版本更新不会覆盖已发布批次。</p></div>';
     }
     function renderBatchManagementFilterOptions() {
@@ -13502,6 +13599,7 @@
         sub = "platform-brochures";
       }
       if (view === "info" && sub === "brochures") sub = "platform-brochures";
+      if (view === "info" && ["org-brochures", "brochure-review"].indexOf(sub) > -1) sub = "platform-brochures";
       if (view === "plans" && sub === "guides") {
         view = "info";
         sub = "list";
@@ -18507,6 +18605,11 @@
         return;
       }
       if (event.target.closest("[data-batch-save-draft]")) { saveBatchFormAction("draft"); return; }
+      var batchBrochureAttachmentRemove = event.target.closest("[data-batch-brochure-remove-attachment]");
+      if (batchBrochureAttachmentRemove) {
+        batchUpdateBrochureAttachments(batchBrochureAttachmentRemove.closest('[data-batch-page="create"]'), [], Number(batchBrochureAttachmentRemove.getAttribute("data-batch-brochure-remove-attachment")));
+        return;
+      }
       if (event.target.closest("[data-batch-submit-review]")) { saveBatchFormAction("submit-review"); return; }
       if (event.target.closest("[data-batch-publish]")) { saveBatchFormAction("publish"); return; }
       var annualEdit = event.target.closest("[data-annual-edit]");
@@ -20435,6 +20538,12 @@
         batchSyncBrochureSummary(changedBatchBrochureCheck);
         return;
       }
+      var batchBrochureFiles = event.target.closest("[data-batch-brochure-files]");
+      if (batchBrochureFiles) {
+        batchUpdateBrochureAttachments(batchBrochureFiles.closest('[data-batch-page="create"]'), batchBrochureFiles.files);
+        batchBrochureFiles.value = "";
+        return;
+      }
       var batchCoverInput = event.target.closest("[data-batch-cover-input]");
       if (batchCoverInput) {
         var batchCoverFile = batchCoverInput.files && batchCoverInput.files[0];
@@ -21312,7 +21421,7 @@
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var isPlatformScope = scope === "platform";
       var title = isPlatformScope ? "平台考级简章" : "机构考级简章";
-      var note = isPlatformScope ? "平台统一发布，作为承办单位和培训机构新建简章时的只读模板来源。" : "承办单位创建并提交审核；审核通过并由平台正式发布后，才可被本机构新批次关联。";
+      var note = isPlatformScope ? "平台统一发布，供新建批次计划关联；批次内可编辑简章内容，考级对象、教材与级别、评审标准、证书奖励、成绩公布保持只读。" : "历史机构简章归档，本期统一在批次计划中维护简章内容。";
       var createButton = isPlatformScope
         ? (role === "platform" ? '<button class="btn primary" data-drawer="syllabus-create" data-brochure-create>新增平台简章</button>' : "")
         : (role !== "platform" ? '<button class="btn primary" data-drawer="syllabus-create" data-brochure-create>新增机构简章</button>' : "");
