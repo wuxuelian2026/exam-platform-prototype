@@ -1131,6 +1131,11 @@
     .overview-alert span { color: var(--sub); font-size: 12px; }
     .overview-alert .btn { padding: 0; white-space: nowrap; }
     .dashboard-todo-shell { display: grid; gap: 12px; }
+    .dashboard-review-shortcuts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 4px 0; }
+    .dashboard-review-shortcuts strong { color: var(--text); font-size: 13px; }
+    .dashboard-review-shortcuts .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; white-space: nowrap; }
+    .dashboard-review-count { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; padding: 0 6px; border-radius: 4px; background: #fff1e7; color: #b54708; font-size: 12px; font-weight: 700; line-height: 20px; font-variant-numeric: tabular-nums; }
+    .dashboard-review-count.is-empty { background: #f2f4f7; color: var(--muted); }
     .dashboard-todo-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
     .dashboard-todo-summary .metric { min-width: 0; }
     .dashboard-todo-summary .metric strong { font-variant-numeric: tabular-nums; }
@@ -10533,6 +10538,30 @@
       var count = root.querySelector("[data-dashboard-todo-count]");
       if (count) count.textContent = rows.length + " 条";
     }
+    function dashboardReviewPendingCount(view, sub) {
+      var route = authRouteKey(view, sub);
+      if (route === "plans/batch-review") return BATCH_REVIEW_DEMO.filter(function (item) { return item.reviewStatus === "待审核"; }).length;
+      var selectors = {
+        "system/unit-review": '[data-page="org"] [data-subview="unit-review"] [data-unit-review-row][data-unit-review-status="待审核"]',
+        "org/site-review": '[data-page="org"] [data-subview="site-review"] [data-site-review-row][data-site-review-status-value="待审核"]',
+        "info/review": '[data-page="info"] [data-subview="review"] [data-info-review-row][data-info-review-status="待审核"]'
+      };
+      return selectors[route] ? document.querySelectorAll(selectors[route]).length : 0;
+    }
+    function dashboardReviewShortcutsHtml() {
+      var entries = [
+        { label: "单位审核", view: "system", sub: "unit-review" },
+        { label: "考点审核", view: "org", sub: "site-review" },
+        { label: "计划审核", view: "plans", sub: "batch-review" },
+        { label: "信息审核", view: "info", sub: "review" }
+      ].filter(function (entry) { return authCanAccessRoute(entry.view, entry.sub); });
+      if (!entries.length) return "";
+      return '<nav class="dashboard-review-shortcuts" aria-label="审核入口"><strong>审核入口</strong>' + entries.map(function (entry) {
+        var route = authRouteKey(entry.view, entry.sub);
+        var count = dashboardReviewPendingCount(entry.view, entry.sub);
+        return '<button class="btn" type="button" data-dashboard-review-entry data-jump="' + route + '"><span>' + entry.label + '</span><span class="dashboard-review-count' + (count ? '' : ' is-empty') + '" data-dashboard-review-count="' + route + '" aria-label="待审核 ' + count + ' 项">' + count + '</span></button>';
+      }).join("") + '</nav>';
+    }
     function renderDashboardWorkbench(page) {
       var root = page && page.querySelector('[data-subview="workbench"]');
       if (!root) return;
@@ -10544,7 +10573,7 @@
       var urgent = pending.filter(function (item) { return item.meta.priority === "紧急"; }).length;
       var todoTotal = pending.reduce(function (sum, item) { return sum + (Number(item.meta.todoCount) || 0); }, 0);
       var roleLabel = role === "platform" ? "平台全量批次" : role === "organizer" ? "本承办单位批次" : "本机构关联批次";
-      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all"><div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div><div class="card metric"><span>紧急批次</span><strong>' + urgent + '</strong><span class="muted">需要优先处理</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色责任范围汇总下一步操作，已完成批次保留查看入口。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>优先级</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
+      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div><div class="card metric"><span>紧急批次</span><strong>' + urgent + '</strong><span class="muted">需要优先处理</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色责任范围汇总下一步操作，已完成批次保留查看入口。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>优先级</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
       renderDashboardTodoRows(root.querySelector(".dashboard-todo-shell"));
     }
     var ANALYTICS_STAT_LEVELS = LEVEL_DICTIONARY.slice();
