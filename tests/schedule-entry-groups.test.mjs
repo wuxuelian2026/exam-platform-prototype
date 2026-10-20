@@ -155,7 +155,7 @@ test("roster follows group and member order while retaining each candidate's own
 test("demo fixture matches the customer's ten-person example without altering other batches", () => {
   const f = fixture();
   const demo = f.c.scheduleWizardCandidateSource({ id: "batch-demo-05", site: "测试考点" });
-  const china = demo.filter(item => item.major === "中国舞");
+  const china = demo.filter(item => item.major === "中国舞" && item.organization === "光谷少儿艺术中心");
   assert.equal(china.length, 10);
   assert.deepEqual(["2级", "3级", "5级"].map(level => china.filter(item => item.level === level).length), [3, 4, 3]);
   assert.equal(f.c.scheduleWizardCandidateSource({ id: "other" }).length, 3);

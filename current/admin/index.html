@@ -23449,6 +23449,17 @@
           });
         });
       });
+      if (batch.id === "batch-demo-05") {
+        var danceSession = rows.find(function (row) { return row.site === batch.site && row.room === "A201" && row.date === dates[0] && row.time === "14:00-17:00"; });
+        if (danceSession) {
+          var hankouCandidates = scheduleWizardCandidateSource(batch).filter(function (candidate) { return candidate.organization === "汉口美育培训学校" && candidate.id.indexOf(batch.id + "-HK-DANCE-") === 0; });
+          danceSession.candidateIds = danceSession.candidateIds.concat(hankouCandidates.map(function (candidate) { return candidate.id; }));
+          danceSession.majors = ["中国舞", "国际标准舞", "芭蕾舞"];
+          danceSession.major = danceSession.majors.join("、");
+          danceSession.assigned = danceSession.candidateIds.length;
+          danceSession.capacity = 40;
+        }
+      }
       return rows;
     }
     function scheduleArrangeSessionRows(batch, entryMode) {
@@ -23468,6 +23479,12 @@
         candidates[1] = Object.assign({}, candidates[1], { level: "2级", site: batch.site, name: "舞蹈考生01" });
         for (var index = 2; index <= 10; index += 1) candidates.push({ id: batch.id + "-D" + index, code: "DANCE" + String(index).padStart(3, "0"), name: "舞蹈考生" + String(index).padStart(2, "0"), organization: "光谷少儿艺术中心", site: batch.site, subjectCode: "02001", major: "中国舞", level: index <= 3 ? "2级" : index <= 7 ? "3级" : "5级" });
         candidates.push({ id: batch.id + "-BALLET", code: "BALLET001", name: "芭蕾考生01", organization: "光谷少儿艺术中心", site: batch.site, subjectCode: "02003", major: "芭蕾舞", level: "3级" });
+        [{ code: "02001", name: "中国舞" }, { code: "02002", name: "国际标准舞" }, { code: "02003", name: "芭蕾舞" }].forEach(function (subject, subjectIndex) {
+          for (var number = 1; number <= 10; number += 1) {
+            var serial = String(subjectIndex * 10 + number).padStart(3, "0");
+            candidates.push({ id: batch.id + "-HK-DANCE-" + serial, code: "HKDANCE" + serial, name: "汉口舞蹈考生" + serial, organization: "汉口美育培训学校", site: batch.site, subjectCode: subject.code, major: subject.name, level: number <= 3 ? "2级" : number <= 7 ? "3级" : "5级" });
+          }
+        });
       }
       return candidates;
     }
