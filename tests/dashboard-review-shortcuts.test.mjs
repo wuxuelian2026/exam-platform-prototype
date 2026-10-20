@@ -149,6 +149,14 @@ test("all roles render three metrics and eight headers without urgency indicator
   assert.match(html, /\.dashboard-todo-summary \{[^}]*repeat\(3,/);
 });
 
+test("workbench exposes the existing overview tab and panel", () => {
+  const workbench = html.match(/<section class="page active" data-page="dashboard">[\s\S]*?<\/section>/)?.[0] || "";
+  assert.match(workbench, /data-sub="overview"[^>]*>总览/);
+  assert.match(workbench, /data-subview="overview"/);
+  assert.match(workbench, /data-subview="workbench"/);
+  assert.match(workbench, /data-subview="batch-analysis"/);
+});
+
 test("batch todo rows and empty placeholder align to eight columns and retain processing links", () => {
   const { context } = fixture();
   context.escapeHtml = value => String(value ?? "");

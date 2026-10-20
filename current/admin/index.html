@@ -2362,7 +2362,7 @@
       <main class="content">
         <section class="page active" data-page="dashboard">
           <div class="page-head"><div><h1 class="page-title">工作台</h1></div><div class="page-actions"><a class="btn" href="exam-dashboard-cockpit.html" target="_blank">进入大屏驾驶舱</a></div></div>
-          <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
+          <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="overview" role="tab" aria-selected="false">总览</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
           <div class="subview active" data-subview="workbench">
             <div class="grid-4">
               <div class="card metric" data-jump="batch-workbench/enroll">报名人数<strong>2,486</strong><span class="muted">当前报名中批次</span></div>
@@ -2379,6 +2379,7 @@
               </tbody></table></div>
             </div>
           </div>
+          <div class="subview" data-subview="overview"></div>
           <div class="subview" data-subview="batch-analysis"></div>
         </section>
 
@@ -17988,6 +17989,82 @@
     function messageSubview(name) {
       return document.querySelector('[data-page="system"] [data-subview="' + name + '"]');
     }
+    function completeMessageTemplateCatalog() {
+      var root = messageSubview("message-templates");
+      if (!root) return;
+      var tbody = root.querySelector("tbody"), original = tbody.querySelector("tr");
+      var catalog = [
+        ["UNIT-REVIEW", "单位审核待办", "单位审核", "审核人员", "单位【{unitName}】已提交审核，请处理。"],
+        ["UNIT-REJECT", "单位审核驳回通知", "单位审核", "单位管理员", "单位【{unitName}】审核未通过，原因：{reason}。"],
+        ["SITE-REVIEW", "考点审核待办", "考点审核", "审核人员", "考点【{siteName}】已提交审核，请处理。"],
+        ["SITE-APPROVE", "考点审核通过通知", "考点审核", "申请单位管理员", "考点【{siteName}】审核已通过。"],
+        ["SITE-REJECT", "考点审核驳回通知", "考点审核", "申请单位管理员", "考点【{siteName}】审核未通过，原因：{reason}。"],
+        ["JUDGE-CERT-REVIEW", "考官证书审核待办", "考官审核", "平台审核人员", "考官【{examinerName}】提交了证书新增或变更，请审核证书。"],
+        ["JUDGE-CERT-APPROVE", "考官证书审核通过通知", "考官审核", "考官", "您的证书审核已通过，请查看证书详情。"],
+        ["JUDGE-CERT-REJECT", "考官证书审核驳回通知", "考官审核", "考官", "您的证书审核未通过，原因：{reason}。"],
+        ["JUDGE-CERT-WITHDRAW", "考官证书审核撤销通知", "考官审核", "考官及审核人员", "考官【{examinerName}】的证书审核已撤销。"],
+        ["JUDGE-CERT-EXPIRY", "考官证书到期提醒", "考官审核", "考官", "您的证书将于【{date}】到期，请及时维护。"],
+        ["GUIDE-REVIEW", "考级简章审核待办", "简章审核", "审核人员", "考级简章【{guideName}】已提交审核。"],
+        ["GUIDE-APPROVE", "考级简章审核通过通知", "简章审核", "发布单位管理员", "考级简章【{guideName}】审核已通过。"],
+        ["GUIDE-REJECT", "考级简章审核驳回通知", "简章审核", "发布单位管理员", "考级简章【{guideName}】审核未通过，原因：{reason}。"],
+        ["BATCH-REVIEW", "批次计划审核待办", "批次审核", "审核人员", "批次【{batchName}】已提交审核。"],
+        ["BATCH-APPROVE", "批次计划审核通过通知", "批次审核", "批次所属单位管理员", "批次【{batchName}】审核已通过。"],
+        ["BATCH-REJECT", "批次计划审核驳回通知", "批次审核", "批次所属单位管理员", "批次【{batchName}】审核未通过，原因：{reason}。"],
+        ["BATCH-PUBLISH", "批次计划发布通知", "批次审核", "可报名机构管理员", "批次【{batchName}】已发布，可查看报名安排。"],
+        ["REGISTRATION-SUCCESS", "考级报名成功通知", "报名缴费", "考生", "您已报名【{batchName}】，请查看报名详情。"],
+        ["PAYMENT-REMIND", "考级缴费截止提醒", "报名缴费", "待缴费考生", "【{batchName}】缴费截止为【{date} {time}】，请及时缴费。"],
+        ["PAYMENT-SUCCESS", "考级缴费成功通知", "报名缴费", "考生", "【{batchName}】缴费已完成，请查看报名状态。"],
+        ["REGISTRATION-CANCEL", "考级报名取消通知", "报名缴费", "考生", "【{batchName}】报名已取消，原因：{reason}。"],
+        ["REFUND-REQUEST", "考级退款处理待办", "报名缴费", "收退款责任单位", "考生【{studentName}】申请退款，请查看【{batchName}】报名记录。"],
+        ["REFUND-SUCCESS", "考级退款完成通知", "报名缴费", "考生", "【{batchName}】退款已完成，请核对退款结果。"],
+        ["SCHEDULE-REVIEW", "排期复核待办", "排期编排", "排期复核人员", "【{batchName}】排期已提交，请复核。"],
+        ["SCHEDULE-PUBLISH", "排期发布通知", "排期编排", "报名机构管理员", "【{batchName}】排期已发布，请查看场次安排。"],
+        ["TICKET-READY", "准考证可查看通知", "排期编排", "考生", "【{batchName}】准考证已生成，请查看考试安排。"],
+        ["TICKET-CHANGE", "准考证变更通知", "排期编排", "受影响考生", "【{batchName}】考试安排已变更，请重新查看准考证。"],
+        ["EXAM-REMIND", "线下考试提醒", "排期编排", "考生及考官", "【{batchName}】考试时间为【{date} {time}】，请按安排参加。"],
+        ["ONLINE-OPEN", "线上考试开放通知", "线上考试", "考生", "【{batchName}】线上考试已开放，请进入我的报名提交考试视频。"],
+        ["ONLINE-DEADLINE", "线上视频提交截止提醒", "线上考试", "尚未提交视频考生", "【{batchName}】视频提交将于【{date} {time}】截止。"],
+        ["ONLINE-SUBMITTED", "考试视频提交成功通知", "线上考试", "考生", "【{batchName}】考试视频提交成功，请等待评分结果。"],
+        ["DISPATCH-CHANGE", "考官派遣变更通知", "考官派遣", "受影响考官", "【{batchName}】派遣安排已变更，请查看最新任务。"],
+        ["DISPATCH-CANCEL", "考官派遣撤销通知", "考官派遣", "受影响考官", "【{batchName}】派遣已撤销，原因：{reason}。"],
+        ["ONLINE-ASSIGN", "线上评分任务指派通知", "评分录入", "被指派考官", "您收到【{batchName}】评分任务，请于【{date} {time}】前完成。"],
+        ["SCORE-DEADLINE", "评分截止提醒", "评分录入", "存在未评分任务的考官", "【{batchName}】尚有【{count}】项待评分，请于【{date} {time}】前完成。"],
+        ["SCORE-SUBMITTED", "评分提交完成通知", "评分录入", "成绩管理人员", "【{batchName}】评分已提交，请检查成绩发布条件。"],
+        ["SCORE-CORRECTION", "成绩更正通知", "成绩证书", "受影响考生", "【{batchName}】已发布成绩发生更正，请查看最新结果。"],
+        ["CERT-REISSUE", "证书补发换发通知", "成绩证书", "考生", "您的证书已补发或换发，请查看最新有效证书。"],
+        ["CERT-INVALID", "证书失效通知", "成绩证书", "考生", "您的证书已失效，原因：{reason}，请查看详情。"],
+        ["TRAINING-SUCCESS", "培训报名成功通知", "培训报名", "培训报名人", "您已报名【{activityName}】，请查看培训报名详情。"],
+        ["TRAINING-PAYMENT", "培训缴费完成通知", "培训报名", "培训报名人", "【{activityName}】缴费已完成。"],
+        ["TRAINING-CANCEL", "培训报名取消通知", "培训报名", "培训报名人", "【{activityName}】报名已取消，原因：{reason}。"],
+        ["TRAINING-REFUND", "培训退款完成通知", "培训报名", "培训报名人", "【{activityName}】退款已完成，请查看报名详情。"],
+        ["LOGIN-OTP", "登录验证码", "系统管理", "登录用户", "您的登录验证码为【{code}】，有效期【{minutes}】分钟，请勿泄露。", "短信"],
+        ["PASSWORD-OTP", "找回密码验证码", "系统管理", "找回密码用户", "您的身份校验验证码为【{code}】，有效期【{minutes}】分钟。", "短信"],
+        ["PHONE-OTP", "手机号变更验证码", "系统管理", "修改手机号用户", "您的手机号变更验证码为【{code}】，有效期【{minutes}】分钟。", "短信"],
+        ["ACCOUNT-CREATED", "机构账号开通通知", "系统管理", "新账号用户", "您的机构账号已开通，请通过登录页完成身份验证。"],
+        ["INFORMATION-PUBLISH", "信息发布通知", "信息发布", "发布时选定的接收对象", "新信息【{title}】已发布，请查看详情。"]
+      ];
+      catalog.forEach(function (item) {
+        var code = "TPL-" + item[0];
+        if (Array.from(tbody.rows).some(function (row) { return row.cells[0].textContent.trim() === code; })) return;
+        var row = original.cloneNode(true), channel = item[5] || "站内消息";
+        row.dataset.templateKeyword = item[1] + " " + code + " " + item[3];
+        row.dataset.templateRecipient = item[3];
+        row.dataset.templateScene = item[2]; row.dataset.templateChannel = channel; row.dataset.templateStatus = "停用";
+        row.cells[0].textContent = code; row.cells[1].innerHTML = '<strong>' + escapeHtml(item[1]) + '</strong><div class="muted">接收对象：' + escapeHtml(item[3]) + '</div>';
+        row.cells[2].textContent = item[2]; row.cells[3].textContent = channel;
+        row.cells[4].textContent = item[1]; row.cells[5].textContent = item[4];
+        row.cells[6].innerHTML = '<span class="tag red" data-template-status-label>停用</span>';
+        row.cells[7].textContent = "2026-10-14";
+        row.querySelector("[data-message-template-toggle]").textContent = "启用";
+        tbody.appendChild(row);
+      });
+      var filter = root.querySelector("[data-message-template-filter-scene]");
+      catalog.forEach(function (item) { if (!Array.from(filter.options).some(function (option) { return option.value === item[2]; })) filter.add(new Option(item[2], item[2])); });
+      root.querySelector(".message-module-banner span").textContent = "列举考级及培训报名全流程通知场景；新增预置模板默认停用，按实际通知方案配置渠道后启用。";
+      var title = root.querySelector(".table-title");
+      title.textContent = "消息模板列表（" + tbody.rows.length + "）";
+    }
+    completeMessageTemplateCatalog();
     function filterMessageTemplates(reset) {
       var root = messageSubview("message-templates");
       if (!root) return;
@@ -18080,7 +18157,13 @@
       var textarea = drawerBody.querySelector("textarea");
       if (inputs[0]) inputs[0].setAttribute("data-message-template-code", "");
       if (inputs[1]) inputs[1].setAttribute("data-message-template-name", "");
-      if (selects[0]) selects[0].setAttribute("data-message-template-scene", "");
+      if (selects[0]) {
+        selects[0].setAttribute("data-message-template-scene", "");
+        messageSubview("message-templates").querySelectorAll("[data-message-template-filter-scene] option").forEach(function (option) {
+          if (option.textContent === "全部场景") return;
+          if (!Array.from(selects[0].options).some(function (existing) { return existing.value === option.value; })) selects[0].add(new Option(option.textContent, option.value));
+        });
+      }
       if (textarea) textarea.setAttribute("data-message-template-content", "");
       if (inputs[2]) inputs[2].setAttribute("data-message-template-title", "");
       drawerBody.querySelectorAll('input[type="checkbox"]').forEach(function (item) { if (item.parentElement && /站内消息|短信/.test(item.parentElement.textContent)) item.setAttribute("data-message-template-channel", ""); });
@@ -18088,7 +18171,7 @@
       if (!row) return;
       var cells = row.cells;
       if (inputs[0]) inputs[0].value = cells[0].textContent.trim();
-      if (inputs[1]) inputs[1].value = cells[1].textContent.trim();
+      if (inputs[1]) inputs[1].value = (cells[1].querySelector("strong") || cells[1]).textContent.trim();
       if (selects[0]) selects[0].value = row.dataset.templateScene || cells[2].textContent.trim();
       if (inputs[2]) inputs[2].value = cells[4].textContent.trim();
       if (textarea) textarea.value = cells[5].textContent.trim();
@@ -18112,6 +18195,7 @@
       if (row) {
         row.cells[0].textContent = fields.code.value.trim();
         row.cells[1].innerHTML = "<strong>" + escapeHtml(fields.name.value.trim()) + "</strong>";
+        if (row.dataset.templateRecipient) row.cells[1].innerHTML += '<div class="muted">接收对象：' + escapeHtml(row.dataset.templateRecipient) + '</div>';
         row.cells[2].textContent = fields.scene.value;
         row.cells[3].textContent = channelText;
         row.cells[4].textContent = fields.title.value.trim();
@@ -23371,6 +23455,68 @@
     };
     DRAWER["department-create"].foot = '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-department-save>保存部门</button>';
     DRAWER["role-permission"] = { title: "角色权限配置", wide: true, body: function () { var row = window.__activeRoleRow; var cells = row ? row.cells : []; var name = cells[1] ? cells[1].textContent.trim() : "当前角色"; var scope = cells[4] ? cells[4].textContent.trim() : "本单位"; return '<div class="info-banner"><strong>' + escapeHtml(name) + '</strong><br>菜单权限、按钮权限和数据范围统一在此维护；权限保存后对新请求立即生效。</div><div class="field-row-2"><div class="field"><label>角色名称</label><input class="input" value="' + escapeHtml(name) + '" readonly></div><div class="field"><label>默认数据范围 *</label><select class="select" data-role-permission-scope><option>' + escapeHtml(scope) + '</option><option>全平台</option><option>本单位及下级机构</option><option>本机构</option><option>本人</option></select></div></div><div class="drawer-section"><h3 class="drawer-section-title">菜单权限</h3><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 工作台</label><label class="level-check"><input type="checkbox" checked> 考级业务</label><label class="level-check"><input type="checkbox" checked> 计划发布</label><label class="level-check"><input type="checkbox" checked> 批次工作台</label><label class="level-check"><input type="checkbox"> 共享中台</label></div></div><div class="drawer-section"><h3 class="drawer-section-title">按钮权限</h3><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 查询</label><label class="level-check"><input type="checkbox" checked> 新增</label><label class="level-check"><input type="checkbox" checked> 编辑</label><label class="level-check"><input type="checkbox"> 删除</label><label class="level-check"><input type="checkbox"> 审核</label><label class="level-check"><input type="checkbox" checked> 导出</label></div></div>'; }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-role-permission-save>保存权限配置</button>' };
+
+    var roleTreeStorageKey = "hbyx-role-permission-tree-v1";
+    function roleTreeSync(tree) {
+      Array.from(tree.querySelectorAll("li")).reverse().forEach(function (node) {
+        var own = node.querySelector("input[data-role-tree-check]");
+        var children = node.querySelectorAll("ul input[data-role-tree-check]");
+        if (!children.length) return;
+        own.checked = Array.from(children).every(function (input) { return input.checked; });
+        own.indeterminate = !own.checked && Array.from(children).some(function (input) { return input.checked || input.indeterminate; });
+      });
+    }
+    DRAWER["role-permission"].body = function () {
+      var row = window.__activeRoleRow, cells = row ? row.cells : [];
+      var code = cells[0] ? cells[0].textContent.trim() : "NEW";
+      var name = cells[1] ? cells[1].textContent.trim() : "当前角色";
+      var scope = cells[4] ? cells[4].textContent.trim() : "本机构";
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(roleTreeStorageKey) || "{}")[code] || {}; } catch (error) {}
+      function check(id, label, kind, children) {
+        var selected = saved.permissions ? saved.permissions.indexOf(id) >= 0 : code === "PLATFORM_ADMIN";
+        return '<li style="list-style:none;margin:6px 0"><label style="display:flex;align-items:center;gap:8px;min-height:30px"><input type="checkbox" data-role-tree-check="' + escapeHtml(id) + '"' + (selected ? ' checked' : '') + '><span>' + escapeHtml(label) + '</span><span class="tag">' + kind + '</span></label>' + (children ? '<ul style="margin:0 0 0 18px;padding-left:18px;border-left:1px solid #dce3eb">' + children + '</ul>' : '') + '</li>';
+      }
+      var groups = {}, seen = {};
+      document.querySelectorAll(".menu-item[data-jump]").forEach(function (item) {
+        var route = item.getAttribute("data-jump");
+        if (!route || seen[route] || item.hidden) return;
+        seen[route] = true;
+        var group = route.split("/")[0];
+        var parts = route.split("/");
+        var pageRoot = document.querySelector('[data-page="' + parts[0] + '"]');
+        var page = pageRoot && parts[1] ? pageRoot.querySelector('[data-subview="' + parts[1] + '"]') : pageRoot;
+        var labels = ["查询"], actions = "";
+        if (page) page.querySelectorAll("button").forEach(function (button) {
+          var label = button.textContent.trim();
+          if (label && label.length <= 18 && labels.indexOf(label) < 0) labels.push(label);
+        });
+        labels.forEach(function (label) { actions += check(route + ":" + label, label, "按钮", ""); });
+        var label = item.querySelector(".menu-label");
+        (groups[group] || (groups[group] = [])).push(check(route, label ? label.textContent.trim() : item.textContent.trim(), "页面", actions));
+      });
+      var titles = {dashboard:"工作台",org:"考级资源库",plans:"计划发布",batches:"批次工作台",config:"基础配置",system:"系统管理"};
+      return '<div class="field-row-2"><div class="field"><label>角色名称</label><input class="input" readonly value="' + escapeHtml(name) + '"></div><div class="field"><label>默认数据范围</label><select class="select" data-role-permission-scope>' + ["全平台","本单位及下级机构","本机构","本人"].map(function (value) { return '<option' + (value === (saved.scope || scope) ? ' selected' : '') + '>' + value + '</option>'; }).join("") + '</select></div></div><div class="drawer-section"><h3 class="drawer-section-title">菜单 / 页面 / 按钮权限</h3><ul data-role-permission-tree style="padding:0;margin:0">' + Object.keys(groups).map(function (group) { return check("menu:" + group, titles[group] || group, "菜单", groups[group].join("")); }).join("") + '</ul></div>';
+    };
+    document.addEventListener("change", function (event) {
+      var input = event.target.closest("[data-role-tree-check]");
+      if (!input) return;
+      input.closest("li").querySelectorAll("ul input[data-role-tree-check]").forEach(function (child) { child.checked = input.checked; child.indeterminate = false; });
+      roleTreeSync(input.closest("[data-role-permission-tree]"));
+    });
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest("[data-role-permission-save]")) return;
+      var tree = document.querySelector("[data-role-permission-tree]");
+      if (!tree) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      var row = window.__activeRoleRow, stored = {};
+      try { stored = JSON.parse(localStorage.getItem(roleTreeStorageKey) || "{}"); } catch (error) {}
+      var scope = document.querySelector("[data-role-permission-scope]").value;
+      stored[row.cells[0].textContent.trim()] = {scope:scope, permissions:Array.from(tree.querySelectorAll("input:checked")).map(function (input) { return input.getAttribute("data-role-tree-check"); })};
+      localStorage.setItem(roleTreeStorageKey, JSON.stringify(stored));
+      row.cells[4].textContent = scope;
+      toast("角色权限已保存（原型本地配置）"); closeDrawer();
+    }, true);
 
     function scheduleRoleCanWrite(role, phase) {
       return phase === "编排中" && ["platform", "organizer", "training"].indexOf(role) > -1;
