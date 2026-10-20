@@ -141,8 +141,8 @@
     .switch-control input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .2); transition: .16s; }
     .switch-control input:checked { background: var(--primary); }
     .switch-control input:checked::after { transform: translateX(14px); }
-    .course-navigation-settings { justify-content: flex-end; margin-bottom: 14px; }
-    .course-navigation-settings input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+    .course-navigation-settings, .training-navigation-settings { justify-content: flex-end; margin-bottom: 14px; }
+    .course-navigation-settings input:focus-visible, .training-navigation-settings input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
     .btn { height: 32px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); color: var(--text); cursor: pointer; }
     .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
     .btn.success { background: var(--success); border-color: var(--success); color: #fff; }
@@ -4005,6 +4005,7 @@
           <div class="page-head"><div><h1 class="page-title" data-page-heading>培训活动发布</h1></div><span class="tag blue">独立培训业务</span></div>
           <div class="tabs" data-tabs role="tablist" aria-label="师资培训视图"><button class="tab active" type="button" data-sub="publish" role="tab" aria-selected="true">培训活动发布</button><button class="tab" type="button" data-sub="enrollments" role="tab" aria-selected="false">培训报名管理</button></div>
           <div class="subview active" data-subview="publish">
+            <div class="page-actions training-navigation-settings" data-platform-only><label class="switch-control"><span>考生小程序底部“培训”导航</span><input type="checkbox" role="switch" aria-label="显示考生小程序底部培训导航" data-training-navigation-switch checked><span data-training-navigation-status>显示</span></label></div>
             <div class="info-banner"><strong>业务口径：</strong>培训方式固定为线下；平台负责活动发布、编辑和截止报名，承办单位与培训机构按授权范围查看已发布活动。</div>
             <div class="grid-4"><div class="card metric">活动总数<strong data-training-activity-count>3</strong><span class="muted">当前可见范围</span></div><div class="card metric">报名中<strong>2</strong><span class="muted">开放报名活动</span></div><div class="card metric">已报名<strong>186</strong><span class="muted">累计报名人次</span></div><div class="card metric">待处理报名<strong>12</strong><span class="muted">待缴费或待退款</span></div></div>
             <div class="filter-card" data-training-activity-filters><div class="field"><label>活动名称/方向</label><input class="input" data-training-activity-keyword placeholder="请输入活动名称或培训方向"></div><div class="field"><label>报名状态</label><select class="select" data-training-activity-status><option>全部状态</option><option>未开始</option><option>报名中</option><option>已截止</option><option>已结束</option></select></div><div class="field"><label>培训方式</label><select class="select" disabled><option>线下培训</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-training-activity-search>查询</button><button class="btn" data-training-activity-reset>重置</button></div></div></div>
@@ -22334,6 +22335,7 @@
     function prepareTrainingActivityRows(page) {
       var root = page || document.querySelector('[data-page="training"]');
       if (!root) return;
+      syncTrainingNavigationSwitch();
       root.querySelectorAll("[data-training-activity-row]").forEach(function (row) {
         var data = trainingActivityData(row);
         var statusCells = row.querySelectorAll("td");
@@ -22600,13 +22602,46 @@
       syncLearningNavigationSwitch();
       toast(input.checked ? "小程序底部学习导航已显示" : "小程序底部学习导航已隐藏");
     }
+    function syncTrainingNavigationSwitch() {
+      var input = document.querySelector("[data-training-navigation-switch]");
+      var status = document.querySelector("[data-training-navigation-status]");
+      var visible = window.HBYXExamNavigation.getTrainingVisible();
+      if (input) {
+        input.checked = visible;
+        input.disabled = !AUTH_SESSION || AUTH_SESSION.role !== "platform";
+      }
+      if (status) status.textContent = visible ? "显示" : "隐藏";
+    }
+    function saveTrainingNavigationSwitch(input) {
+      if (!AUTH_SESSION || AUTH_SESSION.role !== "platform") {
+        syncTrainingNavigationSwitch();
+        toast("仅平台可设置考生小程序培训导航");
+        return;
+      }
+      try {
+        window.HBYXExamNavigation.setTrainingVisible(input.checked);
+      } catch (error) {
+        syncTrainingNavigationSwitch();
+        toast("设置保存失败，请检查浏览器存储后重试");
+        return;
+      }
+      syncTrainingNavigationSwitch();
+      toast(input.checked ? "考生小程序底部培训导航已显示" : "考生小程序底部培训导航已隐藏");
+    }
     document.addEventListener("change", function (event) {
       if (event.target.matches("[data-learning-navigation-switch]")) saveLearningNavigationSwitch(event.target);
+      if (event.target.matches("[data-training-navigation-switch]")) saveTrainingNavigationSwitch(event.target);
     });
     window.addEventListener("storage", function (event) {
-      if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) syncLearningNavigationSwitch();
+      if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) {
+        syncLearningNavigationSwitch();
+        syncTrainingNavigationSwitch();
+      }
     });
-    window.addEventListener("focus", syncLearningNavigationSwitch);
+    window.addEventListener("focus", function () {
+      syncLearningNavigationSwitch();
+      syncTrainingNavigationSwitch();
+    });
 
     function courseDefaultLessons(editing, courseId) {
       if (!editing) return [{ id: "lesson-" + Date.now(), title: "", duration: "", summary: "", videoName: "", videoAssetId: "", videoStatus: "未上传", playbackUrl: "", previewEnabled: true, previewSeconds: 300 }];

@@ -2347,6 +2347,8 @@
     }
     .tab.active { color: var(--brand-primary); }
     .tabbar.learning-hidden { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tabbar.training-hidden { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tabbar.learning-hidden.training-hidden { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .tab.active::after {
       content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
       width: 18px; height: 2px; background: var(--brand-gold); border-radius: 2px;
@@ -19811,24 +19813,29 @@
         syncApplicationDetail();
       }
 
-      function syncLearningNavigation() {
-        var visible = window.HBYXExamNavigation.getLearningVisible();
-        var tab = document.querySelector('.tabbar [data-tab="learning"]');
+      function syncStudentNavigation() {
+        var visibility = {
+          learning: window.HBYXExamNavigation.getLearningVisible(),
+          training: window.HBYXExamNavigation.getTrainingVisible()
+        };
         var tabbar = document.querySelector(".tabbar");
-        if (tab) tab.hidden = !visible;
-        if (tabbar) tabbar.classList.toggle("learning-hidden", !visible);
-        return visible;
+        Object.keys(visibility).forEach(function (key) {
+          var tab = document.querySelector('.tabbar [data-tab="' + key + '"]');
+          if (tab) tab.hidden = !visibility[key];
+          if (tabbar) tabbar.classList.toggle(key + "-hidden", !visibility[key]);
+        });
+        return visibility;
       }
 
-      function refreshLearningNavigation() {
-        if (!syncLearningNavigation() && currentView() === "learning") activateView();
+      function refreshStudentNavigation() {
+        if (syncStudentNavigation()[currentView()] === false) activateView();
       }
 
       function activateView() {
         var currentRouteHash = window.location.hash || "#home";
         var previousRouteHash = lastRouteHash;
         var view = currentView();
-        if (!syncLearningNavigation() && view === "learning") {
+        if (syncStudentNavigation()[view] === false) {
           window.location.hash = "#home";
           return;
         }
@@ -24469,7 +24476,7 @@
 
       window.addEventListener("hashchange", handleOnlineExamHashChange);
       window.addEventListener("storage", function (event) {
-        if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) refreshLearningNavigation();
+        if (event.key === window.HBYXExamNavigation.storageKey || event.key === null) refreshStudentNavigation();
         if (event.key === COURSE_CATALOG_STORAGE_KEY) {
           refreshCourseCatalogFromShared();
           syncCourseListUI();
@@ -24481,9 +24488,9 @@
         }
       });
       var savedRole = "学生";
-      window.addEventListener("focus", refreshLearningNavigation);
+      window.addEventListener("focus", refreshStudentNavigation);
       document.addEventListener("visibilitychange", function () {
-        if (document.visibilityState === "visible") refreshLearningNavigation();
+        if (document.visibilityState === "visible") refreshStudentNavigation();
       });
       try { savedRole = localStorage.getItem(ROLE_STORAGE_KEY) || "学生"; } catch (e) {}
       restoreAuthFromStorage();

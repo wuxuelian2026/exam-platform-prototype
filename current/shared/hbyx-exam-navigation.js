@@ -3,23 +3,27 @@
 
   var storageKey = "hbyx_exam_navigation_v1";
 
-  function getLearningVisible() {
+  function readSettings() {
     try {
       var settings = JSON.parse(global.localStorage.getItem(storageKey) || "null");
-      return !settings || settings.learningVisible !== false;
+      return settings && typeof settings === "object" && !Array.isArray(settings) ? settings : {};
     } catch (error) {
-      return true;
+      return {};
     }
   }
 
-  function setLearningVisible(visible) {
-    if (typeof visible !== "boolean") throw new TypeError("Learning visibility must be a boolean");
-    global.localStorage.setItem(storageKey, JSON.stringify({ learningVisible: visible }));
+  function setVisibility(key, visible) {
+    if (typeof visible !== "boolean") throw new TypeError("Navigation visibility must be a boolean");
+    var settings = readSettings();
+    settings[key] = visible;
+    global.localStorage.setItem(storageKey, JSON.stringify(settings));
   }
 
   global.HBYXExamNavigation = {
     storageKey: storageKey,
-    getLearningVisible: getLearningVisible,
-    setLearningVisible: setLearningVisible
+    getLearningVisible: function () { return readSettings().learningVisible !== false; },
+    setLearningVisible: function (visible) { setVisibility("learningVisible", visible); },
+    getTrainingVisible: function () { return readSettings().trainingVisible !== false; },
+    setTrainingVisible: function (visible) { setVisibility("trainingVisible", visible); }
   };
 })(window);
