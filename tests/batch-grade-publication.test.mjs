@@ -194,6 +194,25 @@ test("both grade interfaces remove confirmation tabs, actions and drawers", () =
   assert.match(implementation("createBatchDemo"), /status\.stage !== "grades"/);
 });
 
+test("grade interfaces expose only pending and published tabs", () => {
+  const staticGrades = between('        <section class="page" data-page="grades">', '        <section class="page" data-page="certificates">');
+  assert.deepEqual([...staticGrades.matchAll(/data-result-status-tab="([^"]+)"/g)].map(match => match[1]), ["待发布", "已发布"]);
+  assert.doesNotMatch(staticGrades, /<option>(更正中|已作废)<\/option>/);
+  const offline = implementation("normalizeOfflineGradesPanel");
+  assert.match(offline, /var gradeStatuses = \["待发布", "已发布"\]/);
+  const online = implementation("renderOnlineStageViewPanel");
+  assert.deepEqual([...online.matchAll(/data-online-grade-status="([^"]+)"/g)].map(match => match[1]), ["待发布", "已发布"]);
+});
+
+test("grade and certificate stages omit review-loop buttons without removing other audit actions", () => {
+  for (const name of ["enhanceGradesWorkbenchPanel", "normalizeOfflineGradesPanel", "renderOnlineStageViewPanel"]) {
+    assert.doesNotMatch(implementation(name), /查看审核闭环|data-drawer="review-loop-contract"/);
+  }
+  assert.doesNotMatch(html, /data-drawer="review-loop-contract" data-review-object-type="(?:GRADE|CERTIFICATE)"/);
+  assert.match(html, /data-cert-audit-open data-drawer="cert-audit"/);
+  assert.match(html, /data-review-object-type="SCHEDULE"/);
+});
+
 test("offline grades are not initialized again after embedded navigation removes their tabs", () => {
   for (const overrides of [{}, { stage: "certificates", status: "待生成", scorePublished: 3 }]) {
     const f = fixture(overrides);

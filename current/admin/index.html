@@ -3897,7 +3897,7 @@
                 <div class="field"><label>报名机构</label><select class="select"><option>全部机构</option><option>光谷少儿艺术中心</option><option>汉口美育培训学校</option><option>汉口美育培训学校</option></select></div>
                 <div class="field"><label>整体评级</label><select class="select"><option>全部评级</option><option>优秀</option><option>良好</option><option>合格</option><option>不合格</option></select></div>
                 <div class="field"><label>考试结果</label><select class="select"><option>全部考试结果</option><option>已完成</option><option>未考试</option></select></div>
-                <div class="field"><label>成绩发布状态</label><select class="select" data-result-status-select><option selected>待发布</option><option>已发布</option><option>更正中</option><option>已作废</option></select></div>
+                <div class="field"><label>成绩发布状态</label><select class="select" data-result-status-select><option selected>待发布</option><option>已发布</option></select></div>
                 <div class="field"><label>关键词</label><input class="input" data-result-keyword data-keyword-max-length="64" data-keyword-fields="candidateName,ticketNo,applicationNo,idNumber" data-keyword-match="candidateName:contains,ticketNo:prefix,applicationNo:prefix,idNumber:exact-or-last4" data-keyword-normalize="trim,fullwidth-to-halfwidth,NFKC" data-filter-combine="AND" maxlength="64" placeholder="姓名/准考证号/报名编号/证件号"></div>
                 <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-result-search>查询</button><button class="btn" data-result-reset>重置</button></div></div>
               </div>
@@ -3905,8 +3905,6 @@
                 <div class="result-flow" role="tablist" aria-label="成绩状态切换">
                   <button class="active" type="button" data-result-status-tab="待发布" role="tab" aria-selected="true">待发布</button>
                   <button type="button" data-result-status-tab="已发布" role="tab" aria-selected="false">已发布</button>
-                  <button type="button" data-result-status-tab="更正中" role="tab" aria-selected="false">更正中</button>
-                  <button type="button" data-result-status-tab="已作废" role="tab" aria-selected="false">已作废</button>
                 </div>
                 <div class="result-action-bar">
                   <strong>成绩列表</strong>
@@ -9887,7 +9885,7 @@
       var hasUnconfirmed = publication.blocked;
       var publishLabel = hasUnconfirmed ? "待评分，不可发布" : publication.pendingPublish ? "待发布" : published ? "已发布" : "暂无成绩";
       var tabs = '<div class="tabs" data-grade-workbench-tabs role="tablist" aria-label="成绩管理一级页签"><button class="tab active" type="button" data-grade-root-tab="workbench" aria-selected="true">批次成绩工作台</button><button class="tab" type="button" data-grade-root-tab="list" aria-selected="false">成绩列表</button></div>';
-      var card = '<div class="table-card" data-grade-distribution><div class="table-tools"><div><h2 class="table-title">成绩状态分布</h2><span class="muted">' + escapeHtml(batch.name) + ' · 批次 ID：' + escapeHtml(batch.id) + ' · 共 ' + formatDemoNumber(scheduled) + ' 条成绩记录</span></div><div class="page-actions">' + batchTagHtml(hasUnconfirmed ? "orange" : published ? "green" : "blue", publishLabel) + '<button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="GRADE" data-review-object-id="' + escapeHtml(batch.id) + '">查看审核闭环</button></div></div><div class="batch-status-distribution">' + distribution.map(function (row) { return '<div class="batch-status-bar"><span>' + row[0] + '</span><div class="batch-status-track"><i style="width:' + Math.round(row[1] * 100 / max) + '%;background:' + (row[2] === "orange" ? "#f59e0b" : row[2] === "green" ? "#16a34a" : "#2563eb") + '"></i></div><strong>' + formatDemoNumber(row[1]) + '</strong></div>'; }).join("") + '</div><div class="grade-batch-status"><div><strong>批次级发布状态</strong>' + batchTagHtml(hasUnconfirmed ? "orange" : published ? "green" : "blue", publishLabel) + '</div><span>' + (hasUnconfirmed ? "仍有未完成评分或待补正成绩，发布操作已阻断。" : published ? "当前批次成绩已发布，通过考生可进入证书阶段。" : "评分提交完成，发布前校验通过即可发布。") + '</span></div></div>';
+      var card = '<div class="table-card" data-grade-distribution><div class="table-tools"><div><h2 class="table-title">成绩状态分布</h2><span class="muted">' + escapeHtml(batch.name) + ' · 批次 ID：' + escapeHtml(batch.id) + ' · 共 ' + formatDemoNumber(scheduled) + ' 条成绩记录</span></div><div class="page-actions">' + batchTagHtml(hasUnconfirmed ? "orange" : published ? "green" : "blue", publishLabel) + '</div></div><div class="batch-status-distribution">' + distribution.map(function (row) { return '<div class="batch-status-bar"><span>' + row[0] + '</span><div class="batch-status-track"><i style="width:' + Math.round(row[1] * 100 / max) + '%;background:' + (row[2] === "orange" ? "#f59e0b" : row[2] === "green" ? "#16a34a" : "#2563eb") + '"></i></div><strong>' + formatDemoNumber(row[1]) + '</strong></div>'; }).join("") + '</div><div class="grade-batch-status"><div><strong>批次级发布状态</strong>' + batchTagHtml(hasUnconfirmed ? "orange" : published ? "green" : "blue", publishLabel) + '</div><span>' + (hasUnconfirmed ? "仍有未完成评分或待补正成绩，发布操作已阻断。" : published ? "当前批次成绩已发布，通过考生可进入证书阶段。" : "评分提交完成，发布前校验通过即可发布。") + '</span></div></div>';
       dashboard.insertAdjacentHTML("afterbegin", tabs + card);
       var batchCard = dashboard.querySelector(".result-batch-card");
       if (batchCard) batchCard.remove();
@@ -9923,14 +9921,14 @@
       if (!root) return;
       var gradeStageIndex = batch ? BATCH_STAGE_ORDER.indexOf(batch.stage) : -1;
       var publishedBatch = !!batch && (["已发布", "成绩已发布"].indexOf(batch.status) > -1 || gradeStageIndex > 5);
-      var gradeStatuses = ["待发布", "已发布", "更正中", "已作废"];
+      var gradeStatuses = ["待发布", "已发布"];
       var targetStatus = publishedBatch ? "已发布" : (batch && gradeStatuses.indexOf(gradeStatusLabel(batch.status)) > -1 ? gradeStatusLabel(batch.status) : "待发布");
       var flow = root.querySelector(".result-flow");
       if (flow) {
         flow.innerHTML = gradeStatuses.map(function (status) { return '<button class="' + (targetStatus === status ? "active" : "") + '" type="button" data-result-status-tab="' + status + '" role="tab" aria-selected="' + (targetStatus === status ? "true" : "false") + '">' + status + '</button>'; }).join("");
       }
       var actionBar = root.querySelector(".result-action-bar .page-actions");
-      if (actionBar) actionBar.innerHTML = '<button class="btn" data-result-action="grade-setting" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-result-action="publish" data-drawer="result-publish">发布</button><button class="btn" data-result-action="export" data-toast="成绩清单已导出">导出成绩</button><button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="GRADE">查看审核闭环</button>';
+      if (actionBar) actionBar.innerHTML = '<button class="btn" data-result-action="grade-setting" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-result-action="publish" data-drawer="result-publish">发布</button><button class="btn" data-result-action="export" data-toast="成绩清单已导出">导出成绩</button>';
       if (publishedBatch) {
         var publishedMockBody = root.querySelector(".result-table tbody");
         if (publishedMockBody && !publishedMockBody.querySelector("[data-result-mock]")) {
@@ -10412,7 +10410,7 @@
       }
       if (workbench) {
         var auditActions = workbench.querySelector(".cert-action-bar .page-actions");
-        if (auditActions && !auditActions.querySelector("[data-cert-audit-open]")) auditActions.insertAdjacentHTML("beforeend", '<button class="btn" data-cert-audit-open data-drawer="cert-audit" data-batch-id="' + escapeHtml(batch.id) + '">审计记录</button><button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="CERTIFICATE" data-review-object-id="' + escapeHtml(batch.id) + '">查看审核闭环</button>');
+        if (auditActions && !auditActions.querySelector("[data-cert-audit-open]")) auditActions.insertAdjacentHTML("beforeend", '<button class="btn" data-cert-audit-open data-drawer="cert-audit" data-batch-id="' + escapeHtml(batch.id) + '">审计记录</button>');
         var inlineAudit = workbench.querySelector("[data-cert-audit]");
         if (inlineAudit) inlineAudit.remove();
       }
@@ -11181,7 +11179,7 @@
     }
     function renderOnlineStageViewPanel(panel, batch, view, note) {
       var filterHtml = view.filters ? '<div class="filter-card online-video-filter"><div class="field"><label>专业</label><select class="select" data-online-video-filter="major"><option value="">全部专业</option><option value="钢琴">钢琴</option><option value="中国舞">中国舞</option><option value="小提琴">小提琴</option></select></div><div class="field"><label>级别</label><select class="select" data-online-video-filter="level"><option value="">全部级别</option><option value="1-3级">1-3级</option><option value="4-6级">4-6级</option><option value="7-10级">7-10级</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-online-video-search>查询</button><button class="btn" data-online-video-reset>重置</button></div></div></div>' : '';
-      var statusTabsHtml = view.statusTabs ? '<div class="result-flow online-grade-status-tabs" role="tablist" aria-label="线上成绩发布状态"><button class="active" type="button" data-online-grade-status="待发布" role="tab" aria-selected="true">待发布</button><button type="button" data-online-grade-status="已发布" role="tab" aria-selected="false">已发布</button><button type="button" data-online-grade-status="更正中" role="tab" aria-selected="false">更正中</button><button type="button" data-online-grade-status="已作废" role="tab" aria-selected="false">已作废</button></div><div class="result-action-bar"><strong>成绩列表</strong><div class="page-actions"><button class="btn" data-online-grade-action="grade-setting" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-online-grade-action="publish" data-drawer="result-publish">发布</button><button class="btn" data-online-grade-action="export" data-toast="线上成绩清单已导出">导出成绩</button><button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="GRADE">查看审核闭环</button></div></div>' : '';
+      var statusTabsHtml = view.statusTabs ? '<div class="result-flow online-grade-status-tabs" role="tablist" aria-label="线上成绩发布状态"><button class="active" type="button" data-online-grade-status="待发布" role="tab" aria-selected="true">待发布</button><button type="button" data-online-grade-status="已发布" role="tab" aria-selected="false">已发布</button></div><div class="result-action-bar"><strong>成绩列表</strong><div class="page-actions"><button class="btn" data-online-grade-action="grade-setting" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-online-grade-action="publish" data-drawer="result-publish">发布</button><button class="btn" data-online-grade-action="export" data-toast="线上成绩清单已导出">导出成绩</button></div></div>' : '';
       panel.innerHTML = '<div class="batch-workbench-layout"><div class="batch-stage-main"><div class="table-card"><div class="table-tools"><div><h2 class="table-title">' + escapeHtml(view.title) + '</h2><span class="muted">' + escapeHtml(note || "线上考试 · 按考生处理") + '</span></div>' + stageActionsHtml(view.actions) + '</div>' + filterHtml + statusTabsHtml + tableHtml(view.headers, view.rows) + '</div></div></div>';
       if (view.filters) {
         panel.querySelectorAll(".table-card tbody tr").forEach(function (row) { row.setAttribute("data-online-video-row", "true"); });
