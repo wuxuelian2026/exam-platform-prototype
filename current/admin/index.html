@@ -4009,7 +4009,7 @@
             <div class="info-banner"><strong>业务口径：</strong>培训方式固定为线下；平台负责活动发布、编辑和截止报名，承办单位与培训机构按授权范围查看已发布活动。</div>
             <div class="grid-4"><div class="card metric">活动总数<strong data-training-activity-count>3</strong><span class="muted">当前可见范围</span></div><div class="card metric">报名中<strong>2</strong><span class="muted">开放报名活动</span></div><div class="card metric">已报名<strong>186</strong><span class="muted">累计报名人次</span></div><div class="card metric">待处理报名<strong>12</strong><span class="muted">待缴费或待退款</span></div></div>
             <div class="filter-card" data-training-activity-filters><div class="field"><label>活动名称/方向</label><input class="input" data-training-activity-keyword placeholder="请输入活动名称或培训方向"></div><div class="field"><label>报名状态</label><select class="select" data-training-activity-status><option>全部状态</option><option>未开始</option><option>报名中</option><option>已截止</option><option>已结束</option></select></div><div class="field"><label>培训方式</label><select class="select" disabled><option>线下培训</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-training-activity-search>查询</button><button class="btn" data-training-activity-reset>重置</button></div></div></div>
-            <div class="table-card"><div class="table-tools"><div><h2 class="table-title">培训活动列表</h2><span class="muted">活动发布状态与报名状态分开维护，活动详情保留发布快照。</span></div><div class="page-actions"><button class="btn primary" data-training-write-action data-platform-only data-toast="培训活动新增表单已打开">新增培训活动</button></div></div><div class="table-wrap"><table><thead><tr><th>活动编号</th><th>活动名称/培训方向</th><th>培训方式</th><th>培训时间/地点</th><th>报名周期</th><th>报名人数</th><th>发布状态</th><th>报名状态</th><th>操作</th></tr></thead><tbody>
+            <div class="table-card"><div class="table-tools"><div><h2 class="table-title">培训活动列表</h2><span class="muted">活动发布状态与报名状态分开维护，活动详情保留发布快照。</span></div><div class="page-actions"><button class="btn primary" data-training-write-action data-platform-only data-drawer="training-create">新增培训活动</button></div></div><div class="table-wrap"><table><thead><tr><th>活动编号</th><th>活动名称/培训方向</th><th>培训方式</th><th>培训时间/地点</th><th>报名周期</th><th>报名人数</th><th>发布状态</th><th>报名状态</th><th>操作</th></tr></thead><tbody>
               <tr data-training-activity-row data-training-activity-id="TA202608001" data-training-activity-name="社会艺术水平考级教师能力提升培训" data-training-activity-direction="考级教学与备课" data-training-activity-registration-status="报名中" data-training-activity-publish-status="已发布"><td>TA202608001</td><td><strong>社会艺术水平考级教师能力提升培训</strong><br><span class="muted">考级教学与备课</span></td><td>线下培训</td><td>2026-09-18 至 2026-09-20<br><span class="muted">湖北艺术职业学院</span></td><td>2026-08-20 至 2026-09-12</td><td>86 / 120</td><td><span class="tag green">已发布</span></td><td><span class="tag blue">报名中</span></td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button><button class="btn link" data-training-write-action data-platform-only data-toast="培训活动编辑表单已打开">编辑</button><button class="btn link" data-training-write-action data-platform-only data-toast="请填写截止报名原因">截止报名</button></div></td></tr>
               <tr data-training-activity-row data-training-activity-id="TA202607002" data-training-activity-name="声乐专业教师课堂设计研修" data-training-activity-direction="声乐专业" data-training-activity-registration-status="已截止" data-training-activity-publish-status="已发布"><td>TA202607002</td><td><strong>声乐专业教师课堂设计研修</strong><br><span class="muted">声乐专业</span></td><td>线下培训</td><td>2026-08-26 至 2026-08-28<br><span class="muted">武汉承办中心</span></td><td>2026-07-20 至 2026-08-18</td><td>64 / 80</td><td><span class="tag green">已发布</span></td><td><span class="tag orange">已截止</span></td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button><button class="btn link" data-training-write-action data-platform-only data-toast="培训活动编辑表单已打开">编辑</button></div></td></tr>
               <tr data-training-activity-row data-training-activity-id="TA202609003" data-training-activity-name="中国舞教师示范课与考级衔接" data-training-activity-direction="中国舞专业" data-training-activity-registration-status="未开始" data-training-activity-publish-status="草稿"><td>TA202609003</td><td><strong>中国舞教师示范课与考级衔接</strong><br><span class="muted">中国舞专业</span></td><td>线下培训</td><td>2026-10-10 至 2026-10-11<br><span class="muted">待发布地点</span></td><td>未开放</td><td>0 / 60</td><td><span class="tag orange">草稿</span></td><td><span class="tag">未开始</span></td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button><button class="btn link" data-training-write-action data-platform-only data-toast="培训活动编辑表单已打开">编辑</button><button class="btn link" data-training-write-action data-platform-only data-toast="培训活动已发布">发布</button></div></td></tr>
@@ -13901,6 +13901,7 @@
       }
     }
     function openDrawer(key) {
+      if (key === "training-create" && (!AUTH_SESSION || AUTH_SESSION.role !== "platform")) { toast("仅平台可新增培训活动"); return; }
       if (["result-confirm", "result-submit-confirm"].indexOf(key) > -1) { toast("成绩无需单独确认，请在待发布列表中发布"); return; }
       var conf = DRAWER[key] || { title: "演示详情", body: "<p>暂无详情。</p>", foot: '<button class="btn" data-close-drawer>关闭</button>' };
       if (key === "schedule-assign" && window.__scheduleDrawerMode) {
@@ -18399,7 +18400,12 @@
       if (event.target.closest("[data-training-enrollment-search]")) { filterTrainingEnrollments(false, false); return; }
       if (event.target.closest("[data-training-enrollment-reset]")) { filterTrainingEnrollments(true, false); return; }
       var trainingDetail = event.target.closest("[data-training-detail]");
-      if (trainingDetail) { toast("培训活动详情已打开，当前为只读快照"); return; }
+      if (trainingDetail) {
+        var trainingRow = trainingDetail.closest("[data-training-activity-record]");
+        if (trainingRow) { window.__activeTrainingActivity = JSON.parse(trainingRow.dataset.trainingActivityRecord); openDrawer("training-detail"); }
+        else toast("培训活动详情已打开，当前为只读快照");
+        return;
+      }
       var trainingEnrollmentDetail = event.target.closest("[data-training-enrollment-detail]");
       if (trainingEnrollmentDetail) { toast("培训报名详情已打开，当前为只读记录"); return; }
       var toggle = event.target.closest("[data-toggle-sub]");
@@ -20566,6 +20572,8 @@
       row.cells[4].textContent = "¥" + total;
     });
     document.body.addEventListener("submit", function (event) {
+      var trainingForm = event.target.closest("[data-training-create-form]");
+      if (trainingForm) { event.preventDefault(); saveTrainingActivity(trainingForm); return; }
       var recoveryForm = event.target.closest("[data-reset-form]");
       if (recoveryForm) { event.preventDefault(); authSubmitRecovery(recoveryForm); return; }
       var loginForm = event.target.closest("[data-login-form]");
@@ -22332,11 +22340,106 @@
         publishStatus: row.dataset.trainingActivityPublishStatus || ""
       };
     }
+    var TRAINING_ACTIVITY_STORAGE_KEY = "hbyx_admin_training_activities_v1";
+    function trainingActivityFormHtml() {
+      function input(name, label, type, attributes) {
+        return '<div class="field"><label for="training-create-' + name + '">' + label + ' *</label><input class="input" id="training-create-' + name + '" name="' + name + '" type="' + (type || 'text') + '" required ' + (attributes || '') + '></div>';
+      }
+      return '<form id="training-create-form" data-training-create-form>' +
+        '<div class="drawer-section"><h3 class="drawer-section-title">基本信息</h3><div class="field-row-2">' + input('name', '活动名称', 'text', 'maxlength="100"') + input('direction', '培训方向', 'text', 'maxlength="50"') +
+        '</div><div class="field-row-2"><div class="field"><label for="training-create-mode">培训方式</label><input class="input" id="training-create-mode" value="线下培训" readonly></div>' + input('target', '培训对象', 'text', 'maxlength="200"') + '</div></div>' +
+        '<div class="drawer-section"><h3 class="drawer-section-title">培训安排</h3><div class="field-row-2">' + input('start', '培训开始日期', 'date') + input('end', '培训结束日期', 'date') + '</div>' + input('location', '培训地点', 'text', 'maxlength="200"') + '</div>' +
+        '<div class="drawer-section"><h3 class="drawer-section-title">报名设置</h3><div class="field-row-2">' + input('registrationStart', '报名开始日期', 'date') + input('registrationEnd', '报名截止日期', 'date') +
+        '</div><div class="field-row-2">' + input('capacity', '人数上限', 'number', 'min="1" max="100000" step="1"') + input('fee', '培训费用（元）', 'number', 'min="0" max="999999.99" step="0.01" value="0"') + '</div></div>' +
+        '<div class="drawer-section"><h3 class="drawer-section-title">联系与介绍</h3><div class="field-row-2">' + input('contactName', '联系人', 'text', 'maxlength="50"') + input('contactPhone', '联系电话', 'tel', 'maxlength="20"') +
+        '</div><div class="field"><label for="training-create-description">活动介绍 *</label><textarea class="textarea" id="training-create-description" name="description" required maxlength="5000" rows="5"></textarea></div></div></form>';
+    }
+    function trainingActivityValidation(data) {
+      if (!data || typeof data !== "object") return "请完善活动信息";
+      var limits = { name: 100, direction: 50, target: 200, location: 200, contactName: 50, contactPhone: 20, description: 5000 };
+      if (Object.keys(limits).some(function (key) { return typeof data[key] !== "string" || !data[key].trim() || data[key].length > limits[key]; })) return "请完善活动名称、方向、对象、地点、联系人和活动介绍";
+      if (![data.start, data.end, data.registrationStart, data.registrationEnd].every(function (value) {
+        if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+        var date = new Date(value + "T00:00:00Z");
+        return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+      })) return "请填写有效的培训日期和报名日期";
+      if (data.start > data.end) return "培训结束日期不能早于开始日期";
+      if (data.registrationStart > data.registrationEnd) return "报名截止日期不能早于开始日期";
+      if (data.registrationEnd > data.start) return "报名截止日期不能晚于培训开始日期";
+      if (!/^\d+$/.test(String(data.capacity)) || Number(data.capacity) < 1 || Number(data.capacity) > 100000) return "人数上限须为1至100000的整数";
+      if (!/^\d+(\.\d{1,2})?$/.test(String(data.fee)) || Number(data.fee) > 999999.99) return "培训费用须为非负金额，最多两位小数";
+      if (!/^(1[3-9]\d{9}|0\d{2,3}-?\d{7,8})$/.test(data.contactPhone)) return "请填写有效的手机号或座机号码";
+      return "";
+    }
+    function trainingActivityRegistrationStatus(data) {
+      var now = new Date();
+      var today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+      if (today > data.end) return "已结束";
+      if (today > data.registrationEnd) return "已截止";
+      return today < data.registrationStart ? "未开始" : "报名中";
+    }
+    function readCreatedTrainingActivities() {
+      try {
+        var records = JSON.parse(window.localStorage.getItem(TRAINING_ACTIVITY_STORAGE_KEY) || "[]");
+        return Array.isArray(records) ? records.filter(function (data) { return !trainingActivityValidation(data) && typeof data.id === "string" && /^TA\d+(?:-\d+)?$/.test(data.id); }) : [];
+      } catch (error) { return []; }
+    }
+    function renderCreatedTrainingActivity(data, tbody) {
+      var row = document.createElement("tr");
+      row.setAttribute("data-training-activity-row", "");
+      row.dataset.trainingActivityId = data.id;
+      row.dataset.trainingActivityName = data.name;
+      row.dataset.trainingActivityDirection = data.direction;
+      row.dataset.trainingActivityPublishStatus = "已发布";
+      row.dataset.trainingActivityRegistrationStatus = trainingActivityRegistrationStatus(data);
+      row.dataset.trainingActivityRecord = JSON.stringify(data);
+      row.innerHTML = '<td>' + escapeHtml(data.id) + '</td><td><strong>' + escapeHtml(data.name) + '</strong><br><span class="muted">' + escapeHtml(data.direction) + '</span></td><td>线下培训</td><td>' + escapeHtml(data.start + ' 至 ' + data.end) + '<br><span class="muted">' + escapeHtml(data.location) + '</span></td><td>' + escapeHtml(data.registrationStart + ' 至 ' + data.registrationEnd) + '</td><td>0 / ' + escapeHtml(data.capacity) + '</td><td>' + trainingStatusTag('已发布') + '</td><td>' + trainingStatusTag(row.dataset.trainingActivityRegistrationStatus) + '</td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button></div></td>';
+      tbody.insertBefore(row, tbody.firstChild);
+      return row;
+    }
+    function saveTrainingActivity(form) {
+      if (!AUTH_SESSION || AUTH_SESSION.role !== "platform") { toast("仅平台可新增培训活动"); return; }
+      if (!form || !form.reportValidity()) return;
+      var data = {};
+      form.querySelectorAll("[name]").forEach(function (input) { data[input.name] = input.value.trim(); });
+      var error = trainingActivityValidation(data);
+      if (error) { toast(error); return; }
+      var tbody = document.querySelector('[data-page="training"] [data-subview="publish"] tbody');
+      if (!tbody) return;
+      var records = readCreatedTrainingActivities();
+      var baseId = "TA" + Date.now();
+      data.id = baseId;
+      var suffix = 0;
+      while (records.some(function (item) { return item.id === data.id; }) || Array.from(tbody.querySelectorAll("[data-training-activity-row]")).some(function (row) { return row.dataset.trainingActivityId === data.id; })) data.id = baseId + "-" + (++suffix);
+      records.push(data);
+      try { window.localStorage.setItem(TRAINING_ACTIVITY_STORAGE_KEY, JSON.stringify(records)); }
+      catch (error) { toast("保存失败，请检查浏览器存储后重试"); return; }
+      renderCreatedTrainingActivity(data, tbody);
+      closeDrawer();
+      filterTrainingActivities(true, true);
+      toast("培训活动已创建并发布");
+    }
+    function createdTrainingActivityDetailHtml() {
+      var data = window.__activeTrainingActivity;
+      if (!data) return '<div class="empty-state">未找到培训活动。</div>';
+      var fields = { id: '活动编号', name: '活动名称', direction: '培训方向', target: '培训对象', location: '培训地点', capacity: '人数上限', contactName: '联系人', contactPhone: '联系电话' };
+      var html = '<dl class="kv">';
+      Object.keys(fields).forEach(function (key) { html += '<dt>' + fields[key] + '</dt><dd>' + escapeHtml(data[key]) + '</dd>'; });
+      return html + '<dt>培训方式</dt><dd>线下培训</dd><dt>培训日期</dt><dd>' + escapeHtml(data.start + ' 至 ' + data.end) + '</dd><dt>报名周期</dt><dd>' + escapeHtml(data.registrationStart + ' 至 ' + data.registrationEnd) + '</dd><dt>培训费用</dt><dd>¥' + Number(data.fee).toFixed(2) + '</dd><dt>发布状态</dt><dd>已发布</dd><dt>报名状态</dt><dd>' + trainingActivityRegistrationStatus(data) + '</dd></dl><div class="drawer-section"><h3 class="drawer-section-title">活动介绍</h3><p style="white-space:pre-wrap;overflow-wrap:anywhere">' + escapeHtml(data.description) + '</p></div>';
+    }
     function prepareTrainingActivityRows(page) {
       var root = page || document.querySelector('[data-page="training"]');
       if (!root) return;
       syncTrainingNavigationSwitch();
+      var tbody = root.querySelector('[data-subview="publish"] tbody');
+      if (tbody && !tbody.dataset.trainingRestored) {
+        readCreatedTrainingActivities().forEach(function (data) {
+          if (!Array.from(tbody.querySelectorAll("[data-training-activity-row]")).some(function (row) { return row.dataset.trainingActivityId === data.id; })) renderCreatedTrainingActivity(data, tbody);
+        });
+        tbody.dataset.trainingRestored = "true";
+      }
       root.querySelectorAll("[data-training-activity-row]").forEach(function (row) {
+        if (row.dataset.trainingActivityRecord) row.dataset.trainingActivityRegistrationStatus = trainingActivityRegistrationStatus(JSON.parse(row.dataset.trainingActivityRecord));
         var data = trainingActivityData(row);
         var statusCells = row.querySelectorAll("td");
         if (statusCells[6]) statusCells[6].innerHTML = trainingStatusTag(data.publishStatus);
@@ -22954,6 +23057,8 @@
       records.push(record);
       try { window.localStorage.setItem(COURSE_SHARED_ORDER_STORAGE_KEY, JSON.stringify(records)); } catch (error) { /* prototype storage is optional */ }
     }
+    DRAWER["training-create"] = { title: "新增培训活动", wide: true, body: trainingActivityFormHtml, foot: '<button class="btn" type="button" data-close-drawer>取消</button><button class="btn primary" type="submit" form="training-create-form" data-platform-only>保存并发布</button>' };
+    DRAWER["training-detail"] = { title: "培训活动详情", wide: true, body: createdTrainingActivityDetailHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' };
     DRAWER["course-create"] = { title: "新增课程", wide: true, body: function () { return courseFormBodyHtml(false); }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-course-save-draft data-platform-only>保存草稿</button><button class="btn primary" data-course-save data-platform-only>保存并上架</button>' };
     DRAWER["course-edit"] = { title: "编辑课程", wide: true, body: function () { return courseFormBodyHtml(true); }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-course-save data-platform-only>保存修改</button>' };
     DRAWER["course-detail"] = { title: "课程详情", wide: true, body: function () { return courseDetailBodyHtml(); }, foot: '<button class="btn" data-close-drawer>关闭</button><button class="btn primary" data-drawer="course-edit" data-platform-only>编辑课程</button>' };
