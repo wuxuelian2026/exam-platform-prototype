@@ -4201,7 +4201,6 @@
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
           "enroll/list", "exam/schedule", "exam/tickets", "dispatch/list", "grades/list",
           "certificates/library", "analytics/board", "support/exceptions",
-          "courses/publish", "courses/orders", "training/publish", "training/enrollments",
           "system/units", "system/departments", "system/users", "system/roles", "system/message-records", "system/my-messages", "system/logs", "system/params", "system/dict"
         ]
       },
@@ -4219,7 +4218,6 @@
           "batch-workbench/overview", "batch-workbench/enroll", "batch-workbench/schedule", "batch-workbench/dispatch",
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
           "enroll/list", "exam/schedule", "exam/tickets", "grades/list", "certificates/library",
-          "courses/publish", "courses/orders", "training/publish", "training/enrollments",
           "analytics/board", "analytics/export", "support/exceptions", "system/mini-users", "system/message-records", "system/my-messages"
         ]
       }
@@ -4463,7 +4461,12 @@
     function authRouteKey(view, sub) {
       return view + (sub ? "/" + sub : "");
     }
+    function authCanAccessDomain(domain) {
+      if (domain === "course" || domain === "training") return !!AUTH_SESSION && AUTH_SESSION.role === "platform";
+      return domain !== "shared" || authRoleConfig(AUTH_SESSION && AUTH_SESSION.role).shared;
+    }
     function authCanAccessRoute(view, sub) {
+      if (view === "courses" || view === "training") return authCanAccessDomain(view === "courses" ? "course" : "training");
       var config = authRoleConfig(AUTH_SESSION && AUTH_SESSION.role);
       var route = authRouteKey(view, sub);
       if (view === "dashboard" && sub === "workbench") return !!AUTH_SESSION;
@@ -4576,9 +4579,9 @@
     function syncRoleMenus() {
       var config = authRoleConfig(AUTH_SESSION && AUTH_SESSION.role);
       document.querySelectorAll("[data-top-domain]").forEach(function (item) {
-        var isShared = item.getAttribute("data-top-domain") === "shared";
-        item.dataset.authHidden = isShared && !config.shared ? "true" : "false";
-        item.hidden = isShared && !config.shared;
+        var allowed = authCanAccessDomain(item.getAttribute("data-top-domain"));
+        item.dataset.authHidden = allowed ? "false" : "true";
+        item.hidden = !allowed;
       });
       document.querySelectorAll(".menu-item[data-jump], .menu-item[data-nav]").forEach(function (item) {
         var jump = item.getAttribute("data-jump");
@@ -12429,8 +12432,7 @@
       return view === "system" ? "shared" : "exam";
     }
     function syncTopDomain(domain) {
-      var config = authRoleConfig(AUTH_SESSION && AUTH_SESSION.role);
-      if (domain === "shared" && !config.shared) domain = "exam";
+      if (!authCanAccessDomain(domain)) domain = "exam";
       document.querySelectorAll("[data-top-domain]").forEach(function (item) {
         item.classList.toggle("active", item.getAttribute("data-top-domain") === domain);
       });
@@ -18380,8 +18382,8 @@
       var topDomain = event.target.closest("[data-top-domain]");
       if (topDomain) {
         var domain = topDomain.getAttribute("data-top-domain");
-        if (topDomain.dataset.authHidden === "true") {
-          toast("当前机构类型无共享中台入口权限");
+        if (topDomain.dataset.authHidden === "true" || !authCanAccessDomain(domain)) {
+          toast("当前账号无此业务域访问权限");
           return;
         }
         if (domain === "shared") {
