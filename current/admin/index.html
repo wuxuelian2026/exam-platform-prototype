@@ -24582,7 +24582,7 @@
     function paginationTable(table) {
       if (!table || !table.parentElement || !table.parentElement.matches(".table-wrap")) return;
       var wrap = table.parentElement;
-      var state = paginationStates.get(table) || { page: 1, pageSize: PAGINATION_DEFAULT_SIZE };
+      var state = paginationStates.get(table) || { page: 1, pageSize: table.closest(".schedule-entry-workbench") ? 10 : PAGINATION_DEFAULT_SIZE };
       var rows = paginationRows(table);
       var dataRows = rows.filter(function (row) {
         return !row.hidden && !paginationIsEmptyRow(row) && !row.hasAttribute("data-pagination-ignore");
@@ -24599,7 +24599,10 @@
         wrap.insertAdjacentElement("afterend", pager);
       }
       var markup = paginationMarkup(totalPages, state.page, state.pageSize);
-      if (pager.outerHTML !== markup) pager.outerHTML = markup;
+      var renderKey = totalPages + ":" + state.page + ":" + state.pageSize;
+      if (pager.getAttribute("data-pagination-render-key") !== renderKey) {
+        pager.outerHTML = markup.replace("<nav ", '<nav data-pagination-render-key="' + renderKey + '" ');
+      }
       paginationStates.set(table, state);
     }
 
