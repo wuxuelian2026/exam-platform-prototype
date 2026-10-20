@@ -23,7 +23,7 @@ function implementation(name) {
 const source = [
   between("    var BATCH_STAGE_ORDER =", "    var BATCH_STAGE_STATUS_BY_LEGACY ="),
   between("    var BATCH_STAGE_DONE_STATUS =", "    function offlineScheduleIsPublished("),
-  ...["offlineScheduleIsPublished", "offlineParallelStageStatus", "batchStagePhase", "batchStageStatusView", "autoAdvancePublishedOfflineGrades", "gradeStatusLabel", "gradePublicationState", "publishBatchGrades", "updateResultActions", "applyResultStatus", "applyOnlineGradeStatus", "resultPublishBodyHtml", "normalizeOfflineGradesPanel", "onlineGradesStageView", "uniqueBatchDemoList"].map(implementation)
+  ...["offlineScheduleIsPublished", "offlineParallelStageStatus", "batchStagePhase", "batchStageStatusView", "autoAdvancePublishedOfflineGrades", "gradeStatusLabel", "gradePublicationState", "publishBatchGrades", "updateResultActions", "applyResultStatus", "applyOnlineGradeStatus", "resultPublishBodyHtml", "enhanceGradesWorkbenchPanel", "embedGradesWorkbenchPanel", "normalizeOfflineGradesPanel", "onlineGradesStageView", "uniqueBatchDemoList"].map(implementation)
 ].join("\n");
 
 function fixture(overrides = {}, role = "platform") {
@@ -192,4 +192,60 @@ test("both grade interfaces remove confirmation tabs, actions and drawers", () =
   assert.match(online, /data-online-grade-action="publish"/);
   assert.doesNotMatch(html, /"result-confirm": \{|"result-submit-confirm": \{/);
   assert.match(implementation("createBatchDemo"), /status\.stage !== "grades"/);
+});
+
+test("offline grades are not initialized again after embedded navigation removes their tabs", () => {
+  for (const overrides of [{}, { stage: "certificates", status: "待生成", scorePublished: 3 }]) {
+    const f = fixture(overrides);
+    const list = { hidden: false };
+    const dashboard = { querySelector: (selector) => selector === '[data-grade-root-panel="list"]' ? list : null };
+    const panel = {
+      querySelector: () => dashboard,
+      setAttribute: () => assert.fail("existing grade list must not be reinitialized")
+    };
+    for (let index = 0; index < 3; index += 1) {
+      f.context.enhanceGradesWorkbenchPanel(panel, f.batch);
+      assert.equal(list.hidden, false);
+    }
+  }
+});
+
+test("offline grade embedding keeps the existing populated list visible on repeated entry", () => {
+  const f = fixture();
+  const list = { hidden: true, rows: [{ status: "待发布" }] };
+  const dashboard = { querySelector: (selector) => selector === '[data-grade-root-panel="list"]' ? list : null };
+  const classes = new Set(["subview"]);
+  const subview = {
+    classList: { contains: (name) => classes.has(name), toggle: (name, value) => value ? classes.add(name) : classes.delete(name) },
+    getAttribute: () => "list"
+  };
+  const panel = {
+    children: [subview],
+    querySelector: (selector) => selector === ".result-dashboard" ? dashboard : null,
+    setAttribute: () => assert.fail("embedding must reuse initialized list")
+  };
+  const applied = [];
+  f.context.embedBatchWorkbenchPanel = () => {};
+  f.context.applyResultStatus = (root, status) => applied.push({ root, status });
+  for (let index = 0; index < 3; index += 1) {
+    list.hidden = true;
+    f.context.embedGradesWorkbenchPanel(panel);
+    assert.equal(list.hidden, false);
+    assert.equal(list.rows.length, 1);
+    assert.ok(classes.has("active"));
+    assert.equal(applied.at(-1).root, dashboard);
+  }
+});
+
+test("training offline grade queries retain published-only and own-organization restrictions", () => {
+  const f = fixture({}, "training");
+  const rows = [
+    ["待发布", "测试培训机构"], ["已发布", "测试培训机构"], ["已发布", "其他培训机构"]
+  ].map(([status, org]) => ({
+    getAttribute: () => status, cells: [{}, { textContent: org }],
+    querySelectorAll: () => []
+  }));
+  const root = { querySelector: () => null, querySelectorAll: (selector) => selector === "[data-result-row]" ? rows : [] };
+  f.context.applyResultStatus(root, "待发布", true);
+  assert.deepEqual(rows.map((row) => row.hidden), [true, false, true]);
 });

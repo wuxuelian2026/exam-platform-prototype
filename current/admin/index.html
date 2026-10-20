@@ -9848,7 +9848,8 @@
     }
     function enhanceGradesWorkbenchPanel(panel, batch) {
       var dashboard = panel && panel.querySelector(".result-dashboard");
-      if (!dashboard || !batch || dashboard.querySelector("[data-grade-workbench-tabs]")) return;
+      // Embedded grades remove the tabs, but retain the initialized list panel.
+      if (!dashboard || !batch || dashboard.querySelector('[data-grade-root-panel="list"]')) return;
       panel.setAttribute("data-batch-id", batch.id);
       var publication = gradePublicationState(batch);
       var scheduled = publication.total;
