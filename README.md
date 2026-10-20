@@ -8,6 +8,12 @@
 
 改动落在 `current/` 下对应目录，提交推送后 GitHub Actions 会自动重新部署。
 
+## 当前需求变更分支
+
+从后台登录方式调整（密码登录支持账号或手机号、增加手机号验证码登录）及忘记密码功能开始，后续考级原型修改统一提交到 `v1.120261019需求变更`，不直接提交到 `main`。原型事实源仍为本仓库的 `current/` 目录，不接真实后端或短信服务。
+
+当前 Pages 自动部署仍跟随 `main`，需求变更分支的提交和推送不会自动更新线上预览；发布需另行确认。
+
 ## 在线预览
 
 部署完成后，通过 GitHub Pages 访问：
@@ -60,9 +66,10 @@ changes/      版本变更记录
 ## 更新流程
 
 ```bash
+git switch 'v1.120261019需求变更'
 git add .
 git commit -m "update: revise exam prototype"
-git push
+git push -u origin 'v1.120261019需求变更'
 ```
 
 推送到 `main` 后，GitHub Actions 会自动重新部署 Pages。

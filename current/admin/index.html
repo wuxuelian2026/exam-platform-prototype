@@ -69,6 +69,25 @@
     .auth-title { margin: 0 0 6px; font-size: 24px; }
     .auth-description { margin: 0 0 22px; color: var(--sub); }
     .auth-form { display: grid; gap: 16px; }
+    .auth-form[hidden] { display: none !important; }
+    .auth-forgot { justify-self: end; margin-top: -8px; }
+    .auth-reset-progress { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; color: var(--sub); font-size: 13px; }
+    .auth-reset-progress li { padding: 8px 0; border-bottom: 2px solid var(--border); }
+    .auth-reset-progress [aria-current="step"] { border-color: var(--primary); color: var(--primary); font-weight: 700; }
+    .auth-reset-actions { display: flex; gap: 10px; align-items: center; }
+    .auth-reset-actions .auth-submit { flex: 1; min-width: 0; }
+    .auth-reset-back[hidden] { display: none !important; }
+    .auth-password-rule { color: var(--sub); font-size: 12px; }
+    .auth-method-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
+    .auth-method-tab { min-height: 42px; padding: 8px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--sub); cursor: pointer; }
+    .auth-method-tab[aria-selected="true"] { border-bottom-color: var(--primary); color: var(--primary); font-weight: 700; }
+    .auth-method-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .auth-login-fields { display: grid; gap: 16px; }
+    .auth-login-fields[hidden] { display: none !important; }
+    .auth-code-row { display: grid; grid-template-columns: minmax(0, 1fr) 124px; gap: 8px; }
+    .auth-code-row .input { min-width: 0; width: 100%; }
+    .auth-code-send { min-height: 36px; padding: 0 8px; white-space: nowrap; }
+    .auth-code-send:disabled { color: var(--muted); cursor: not-allowed; }
     .auth-form .field label { color: var(--text); font-size: 13px; font-weight: 600; }
     .auth-role-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .auth-role-option { min-height: 52px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--white); color: var(--sub); display: grid; place-content: center; gap: 1px; cursor: pointer; }
@@ -2059,18 +2078,78 @@
           </div>
           <input type="hidden" value="platform" data-login-role-value>
         </div>
-        <div class="field">
-          <label for="login-account">账号</label>
-          <input class="input" id="login-account" name="account" value="admin" autocomplete="username" placeholder="请输入登录账号" data-login-account>
+        <div class="auth-method-tabs" role="tablist" aria-label="登录方式">
+          <button class="auth-method-tab" type="button" role="tab" id="login-password-tab" aria-controls="login-password-panel" aria-selected="true" data-login-method="password">密码登录</button>
+          <button class="auth-method-tab" type="button" role="tab" id="login-sms-tab" aria-controls="login-sms-panel" aria-selected="false" tabindex="-1" data-login-method="sms">验证码登录</button>
         </div>
-        <div class="field">
-          <label for="login-password">密码</label>
-          <input class="input" id="login-password" name="password" type="password" value="123456" autocomplete="current-password" placeholder="请输入登录密码" data-login-password>
+        <div class="auth-login-fields" id="login-password-panel" role="tabpanel" aria-labelledby="login-password-tab" data-login-panel="password">
+          <div class="field">
+            <label for="login-account">账号或手机号</label>
+            <input class="input" id="login-account" name="account" value="admin" autocomplete="username" placeholder="请输入账号或手机号" aria-describedby="login-error" data-login-account>
+          </div>
+          <div class="field">
+            <label for="login-password">密码</label>
+            <input class="input" id="login-password" name="password" type="password" value="123456" autocomplete="current-password" placeholder="请输入登录密码" aria-describedby="login-error" data-login-password>
+          </div>
+          <button class="btn link auth-forgot" type="button" data-forgot-password aria-controls="reset-password-form" aria-expanded="false">忘记密码？</button>
         </div>
-        <p class="auth-error" data-login-error aria-live="polite"></p>
+        <div class="auth-login-fields" id="login-sms-panel" role="tabpanel" aria-labelledby="login-sms-tab" data-login-panel="sms" hidden>
+          <div class="field">
+            <label for="login-phone">手机号</label>
+            <input class="input" id="login-phone" name="phone" type="tel" value="13800000001" inputmode="numeric" maxlength="11" autocomplete="tel" placeholder="请输入手机号" aria-describedby="login-error" data-login-phone disabled>
+          </div>
+          <div class="field">
+            <label for="login-code">验证码</label>
+            <div class="auth-code-row">
+              <input class="input" id="login-code" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="请输入验证码" aria-describedby="login-error" data-login-code disabled>
+              <button class="btn auth-code-send" type="button" data-login-send-code disabled>获取验证码</button>
+            </div>
+          </div>
+        </div>
+        <p class="auth-error" id="login-error" data-login-error aria-live="polite"></p>
         <button class="btn primary auth-submit" type="submit">登录</button>
       </form>
-      <div class="auth-tip">演示账号：admin（平台）、cbdw（承办单位）、pxjg（培训机构）；统一密码：123456。</div>
+      <form class="auth-form" id="reset-password-form" data-reset-form novalidate hidden>
+        <ol class="auth-reset-progress" aria-label="找回密码步骤">
+          <li data-reset-progress="verify" aria-current="step">1 验证手机号</li>
+          <li data-reset-progress="password">2 设置新密码</li>
+        </ol>
+        <div class="auth-login-fields" data-reset-step="verify">
+          <div class="field">
+            <label for="reset-phone">绑定手机号</label>
+            <input class="input" id="reset-phone" name="phone" type="tel" inputmode="numeric" maxlength="11" autocomplete="tel" placeholder="请输入账号绑定的手机号" aria-describedby="reset-error" data-reset-phone disabled>
+          </div>
+          <div class="field">
+            <label for="reset-code">短信验证码</label>
+            <div class="auth-code-row">
+              <input class="input" id="reset-code" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="请输入验证码" aria-describedby="reset-error" data-reset-code disabled>
+              <button class="btn auth-code-send" type="button" data-reset-send-code disabled>获取验证码</button>
+            </div>
+          </div>
+        </div>
+        <div class="auth-login-fields" data-reset-step="password" hidden>
+          <div class="field">
+            <label for="reset-verified-phone">已验证手机号</label>
+            <input class="input" id="reset-verified-phone" type="tel" data-reset-verified-phone readonly disabled>
+          </div>
+          <div class="field">
+            <label for="reset-password">新密码</label>
+            <input class="input" id="reset-password" name="new-password" type="password" maxlength="20" autocomplete="new-password" placeholder="请输入新密码" aria-describedby="reset-password-rule reset-error" data-reset-password disabled>
+            <span class="auth-password-rule" id="reset-password-rule">8-20位，至少包含字母和数字，不含空格。</span>
+          </div>
+          <div class="field">
+            <label for="reset-password-confirm">确认新密码</label>
+            <input class="input" id="reset-password-confirm" name="confirm-password" type="password" maxlength="20" autocomplete="new-password" placeholder="请再次输入新密码" aria-describedby="reset-error" data-reset-confirm disabled>
+          </div>
+        </div>
+        <p class="auth-error" id="reset-error" data-reset-error aria-live="polite"></p>
+        <div class="auth-reset-actions">
+          <button class="btn auth-reset-back" type="button" data-reset-back hidden>上一步</button>
+          <button class="btn primary auth-submit" type="submit" data-reset-submit>下一步</button>
+        </div>
+        <button class="btn link" type="button" data-reset-cancel>返回登录</button>
+      </form>
+      <div class="auth-tip" data-login-tip>演示账号：admin / 13800000001；密码：123456。</div>
       <div class="auth-context">平台负责全局配置与制证；承办单位负责批次审核、排期复核与发布；培训机构负责本机构全部报名记录（含个人报名渠道）的缴费、退款与排期。</div>
     </div>
   </section>
@@ -4144,17 +4223,96 @@
       }
     };
     var AUTH_DEMO_ACCOUNTS = {
-      admin: { role: "platform", password: "123456" },
-      cbdw: { role: "organizer", password: "123456" },
-      pxjg: { role: "training", password: "123456" }
+      admin: { account: "admin", role: "platform", phone: "13800000001", password: "123456" },
+      cbdw: { account: "cbdw", role: "organizer", phone: "13800000002", password: "123456" },
+      pxjg: { account: "pxjg", role: "training", phone: "13800000003", password: "123456" }
     };
+    var AUTH_LOGIN_METHOD = "password";
+    var AUTH_SMS_CHALLENGE = null;
+    var AUTH_SMS_TIMER = null;
+    var AUTH_RECOVERY = { open: false, step: "verify", challenge: null, timer: null, account: "", verifiedUntil: 0 };
     var AUTH_SESSION = null;
     var AUTH_RETURN_ROUTE = "";
     function authRoleConfig(role) {
       return AUTH_ROLE_CONFIG[role] || AUTH_ROLE_CONFIG.platform;
     }
     function authDemoAccount(account) {
-      return AUTH_DEMO_ACCOUNTS[String(account || "").trim().toLowerCase()] || null;
+      var identifier = String(account || "").trim().toLowerCase();
+      return Object.keys(AUTH_DEMO_ACCOUNTS).map(function (name) { return AUTH_DEMO_ACCOUNTS[name]; }).find(function (item) {
+        return item.account === identifier || item.phone === identifier;
+      }) || null;
+    }
+    function authUpdateCodeButton() {
+      var button = document.querySelector("[data-login-send-code]");
+      var seconds = AUTH_SMS_CHALLENGE ? Math.max(0, Math.ceil((AUTH_SMS_CHALLENGE.resendAt - Date.now()) / 1000)) : 0;
+      if (button) {
+        button.disabled = AUTH_LOGIN_METHOD !== "sms" || seconds > 0;
+        button.textContent = seconds > 0 ? seconds + "秒后重新获取" : "获取验证码";
+      }
+      if (!seconds && AUTH_SMS_TIMER !== null) {
+        clearInterval(AUTH_SMS_TIMER);
+        AUTH_SMS_TIMER = null;
+      }
+    }
+    function authResetSms() {
+      AUTH_SMS_CHALLENGE = null;
+      if (AUTH_SMS_TIMER !== null) clearInterval(AUTH_SMS_TIMER);
+      AUTH_SMS_TIMER = null;
+      var code = document.querySelector("[data-login-code]");
+      if (code) code.value = "";
+      authUpdateCodeButton();
+    }
+    function authSelectMethod(method) {
+      AUTH_LOGIN_METHOD = method === "sms" ? "sms" : "password";
+      document.querySelectorAll("[data-login-method]").forEach(function (tab) {
+        var active = tab.getAttribute("data-login-method") === AUTH_LOGIN_METHOD;
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+        tab.tabIndex = active ? 0 : -1;
+      });
+      document.querySelectorAll("[data-login-panel]").forEach(function (panel) {
+        var active = panel.getAttribute("data-login-panel") === AUTH_LOGIN_METHOD;
+        panel.hidden = !active;
+        panel.querySelectorAll("input, button").forEach(function (input) { input.disabled = !active; });
+      });
+      authUpdateCodeButton();
+      authSetError("");
+    }
+    function authSendCode() {
+      if (AUTH_LOGIN_METHOD !== "sms") return;
+      if (AUTH_SMS_CHALLENGE && Date.now() < AUTH_SMS_CHALLENGE.resendAt) return;
+      var phone = document.querySelector("[data-login-phone]").value.trim();
+      if (!/^1[3-9]\d{9}$/.test(phone)) { authSetError("请输入正确的11位手机号。"); return; }
+      if (!authDemoAccount(phone)) { authSetError("该手机号未绑定后台账号，请联系管理员。"); return; }
+      AUTH_SMS_CHALLENGE = { phone: phone, code: "123456", expiresAt: Date.now() + 5 * 60 * 1000, resendAt: Date.now() + 60 * 1000 };
+      document.querySelector("[data-login-code]").value = "";
+      authSetError("");
+      authUpdateCodeButton();
+      AUTH_SMS_TIMER = setInterval(authUpdateCodeButton, 1000);
+      document.querySelector("[data-login-code]").focus();
+      toast("演示验证码：123456，5分钟内有效（不发送真实短信）。");
+    }
+    function authSubmitLogin(form) {
+      var identifier = form.querySelector(AUTH_LOGIN_METHOD === "sms" ? "[data-login-phone]" : "[data-login-account]").value.trim();
+      var demoAccount;
+      if (AUTH_LOGIN_METHOD === "sms") {
+        var code = form.querySelector("[data-login-code]").value.trim();
+        if (!/^1[3-9]\d{9}$/.test(identifier)) { authSetError("请输入正确的11位手机号。"); return; }
+        if (!/^\d{6}$/.test(code)) { authSetError("请输入6位数字验证码。"); return; }
+        if (!AUTH_SMS_CHALLENGE || AUTH_SMS_CHALLENGE.phone !== identifier) { authSetError("请先获取当前手机号的验证码。"); return; }
+        if (Date.now() >= AUTH_SMS_CHALLENGE.expiresAt) { authSetError("验证码已过期，请重新获取。"); return; }
+        if (code !== AUTH_SMS_CHALLENGE.code) { authSetError("验证码错误，请重新输入。"); return; }
+        demoAccount = authDemoAccount(identifier);
+      } else {
+        var password = form.querySelector("[data-login-password]").value.trim();
+        if (!identifier || !password) { authSetError("请输入账号或手机号和密码。"); return; }
+        demoAccount = authDemoAccount(identifier);
+        if (!demoAccount) { authSetError("账号或手机号不存在，请使用演示账号。"); return; }
+        if (password !== demoAccount.password) { authSetError(demoAccount.passwordReset ? "密码错误，请使用重置后的新密码。" : "密码错误，演示账号统一密码为 123456。"); return; }
+      }
+      if (!demoAccount) { authSetError("该手机号未绑定后台账号，请联系管理员。"); return; }
+      authSelectRole(demoAccount.role, false);
+      authSetError("");
+      authLogin(demoAccount.role, demoAccount.account);
     }
     function authSelectRole(role, fillCredentials) {
       document.querySelectorAll("[data-login-role]").forEach(function (item) {
@@ -4170,8 +4328,135 @@
       });
       var account = document.querySelector("[data-login-account]");
       var password = document.querySelector("[data-login-password]");
+      var phone = document.querySelector("[data-login-phone]");
       if (account && accountName) account.value = accountName;
-      if (password && accountName) password.value = AUTH_DEMO_ACCOUNTS[accountName].password;
+      if (password && accountName) password.value = AUTH_DEMO_ACCOUNTS[accountName].passwordReset ? "" : AUTH_DEMO_ACCOUNTS[accountName].password;
+      if (phone && accountName) phone.value = AUTH_DEMO_ACCOUNTS[accountName].phone;
+      var tip = document.querySelector("[data-login-tip]");
+      if (tip && accountName) tip.textContent = "演示账号：" + accountName + " / " + AUTH_DEMO_ACCOUNTS[accountName].phone + (AUTH_DEMO_ACCOUNTS[accountName].passwordReset ? "；本次演示密码已重置。" : "；密码：123456。");
+    }
+    function authRecoveryError(message) {
+      var error = document.querySelector("[data-reset-error]");
+      if (error) error.textContent = message || "";
+    }
+    function authRecoveryUpdateCodeButton() {
+      var button = document.querySelector("[data-reset-send-code]");
+      var seconds = AUTH_RECOVERY.challenge ? Math.max(0, Math.ceil((AUTH_RECOVERY.challenge.resendAt - Date.now()) / 1000)) : 0;
+      if (button) {
+        button.disabled = !AUTH_RECOVERY.open || AUTH_RECOVERY.step !== "verify" || seconds > 0;
+        button.textContent = seconds > 0 ? seconds + "秒后重新获取" : "获取验证码";
+      }
+      if (!seconds && AUTH_RECOVERY.timer !== null) {
+        clearInterval(AUTH_RECOVERY.timer);
+        AUTH_RECOVERY.timer = null;
+      }
+    }
+    function authRecoveryClearChallenge() {
+      AUTH_RECOVERY.challenge = null;
+      if (AUTH_RECOVERY.timer !== null) clearInterval(AUTH_RECOVERY.timer);
+      AUTH_RECOVERY.timer = null;
+      document.querySelector("[data-reset-code]").value = "";
+      authRecoveryUpdateCodeButton();
+    }
+    function authRecoveryStep(step) {
+      AUTH_RECOVERY.step = step === "password" ? "password" : "verify";
+      document.querySelectorAll("[data-reset-step]").forEach(function (panel) {
+        var active = AUTH_RECOVERY.open && panel.getAttribute("data-reset-step") === AUTH_RECOVERY.step;
+        panel.hidden = !active;
+        panel.querySelectorAll("input, button").forEach(function (input) { input.disabled = !active; });
+      });
+      document.querySelectorAll("[data-reset-progress]").forEach(function (item) {
+        if (item.getAttribute("data-reset-progress") === AUTH_RECOVERY.step) item.setAttribute("aria-current", "step");
+        else item.removeAttribute("aria-current");
+      });
+      document.querySelector("[data-reset-back]").hidden = AUTH_RECOVERY.step !== "password";
+      document.querySelector("[data-reset-submit]").textContent = AUTH_RECOVERY.step === "password" ? "重置密码" : "下一步";
+      document.querySelector("[data-reset-password]").value = "";
+      document.querySelector("[data-reset-confirm]").value = "";
+      authRecoveryError("");
+      authRecoveryUpdateCodeButton();
+    }
+    function authRecoveryShow(open) {
+      AUTH_RECOVERY.open = !!open;
+      AUTH_RECOVERY.account = "";
+      AUTH_RECOVERY.verifiedUntil = 0;
+      authRecoveryClearChallenge();
+      authResetSms();
+      document.querySelector("[data-login-form]").hidden = !!open;
+      document.querySelector("[data-reset-form]").hidden = !open;
+      document.querySelector("[data-login-tip]").hidden = !!open;
+      document.querySelector(".auth-context").hidden = !!open;
+      document.querySelector("[data-forgot-password]").setAttribute("aria-expanded", open ? "true" : "false");
+      document.querySelector("#auth-title").textContent = open ? "找回密码" : "登录";
+      document.querySelector(".auth-description").textContent = open ? "验证账号绑定的手机号，重置登录密码。" : "请选择演示身份，登录后进入对应工作空间。";
+      authRecoveryStep("verify");
+      if (open) {
+        var identifier = document.querySelector(AUTH_LOGIN_METHOD === "sms" ? "[data-login-phone]" : "[data-login-account]").value.trim();
+        var user = authDemoAccount(identifier);
+        var phone = document.querySelector("[data-reset-phone]");
+        phone.value = user ? user.phone : /^\d+$/.test(identifier) ? identifier : "";
+        phone.focus();
+      } else {
+        document.querySelector("[data-reset-phone]").value = "";
+        document.querySelector("[data-reset-verified-phone]").value = "";
+        authSelectMethod("password");
+      }
+    }
+    function authRecoverySendCode() {
+      if (!AUTH_RECOVERY.open || AUTH_RECOVERY.step !== "verify") return;
+      if (AUTH_RECOVERY.challenge && Date.now() < AUTH_RECOVERY.challenge.resendAt) return;
+      var phone = document.querySelector("[data-reset-phone]").value.trim();
+      if (!/^1[3-9]\d{9}$/.test(phone)) { authRecoveryError("请输入正确的11位手机号。"); return; }
+      if (!authDemoAccount(phone)) { authRecoveryError("该手机号未绑定后台账号，请联系管理员重置密码。"); return; }
+      authRecoveryClearChallenge();
+      AUTH_RECOVERY.challenge = { phone: phone, code: "123456", expiresAt: Date.now() + 5 * 60 * 1000, resendAt: Date.now() + 60 * 1000 };
+      authRecoveryError("");
+      authRecoveryUpdateCodeButton();
+      AUTH_RECOVERY.timer = setInterval(authRecoveryUpdateCodeButton, 1000);
+      document.querySelector("[data-reset-code]").focus();
+      toast("找回密码演示验证码：123456，5分钟内有效（不发送真实短信）。");
+    }
+    function authSubmitRecovery(form) {
+      if (!AUTH_RECOVERY.open) return;
+      if (AUTH_RECOVERY.step === "verify") {
+        var phone = form.querySelector("[data-reset-phone]").value.trim();
+        var code = form.querySelector("[data-reset-code]").value.trim();
+        var challenge = AUTH_RECOVERY.challenge;
+        if (!/^1[3-9]\d{9}$/.test(phone)) { authRecoveryError("请输入正确的11位手机号。"); return; }
+        if (!/^\d{6}$/.test(code)) { authRecoveryError("请输入6位数字验证码。"); return; }
+        if (!challenge || challenge.phone !== phone) { authRecoveryError("请先获取当前手机号的找回密码验证码。"); return; }
+        if (Date.now() >= challenge.expiresAt) { authRecoveryError("验证码已过期，请重新获取。"); return; }
+        if (challenge.code !== code) { authRecoveryError("验证码错误，请重新输入。"); return; }
+        var user = authDemoAccount(phone);
+        if (!user) { authRecoveryError("该手机号未绑定后台账号，请联系管理员重置密码。"); return; }
+        AUTH_RECOVERY.account = user.account;
+        AUTH_RECOVERY.verifiedUntil = Date.now() + 5 * 60 * 1000;
+        document.querySelector("[data-reset-verified-phone]").value = user.phone;
+        authRecoveryClearChallenge();
+        authRecoveryStep("password");
+        document.querySelector("[data-reset-password]").focus();
+        return;
+      }
+      var account = authDemoAccount(AUTH_RECOVERY.account);
+      if (!account || Date.now() >= AUTH_RECOVERY.verifiedUntil) {
+        AUTH_RECOVERY.account = "";
+        AUTH_RECOVERY.verifiedUntil = 0;
+        authRecoveryStep("verify");
+        authRecoveryError("身份验证已过期，请重新验证手机号。");
+        return;
+      }
+      var password = form.querySelector("[data-reset-password]").value;
+      var confirm = form.querySelector("[data-reset-confirm]").value;
+      if (!/^(?=.*[A-Za-z])(?=.*\d)[!-~]{8,20}$/.test(password)) { authRecoveryError("密码须为8-20位，至少包含字母和数字，不能包含空格。"); return; }
+      if (password !== confirm) { authRecoveryError("两次输入的新密码不一致。"); return; }
+      if (password === account.password) { authRecoveryError("新密码不能与原密码相同。"); return; }
+      // Demo credentials stay in memory and return to defaults after a page reload.
+      account.password = password;
+      account.passwordReset = true;
+      authRecoveryShow(false);
+      authSelectRole(account.role, true);
+      document.querySelector("[data-login-password]").focus();
+      toast("密码已重置，请使用新密码重新登录（仅本次页面演示有效）。");
     }
     function authRouteKey(view, sub) {
       return view + (sub ? "/" + sub : "");
@@ -4206,6 +4491,7 @@
       if (error) error.textContent = message || "";
     }
     function authShowLogin() {
+      authRecoveryShow(false);
       var authScreen = document.querySelector("[data-auth-screen]");
       var appShell = document.querySelector("[data-app-shell]");
       if (authScreen) authScreen.hidden = false;
@@ -4213,6 +4499,8 @@
       closeDrawer();
       closeAccountMenu();
       authSetError("");
+      authResetSms();
+      authSelectMethod("password");
       authSelectRole("platform", true);
       var account = document.querySelector("[data-login-account]");
       if (account) {
@@ -4249,6 +4537,7 @@
       updateMyMessageMetrics();
     }
     function authLogin(role, account) {
+      authResetSms();
       var config = authRoleConfig(role);
       var session = {
         role: AUTH_ROLE_CONFIG[role] ? role : "platform",
@@ -17748,6 +18037,23 @@
         authSetError("");
         return;
       }
+      var loginMethod = event.target.closest("[data-login-method]");
+      if (loginMethod) {
+        authSelectMethod(loginMethod.getAttribute("data-login-method"));
+        return;
+      }
+      if (event.target.closest("[data-login-send-code]")) { authSendCode(); return; }
+      if (event.target.closest("[data-forgot-password]")) { authRecoveryShow(true); return; }
+      if (event.target.closest("[data-reset-send-code]")) { authRecoverySendCode(); return; }
+      if (event.target.closest("[data-reset-cancel]")) { authRecoveryShow(false); document.querySelector("[data-login-account]").focus(); return; }
+      if (event.target.closest("[data-reset-back]")) {
+        AUTH_RECOVERY.account = "";
+        AUTH_RECOVERY.verifiedUntil = 0;
+        authRecoveryClearChallenge();
+        authRecoveryStep("verify");
+        document.querySelector("[data-reset-phone]").focus();
+        return;
+      }
       var examinerToggle = event.target.closest("[data-examiner-picker-toggle]");
       var examinerOption = event.target.closest("[data-examiner-option]");
       if (!examinerToggle && !examinerOption && !event.target.closest("[data-examiner-picker]")) closeExaminerPickers();
@@ -20011,31 +20317,22 @@
       row.cells[4].textContent = "¥" + total;
     });
     document.body.addEventListener("submit", function (event) {
+      var recoveryForm = event.target.closest("[data-reset-form]");
+      if (recoveryForm) { event.preventDefault(); authSubmitRecovery(recoveryForm); return; }
       var loginForm = event.target.closest("[data-login-form]");
       if (!loginForm) return;
       event.preventDefault();
-      var accountInput = loginForm.querySelector("[data-login-account]");
-      var passwordInput = loginForm.querySelector("[data-login-password]");
-      var account = accountInput ? accountInput.value.trim().toLowerCase() : "";
-      var password = passwordInput ? passwordInput.value.trim() : "";
-      if (!account || !password) {
-        authSetError("请输入账号和密码。");
-        return;
-      }
-      var demoAccount = authDemoAccount(account);
-      if (!demoAccount) {
-        authSetError("账号不存在，请使用页面提供的演示账号。");
-        return;
-      }
-      if (password !== demoAccount.password) {
-        authSetError("密码错误，演示账号统一密码为 123456。");
-        return;
-      }
-      authSelectRole(demoAccount.role, false);
-      authSetError("");
-      authLogin(demoAccount.role, account);
+      authSubmitLogin(loginForm);
     });
     document.addEventListener("keydown", function (event) {
+      var loginTab = event.target.closest("[data-login-method]");
+      if (loginTab && ["ArrowLeft", "ArrowRight", "Home", "End"].indexOf(event.key) > -1) {
+        event.preventDefault();
+        var method = event.key === "Home" ? "password" : event.key === "End" ? "sms" : AUTH_LOGIN_METHOD === "sms" ? "password" : "sms";
+        authSelectMethod(method);
+        document.querySelector('[data-login-method="' + method + '"]').focus();
+        return;
+      }
       if (event.key === "Escape") closeExaminerPickers();
       if (event.key === "Delete" && drawer.classList.contains("open") && drawerBody.querySelector("[data-cert-wizard]")) {
         var deleteState = certWizardState();
