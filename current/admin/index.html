@@ -3181,8 +3181,8 @@
           <div class="subview" data-subview="batches">
             
             <div class="tabs batch-publish-status-tabs" role="tablist" aria-label="批次状态"><button class="tab active" type="button" data-batch-publish-tab="未发布" role="tab" aria-selected="true">未发布</button><button class="tab" type="button" data-batch-publish-tab="已发布" role="tab" aria-selected="false">已发布</button><button class="tab" type="button" data-batch-publish-tab="已结束" role="tab" aria-selected="false">已结束</button><button class="tab" type="button" data-batch-publish-tab="已归档" role="tab" aria-selected="false">已归档</button></div>
-            <div class="filter-card" data-batch-list-filter><div class="field"><label for="batch-list-keyword">批次名称</label><input class="input" id="batch-list-keyword" data-batch-list-keyword placeholder="请输入批次名称、编码或简章标题"></div><div class="field"><label>考试方式</label><select class="select" data-batch-list-mode><option value="">全部考试方式</option><option value="线上考试">线上考试</option><option value="线下考试">线下考试</option></select></div><div class="field"><label>承办单位</label><select class="select" data-batch-list-org><option value="">全部承办单位</option></select></div><div class="field"><label>时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-list-date-start aria-label="批次时间开始"><input class="input" type="date" data-batch-list-date-end aria-label="批次时间结束"></div><span class="muted">按报名或考试时间命中</span></div><div class="field"><label>阶段</label><select class="select" data-batch-list-stage><option value="">全部阶段</option></select></div><div class="field"><label>当前状态</label><select class="select" data-batch-list-status><option value="">全部当前状态</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-list-search>查询</button><button class="btn" data-batch-list-reset>重置</button></div></div></div>
-            <div class="table-card"><div class="table-tools"><h2 class="table-title">批次列表</h2><div class="page-actions"><span class="tag blue">线上/线下独立发布 · 批次 ID 贯穿全流程</span><button class="btn primary" data-jump="plans/batch-create">新增批次</button></div></div><div class="table-wrap"><table class="batch-list-table"><thead><tr><th>演示顺序</th><th>批次</th><th>考试方式</th><th>关联简章</th><th>承办单位</th><th>报名时间</th><th>考试时间</th><th>报名二维码</th><th>考点</th><th>执行专业数量</th><th>报名人数</th><th>已缴费人数</th><th>考官数量</th><th>发布状态</th><th>审核状态</th><th>当前阶段 / 状态</th><th>操作</th></tr></thead><tbody data-demo-batch-list>
+            <div class="filter-card" data-batch-list-filter><div class="field"><label for="batch-list-keyword">批次名称</label><input class="input" id="batch-list-keyword" data-batch-list-keyword placeholder="请输入批次名称、编码或简章标题"></div><div class="field"><label>考试方式</label><select class="select" data-batch-list-mode><option value="">全部考试方式</option><option value="线上考试">线上考试</option><option value="线下考试">线下考试</option></select></div><div class="field"><label>所属单位</label><select class="select" data-batch-list-org><option value="">全部所属单位</option></select></div><div class="field"><label>时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-list-date-start aria-label="批次时间开始"><input class="input" type="date" data-batch-list-date-end aria-label="批次时间结束"></div><span class="muted">按报名或考试时间命中</span></div><div class="field"><label>阶段</label><select class="select" data-batch-list-stage><option value="">全部阶段</option></select></div><div class="field"><label>当前状态</label><select class="select" data-batch-list-status><option value="">全部当前状态</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-list-search>查询</button><button class="btn" data-batch-list-reset>重置</button></div></div></div>
+            <div class="table-card"><div class="table-tools"><h2 class="table-title">批次列表</h2><div class="page-actions"><span class="tag blue">线上/线下独立发布 · 批次 ID 贯穿全流程</span><button class="btn primary" data-jump="plans/batch-create">新增批次</button></div></div><div class="table-wrap"><table class="batch-list-table"><thead><tr><th>演示顺序</th><th>批次</th><th>考试方式</th><th>关联简章</th><th>所属单位</th><th>报名时间</th><th>考试时间</th><th>报名二维码</th><th>考点</th><th>执行专业数量</th><th>报名人数</th><th>已缴费人数</th><th>考官数量</th><th>发布状态</th><th>审核状态</th><th>当前阶段 / 状态</th><th>操作</th></tr></thead><tbody data-demo-batch-list>
             </tbody></table></div></div>
           </div>
           <div class="subview" data-subview="batch-review">
@@ -3195,12 +3195,12 @@
             </div>
             <div class="filter-card" data-batch-review-filter>
               <div class="field"><label>批次名称</label><input class="input" data-batch-review-keyword placeholder="请输入批次名称或申请编号"></div>
-              <div class="field"><label>承办单位</label><select class="select" data-batch-review-org><option value="">全部承办单位</option></select></div>
+              <div class="field"><label>所属单位</label><select class="select" data-batch-review-org><option value="">全部所属单位</option></select></div>
               <div class="field"><label>考试方式</label><select class="select" data-batch-review-mode><option value="">全部考试方式</option><option>线上考试</option><option>线下考试</option></select></div>
               <div class="field"><label>提交时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-review-date-start value="2026-07-14" aria-label="提交开始日期"><input class="input" type="date" data-batch-review-date-end value="2026-08-12" aria-label="提交结束日期"></div><span class="muted">默认最近30天</span></div>
               <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-review-search>查询</button><button class="btn" data-batch-review-reset>重置</button></div></div>
             </div>
-            <div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次计划审核列表</h2><span class="muted">审核通过不必然等于已发布：按发布策略自动发布或由平台执行“正式发布”；只有已发布批次可进入工作台。</span></div><span class="tag blue">平台专属</span></div><div class="table-wrap"><table class="batch-review-table"><thead><tr><th>申请编号</th><th>批次名称</th><th>考试方式</th><th>关联简章</th><th>承办单位</th><th>报名时间</th><th>考试时间</th><th>提交人</th><th>提交时间</th><th>审核状态</th><th>批次版本/审核实例</th><th>发布策略/状态</th><th>通知状态</th><th>驳回原因</th><th>操作</th></tr></thead><tbody data-batch-review-body></tbody></table></div></div>
+            <div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次计划审核列表</h2><span class="muted">审核通过不必然等于已发布：按发布策略自动发布或由平台执行“正式发布”；只有已发布批次可进入工作台。</span></div><span class="tag blue">平台专属</span></div><div class="table-wrap"><table class="batch-review-table"><thead><tr><th>申请编号</th><th>批次名称</th><th>考试方式</th><th>关联简章</th><th>所属单位</th><th>报名时间</th><th>考试时间</th><th>提交人</th><th>提交时间</th><th>审核状态</th><th>批次版本/审核实例</th><th>发布策略/状态</th><th>通知状态</th><th>驳回原因</th><th>操作</th></tr></thead><tbody data-batch-review-body></tbody></table></div></div>
           </div>
           <div class="subview" data-subview="batch-create">
             <div data-batch-create-page></div>
@@ -8220,11 +8220,42 @@
       if (!Number.isInteger(value) || value < 1) value = 15;
       return "缴费后" + value + "日内完成考级视频录制提交";
     }
+    function batchOwnerUnits() {
+      var scope = roleOrganizationDataScope();
+      return Array.from(document.querySelectorAll('[data-subview="units"] [data-unit-row]')).map(function (row) {
+        return { id: row.getAttribute("data-unit-id"), name: row.getAttribute("data-unit-name"), type: row.getAttribute("data-unit-type") };
+      }).filter(function (unit) {
+        return scope.ids[unit.id] && ["平台", "承办单位", "培训机构"].indexOf(unit.type) > -1;
+      });
+    }
+    function batchOwnerOptionsHtml() {
+      var units = batchOwnerUnits();
+      var currentId = roleOrganizationDataScope().rootOrgId;
+      return '<option value="">请选择所属单位</option>' + ["平台", "承办单位", "培训机构"].map(function (type) {
+        var options = units.filter(function (unit) { return unit.type === type; });
+        if (!options.length) return "";
+        return '<optgroup label="' + type + '">' + options.map(function (unit) {
+          return '<option value="' + escapeHtml(unit.id) + '"' + (unit.id === currentId ? ' selected' : '') + '>' + escapeHtml(unit.name) + '</option>';
+        }).join("") + '</optgroup>';
+      }).join("");
+    }
+    function batchSelectedOwnerUnit(root) {
+      var select = root && root.querySelector("[data-batch-form-org]");
+      return select && batchOwnerUnits().find(function (unit) { return unit.id === select.value; }) || null;
+    }
+    function batchHydrateOwnerUnit(root, batch) {
+      var select = root && root.querySelector("[data-batch-form-org]");
+      if (!select) return;
+      var unit = batchOwnerUnits().find(function (item) {
+        return batch.ownerOrgId ? item.id === batch.ownerOrgId : item.name === batch.org;
+      });
+      select.value = unit ? unit.id : "";
+    }
     function batchCreateBasicHtml() {
       return [
         '<div class="table-card"><div class="table-tools"><h2 class="table-title">基础信息</h2><span class="tag blue">批次主档</span></div><div style="padding:16px">',
         '<div class="field-row-2"><div class="field"><label>考试方式 *</label><select class="select" data-batch-exam-mode><option value="offline">线下考试</option><option value="online">线上考试</option></select><span class="muted">线上批次与线下批次分别创建、分别发布。</span></div>' + batchBrochurePickerHtml() + '</div>',
-        '<div class="field-row-2" style="margin-top:12px"><div class="field"><label>批次名称 *</label><input class="input" data-batch-form-name value="2026下半年 · 武汉"></div><div class="field"><label>承办单位 *</label><select class="select" data-batch-form-org><option>武汉承办中心</option><option>宜昌承办中心</option></select></div></div>',
+        '<div class="field-row-2" style="margin-top:12px"><div class="field"><label>批次名称 *</label><input class="input" data-batch-form-name value="2026下半年 · 武汉"></div><div class="field"><label for="batch-owner-unit">所属单位 *</label><select class="select" id="batch-owner-unit" data-batch-form-org required>' + batchOwnerOptionsHtml() + '</select></div></div>',
         '<div class="field-row-2" style="margin-top:12px"><div class="field batch-datetime-field"><label>报名开始日期/时间 *</label><div class="batch-datetime-range"><input class="input" type="date" data-batch-enroll-start-date value="2026-07-01" aria-label="报名开始日期"><input class="input" type="time" step="1" data-batch-enroll-start-time value="00:00:00" aria-label="报名开始时间"><span class="batch-datetime-range-separator">至</span><input class="input" type="date" data-batch-enroll-end-date value="2026-08-15" aria-label="报名截止日期"><input class="input" type="time" step="1" data-batch-enroll-end-time value="23:59:59" aria-label="报名截止时间"></div><span class="muted">日期 YYYYMMDD，时间 hhmmss，精确到秒。</span></div></div>',
         '<div class="field-row-2" style="margin-top:12px"><div class="field batch-datetime-field" data-batch-mode-section="offline"><label>考试开始日期/时间 *</label><div class="batch-datetime-range"><input class="input" type="date" data-batch-exam-start-date value="2026-08-18" aria-label="考试开始日期"><input class="input" type="time" step="1" data-batch-exam-start-time value="00:00:00" aria-label="考试开始时间"><span class="batch-datetime-range-separator">至</span><input class="input" type="date" data-batch-exam-end-date value="2026-08-24" aria-label="考试结束日期"><input class="input" type="time" step="1" data-batch-exam-end-time value="23:59:59" aria-label="考试结束时间"></div><span class="muted">日期 YYYYMMDD，时间 hhmmss，精确到秒；允许跨日。</span></div><div class="field batch-datetime-field" data-batch-mode-section="online" hidden><label>视频录制提交期限（天） *</label><input class="input" type="number" min="1" max="90" step="1" inputmode="numeric" data-batch-online-submit-days value="15" aria-describedby="batch-online-submit-days-note"><span class="muted" id="batch-online-submit-days-note">考生缴费后，在设定天数内完成考级视频录制并提交；系统按每笔缴费时间计算个人截止时间。</span></div></div>',
         '<div class="field-row-2" style="margin-top:12px"><div class="field"><label>联系人</label><input class="input" data-batch-contact-name value="周老师" maxlength="20" placeholder="请输入联系人姓名"></div><div class="field"><label>联系方式</label><input class="input" data-batch-contact-phone value="027-87561234" maxlength="30" placeholder="手机号或座机号"></div></div>',
@@ -8279,6 +8310,7 @@
       var executionCount = root.querySelectorAll('[data-batch-picker="execution"] [data-batch-select]:checked').length;
       if (!name || !name.value.trim()) return { ok: false, message: "请填写批次名称" };
       if (!mode || !mode.value) return { ok: false, message: "请选择考试方式" };
+      if (!batchSelectedOwnerUnit(root)) return { ok: false, message: "请选择本单位或下级单位作为所属单位" };
       if (brochureChecks.length !== 1) return { ok: false, message: "请选择一份已发布简章" };
       if (brochureChecks.some(function (item) { var option = item.closest("[data-batch-brochure-option]"); return item.disabled || !option || option.textContent.indexOf("已发布") === -1; })) return { ok: false, message: "批次只能关联已发布简章" };
       if (!enrollStart.date || !enrollStart.time || !enrollEnd.date || !enrollEnd.time) return { ok: false, message: "请完整填写报名日期和时间" };
@@ -8329,6 +8361,8 @@
     }
     function batchFormSnapshot(action) {
       var root = batchCreateRoot();
+      var ownerUnit = batchSelectedOwnerUnit(root);
+      if (!ownerUnit) return null;
       var mode = root.querySelector("[data-batch-exam-mode]");
       var selectedBrochure = root.querySelector("[data-batch-brochure-check]:checked");
       var selectedSites = mode.value === "online" ? [] : Array.from(root.querySelectorAll('[data-batch-picker="site"] [data-batch-select]:checked')).map(function (item) { return item.closest("[data-batch-row]").querySelector("td:nth-child(2)").textContent.trim(); });
@@ -8338,7 +8372,9 @@
       var batch = existing ? Object.assign({}, existing) : { id: id, code: "BATCH-DEMO-" + id.slice(-6), city: "武汉", assignedSessions: 0, enrolled: 0, paid: 0, conflicts: 0, majorCount: selectedExecution, siteCount: selectedSites.length };
       var actionLabel = action === "publish" ? "报名中" : "计划编制";
       batch.name = root.querySelector("[data-batch-form-name]").value.trim();
-      batch.org = root.querySelector("[data-batch-form-org]").value;
+      batch.org = ownerUnit.name;
+      batch.ownerOrgId = ownerUnit.id;
+      batch.ownerOrgType = ownerUnit.type;
       batch.contactName = (root.querySelector("[data-batch-contact-name]") || {}).value || "";
       batch.contactPhone = (root.querySelector("[data-batch-contact-phone]") || {}).value || "";
       batch.remark = (root.querySelector("[data-batch-form-remark]") || {}).value || "";
@@ -8389,7 +8425,6 @@
       var examRange = batch.examStartDate ? { startDate: batch.examStartDate, startTime: batch.examStartTime, endDate: batch.examEndDate, endTime: batch.examEndTime } : batchDateTimeRangeParts(batch.examWindow);
       var values = {
         "[data-batch-form-name]": batch.name,
-        "[data-batch-form-org]": batch.org,
         "[data-batch-enroll-start-date]": batchInputDateValue(enrollRange.startDate),
         "[data-batch-enroll-start-time]": batchInputTimeValue(enrollRange.startTime, "00:00:00"),
         "[data-batch-enroll-end-date]": batchInputDateValue(enrollRange.endDate),
@@ -8403,6 +8438,7 @@
         "[data-batch-form-remark]": batch.remark || ""
       };
       Object.keys(values).forEach(function (selector) { var node = root.querySelector(selector); if (node && values[selector]) node.value = values[selector]; });
+      batchHydrateOwnerUnit(root, batch);
       var onlineSubmitDays = root.querySelector("[data-batch-online-submit-days]");
       if (onlineSubmitDays && batch.onlineSubmitWindowDays) onlineSubmitDays.value = batch.onlineSubmitWindowDays;
       batchSyncCoverImagePreview(root, batch.coverImage || null);
@@ -8416,6 +8452,7 @@
       var validation = batchValidationResult(batchCreateRoot(), action);
       if (!validation.ok) { toast("保存已阻断：" + validation.message); return; }
       var batch = batchFormSnapshot(action);
+      if (!batch) { toast("保存已阻断：请选择本单位或下级单位作为所属单位"); return; }
       window.__editingBatchId = "";
       renderBatchManagementDemoRows();
       showPage("plans", "batches");
@@ -11357,7 +11394,7 @@
       if (orgInput) {
         var currentOrg = orgInput.value;
         var reviewOrgs = Array.from(new Set(BATCH_REVIEW_DEMO.map(function (item) { return item.org; })));
-        orgInput.innerHTML = '<option value="">全部承办单位</option>' + reviewOrgs.map(function (org) { return '<option value="' + escapeHtml(org) + '">' + escapeHtml(org) + '</option>'; }).join("");
+        orgInput.innerHTML = '<option value="">全部所属单位</option>' + reviewOrgs.map(function (org) { return '<option value="' + escapeHtml(org) + '">' + escapeHtml(org) + '</option>'; }).join("");
         orgInput.value = reviewOrgs.indexOf(currentOrg) > -1 ? currentOrg : "";
       }
       var activeStatus = activeBatchReviewStatus();
@@ -11575,14 +11612,14 @@
       openDrawer("batch-brochure-detail");
     }
     function batchBrochureDetailBodyHtml(batch) {
-      return '<div class="info-banner"><strong>' + escapeHtml(batch.brochureName) + '</strong><br><span class="muted">已绑定到批次 ' + escapeHtml(batch.id) + '</span></div><dl class="kv"><dt>简章状态</dt><dd><span class="tag green">已发布</span></dd><dt>关联规划</dt><dd>' + escapeHtml(batch.planCode) + '</dd><dt>承办单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名窗口</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>批次约束</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">简章在本批次中的作用</h2><span class="tag blue">发布快照</span></div><p class="muted" style="padding:0 16px 16px;margin:0;line-height:1.7">批次发布时锁定简章内容、报名窗口、考试时间和开考范围；后续简章版本更新不会覆盖已发布批次。</p></div>';
+      return '<div class="info-banner"><strong>' + escapeHtml(batch.brochureName) + '</strong><br><span class="muted">已绑定到批次 ' + escapeHtml(batch.id) + '</span></div><dl class="kv"><dt>简章状态</dt><dd><span class="tag green">已发布</span></dd><dt>关联规划</dt><dd>' + escapeHtml(batch.planCode) + '</dd><dt>所属单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名窗口</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>批次约束</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">简章在本批次中的作用</h2><span class="tag blue">发布快照</span></div><p class="muted" style="padding:0 16px 16px;margin:0;line-height:1.7">批次发布时锁定简章内容、报名窗口、考试时间和开考范围；后续简章版本更新不会覆盖已发布批次。</p></div>';
     }
     function renderBatchManagementFilterOptions() {
       var root = document.querySelector("[data-batch-list-filter]");
       if (!root) return;
       var optionData = {
         "data-batch-list-mode": { first: "全部考试方式", values: BATCH_DEMO_LIST.map(function (batch) { return batch.examMode || batch.mode || "线下考试"; }) },
-        "data-batch-list-org": { first: "全部承办单位", values: BATCH_DEMO_LIST.map(function (batch) { return batch.org; }) },
+        "data-batch-list-org": { first: "全部所属单位", values: BATCH_DEMO_LIST.map(function (batch) { return batch.org; }) },
         "data-batch-list-stage": { first: "全部阶段", values: BATCH_DEMO_LIST.map(function (batch) { return batch.stage; }), labels: BATCH_STAGE_LABEL },
         "data-batch-list-status": { first: "全部当前状态", values: BATCH_DEMO_LIST.map(function (batch) { return batch.status; }) }
       };
@@ -16420,7 +16457,7 @@
       return [
         '<div class="drawer-section"><h3 class="drawer-section-title">报名缴费概览</h3><div class="enroll-workbench">',
         '<div class="card enroll-batch-card">',
-        '<div class="enroll-batch-info"><strong>' + escapeHtml(batch.name) + '</strong><span>报名 ' + escapeHtml(batch.enrollWindow) + ' · 考试 ' + escapeHtml(batch.examWindow) + ' · 承办单位：' + escapeHtml(batch.org) + '</span><span class="muted">报名后自动生成待缴费记录；缴费确认后进入培训机构待排期池。</span></div>',
+        '<div class="enroll-batch-info"><strong>' + escapeHtml(batch.name) + '</strong><span>报名 ' + escapeHtml(batch.enrollWindow) + ' · 考试 ' + escapeHtml(batch.examWindow) + ' · 所属单位：' + escapeHtml(batch.org) + '</span><span class="muted">报名后自动生成待缴费记录；缴费确认后进入培训机构待排期池。</span></div>',
         '<div class="mini-stat"><span>总报名</span><strong>' + formatDemoNumber(batch.enrolled) + '</strong><small class="muted">当前批次</small></div>',
         '<div class="mini-stat"><span>已缴费</span><strong>' + formatDemoNumber(batch.paid) + '</strong><small class="muted">后台确认</small></div>',
         '<div class="mini-stat"><span>待缴费</span><strong>' + formatDemoNumber(batch.pendingPayment) + '</strong><small class="muted">不进入编排</small></div>',
@@ -16445,7 +16482,7 @@
       var enrollRoute = batchRoute("batch-workbench", "enroll", batch.id);
       var dispatchRoute = batchRoute("batch-workbench", "dispatch", batch.id);
       return [
-        '<dl class="kv"><dt>批次 ID</dt><dd><code>' + escapeHtml(batch.id) + '</code></dd><dt>考试方式</dt><dd>' + escapeHtml(batch.site === "线上提交" ? "线上考试" : "线下考试") + '</dd><dt>关联简章</dt><dd>' + escapeHtml(batch.brochureName) + '</dd><dt>承办单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>考试时间/考点</dt><dd>' + escapeHtml(batch.examWindow) + ' / ' + escapeHtml(batch.site) + '</dd><dt>报名二维码</dt><dd><button class="btn link" data-drawer="batch-org-qr">查看批次+报名机构二维码</button></dd><dt>执行专业数量</dt><dd><button class="btn link" data-toast="已切换到执行专业与级别分页签">' + formatDemoNumber(batch.majorCount) + '个专业</button></dd><dt>报名人数</dt><dd><button class="btn link" data-jump="' + escapeHtml(enrollRoute) + '" data-close-drawer>' + formatDemoNumber(batch.enrolled) + '</button></dd><dt>已缴费人数</dt><dd><button class="btn link" data-jump="' + escapeHtml(enrollRoute) + '" data-close-drawer>' + formatDemoNumber(batch.paid) + '</button></dd><dt>已关联考官数</dt><dd><button class="btn link" data-jump="' + escapeHtml(dispatchRoute) + '" data-close-drawer>' + formatDemoNumber(batch.assignedSessions) + '</button></dd><dt>约束校验</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd><dt>主流程</dt><dd>报名与缴费 → 排期编排 → 考官派遣 → 准考证 → 成绩 → 证书 → 运营分析</dd></dl>',
+        '<dl class="kv"><dt>批次 ID</dt><dd><code>' + escapeHtml(batch.id) + '</code></dd><dt>考试方式</dt><dd>' + escapeHtml(batch.site === "线上提交" ? "线上考试" : "线下考试") + '</dd><dt>关联简章</dt><dd>' + escapeHtml(batch.brochureName) + '</dd><dt>所属单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>考试时间/考点</dt><dd>' + escapeHtml(batch.examWindow) + ' / ' + escapeHtml(batch.site) + '</dd><dt>报名二维码</dt><dd><button class="btn link" data-drawer="batch-org-qr">查看批次+报名机构二维码</button></dd><dt>执行专业数量</dt><dd><button class="btn link" data-toast="已切换到执行专业与级别分页签">' + formatDemoNumber(batch.majorCount) + '个专业</button></dd><dt>报名人数</dt><dd><button class="btn link" data-jump="' + escapeHtml(enrollRoute) + '" data-close-drawer>' + formatDemoNumber(batch.enrolled) + '</button></dd><dt>已缴费人数</dt><dd><button class="btn link" data-jump="' + escapeHtml(enrollRoute) + '" data-close-drawer>' + formatDemoNumber(batch.paid) + '</button></dd><dt>已关联考官数</dt><dd><button class="btn link" data-jump="' + escapeHtml(dispatchRoute) + '" data-close-drawer>' + formatDemoNumber(batch.assignedSessions) + '</button></dd><dt>约束校验</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd><dt>主流程</dt><dd>报名与缴费 → 排期编排 → 考官派遣 → 准考证 → 成绩 → 证书 → 运营分析</dd></dl>',
         batchEnrollmentOverviewHtml(batch),
         '<div class="tabs" aria-label="批次详情分页签" style="margin-top:14px"><button class="tab">基本信息</button><button class="tab active">执行专业与级别</button><button class="tab">报名二维码</button><button class="tab">报名缴费</button><button class="tab">排期准考证</button><button class="tab">成绩证书</button></div>',
         batchExecutionDetailTableHtml(),
@@ -16456,7 +16493,7 @@
       batch = batch || currentBatchContext();
       var order = batchStageOrder(batch);
       var stageIndex = order.indexOf(batch.stage);
-      return '<div class="batch-detail-summary"><div class="table-card"><div class="table-tools"><h2 class="table-title">批次基本信息</h2>' + batchTagHtml(batch.statusTag || "blue", batch.status) + '</div><div style="padding:16px"><dl class="kv"><dt>批次 ID</dt><dd><code>' + escapeHtml(batch.id) + '</code></dd><dt>考试方式</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "线上考试" : "线下考试") + '</dd><dt>关联简章</dt><dd>' + escapeHtml(batch.brochureName) + '</dd><dt>承办单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名时间</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>默认考点</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "不适用（线上考试）" : batch.site) + '</dd><dt>约束校验</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">批次数据</h2></div><div style="padding:16px"><div class="site-summary-grid" style="padding:0;border:0;background:transparent;grid-template-columns:repeat(2,minmax(0,1fr));"><div class="site-summary-item"><span>报名人数</span><strong>' + formatDemoNumber(batch.enrolled) + '</strong></div><div class="site-summary-item"><span>已缴费人数</span><strong>' + formatDemoNumber(batch.paid) + '</strong></div><div class="site-summary-item"><span>' + (isOnlineBatch(batch) ? "已提交视频人数" : "执行专业数量") + '</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.videoSubmitted : batch.majorCount) + '</strong></div><div class="site-summary-item"><span>已关联考官数</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.assignedStudents : batch.assignedSessions) + '</strong></div></div></div></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">主流程状态</h2><span class="muted">当前阶段：' + escapeHtml(batchStageLabel(batch, batch.stage)) + '</span></div><div style="padding:16px"><div class="batch-detail-flow">' + order.filter(function (stage) { return stage !== "overview"; }).map(function (stage) { var active = order.indexOf(stage) === stageIndex; return '<span class="' + (active ? "active" : "") + '">' + escapeHtml(batchStageLabel(batch, stage)) + '</span>'; }).join("") + '</div></div></div>';
+      return '<div class="batch-detail-summary"><div class="table-card"><div class="table-tools"><h2 class="table-title">批次基本信息</h2>' + batchTagHtml(batch.statusTag || "blue", batch.status) + '</div><div style="padding:16px"><dl class="kv"><dt>批次 ID</dt><dd><code>' + escapeHtml(batch.id) + '</code></dd><dt>考试方式</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "线上考试" : "线下考试") + '</dd><dt>关联简章</dt><dd>' + escapeHtml(batch.brochureName) + '</dd><dt>所属单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名时间</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>默认考点</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "不适用（线上考试）" : batch.site) + '</dd><dt>约束校验</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">批次数据</h2></div><div style="padding:16px"><div class="site-summary-grid" style="padding:0;border:0;background:transparent;grid-template-columns:repeat(2,minmax(0,1fr));"><div class="site-summary-item"><span>报名人数</span><strong>' + formatDemoNumber(batch.enrolled) + '</strong></div><div class="site-summary-item"><span>已缴费人数</span><strong>' + formatDemoNumber(batch.paid) + '</strong></div><div class="site-summary-item"><span>' + (isOnlineBatch(batch) ? "已提交视频人数" : "执行专业数量") + '</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.videoSubmitted : batch.majorCount) + '</strong></div><div class="site-summary-item"><span>已关联考官数</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.assignedStudents : batch.assignedSessions) + '</strong></div></div></div></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">主流程状态</h2><span class="muted">当前阶段：' + escapeHtml(batchStageLabel(batch, batch.stage)) + '</span></div><div style="padding:16px"><div class="batch-detail-flow">' + order.filter(function (stage) { return stage !== "overview"; }).map(function (stage) { var active = order.indexOf(stage) === stageIndex; return '<span class="' + (active ? "active" : "") + '">' + escapeHtml(batchStageLabel(batch, stage)) + '</span>'; }).join("") + '</div></div></div>';
     }
     function batchDetailExecutionHtml(batch) {
       return '<div class="info-banner"><strong>批次执行快照：</strong>' + escapeHtml(batch.name) + '（' + escapeHtml(batch.id) + '）的执行专业、级别和门类评分维度按本批次快照读取；费用在报名机构页签维护。</div>' + batchExecutionDetailTableHtml();
@@ -16496,7 +16533,7 @@
       var examEnd = mode === "线上考试" ? batchOnlineSubmitRuleText(batch.onlineSubmitWindowDays) : batchDetailWindowPart(batch.examWindow, 1);
       return '<div class="table-card"><div class="table-tools"><h2 class="table-title">基本信息</h2><span class="tag blue">只读回显</span></div><div style="padding:16px"><div class="field-row-2">' +
         batchDetailReadonlyFieldHtml("考试方式", mode) + batchDetailReadonlyFieldHtml("批次 ID", batch.id) +
-        '</div><div class="field-row-2" style="margin-top:12px">' + batchDetailReadonlyFieldHtml("关联考级简章", batch.brochureName) + batchDetailReadonlyFieldHtml("承办单位", batch.org) +
+        '</div><div class="field-row-2" style="margin-top:12px">' + batchDetailReadonlyFieldHtml("关联考级简章", batch.brochureName) + batchDetailReadonlyFieldHtml("所属单位", batch.org) +
         '</div><div class="field-row-2" style="margin-top:12px">' + batchDetailReadonlyFieldHtml("批次名称", batch.name) + batchDetailReadonlyFieldHtml("联系人", batch.contactName || "承办单位管理员") +
         '</div><div class="field-row-2" style="margin-top:12px">' + batchDetailReadonlyFieldHtml("联系方式", batch.contactPhone || "待补充") + batchDetailReadonlyFieldHtml("备注", batch.remark || "-") +
         '</div><div class="field-row-2" style="margin-top:12px">' + batchDetailReadonlyFieldHtml("报名开始时间", batchDetailWindowPart(batch.enrollWindow, 0)) + batchDetailReadonlyFieldHtml("报名截止时间", batchDetailWindowPart(batch.enrollWindow, 1)) +
