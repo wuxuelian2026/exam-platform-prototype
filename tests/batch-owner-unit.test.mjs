@@ -28,6 +28,8 @@ function fixture(role = "platform") {
   }
   fields.set("[data-batch-exam-mode]", { value: "offline" });
   fields.set("[data-batch-online-submit-days]", { value: "15" });
+  fields.set("[data-batch-contact-name]", { value: "周老师" });
+  fields.set("[data-batch-contact-phone]", { value: "027-87561234" });
   const brochure = {
     disabled: false,
     closest: () => ({ textContent: "原型简章 已发布", getAttribute: () => "原型简章" })
@@ -181,4 +183,54 @@ test("invalid owner cannot create or modify a batch snapshot", () => {
   f.context.batchFormSnapshot("draft");
   assert.equal(batch.ownerOrgId, "inst-guanggu");
   assert.equal(f.context.BATCH_DEMO_LIST.length, 1);
+});
+
+test("contact fields have associated labels, required semantics and existing limits", () => {
+  const basicHtml = between("    function batchCreateBasicHtml(", "    function batchCreatePageBodyHtml(");
+  for (const [key, label, limit] of [["name", "联系人", 20], ["phone", "联系方式", 30]]) {
+    assert.ok(basicHtml.includes(`<label for="batch-contact-${key}">${label} *</label>`));
+    const input = basicHtml.match(new RegExp(`<input[^>]*id="batch-contact-${key}"[^>]*>`))[0];
+    assert.match(input, /\srequired(?=[\s>])/);
+    assert.ok(input.includes(`maxlength="${limit}"`));
+  }
+});
+
+test("all save actions require both contacts for online and offline plans", () => {
+  for (const mode of ["offline", "online"]) {
+    for (const action of ["draft", "submit-review", "publish"]) {
+      for (const [key, label] of [["name", "联系人"], ["phone", "联系方式"]]) {
+        for (const value of ["", "   ", "\t\n", null]) {
+          const f = fixture();
+          f.fields.get("[data-batch-exam-mode]").value = mode;
+          const selector = `[data-batch-contact-${key}]`;
+          if (value === null) f.fields.delete(selector);
+          else f.fields.get(selector).value = value;
+          const result = f.context.batchValidationResult(f.root, action);
+          assert.equal(result.ok, false, `${mode}/${action}/${key}/${JSON.stringify(value)}`);
+          assert.equal(result.message, `请填写${label}`);
+        }
+      }
+    }
+  }
+});
+
+test("valid contacts accept mobile and landline numbers without changing length limits", () => {
+  const f = fixture();
+  const name = f.fields.get("[data-batch-contact-name]");
+  const phone = f.fields.get("[data-batch-contact-phone]");
+  name.value = "联".repeat(20);
+  for (const mode of ["offline", "online"]) {
+    f.fields.get("[data-batch-exam-mode]").value = mode;
+    for (const action of ["draft", "submit-review", "publish"]) {
+      for (const number of ["13800000000", "027-87561234", "1".repeat(30)]) {
+        phone.value = number;
+        assert.equal(f.context.batchValidationResult(f.root, action).ok, true);
+      }
+    }
+  }
+  name.value += "人";
+  assert.equal(f.context.batchValidationResult(f.root, "draft").message, "联系人最多20个字符");
+  name.value = "周老师";
+  phone.value = "1".repeat(31);
+  assert.equal(f.context.batchValidationResult(f.root, "draft").message, "联系方式最多30个字符");
 });
