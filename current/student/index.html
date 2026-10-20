@@ -11571,6 +11571,7 @@
                 <div class="application-detail-row"><span>考点电话</span><strong data-exam-detail-phone>027-88889999</strong></div>
                 <div class="application-detail-row"><span>考场</span><strong data-exam-detail-session>第3考场</strong></div>
                 <div class="application-detail-row"><span>序号</span><strong data-exam-detail-order>03</strong></div>
+                <div class="application-detail-row" data-exam-detail-entry-group-row hidden><span>入场分组</span><strong data-exam-detail-entry-group></strong></div>
               </div>
             </div>
           </section>
@@ -13610,6 +13611,7 @@
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
   <script src="../shared/hbyx-exam-navigation.js"></script>
+  <script src="../shared/hbyx-exam-entry-groups.js"></script>
   <script>
     (function () {
       var shell = document.querySelector(".phone-shell");
@@ -14570,6 +14572,7 @@
           ]
         },
         "mock-yesterday-offline": {
+          entryGroup: { id: "dance-yesterday-g1", name: "第1组", memberOrder: 1, memberCount: 7 },
           title: "中国舞 · 4级", tracks: [{ group: "基本功", title: "基本功组合" }],
           status: "已缴费", statusClass: "", detailKind: "exam", mode: "offline",
           info: "相对日期演示 · 中国舞 · 4级 · 线下考试", examDate: mockExamDateKey(-1).replace(/-/g, ""),
@@ -14586,6 +14589,7 @@
           actions: [{ text: "返回列表", href: "#applications", variant: "ghost" }]
         },
         "mock-tomorrow-offline": {
+          entryGroup: { id: "dance-tomorrow-g2", name: "第2组", memberOrder: 3, memberCount: 3 },
           title: "中国舞 · 4级", tracks: [{ group: "规定舞蹈", title: "规定舞蹈组合" }],
           status: "已缴费", statusClass: "", detailKind: "exam", mode: "offline",
           info: "相对日期演示 · 中国舞 · 4级 · 线下考试", examDate: mockExamDateKey(1).replace(/-/g, ""),
@@ -14653,6 +14657,7 @@
         },
         "exam-offline": {
           categoryCode: "DANCE",
+          entryGroup: { id: "dance-published-g1", name: "第1组", memberOrder: 4, memberCount: 7 },
           title: "中国舞 · 4级",
           tracks: [
             { group: "基本功", title: "基本功组合" },
@@ -19444,6 +19449,13 @@
         }
       }
 
+      function syncExamDetailEntryGroup(data, subject) {
+        var group = window.HBYXExamEntryGroups.display(data, subject);
+        var row = document.querySelector("[data-exam-detail-entry-group-row]");
+        if (row) row.hidden = !group.visible;
+        setApplicationText("[data-exam-detail-entry-group]", group.text);
+      }
+
       function syncApplicationDetail(key) {
         if (key && applicationRecords[key]) activeApplicationKey = key;
         var data = applicationRecords[activeApplicationKey] || applicationRecords.schedule;
@@ -19553,6 +19565,7 @@
           setApplicationText("[data-exam-detail-phone]", venuePhoneText);
           setApplicationText("[data-exam-detail-session]", sessionText);
           setApplicationText("[data-exam-detail-order]", orderText);
+          syncExamDetailEntryGroup(data, parts.subject);
           setApplicationText("[data-exam-detail-summary]", profile.name || currentChild || "张三");
           var ticketLink = document.querySelector("[data-exam-detail-ticket-link]");
           var scoreLink = document.querySelector("[data-exam-detail-score-link]");

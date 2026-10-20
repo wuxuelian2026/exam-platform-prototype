@@ -1037,6 +1037,7 @@
     }
     .candidate-mini-subject,
     .candidate-mini-ticket,
+    .candidate-mini-entry-group,
     .candidate-mini-id {
       margin: 6px 0 0;
       font-size: 13px;
@@ -1045,6 +1046,7 @@
     }
     .candidate-mini-subject { color: var(--text-secondary); }
     .candidate-mini-ticket { color: var(--text-secondary); }
+    .candidate-mini-entry-group { color: var(--text-primary); overflow-wrap: anywhere; }
     .candidate-mini-id { color: var(--text-light); }
     .candidate-mini > .status-pill { flex: 0 0 auto; align-self: flex-start; }
     .rich-text { display: grid; gap: 12px; }
@@ -2173,6 +2175,17 @@
                 <span class="status-pill info" data-schedule-status-pill>考试中</span>
               </div>
             </a>
+            <a class="card schedule-card" href="#schedule-detail" data-filter-item data-schedule-id="dance-afternoon" data-owner="13247185696" data-status="ongoing" data-batch="2026h2" data-category="舞蹈类" data-subcategory="舞蹈类" data-subject="中国舞" data-date="">
+              <span class="schedule-card-status-bar" aria-hidden="true"></span>
+              <div class="schedule-card-main">
+                <h3 class="schedule-card-primary">场次编号：schedule-dance-afternoon</h3>
+                <p class="schedule-card-time"></p>
+                <div class="schedule-card-subject-row"><span class="schedule-card-subject">中国舞</span><span class="schedule-card-level">2-5级</span></div>
+                <p class="schedule-card-place">光谷校区 · B301</p>
+                <p class="schedule-card-candidates">待评分10/总名单10</p>
+              </div>
+              <div class="schedule-card-side"><span class="status-pill info">考试中</span></div>
+            </a>
             <a class="card schedule-card" href="#schedule-detail" data-filter-item data-schedule-id="violin-morning" data-owner="13247185696" data-status="upcoming" data-batch="2026h2" data-category="音乐类" data-subcategory="器乐" data-subject="小提琴" data-date="">
               <span class="schedule-card-status-bar" aria-hidden="true"></span>
               <div class="schedule-card-main">
@@ -2304,6 +2317,7 @@
                 </div>
                 <p class="candidate-mini-ticket" data-entry-ticket>准考证 HB-YZ--0312</p>
                 <p class="candidate-mini-id" data-entry-id>证件号 4201001001</p>
+                <p class="candidate-mini-entry-group" data-entry-group hidden></p>
                 <p class="candidate-mini-subject" data-entry-task-label hidden>线上任务</p>
               </div>
               <span class="status-pill warn" data-entry-status-pill>待评分</span>
@@ -3080,6 +3094,7 @@
   </div>
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
+  <script src="../shared/hbyx-exam-entry-groups.js"></script>
   <script>
     (function () {
       var shell = document.querySelector(".phone-shell");
@@ -3230,6 +3245,24 @@
         "violin-morning": { scheduleId: "schedule-violin-morning", title: "小提琴 · 上午场", source: "学院考级办按考官专业与可评级别完成场次指派。", organizer: "湖北艺术职业学院", trainingOrg: "光谷少儿艺术中心", siteName: "湖北艺术职业学院光谷校区", room: "B102", sitePhone: "027-8756 1234", sitePhoneHref: "tel:02787561234", siteAddress: "湖北艺术职业学院光谷校区", subject: "小提琴", subjectCode: "01017", levelRange: "1-5 级", levelCodes: ["LEVEL_01", "LEVEL_02", "LEVEL_03", "LEVEL_04", "LEVEL_05"], time: "", place: "湖北艺术职业学院光谷校区 · B102", range: "小提琴 1-5 级", notes: "请按通知时间到场；评分按考生整体表现填写。", candidateNames: ["李佳怡", "宋昕妍", "陈可欣", "方知夏", "冯安琪", "蔡子墨", "邵雨晨", "程子豪", "叶星河", "沈清雅"], scoreIds: ["li"], ticketPrefix: "HB-YZ-", timeStart: "09:00" },
         "piano-am": { scheduleId: "schedule-piano-am", title: "钢琴 · 上午场", source: "本场监考与评分流程已完成。", organizer: "湖北艺术职业学院", trainingOrg: "光谷少儿艺术中心", siteName: "湖北艺术职业学院光谷校区", room: "A201", sitePhone: "027-8756 1234", sitePhoneHref: "tel:02787561234", siteAddress: "湖北艺术职业学院光谷校区", subject: "钢琴", subjectCode: "01002", levelRange: "3-5 级", levelCodes: ["LEVEL_03", "LEVEL_04", "LEVEL_05"], time: "", place: "湖北艺术职业学院光谷校区 · A201", range: "钢琴 3-5 级", notes: "本场已完成，仅支持查看场次与考生记录。", candidateNames: ["赵雨桐", "陈思远", "李沐阳", "郭欣怡", "魏书辰", "袁诗涵", "马子昂", "曹若彤", "薛雨菲", "丁予安", "陶乐涵", "曾子诺", "顾予墨", "陆晓彤"], scoreIds: ["zhao", "chen"], ticketPrefix: "HB-YZ-", timeStart: "08:30" }
       };
+      SCHEDULE_TASKS["dance-afternoon"] = {
+        scheduleId: "schedule-dance-afternoon", title: "中国舞 · 今日评分场", categoryCode: "DANCE",
+        source: "后台已发布本场舞蹈排期与入场分组。", organizer: "湖北艺术职业学院", trainingOrg: "光谷少儿艺术中心",
+        siteName: "湖北艺术职业学院光谷校区", room: "B301", sitePhone: "027-8756 1234", sitePhoneHref: "tel:02787561234", siteAddress: "湖北艺术职业学院光谷校区",
+        subject: "中国舞", subjectCode: "02001", levelRange: "2-5 级", levelCodes: ["LEVEL_02", "LEVEL_03", "LEVEL_05"],
+        time: "", place: "湖北艺术职业学院光谷校区 · B301", range: "中国舞 2-5 级", notes: "按入场分组安排考生入场，每位考生单独评分。",
+        candidateNames: ["张三", "林舞桐", "王欣悦", "李芷涵", "陈思妍", "周若曦", "赵诗语", "刘嘉宁", "孙悦然", "吴语彤"], scoreIds: [], ticketPrefix: "HB-DANCE-", timeStart: "09:00"
+      };
+      SCHEDULE_TASKS["dance-afternoon"].candidateNames.forEach(function (name, index) {
+        var id = "dance-afternoon-candidate-" + (index + 1);
+        SCHEDULE_TASKS["dance-afternoon"].scoreIds.push(id);
+        SCORE_TASKS[id] = {
+          name: name, subject: "中国舞", subjectCode: "02001", categoryCode: "DANCE", category: "舞蹈类", level: index < 3 ? "2级" : index < 7 ? "3级" : "5级",
+          textbook: "中国舞等级考试教材", repertoires: ["基本功组合", "规定舞蹈组合", "自选舞蹈片段"],
+          scheduleId: "dance-afternoon", order: index + 1, ticket: "HB-DANCE-" + String(index + 1).padStart(4, "0"), idNumber: "4201********" + String(2000 + index),
+          entryGroup: { id: index < 7 ? "dance-published-g1" : "dance-published-g2", name: index < 7 ? "第1组" : "第2组", memberOrder: index < 7 ? index + 1 : index - 6, memberCount: index < 7 ? 7 : 3 }
+        };
+      });
       function judgeLevelCodesFromRange(value) {
         var text = String(value || "").replace(/\s/g, "");
         var codes = [];
@@ -5271,6 +5304,11 @@
         var tomorrow = demoDateOffset(1);
         refreshRuntimeMessageDates();
 
+        Object.assign(SCHEDULE_TASKS["dance-afternoon"], { demoDay: "today", time: today.dot + " 09:00-18:00" });
+        SCHEDULE_TASKS["dance-afternoon"].scoreIds.forEach(function (id) {
+          Object.assign(SCORE_TASKS[id], { demoDay: "today", date: today.key, examDate: today.dot, time: "14:00", site: "湖北艺术职业学院光谷校区", room: "B301", session: "中国舞今日评分场" });
+        });
+
         Object.assign(SCHEDULE_TASKS["piano-am"], {
           demoDay: "yesterday",
           title: "钢琴 · 上午场",
@@ -5702,6 +5740,12 @@
         if (level) level.textContent = task.level || "—";
         if (ticket) ticket.textContent = "准考证 " + (task.ticket || "—");
         if (idNumber) idNumber.textContent = "证件号 " + candidateDetailIdNumber(task);
+        var entryGroup = document.querySelector("[data-entry-group]");
+        var groupDisplay = window.HBYXExamEntryGroups.display(task);
+        if (entryGroup) {
+          entryGroup.hidden = !groupDisplay.visible;
+          entryGroup.textContent = groupDisplay.visible ? "入场分组：" + groupDisplay.text : "";
+        }
         if (taskLabel) {
           taskLabel.hidden = !task.online;
           taskLabel.textContent = task.online ? "线上任务 · " + task.subject + " " + task.level : "";
@@ -5709,8 +5753,8 @@
         var templateKey = task.subject === "小提琴" ? "violin" : "piano";
         var textbook = document.querySelector("[data-entry-textbook]");
         var repertoire = document.querySelector("[data-entry-repertoire]");
-        if (textbook) textbook.textContent = SCORE_TEXTBOOKS[templateKey] || "平台发布现行教材";
-        if (repertoire) repertoire.textContent = (SCORE_REPERTOIRES[templateKey] || []).join("；");
+        if (textbook) textbook.textContent = task.textbook || SCORE_TEXTBOOKS[templateKey] || "平台发布现行教材";
+        if (repertoire) repertoire.textContent = (task.repertoires || SCORE_REPERTOIRES[templateKey] || []).join("；");
         if (pill) {
           var displayMeta = task.online
             ? onlineTaskStatusMeta(id, loadDemoState())
@@ -5719,6 +5763,15 @@
               : (SCORE_STATUS_META[scoreStatus(id, loadDemoState())] || SCORE_STATUS_META.PENDING);
           setPillState(pill, "status-pill", displayMeta);
         }
+      }
+
+      function appendCandidateEntryGroup(row, task) {
+        var group = window.HBYXExamEntryGroups.display(task);
+        if (!group.visible) return;
+        var field = document.createElement("p");
+        field.className = "candidate-mini-entry-group";
+        field.textContent = "入场分组：" + group.text;
+        row.querySelector(".candidate-mini-main").appendChild(field);
       }
 
       function renderScheduleCandidates(id, state) {
@@ -5751,6 +5804,7 @@
             setCandidate(scoreId);
             window.location.hash = "#score-entry";
           });
+          appendCandidateEntryGroup(row, task);
           wrap.appendChild(row);
         });
       }
