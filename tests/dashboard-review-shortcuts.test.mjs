@@ -127,7 +127,7 @@ test("workbench rerenders shortcuts above unchanged batch metrics, filters and t
     context.renderDashboardWorkbench(page);
     assert.equal((root.innerHTML.match(/class="dashboard-review-shortcuts"/g) || []).length, 1);
     assert.ok(root.innerHTML.indexOf('aria-label="审核入口"') < root.innerHTML.indexOf('class="dashboard-todo-summary"'));
-    for (const label of ["待办批次", "待处理事项", "线下 / 线上", "紧急批次", "阶段筛选", "批次主链待办"]) assert.ok(root.innerHTML.includes(label));
+    for (const label of ["待办批次", "待处理事项", "线下 / 线上", "阶段筛选", "批次主链待办"]) assert.ok(root.innerHTML.includes(label));
     assert.match(root.innerHTML, /<tbody data-dashboard-todo-body>/);
     assert.match(root.innerHTML, /data-jump="batch-workbench\/overview"/);
   }
@@ -135,6 +135,38 @@ test("workbench rerenders shortcuts above unchanged batch metrics, filters and t
   context.renderDashboardWorkbench(page);
   assert.ok(!root.innerHTML.includes("dashboard-review-shortcuts"));
   assert.ok(root.innerHTML.includes("批次主链待办"));
+});
+
+test("all roles render three metrics and eight headers without urgency indicators", () => {
+  for (const role of ["platform", "organizer", "training"]) {
+    const { context, root, page } = fixture(role);
+    context.renderDashboardWorkbench(page);
+    assert.equal((root.innerHTML.match(/class="card metric"/g) || []).length, 3);
+    assert.equal((root.innerHTML.match(/<th>/g) || []).length, 8);
+    assert.ok(!root.innerHTML.includes("紧急批次"));
+    assert.ok(!root.innerHTML.includes("优先级"));
+  }
+  assert.match(html, /\.dashboard-todo-summary \{[^}]*repeat\(3,/);
+});
+
+test("batch todo rows and empty placeholder align to eight columns and retain processing links", () => {
+  const { context } = fixture();
+  context.escapeHtml = value => String(value ?? "");
+  context.batchStageLabel = () => "报名阶段";
+  context.batchStatusTag = () => "blue";
+  context.batchTagHtml = (_, label) => label;
+  context.dashboardTodoMeta = () => ({ order: 1, todo: "处理报名", detail: "待缴费", todoCount: 3, deadline: "2026-10-30", owner: "平台", route: "batch-workbench/enroll", priority: "紧急", priorityTag: "red" });
+  vm.runInContext(between("    function renderDashboardTodoRows(", "    function dashboardReviewPendingCount("), context);
+  const body = {}, count = {};
+  const root = { getAttribute: () => "all", querySelector: selector => selector === "[data-dashboard-todo-body]" ? body : selector === "[data-dashboard-todo-count]" ? count : null };
+  context.renderDashboardTodoRows(root);
+  assert.equal((body.innerHTML.match(/<td(?: |>)/g) || []).length, 16);
+  assert.ok(!body.innerHTML.includes("紧急"));
+  assert.match(body.innerHTML, /data-jump="batch-workbench\/enroll"/);
+  context.dashboardTodoBatchesForRole = () => [];
+  context.renderDashboardTodoRows(root);
+  assert.match(body.innerHTML, /colspan="8"/);
+  assert.equal(count.textContent, "0 条");
 });
 
 test("review routes resolve to existing review pages and shortcut layout can wrap", () => {
