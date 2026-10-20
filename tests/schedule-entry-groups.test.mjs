@@ -22,7 +22,7 @@ function fixture() {
     baseProfessionalCatalog: () => [{ code: "02001", name: "中国舞", categoryCode: "DANCE" }, { code: "02003", name: "芭蕾舞", categoryCode: "DANCE" }, { code: "01001", name: "钢琴", categoryCode: "MUSIC" }],
     isOnlineBatch: item => item.online, scheduleArrangeSessionRows: item => item.scheduleSessionRecords,
     scheduleWizardEntryMode: () => "start", currentBatchContext: () => batch,
-    scheduleRoleCanWrite: (role, phase) => ["training", "organizer"].includes(role) && phase === "编排中",
+    scheduleRoleCanWrite: (role, phase) => ["platform", "training", "organizer"].includes(role) && phase === "编排中",
     schedulePhaseOf: item => item.status, scheduleStepState: () => ({ done: [true] }),
     batchChangeIsFrozen: () => c.frozen, scheduleDirectMutationBlocked: item => item.status === "已发布",
     escapeHtml: value => String(value).replaceAll("<", "&lt;"),
@@ -124,8 +124,8 @@ test("save retains partial drafts with audit but no automatic additions", () => 
   assert.deepEqual(plain(f.batch.scheduleSessionRecords[0].entryGroups), [f.group(["d0", "d3"])]);
   assert.equal(f.audit.length, 1);
 });
-test("platform, reviewing, published and frozen sessions cannot mutate grouping including stale drawers", () => {
-  for (const kind of ["platform", "review", "published", "frozen"]) {
+test("reviewing, published and frozen sessions cannot mutate grouping including stale drawers", () => {
+  for (const kind of ["review", "published", "frozen"]) {
     const f = fixture(); f.c.openScheduleEntryGroups("S1");
     if (kind === "platform") f.c.AUTH_SESSION.role = "platform";
     if (kind === "review") f.batch.status = "待复核";

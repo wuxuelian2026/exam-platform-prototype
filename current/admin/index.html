@@ -2184,7 +2184,7 @@
         <button class="btn link" type="button" data-reset-cancel>返回登录</button>
       </form>
       <div class="auth-tip" data-login-tip>演示账号：admin / 13800000001；密码：123456。</div>
-      <div class="auth-context">平台负责全局配置与制证；承办单位负责批次审核、排期复核与发布；培训机构负责本机构全部报名记录（含个人报名渠道）的缴费、退款与排期。</div>
+      <div class="auth-context">批次工作台内，平台与承办单位均可在各自数据范围内代下级培训机构操作，制证仅限平台；培训机构维护本机构报名、缴费、退款与排期。</div>
     </div>
   </section>
   <div class="layout app-shell" data-app-shell hidden>
@@ -4858,7 +4858,6 @@
         syncRoleActionHidden('[data-page="org"] [data-subview="judges"] [data-drawer="judge-cert"]', true);
         syncRoleActionHidden('[data-page="org"] [data-subview="units"] button[data-toast*="删除"], [data-page="org"] [data-subview="units"] button[data-drawer="unit-delete"]', true);
         syncRoleActionHidden('[data-page="system"] [data-subview="params"] button', true);
-        syncRoleActionHidden('[data-drawer="result-return"], [data-drawer="result-publish"], tr[data-result-status="待发布"] [data-drawer="result-adjust"]', true);
         document.querySelectorAll('[data-subview="units"] [data-unit-row]').forEach(function (row) {
           row.classList.toggle("auth-role-hidden", !organizerScope.ids[row.getAttribute("data-unit-id")]);
         });
@@ -9384,7 +9383,7 @@
     }
     function publishBatchGrades(publishButton) {
       var batch = currentBatchContext();
-      if (!AUTH_SESSION || AUTH_SESSION.role !== "platform") { toast("当前无权发布成绩"); return; }
+      if (!AUTH_SESSION || ["platform", "organizer"].indexOf(AUTH_SESSION.role) < 0) { toast("当前无权发布成绩"); return; }
       if (batchChangeIsFrozen(batch, "grades")) return;
       var publication = gradePublicationState(batch);
       if (publication.blocked) { toast("发布已阻断：" + publication.reason); return; }
@@ -9441,7 +9440,7 @@
       return {
         status: status,
         title: "成绩处理列表",
-        actions: role === "platform" ? [{ text: "发布成绩", drawer: "result-publish" }, { text: "导出成绩", toast: "成绩清单已导出" }] : [{ text: "导出成绩", toast: "成绩清单已导出" }],
+        actions: role !== "training" ? [{ text: "发布成绩", drawer: "result-publish" }, { text: "导出成绩", toast: "成绩清单已导出" }] : [{ text: "导出成绩", toast: "成绩清单已导出" }],
         headers: ["专业/级别", "考试人数", "待评分", "待发布", "已发布", "状态", "操作"],
         rows: rows,
         side: {
@@ -9454,7 +9453,7 @@
             batch.status === "退回调整" ? "退回的数据需完成评分补正后再发布。" : "成绩发布后，通过名单进入证书生成池。"
           ]
         },
-        next: { title: "快捷动作", actions: role !== "platform" ? [{ text: "进入证书库查询", jump: "certificates/library" }] : [{ text: "发布成绩", drawer: "result-publish" }, { text: "进入考级证书管理", jump: "batch-workbench/certificates" }] }
+        next: { title: "快捷动作", actions: role === "training" ? [{ text: "进入证书库查询", jump: "certificates/library" }] : [{ text: "发布成绩", drawer: "result-publish" }, { text: "进入考级证书管理", jump: "batch-workbench/certificates" }] }
       };
     }
     function onlineGradesStageView(batch, status, role) {
@@ -9611,7 +9610,7 @@
       if (stage === "grades") {
         return [
           ["待评分", formatDemoNumber(batch.scorePendingInput), "影响成绩发布", "考官", '<button class="btn link" data-jump="batch-workbench/grades">去查看</button>'],
-          ["待发布", formatDemoNumber(gradePublicationState(batch).pendingPublish), "影响制证", "平台", '<button class="btn link" data-jump="batch-workbench/grades">去发布</button>']
+          ["待发布", formatDemoNumber(gradePublicationState(batch).pendingPublish), "影响制证", "平台 / 承办单位", '<button class="btn link" data-jump="batch-workbench/grades">去发布</button>']
         ];
       }
       if (stage === "certificates") {
@@ -11209,7 +11208,7 @@
       root.querySelectorAll("[data-online-grade-row]").forEach(function (row) { row.hidden = gradeStatusLabel(row.getAttribute("data-online-grade-status-value")) !== status; });
       root.querySelectorAll("[data-online-grade-action]").forEach(function (button) {
         var action = button.getAttribute("data-online-grade-action");
-        button.hidden = action === "grade-setting" ? !writable || role === "training" || status !== "待发布" : action === "publish" ? !writable || role !== "platform" || status !== "待发布" : action === "confirm";
+        button.hidden = action === "grade-setting" ? !writable || role === "training" || status !== "待发布" : action === "publish" ? !writable || ["platform", "organizer"].indexOf(role) < 0 || status !== "待发布" : action === "confirm";
       });
     }
     function filterOnlineVideoRows(root, reset) {
@@ -11377,7 +11376,7 @@
       var payMethod = confirmed ? item.payMethod : "-";
       var register = confirmed ? item.register : "-";
       var registerTime = confirmed ? item.registerTime : "-";
-      var canManageEnrollment = (AUTH_SESSION && AUTH_SESSION.role) === "training";
+      var canManageEnrollment = enrollmentRoleCanManage({ dataset: { org: item.institute, batch: batch.name } });
       var action;
       if (registration === "已退款") {
         action = '<button class="btn link" data-drawer="refund-detail">退款记录</button><button class="btn link" data-drawer="enroll-detail">查看报名</button>';
@@ -12809,7 +12808,7 @@
     }
     function scheduleManageCanEdit(role, row) {
       var editableStatus = ["待排期", "编排中"].indexOf(row.status) > -1;
-      return editableStatus && role === "training";
+      return editableStatus && ["platform", "organizer", "training"].indexOf(role) > -1;
     }
     function scheduleManageActionHtml(role, row) {
       if (!scheduleManageCanEdit(role, row)) {
@@ -13255,7 +13254,7 @@
       };
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var allowed = role === "training" ? ["export"] : (allowMap[gradeStatusLabel(status)] || allowMap["全部状态"]);
-      if (role !== "platform") allowed = allowed.filter(function (action) { return action !== "publish"; });
+      if (["platform", "organizer"].indexOf(role) < 0) allowed = allowed.filter(function (action) { return action !== "publish"; });
       root.querySelectorAll("[data-result-action]").forEach(function (button) {
         button.hidden = allowed.indexOf(button.getAttribute("data-result-action")) === -1;
       });
@@ -13338,7 +13337,11 @@
     function batchChangeIsFrozen(batch, operation) {
       var freeze = batch && BATCH_FREEZE_STATES[batch.id];
       var role = rollbackRole();
-      var roleBlocked = (role === "training" && ["dispatch", "grades", "certificates"].indexOf(operation) > -1) || (role === "organizer" && operation === "dispatch");
+      if (operation === "schedule" && role !== "platform") {
+        var actingOrganization = new URLSearchParams(location.search).get("scheduleOrg");
+        if (actingOrganization && !roleOrganizationDataScope(role).names[actingOrganization]) { toast("不能代权限范围外的报名机构维护排期"); return true; }
+      }
+      var roleBlocked = (role === "training" && ["dispatch", "grades", "certificates"].indexOf(operation) > -1) || (role === "organizer" && operation === "certificates");
       if (roleBlocked) {
         toast("当前角色无权执行该类局部变更，请由平台管理员处理");
         return true;
@@ -13470,6 +13473,12 @@
       return rollbackRole() === "platform" && batch && isPublishedBatch(batch) && !["已结束", "已归档"].includes(batch.publishStatus);
     }
     function scheduleDirectMutationBlocked(batch) {
+      var role = AUTH_SESSION && AUTH_SESSION.role;
+      var organization = new URLSearchParams(location.search).get("scheduleOrg");
+      if (role !== "platform" && organization && !roleOrganizationDataScope(role).names[organization]) {
+        toast("不能代权限范围外的报名机构维护排期");
+        return true;
+      }
       if (batch && schedulePhaseOf(batch) === "已发布") {
         toast("已发布排期不可直接修改，请在批次变更管理发起场次局部调整");
         return true;
@@ -14086,7 +14095,7 @@
         var resultBatch = currentBatchContext();
         drawerTitle.textContent = "发布成绩 · " + resultBatch.name;
         drawerBody.innerHTML = resultPublishBodyHtml();
-        var resultPending = gradePublicationState(resultBatch).blocked || !AUTH_SESSION || AUTH_SESSION.role !== "platform";
+        var resultPending = gradePublicationState(resultBatch).blocked || !AUTH_SESSION || ["platform", "organizer"].indexOf(AUTH_SESSION.role) < 0;
         drawerFoot.innerHTML = resultPending ? '<button class="btn" data-close-drawer>关闭</button><button class="btn" data-jump="' + escapeHtml(batchRoute("batch-workbench", "grades", resultBatch.id)) + '" data-close-drawer>返回成绩列表</button>' : '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-result-publish-confirm>发布成绩</button>';
       }
       if (key === "batch-lifecycle-confirm") {
@@ -16431,12 +16440,27 @@
         updateEnrollmentActions(row);
       });
     }
+    function enrollmentRoleCanManage(row) {
+      var role = AUTH_SESSION && AUTH_SESSION.role;
+      if (!row || ["platform", "organizer", "training"].indexOf(role) < 0) return false;
+      if (role === "platform") return true;
+      var scope = roleOrganizationDataScope(role);
+      if (scope.names[row.dataset.org]) return true;
+      // Generated demo institutions are scoped through their owning batch, not their creator.
+      var batch = BATCH_DEMO_LIST.find(function (item) { return item.name === row.dataset.batch; });
+      return !!(role === "organizer" && batch && scope.names[batch.org] && batchDemoOrgs(batch).indexOf(row.dataset.org) > -1);
+    }
+    function requireEnrollmentManagement(row) {
+      if (enrollmentRoleCanManage(row)) return true;
+      toast("只能操作本单位或权限范围内下级培训机构的报名记录");
+      return false;
+    }
     function updateEnrollmentActions(row) {
       if (!row) return;
       var actionCell = row.querySelector("[data-enroll-action-cell]");
       if (!actionCell) return;
       var registration = row.dataset.registration || "待缴费";
-      var canManageEnrollment = (AUTH_SESSION && AUTH_SESSION.role) === "training";
+      var canManageEnrollment = enrollmentRoleCanManage(row);
       var buttons = [];
       if (row.dataset.exception === "true") buttons.push('<button class="btn link" data-drawer="enroll-exception">处理异常</button>', canManageEnrollment ? '<button class="btn link" data-enroll-confirm-paid>确认缴费</button>' : '');
       if (registration === "待缴费") buttons.push(canManageEnrollment ? '<button class="btn link" data-enroll-confirm-paid>确认缴费</button>' : '', canManageEnrollment ? '<button class="btn link" data-enroll-cancel>取消订单</button>' : '');
@@ -16492,7 +16516,7 @@
         var orgMatch = org === "全部报名机构" || row.dataset.org === org;
         var majorMatch = major === "全部专业" || row.dataset.major === major;
         var levelMatch = level === "全部级别" || row.dataset.level === level;
-        var visible = batchMatch && keywordMatch && registrationMatch && collectionMatch && refundMatch && channelMatch && orgMatch && majorMatch && levelMatch;
+        var visible = enrollmentRoleCanManage(row) && batchMatch && keywordMatch && registrationMatch && collectionMatch && refundMatch && channelMatch && orgMatch && majorMatch && levelMatch;
         row.hidden = !visible;
         if (visible) visibleCount += 1;
       });
@@ -16514,7 +16538,7 @@
       return String(date).slice(0, 4) + "-" + String(date).slice(4, 6) + "-" + String(date).slice(6, 8) + " " + String(time).slice(0, 2) + ":" + String(time).slice(2, 4) + ":" + String(time).slice(4, 6);
     }
     function setEnrollmentPaid(row, audit) {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可确认缴费"); return false; }
+      if (!requireEnrollmentManagement(row)) return false;
       if (!row || ["已缴费", "已退款", "待退款", "已取消"].indexOf(row.dataset.registration) > -1) return false;
       var paymentBatch = batchChangeContext();
       if (batchChangeIsFrozen(paymentBatch, "enroll")) return false;
@@ -16553,30 +16577,30 @@
       return true;
     }
     function openEnrollmentPaymentConfirm(button) {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可确认缴费"); return; }
       var row = button.closest("[data-enroll-row]");
+      if (!requireEnrollmentManagement(row)) return;
       if (!row) return;
       window.__activeEnrollRow = row;
       window.__activeCourseOrderRow = null;
       openDrawer("payment-confirm");
     }
     function openEnrollmentRefundConfirm(button) {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可确认退款"); return; }
       var row = button.closest("[data-enroll-row]");
+      if (!requireEnrollmentManagement(row)) return;
       if (!row) return;
       window.__activeEnrollRow = row;
       openDrawer("enroll-refund-confirm");
     }
     function cancelEnrollmentRow(button) {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可取消报名"); return; }
       var row = button.closest("[data-enroll-row]");
+      if (!requireEnrollmentManagement(row)) return;
       if (!row || ["已缴费", "待退款", "已退款"].indexOf(row.dataset.registration) > -1) { toast("已缴费记录请先发起退款，进入待退款"); return; }
       window.__activeEnrollRow = row;
       openDrawer("enroll-cancel");
     }
     function confirmCancelEnrollment() {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可取消报名"); return; }
       var row = window.__activeEnrollRow;
+      if (!requireEnrollmentManagement(row)) return;
       var reason = drawerBody.querySelector("[data-cancel-reason]");
       if (!row) { toast("未找到报名记录"); return; }
       if (batchChangeIsFrozen(batchChangeContext(), "enroll")) return;
@@ -16640,15 +16664,15 @@
       toast(message);
     }
     function requestEnrollmentRefund(button) {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可发起退款"); return; }
       var row = button.closest("[data-enroll-row]");
+      if (!requireEnrollmentManagement(row) || batchChangeIsFrozen(batchChangeContext(), "enroll")) return;
       if (!row || row.dataset.registration !== "已缴费" || row.dataset.collection !== "已收款" || (row.dataset.refund && row.dataset.refund !== "无")) { toast("当前报名不满足普通退款资格，请按退款规则处理"); return; }
       window.__activeEnrollRow = row;
       openDrawer("enroll-refund-request");
     }
     function confirmEnrollmentRefundRequest() {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可发起退款"); return; }
       var row = window.__activeEnrollRow;
+      if (!requireEnrollmentManagement(row) || batchChangeIsFrozen(batchChangeContext(), "enroll")) return;
       var reason = drawerBody.querySelector("[data-refund-reason]");
       if (!row) { toast("未找到报名记录"); return; }
       if (row.dataset.registration !== "已缴费" || row.dataset.collection !== "已收款" || (row.dataset.refund && row.dataset.refund !== "无")) { toast("当前报名不满足普通退款资格，请按退款规则处理"); return; }
@@ -16664,7 +16688,7 @@
       closeDrawer();
     }
     function confirmEnrollmentRefund() {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可确认退款"); return; }
+      if (!requireEnrollmentManagement(window.__activeEnrollRow) || batchChangeIsFrozen(batchChangeContext(), "enroll")) return;
       var reason = drawerBody.querySelector("[data-refund-reason]");
       var amount = drawerBody.querySelector("[data-refund-amount]");
       var currency = drawerBody.querySelector("[data-refund-currency]");
@@ -17127,13 +17151,13 @@
       syncEnrollmentCheckAll();
     }
     function batchConfirmEnrollmentPaid() {
-      if ((AUTH_SESSION && AUTH_SESSION.role) !== "training") { toast("仅报名记录所属培训机构可确认缴费"); return; }
       if (batchChangeIsFrozen(batchChangeContext(), "enroll")) return;
       var selectedRows = Array.from(activeEnrollmentScope().querySelectorAll("[data-enroll-check]:checked")).map(function (input) { return input.closest("[data-enroll-row]"); }).filter(function (row) { return row && !row.hidden; });
       if (!selectedRows.length) {
         toast("请先勾选需要确认缴费的报名记录");
         return;
       }
+      if (selectedRows.some(function (row) { return !enrollmentRoleCanManage(row); })) { toast("所选报名记录包含数据权限范围外的单位，未执行缴费确认"); return; }
       var eligible = selectedRows.filter(function (row) { return row.dataset.registration === "待缴费"; });
       if (eligible.length !== selectedRows.length) { toast("批量确认缴费仅支持待缴费记录；已取消记录请单条确认"); return; }
       var methodInput = drawerBody.querySelector("[data-payment-method]");
@@ -23336,7 +23360,7 @@
     DRAWER["role-permission"] = { title: "角色权限配置", wide: true, body: function () { var row = window.__activeRoleRow; var cells = row ? row.cells : []; var name = cells[1] ? cells[1].textContent.trim() : "当前角色"; var scope = cells[4] ? cells[4].textContent.trim() : "本单位"; return '<div class="info-banner"><strong>' + escapeHtml(name) + '</strong><br>菜单权限、按钮权限和数据范围统一在此维护；权限保存后对新请求立即生效。</div><div class="field-row-2"><div class="field"><label>角色名称</label><input class="input" value="' + escapeHtml(name) + '" readonly></div><div class="field"><label>默认数据范围 *</label><select class="select" data-role-permission-scope><option>' + escapeHtml(scope) + '</option><option>全平台</option><option>本单位及下级机构</option><option>本机构</option><option>本人</option></select></div></div><div class="drawer-section"><h3 class="drawer-section-title">菜单权限</h3><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 工作台</label><label class="level-check"><input type="checkbox" checked> 考级业务</label><label class="level-check"><input type="checkbox" checked> 计划发布</label><label class="level-check"><input type="checkbox" checked> 批次工作台</label><label class="level-check"><input type="checkbox"> 共享中台</label></div></div><div class="drawer-section"><h3 class="drawer-section-title">按钮权限</h3><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 查询</label><label class="level-check"><input type="checkbox" checked> 新增</label><label class="level-check"><input type="checkbox" checked> 编辑</label><label class="level-check"><input type="checkbox"> 删除</label><label class="level-check"><input type="checkbox"> 审核</label><label class="level-check"><input type="checkbox" checked> 导出</label></div></div>'; }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-role-permission-save>保存权限配置</button>' };
 
     function scheduleRoleCanWrite(role, phase) {
-      return phase === "编排中" && (role === "training" || role === "organizer");
+      return phase === "编排中" && ["platform", "organizer", "training"].indexOf(role) > -1;
     }
     function schedulePhaseOf(batch) {
       if (!batch || isOnlineBatch(batch)) return "线上考试";
@@ -23369,7 +23393,7 @@
     }
     function scheduleRolePermissionBannerHtml(role, phase) {
       var batch = currentBatchContext();
-      var text = role === "platform" ? (phase === "编排中" ? "平台：可创建或追加场次，用于维护批次考场资源；既有场次仅可查看，考生分配、提交排期及发布仍按责任组织权限执行。" : "平台：可查看全平台排期、冲突和已发布排期表，并可导出；不允许编辑、删除、分配、提交、发布或退回。") : role === "organizer" ? "承办单位：查看辖区数据，维护责任范围内排期；可复核发布或退回报名机构排期。" : "培训机构：仅维护本机构已缴费考生，创建场次、分配考生并提交排期。";
+      var text = role === "training" ? "培训机构：维护本机构已缴费考生，创建场次、分配考生并提交排期。" : "平台与承办单位：可在各自数据范围内代下级培训机构创建和编辑场次、分配考生、维护入场分组、提交排期及复核发布；已发布排期只读。";
       return '<div class="info-banner"><strong>当前阶段：' + escapeHtml(phase) + '</strong><br>' + escapeHtml(text) + '</div>';
     }
     function scheduleDefaultSessionRows(batch) {
@@ -23989,7 +24013,7 @@
     }
     function saveScheduleSessionBasic() {
       var context = readScheduleSessionBasicFromDrawer();
-      if (!context || batchChangeIsFrozen(context.batch, "schedule")) return;
+      if (!context || !scheduleEntryWritable(context.batch)) return;
       var batch = context.batch;
       var basic = context.basic;
       var wizard = context.wizard;
@@ -24035,7 +24059,7 @@
     }
     function saveScheduleCandidateAssignment(openGroups) {
       var batch = currentBatchContext();
-      if (batchChangeIsFrozen(batch, "schedule")) return;
+      if (!scheduleEntryWritable(batch)) return;
       var wizard = window.__scheduleSessionWizard || {};
       var basic = wizard.basic || {};
       var selectedIds = (wizard.selectedIds || []).slice();
@@ -24340,9 +24364,9 @@
     function scheduleRoleStep4Html(role, batch) {
       var state = scheduleStepState(batch);
       var isReview = state.phase === "待复核";
-      var canReview = role === "organizer" && isReview;
-      var readOnly = role === "platform" || role === "training" || !canReview;
-      return '<div class="table-card"><div class="table-tools"><div><h2 class="table-title">承办单位复核发布</h2><span class="muted">场次和考生分配在复核阶段只读；发现问题请线下联系编排机构修正，确认无误后直接发布。</span></div><span class="tag ' + (isReview ? 'orange' : state.done[3] ? 'green' : '') + '">' + escapeHtml(state.phase) + '</span></div><div class="info-banner"><strong>复核范围：</strong>当前批次所有报名机构提交结果；平台只能查看和导出，培训机构不能代替承办单位发布。发布前的线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或对外消息。</div><div class="page-actions" style="margin-top:14px">' + (canReview ? '<button class="btn primary" data-schedule-review-publish>发布排期表</button>' : '<button class="btn" data-schedule-export>导出复核结果</button>') + '<button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="SCHEDULE" data-review-object-id="' + escapeHtml(batch.id) + '">查看审核闭环</button></div></div>';
+      var canReview = ["platform", "organizer"].indexOf(role) > -1 && isReview;
+      var readOnly = !canReview;
+      return '<div class="table-card"><div class="table-tools"><div><h2 class="table-title">排期复核发布</h2><span class="muted">场次和考生分配在复核阶段只读；发现问题请线下联系编排机构修正，确认无误后直接发布。</span></div><span class="tag ' + (isReview ? 'orange' : state.done[3] ? 'green' : '') + '">' + escapeHtml(state.phase) + '</span></div><div class="info-banner"><strong>复核范围：</strong>当前批次所有报名机构提交结果；平台与承办单位均可复核发布，培训机构仅可提交本机构排期。发布前的线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或对外消息。</div><div class="page-actions" style="margin-top:14px">' + (canReview ? '<button class="btn primary" data-schedule-review-publish>发布排期表</button>' : '<button class="btn" data-schedule-export>导出复核结果</button>') + '<button class="btn" type="button" data-drawer="review-loop-contract" data-review-object-type="SCHEDULE" data-review-object-id="' + escapeHtml(batch.id) + '">查看审核闭环</button></div></div>';
     }
     function schedulePublishedCalendarHtml(role, batch) {
       var hasPublishedData = ["待排期", "编排中", "待复核"].indexOf(batch.status) === -1;
@@ -24464,7 +24488,6 @@
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var mode = window.__schedulePublishMode || "submit";
       if (batchChangeIsFrozen(batch, "schedule")) return;
-      if (role === "platform") { toast("平台仅可查看和导出，不能提交或发布排期"); return; }
       var entryErrors = scheduleEntryBatchErrors(batch);
       if (entryErrors.length) { toast("入场分组校验未通过：" + entryErrors[0]); return; }
       if (mode === "submit") {
@@ -24482,7 +24505,7 @@
         return;
       }
       if (mode === "publish") {
-        if (role !== "organizer" || schedulePhaseOf(batch) !== "待复核") { toast("仅承办单位可在待复核阶段发布排期表"); return; }
+        if (["platform", "organizer"].indexOf(role) < 0 || schedulePhaseOf(batch) !== "待复核") { toast("仅平台或承办单位可在待复核阶段发布排期表"); return; }
         if (Number(batch.pendingSchedule || 0) > 0 || Number(batch.conflicts || 0) > 0) { toast("发布已阻断：最终校验仍有待排期或冲突记录"); return; }
         batch.schedulePhaseStatus = "已发布";
         batch.scheduleStep4Done = true;

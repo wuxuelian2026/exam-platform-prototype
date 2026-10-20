@@ -33,7 +33,8 @@ function fixture() {
   const fields = { site: "测试考点", room: "A201", start: "08:00", end: "09:00", count: "10", note: "" };
   const selection = { majors: ["钢琴", "中国舞"], dates: ["2026-10-20"] };
   const context = vm.createContext({
-    window: {}, location: { search: "?scheduleEntry=start" }, URLSearchParams,
+    window: {}, AUTH_SESSION: { role: "platform" }, location: { search: "?scheduleEntry=start" }, URLSearchParams,
+    scheduleDirectMutationBlocked: () => false,
     isOnlineBatch: () => false, currentBatchContext: () => batch, escapeHtml,
     batchTagHtml: (_tag, value) => value, batchSessionSuffix: () => "TEST",
     scheduleManageRows: () => [],

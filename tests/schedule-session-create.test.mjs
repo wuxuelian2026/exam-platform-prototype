@@ -29,7 +29,8 @@ function fixture(overrides = {}) {
   };
   const messages = [];
   const context = vm.createContext({
-    window: {}, isOnlineBatch: (item) => item.examMode === "线上考试",
+    window: {}, AUTH_SESSION: { role: "platform" }, location: { search: "" }, URLSearchParams,
+    isOnlineBatch: (item) => item.examMode === "线上考试",
     escapeHtml: (value) => String(value), batchTagHtml: (_tag, value) => value,
     batchSessionSuffix: () => "TEST", scheduleWizardEntryMode: () => "start",
     batchChangeIsFrozen: () => false, syncBatchDemo() {}, appendBatchChangeRecord() {},

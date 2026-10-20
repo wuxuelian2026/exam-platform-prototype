@@ -40,7 +40,7 @@ function fixture(overrides = {}, role = "organizer") {
     BATCH_STAGE_STATUS_BY_LEGACY: {},
     formatDemoNumber: (value) => String(value || 0), padDemoNumber: (value) => String(value).padStart(2, "0"), batchDemoOrgs: () => ["测试机构"],
     schedulePhaseOf: (item) => item.schedulePhaseStatus || item.status,
-    scheduleRoleCanWrite: (name, phase) => ["organizer", "training"].includes(name) && phase === "编排中",
+    scheduleRoleCanWrite: (name, phase) => ["platform", "organizer", "training"].includes(name) && phase === "编排中",
     scheduleStepState: () => ({ done: [true] }),
     scheduleEntryBatchErrors: () => [],
     batchChangeIsFrozen: () => false, closeDrawer() {}, showPage() {},
@@ -96,7 +96,12 @@ test("submitting a schedule does not open either downstream stage", () => {
 });
 
 test("publication preserves role and final-validation restrictions", () => {
-  for (const role of ["platform", "training"]) {
+  for (const role of ["platform", "organizer"]) {
+    const f = fixture({}, role);
+    f.context.confirmSchedulePublish();
+    assert.equal(f.batch.stage, "dispatch");
+  }
+  for (const role of ["training"]) {
     const f = fixture({}, role);
     f.context.confirmSchedulePublish();
     assert.equal(f.batch.stage, "schedule");

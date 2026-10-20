@@ -101,8 +101,8 @@ test("online missing ratings and unfinished scoring block publication", async ()
   }
 });
 
-test("removing confirmation does not grant publication to other roles or frozen batches", async () => {
-  for (const role of ["organizer", "training"]) {
+test("publication remains denied to training and frozen batches", async () => {
+  for (const role of ["training"]) {
     const f = fixture({}, role);
     await f.context.publishBatchGrades(f.button);
     assert.equal(f.writes.length, 0);
@@ -123,6 +123,18 @@ test("offline grades publish directly with audit and progress to certificates", 
   assert.equal(f.batch.certPending, 2);
   assert.equal(f.context.window.__resultAudit[0].action, "发布成绩");
   assert.equal(f.routes[0][1], "certificates");
+});
+
+test("organizer can publish both online and offline grades with the same final validation", async () => {
+  for (const examMode of ["线上考试", "线下考试"]) {
+    const f = fixture({ examMode, onlineGradeMocks: examMode === "线上考试" ? onlineRows() : undefined }, "organizer");
+    await f.context.publishBatchGrades(f.button);
+    assert.equal(f.writes.length, 1);
+    assert.equal(f.batch.stage, "certificates");
+    const invalid = fixture({ examMode, scorePendingInput: 1 }, "organizer");
+    await invalid.context.publishBatchGrades(invalid.button);
+    assert.equal(invalid.writes.length, 0);
+  }
 });
 
 test("online grades publish directly and persist published candidate statuses", async () => {
@@ -148,13 +160,13 @@ test("publication failure keeps pending grades intact and enables retry", async 
   assert.match(f.messages.at(-1), /超时/);
 });
 
-test("offline action permissions expose publish only for platform pending grades", () => {
+test("offline action permissions expose publish for platform and organizer pending grades", () => {
   for (const role of ["platform", "organizer", "training"]) {
     for (const status of ["待发布", "已发布", "更正中", "已作废"]) {
       const f = fixture({}, role);
       const buttons = ["publish", "confirm", "grade-setting", "export"].map((action) => ({ action, getAttribute: () => action }));
       f.context.updateResultActions({ querySelectorAll: () => buttons }, status);
-      assert.equal(buttons[0].hidden, !(role === "platform" && status === "待发布"));
+      assert.equal(buttons[0].hidden, !(role !== "training" && status === "待发布"));
       assert.equal(buttons[1].hidden, true);
       assert.equal(buttons[3].hidden, false);
     }
@@ -171,7 +183,7 @@ test("online filters merge legacy records and hide all write actions after publi
     f.context.applyOnlineGradeStatus(root, "待发布");
     assert.equal(rows[0].hidden, role === "training");
     assert.equal(rows[1].hidden, role === "training");
-    assert.equal(buttons[0].hidden, role !== "platform");
+    assert.equal(buttons[0].hidden, role === "training");
     assert.equal(buttons[1].hidden, true);
     f.context.applyOnlineGradeStatus(root, "已发布");
     assert.equal(buttons[0].hidden, true);
