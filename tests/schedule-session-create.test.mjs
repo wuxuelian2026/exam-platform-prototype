@@ -13,6 +13,7 @@ function between(start, end) {
 const source = [
   between("    function scheduleRoleCanWrite(", "    function scheduleStepBarHtml("),
   between("    function scheduleDefaultSessionRows(", "    function scheduleWizardCandidateSource("),
+  between("    function scheduleWizardCandidateSource(", "    function scheduleWizardEntryMode("),
   between("    function scheduleWizardSelectedDates(", "    function scheduleWizardDatePickerHtml("),
   between("    function scheduleWizardAppendSessionRecords(", "    function scheduleWizardTimeState("),
   between("    function saveScheduleSessionBasic(", "    function saveScheduleCandidateAssignment("),

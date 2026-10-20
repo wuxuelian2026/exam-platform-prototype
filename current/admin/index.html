@@ -601,6 +601,10 @@
     .schedule-date-multi-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .schedule-date-multi-head label { font-size: 13px; font-weight: 600; }
     .schedule-date-multi-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(122px, 1fr)); gap: 8px; }
+    .schedule-major-field { min-width: 0; margin: 14px 0 0; padding: 0; border: 0; }
+    .schedule-major-field legend { padding: 0; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+    .schedule-major-options { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+    .schedule-major-options .check-line { min-height: 24px; margin: 0; overflow-wrap: anywhere; }
     .schedule-date-option { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; }
     .schedule-date-option:hover { border-color: #93c5fd; background: #f8fbff; }
     .schedule-date-option:has(input:checked) { border-color: var(--primary); background: var(--primary-weak); box-shadow: inset 0 -3px 0 var(--primary); }
@@ -12068,7 +12072,7 @@
         var examinerHtml = session.examinerDetails && session.examinerDetails.length ? session.examinerDetails.map(function (item) { return '<div class="dispatch-assigned-examiner"><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.phone) + '</span></div>'; }).join("") : '<span class="muted">待指派</span>';
         var statusTagClass = session.status === "待指派" ? "orange" : session.status === "已发布" ? "green" : "blue";
         var mainRow = '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-room-date="' + escapeHtml(session.date) + '"' + hidden + '><td>' + sessionDetailButton + '</td><td>' + escapeHtml(session.date) + '</td><td>' + escapeHtml(session.time) + '</td><td>' + escapeHtml(session.major || "-") + '</td><td><button type="button" class="btn link schedule-preview-assigned-toggle" data-schedule-preview-session-toggle="' + escapeHtml(session.id) + '" aria-expanded="false" aria-controls="' + escapeHtml(detailId) + '"><strong>' + escapeHtml(String(assigned)) + '</strong><em data-schedule-preview-toggle-text>展开</em></button></td><td>' + examinerHtml + '</td><td>' + batchTagHtml("green", "无冲突") + '</td><td>' + batchTagHtml(statusTagClass, session.status) + '</td><td><button type="button" class="btn link" data-drawer="judge-assign" data-dispatch-session-action="true"' + dispatchAttrs + '>派遣考官</button></td></tr>';
-        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="9"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 报考考生名单"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 报考考生名单</strong><span>已缴费 ' + escapeHtml(String(assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + ' 条 mock 数据</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>报名状态</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div></div></td></tr>';
+        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="9"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 报考考生名单"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 报考考生名单</strong><span>已缴费 ' + escapeHtml(String(assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + (useAssignedCandidates ? ' 条报名数据' : ' 条 mock 数据') + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>报名状态</th></tr></thead><tbody>' + candidateRows + '</tbody></table></div></div></td></tr>';
         return mainRow + detailRow;
       }).join("");
       var initialSessionCount = sessions.filter(function (session) { return scheduleRoomKey(session.site, session.room) === selectedKey && (!selectedDate || session.date === selectedDate); }).length;
@@ -19473,6 +19477,7 @@
           site: editSessionRow.getAttribute("data-schedule-session-site") || "",
           room: editSessionRow.getAttribute("data-schedule-session-room") || "",
           major: editSessionRow.getAttribute("data-schedule-session-major") || "",
+          majors: scheduleSessionMajorsFromRow(editSessionRow),
           date: editSessionRow.getAttribute("data-schedule-session-date") || "",
           start: editSessionTime[0] || "09:00",
           end: editSessionTime[1] || "12:00",
@@ -19494,7 +19499,8 @@
         var wizardRange = String(wizardBatch.examWindow || "").split(" 至 ");
         var wizardSite = (drawerBody.querySelector("[data-schedule-site-field]") || {}).value || "";
         var wizardRoom = (drawerBody.querySelector("[data-schedule-room-field]") || {}).value || "";
-        var wizardMajor = (drawerBody.querySelector("[data-schedule-major-field]") || {}).value || "";
+        var wizardMajors = scheduleWizardSelectedMajors(drawerBody);
+        var wizardMajor = wizardMajors.join("、");
         if (!wizardDates.length || !wizardMajor || !wizardStart || !wizardStart.value || !wizardEnd || !wizardEnd.value || !wizardCount || !wizardCount.value) { toast("请完整填写场次基本信息，选择专业并至少选择1个考试日期"); return; }
         if (wizardDates.some(function (date) { return (wizardRange[0] && date < wizardRange[0]) || (wizardRange[1] && date > wizardRange[1]); })) { toast("下一步已阻断：所有考试日期必须在当前批次考试范围内"); return; }
         if (wizardStart.value >= wizardEnd.value) { toast("下一步已阻断：结束时间必须晚于开始时间"); return; }
@@ -19502,7 +19508,7 @@
         var wizardBusyRanges = scheduleWizardBusyRanges(wizardBatch, { site: wizardSite, room: wizardRoom, dates: wizardDates }, currentScheduleWizard.editingSessionId || "");
         if (scheduleWizardTimeOverlaps(wizardStart.value, wizardEnd.value, wizardBusyRanges)) { toast("下一步已阻断：所选时段与至少一个已选日期的已有场次冲突"); return; }
         if (!/^\d+$/.test(wizardCount.value) || Number(wizardCount.value) < 1) { toast("预估人数必须为正整数"); return; }
-        window.__scheduleSessionWizard = { step: 2, basic: { site: wizardSite, room: wizardRoom, major: wizardMajor, capacity: Number(wizardCount.value), dates: wizardDates, date: wizardDates[0], start: wizardStart.value, end: wizardEnd.value, note: (drawerBody.querySelector("[data-schedule-note-field]") || {}).value || "" }, selectedIds: currentScheduleWizard.selectedIds || [], editingSessionId: currentScheduleWizard.editingSessionId || "", existingAssigned: Number(currentScheduleWizard.existingAssigned || 0) };
+        window.__scheduleSessionWizard = { step: 2, basic: { site: wizardSite, room: wizardRoom, majors: wizardMajors, major: wizardMajor, capacity: Number(wizardCount.value), dates: wizardDates, date: wizardDates[0], start: wizardStart.value, end: wizardEnd.value, note: (drawerBody.querySelector("[data-schedule-note-field]") || {}).value || "" }, selectedIds: currentScheduleWizard.selectedIds || [], editingSessionId: currentScheduleWizard.editingSessionId || "", existingAssigned: Number(currentScheduleWizard.existingAssigned || 0) };
         renderScheduleSessionWizard(2);
         return;
       }
@@ -19740,11 +19746,11 @@
         var effectiveCandidateIds = selectedCandidateIds;
         var finalAssigned = effectiveCandidateIds.length;
         var sessionDates = scheduleWizardSelectedDates(sessionBasic);
-        if (!sessionDates.length || !sessionBasic.major || !sessionBasic.start || !sessionBasic.end || !sessionBasic.capacity) { toast("请先完成场次基本信息，选择专业并至少选择1个考试日期"); return; }
+        if (!sessionDates.length || !scheduleSessionMajors(sessionBasic).length || !sessionBasic.start || !sessionBasic.end || !sessionBasic.capacity) { toast("请先完成场次基本信息，选择专业并至少选择1个考试日期"); return; }
         if (scheduleWizardTimeOverlaps(sessionBasic.start, sessionBasic.end, scheduleWizardBusyRanges(scheduleBatch, sessionBasic, editingSessionId))) { toast("保存已阻断：所选时段与至少一个已选日期的已有场次冲突"); return; }
         var duplicateCandidateIds = scheduleWizardCandidateConflictIds(scheduleBatch, sessionBasic, editingSessionId).filter(function (candidateId) { return effectiveCandidateIds.indexOf(candidateId) > -1; });
         if (duplicateCandidateIds.length) { toast("保存已阻断：" + duplicateCandidateIds.length + "条报名记录已被分配到同日重叠时段的其他场次"); return; }
-        var mismatchedCandidateIds = scheduleWizardCandidateSource(scheduleBatch).filter(function (candidate) { return effectiveCandidateIds.indexOf(candidate.id) > -1 && candidate.major !== sessionBasic.major; }).map(function (candidate) { return candidate.id; });
+        var mismatchedCandidateIds = effectiveCandidateIds.filter(function (candidateId) { return !scheduleWizardCandidateSource(scheduleBatch).some(function (candidate) { return candidate.id === candidateId && scheduleSessionMajors(sessionBasic).indexOf(candidate.major) > -1; }); });
         if (mismatchedCandidateIds.length) { toast("保存已阻断：已选择考生中存在与场次专业不匹配的报名记录"); return; }
         if (!finalAssigned) { toast("请至少勾选1名待排期考生"); return; }
         if (finalAssigned > Number(sessionBasic.capacity)) { toast("保存已阻断：已分配考生数不能超过预估人数"); return; }
@@ -19759,7 +19765,8 @@
             time: sessionBasic.start + "-" + sessionBasic.end,
             site: sessionBasic.site,
             room: scheduleRoomName(sessionBasic.room),
-            major: sessionBasic.major,
+            majors: scheduleSessionMajors(sessionBasic),
+            major: scheduleSessionMajors(sessionBasic).join("、"),
             assigned: finalAssigned,
             capacity: Number(sessionBasic.capacity),
             result: "无冲突",
@@ -23286,15 +23293,30 @@
         { id: batch.id + "-EN003", code: "EN202608210003", name: "王同学", organization: "汉口美育培训学校", site: "武汉音乐学院合作考点", major: "小提琴", level: "5级" }
       ];
     }
-    function scheduleWizardMajorOptionsHtml(batch, selectedMajor) {
-      var majors = scheduleWizardCandidateSource(batch).map(function (candidate) { return candidate.major || ""; }).filter(Boolean).filter(function (major, index, list) { return list.indexOf(major) === index; });
-      return '<option value="">请选择专业</option>' + majors.map(function (major) { return '<option value="' + escapeHtml(major) + '"' + (major === selectedMajor ? ' selected' : '') + '>' + escapeHtml(major) + '</option>'; }).join("");
+    function scheduleSessionMajors(session) {
+      var values = Array.isArray((session || {}).majors) ? session.majors : (session || {}).major ? [session.major] : [];
+      return values.filter(function (major, index, list) { return typeof major === "string" && major.trim() && list.indexOf(major) === index; });
+    }
+    function scheduleSessionMajorsFromRow(row) {
+      try {
+        var majors = JSON.parse(row.getAttribute("data-schedule-session-majors") || "null");
+        if (Array.isArray(majors)) return scheduleSessionMajors({ majors: majors });
+      } catch (error) { /* Legacy rows only carry a single major. */ }
+      return scheduleSessionMajors({ major: row.getAttribute("data-schedule-session-major") || "" });
+    }
+    function scheduleWizardSelectedMajors(root) {
+      return scheduleSessionMajors({ majors: Array.from(root.querySelectorAll("[data-schedule-major-field]:checked")).map(function (input) { return input.value; }) });
+    }
+    function scheduleWizardMajorOptionsHtml(batch, basic) {
+      var selected = scheduleSessionMajors(basic);
+      var majors = scheduleWizardCandidateSource(batch).map(function (candidate) { return candidate.major || ""; }).concat(selected).filter(Boolean).filter(function (major, index, list) { return list.indexOf(major) === index; });
+      return '<fieldset class="schedule-major-field"><legend>专业（多选） *</legend><div class="schedule-major-options">' + majors.map(function (major) { return '<label class="check-line"><input type="checkbox" data-schedule-major-field value="' + escapeHtml(major) + '"' + (selected.indexOf(major) > -1 ? ' checked' : '') + '> ' + escapeHtml(major) + '</label>'; }).join("") + '</div></fieldset>';
     }
     function scheduleSessionPendingCandidates(batch, basic, editingSessionId) {
       var candidates = scheduleWizardCandidateSource(batch);
-      var sessionMajor = String((basic || {}).major || "");
+      var sessionMajors = scheduleSessionMajors(basic);
       var conflictIds = scheduleWizardCandidateConflictIds(batch, basic || {}, editingSessionId || "");
-      return candidates.filter(function (candidate) { return !!sessionMajor && candidate.major === sessionMajor && conflictIds.indexOf(candidate.id) === -1; });
+      return candidates.filter(function (candidate) { return sessionMajors.indexOf(candidate.major) > -1 && conflictIds.indexOf(candidate.id) === -1; });
     }
     function scheduleWizardEntryMode() {
       var params = new URLSearchParams(location.search);
@@ -23367,7 +23389,7 @@
           nextSessionIndex += 1;
           nextSessionId = "S-" + batchSessionSuffix(batch) + "-" + String(nextSessionIndex).padStart(2, "0");
         }
-        records.push({ id: nextSessionId, date: date, time: basic.start + "-" + basic.end, site: basic.site, room: room, major: basic.major, assigned: candidateIds.length, capacity: Number(basic.capacity), result: "无冲突", status: "草稿", candidateIds: candidateIds.slice(), note: basic.note || "" });
+        records.push({ id: nextSessionId, date: date, time: basic.start + "-" + basic.end, site: basic.site, room: room, majors: scheduleSessionMajors(basic), major: scheduleSessionMajors(basic).join("、"), assigned: candidateIds.length, capacity: Number(basic.capacity), result: "无冲突", status: "草稿", candidateIds: candidateIds.slice(), note: basic.note || "" });
         nextSessionIndex += 1;
       });
       return records;
@@ -23526,7 +23548,7 @@
       if (countLabel) countLabel.textContent = matched + "人";
       var selectAll = root.querySelector("[data-schedule-wizard-select-all]");
       if (selectAll) selectAll.checked = false;
-      if (notify) toast(reset ? "已恢复默认报名考点并重置级别，专业保持与场次一致" : "待排期考生筛选已更新");
+      if (notify) toast(reset ? "已恢复默认报名考点、全部场次专业和全部级别" : "待排期考生筛选已更新");
     }
     function scheduleSessionWizardHtml(batch, wizard) {
       var step = wizard.step || 1;
@@ -23541,7 +23563,7 @@
         var timeControls = scheduleWizardTimeControlsHtml(batch, initialBasic, wizard.editingSessionId || "");
         var timeScale = scheduleWizardTimeScaleHtml(batch, initialBasic, wizard.editingSessionId || "");
         var datePicker = scheduleWizardDatePickerHtml(batch, selectedDates, wizard.editingSessionId || "");
-        return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>考试日期范围：' + escapeHtml(batch.examWindow || "-") + '</span></div>' + stepBar + '<div class="info-banner"><strong>' + (wizard.separateDialog ? '场次基本信息' : '步骤1：场次基本信息') + '</strong><br>专业为单选必填项；选择多个考试日期时，系统将按日期批量生成多个同专业场次。</div><div class="field-row-4" style="margin-top:14px"><div class="field"><label>考点 *</label><select class="select" data-schedule-site-field><option>' + escapeHtml(initialBasic.site) + '</option><option>中央艺术考点</option><option>武汉音乐学院合作考点</option></select></div><div class="field"><label>考场 *</label><select class="select" data-schedule-room-field><option>' + escapeHtml(initialBasic.room) + '</option><option>A202 · 容量28人</option><option>B301 · 容量42人</option></select></div><div class="field"><label for="schedule-wizard-major">专业 *</label><select class="select" id="schedule-wizard-major" data-schedule-major-field required>' + scheduleWizardMajorOptionsHtml(batch, initialBasic.major) + '</select></div><div class="field"><label>预估人数 *</label><input class="input" data-schedule-count-field type="number" min="1" step="1" value="' + escapeHtml(String(basic.capacity || 20)) + '"></div></div>' + datePicker + timeScale + '<select class="select" data-schedule-start-field required hidden>' + timeControls.startOptions + '</select><select class="select" data-schedule-end-field required hidden>' + timeControls.endOptions + '</select><div class="field-row-3" style="margin-top:12px"><div class="field"><label>预计生成</label><input class="input" data-schedule-batch-count value="' + escapeHtml(String(selectedDates.length)) + '个场次" readonly></div></div><div class="info-banner" data-schedule-time-availability style="margin-top:10px">' + escapeHtml(timeControls.status) + '</div><div class="field" style="margin-top:12px"><label>备注</label><textarea class="textarea" data-schedule-note-field maxlength="200" placeholder="最多200字">' + escapeHtml(basic.note || "") + '</textarea></div><div class="info-banner" style="margin-top:14px"><strong>保存前校验：</strong>必须选择专业并至少选择1个日期；同一时间将应用到所有已选日期，且不得与任一已有场次重叠。</div>';
+        return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>考试日期范围：' + escapeHtml(batch.examWindow || "-") + '</span></div>' + stepBar + '<div class="info-banner"><strong>' + (wizard.separateDialog ? '场次基本信息' : '步骤1：场次基本信息') + '</strong><br>至少选择1个专业；每个场次包含全部已选专业，多个考试日期将分别生成场次。</div><div class="field-row-3" style="margin-top:14px"><div class="field"><label>考点 *</label><select class="select" data-schedule-site-field><option>' + escapeHtml(initialBasic.site) + '</option><option>中央艺术考点</option><option>武汉音乐学院合作考点</option></select></div><div class="field"><label>考场 *</label><select class="select" data-schedule-room-field><option>' + escapeHtml(initialBasic.room) + '</option><option>A202 · 容量28人</option><option>B301 · 容量42人</option></select></div><div class="field"><label>预估人数 *</label><input class="input" data-schedule-count-field type="number" min="1" step="1" value="' + escapeHtml(String(basic.capacity || 20)) + '"></div></div>' + scheduleWizardMajorOptionsHtml(batch, basic) + datePicker + timeScale + '<select class="select" data-schedule-start-field required hidden>' + timeControls.startOptions + '</select><select class="select" data-schedule-end-field required hidden>' + timeControls.endOptions + '</select><div class="field-row-3" style="margin-top:12px"><div class="field"><label>预计生成</label><input class="input" data-schedule-batch-count value="' + escapeHtml(String(selectedDates.length)) + '个场次" readonly></div></div><div class="info-banner" data-schedule-time-availability style="margin-top:10px">' + escapeHtml(timeControls.status) + '</div><div class="field" style="margin-top:12px"><label>备注</label><textarea class="textarea" data-schedule-note-field maxlength="200" placeholder="最多200字">' + escapeHtml(basic.note || "") + '</textarea></div><div class="info-banner" style="margin-top:14px"><strong>保存前校验：</strong>必须至少选择1个专业和1个日期；同一时间将应用到所有已选日期，且不得与任一已有场次重叠。</div>';
       }
       var candidates = scheduleSessionPendingCandidates(batch, basic, wizard.editingSessionId || "");
       var selectedIds = (wizard.selectedIds || []).filter(function (candidateId, index, list) { return list.indexOf(candidateId) === index && candidates.some(function (candidate) { return candidate.id === candidateId; }); });
@@ -23565,7 +23587,7 @@
       }).join("");
       var empty = '<tr><td colspan="6"><div class="empty-state"><strong>' + (candidates.length ? '全部可分配考生已移入右侧' : '当前没有待排期考生') + '</strong><span>' + (candidates.length ? '可从右侧移除考生，使其返回待排期考生池。' : '请返回后重新选择场次，或检查本批次待排期考生数据。') + '</span></div></td></tr>';
       var filterEmpty = '<tr data-schedule-candidate-filter-empty' + (pendingCandidates.length && initialVisibleCount === 0 ? '' : ' hidden') + '><td colspan="6"><div class="empty-state"><strong>暂无符合条件的待排期考生</strong><span>请调整报名考点、专业或级别筛选条件。</span></div></td></tr>';
-      var candidateFilterHtml = '<div class="schedule-candidate-filter" aria-label="待排期考生筛选"><div class="field"><label for="schedule-candidate-site-filter">报名考点</label><select class="select" id="schedule-candidate-site-filter" data-schedule-candidate-filter="site">' + candidateFilterOptions(candidateSites, defaultCandidateSite, "全部报名考点") + '</select></div><div class="field"><label for="schedule-candidate-major-filter">专业（场次专业）</label><select class="select" id="schedule-candidate-major-filter" data-schedule-candidate-filter="major" disabled><option value="' + escapeHtml(basic.major || "") + '" selected>' + escapeHtml(basic.major || "未选择") + '</option></select></div><div class="field"><label for="schedule-candidate-level-filter">级别</label><select class="select" id="schedule-candidate-level-filter" data-schedule-candidate-filter="level">' + candidateFilterOptions(candidateLevels, "", "全部级别") + '</select></div><div class="page-actions"><span class="tag blue" data-schedule-candidate-filter-count>' + escapeHtml(String(initialVisibleCount)) + '人</span><button type="button" class="btn primary" data-schedule-candidate-filter-search>查询</button><button type="button" class="btn" data-schedule-candidate-filter-reset>重置</button></div></div>';
+      var candidateFilterHtml = '<div class="schedule-candidate-filter" aria-label="待排期考生筛选"><div class="field"><label for="schedule-candidate-site-filter">报名考点</label><select class="select" id="schedule-candidate-site-filter" data-schedule-candidate-filter="site">' + candidateFilterOptions(candidateSites, defaultCandidateSite, "全部报名考点") + '</select></div><div class="field"><label for="schedule-candidate-major-filter">专业（场次专业）</label><select class="select" id="schedule-candidate-major-filter" data-schedule-candidate-filter="major">' + candidateFilterOptions(scheduleSessionMajors(basic), "", "全部场次专业") + '</select></div><div class="field"><label for="schedule-candidate-level-filter">级别</label><select class="select" id="schedule-candidate-level-filter" data-schedule-candidate-filter="level">' + candidateFilterOptions(candidateLevels, "", "全部级别") + '</select></div><div class="page-actions"><span class="tag blue" data-schedule-candidate-filter-count>' + escapeHtml(String(initialVisibleCount)) + '人</span><button type="button" class="btn primary" data-schedule-candidate-filter-search>查询</button><button type="button" class="btn" data-schedule-candidate-filter-reset>重置</button></div></div>';
       var selectedRows = selectedCandidates.map(function (candidate) {
         var candidateSite = candidate.site || batch.site || "未选择考点";
         return '<tr><td>' + escapeHtml(candidate.code) + '</td><td>' + escapeHtml(candidate.name) + '</td><td>' + escapeHtml(candidateSite) + '</td><td>' + escapeHtml(candidate.major + " " + candidate.level) + '</td><td><button type="button" class="btn link danger-text schedule-candidate-transfer-action" data-schedule-wizard-remove-candidate="' + escapeHtml(candidate.id) + '" aria-label="移除已选择考生 ' + escapeHtml(candidate.name) + '">移除</button></td></tr>';
@@ -23573,7 +23595,7 @@
       var selectedEmpty = '<tr><td colspan="5"><div class="empty-state"><strong>尚未选择考生</strong><span>请在左侧勾选考生并点击“确定选择”。</span></div></td></tr>';
       var editAssignmentHint = wizard.editingSessionId ? '<div class="info-banner" style="margin-top:14px"><strong>当前场次原已分配 ' + escapeHtml(String(editingAssigned)) + ' 人。</strong><br>右侧已选择考生池为本次保存后的最终分配结果。</div>' : '';
       var selectedDateSummary = scheduleWizardSelectedDates(basic);
-      return '<div class="batch-context-banner"><strong>场次：' + escapeHtml(basic.site || "-") + ' · ' + escapeHtml(basic.room || "-") + '</strong><span>专业：' + escapeHtml(basic.major || "-") + ' · ' + escapeHtml(selectedDateSummary.join("、") || "-") + ' · ' + escapeHtml((basic.start || "-") + "-" + (basic.end || "-")) + ' · 共' + escapeHtml(String(selectedDateSummary.length)) + '个场次</span></div>' + stepBar + '<div class="info-banner"><strong>' + (wizard.separateDialog ? '分配考生' : '步骤2：分配考生') + '</strong><br>待排期考生池已按场次专业“' + escapeHtml(basic.major || "-") + '”自动锁定，仅显示专业匹配的考生；勾选后点击“确定选择”移入右侧。</div>' + editAssignmentHint + '<div class="schedule-candidate-transfer"><div class="table-card" data-schedule-candidate-pool data-schedule-candidate-default-site="' + escapeHtml(defaultCandidateSite) + '" data-schedule-candidate-default-major="' + escapeHtml(basic.major || "") + '"><div class="table-tools"><div><h3 class="table-title">待排期考生池</h3><span class="muted">专业匹配 · 待确认 <span data-schedule-wizard-selected-count>0</span> 人</span></div><div class="page-actions"><label class="check-line"><input type="checkbox" data-schedule-wizard-select-all> 全选当前筛选结果</label><button type="button" class="btn primary" data-schedule-wizard-confirm-candidates>确定选择 →</button></div></div>' + candidateFilterHtml + '<div class="table-wrap"><table class="schedule-role-table"><thead><tr><th>选择</th><th>报名编号</th><th>考生</th><th>报名机构</th><th>报名考点</th><th>专业/级别</th></tr></thead><tbody>' + (candidateRows || empty) + filterEmpty + '</tbody></table></div></div><div class="table-card" data-schedule-selected-candidate-pool><div class="table-tools"><div><h3 class="table-title">已选择考生池</h3><span class="muted">已选择 ' + escapeHtml(String(selectedCandidates.length)) + ' 人</span></div><span class="tag green">最终分配结果</span></div><div class="table-wrap"><table class="schedule-role-table schedule-selected-table"><thead><tr><th>报名编号</th><th>考生</th><th>报名考点</th><th>专业/级别</th><th>操作</th></tr></thead><tbody>' + (selectedRows || selectedEmpty) + '</tbody></table></div></div></div><div class="info-banner" style="margin-top:14px"><strong>保存校验：</strong>仅允许分配与场次专业一致的考生；同一报名记录在同一天的重叠时段只能分配到1个场次；场次已分配人数不得超过预估人数。</div>';
+      return '<div class="batch-context-banner"><strong>场次：' + escapeHtml(basic.site || "-") + ' · ' + escapeHtml(basic.room || "-") + '</strong><span>专业：' + escapeHtml(scheduleSessionMajors(basic).join("、") || "-") + ' · ' + escapeHtml(selectedDateSummary.join("、") || "-") + ' · ' + escapeHtml((basic.start || "-") + "-" + (basic.end || "-")) + ' · 共' + escapeHtml(String(selectedDateSummary.length)) + '个场次</span></div>' + stepBar + '<div class="info-banner"><strong>' + (wizard.separateDialog ? '分配考生' : '步骤2：分配考生') + '</strong><br>待排期考生池已按场次专业“' + escapeHtml(scheduleSessionMajors(basic).join("、") || "-") + '”自动锁定，仅显示专业匹配的考生；勾选后点击“确定选择”移入右侧。</div>' + editAssignmentHint + '<div class="schedule-candidate-transfer"><div class="table-card" data-schedule-candidate-pool data-schedule-candidate-default-site="' + escapeHtml(defaultCandidateSite) + '" data-schedule-candidate-default-major=""><div class="table-tools"><div><h3 class="table-title">待排期考生池</h3><span class="muted">专业匹配 · 待确认 <span data-schedule-wizard-selected-count>0</span> 人</span></div><div class="page-actions"><label class="check-line"><input type="checkbox" data-schedule-wizard-select-all> 全选当前筛选结果</label><button type="button" class="btn primary" data-schedule-wizard-confirm-candidates>确定选择 →</button></div></div>' + candidateFilterHtml + '<div class="table-wrap"><table class="schedule-role-table"><thead><tr><th>选择</th><th>报名编号</th><th>考生</th><th>报名机构</th><th>报名考点</th><th>专业/级别</th></tr></thead><tbody>' + (candidateRows || empty) + filterEmpty + '</tbody></table></div></div><div class="table-card" data-schedule-selected-candidate-pool><div class="table-tools"><div><h3 class="table-title">已选择考生池</h3><span class="muted">已选择 ' + escapeHtml(String(selectedCandidates.length)) + ' 人</span></div><span class="tag green">最终分配结果</span></div><div class="table-wrap"><table class="schedule-role-table schedule-selected-table"><thead><tr><th>报名编号</th><th>考生</th><th>报名考点</th><th>专业/级别</th><th>操作</th></tr></thead><tbody>' + (selectedRows || selectedEmpty) + '</tbody></table></div></div></div><div class="info-banner" style="margin-top:14px"><strong>保存校验：</strong>仅允许分配专业属于场次已选范围的考生；同一报名记录在同一天的重叠时段只能分配到1个场次；场次已分配人数不得超过预估人数。</div>';
     }
     function scheduleSessionWizardFromRow(row) {
       if (!row) return null;
@@ -23585,6 +23607,7 @@
           site: row.getAttribute("data-schedule-session-site") || "",
           room: row.getAttribute("data-schedule-session-room") || "",
           major: row.getAttribute("data-schedule-session-major") || "",
+          majors: scheduleSessionMajorsFromRow(row),
           capacity: Number(row.getAttribute("data-schedule-session-capacity") || 20),
           date: date,
           dates: date ? [date] : [],
@@ -23604,10 +23627,12 @@
       var endField = drawerBody.querySelector("[data-schedule-end-field]");
       var countField = drawerBody.querySelector("[data-schedule-count-field]");
       var range = String(batch.examWindow || "").split(" 至 ");
+      var majors = scheduleWizardSelectedMajors(drawerBody);
       var basic = {
         site: (drawerBody.querySelector("[data-schedule-site-field]") || {}).value || "",
         room: (drawerBody.querySelector("[data-schedule-room-field]") || {}).value || "",
-        major: (drawerBody.querySelector("[data-schedule-major-field]") || {}).value || "",
+        majors: majors,
+        major: majors.join("、"),
         capacity: countField ? Number(countField.value) : 0,
         dates: dates,
         date: dates[0] || "",
@@ -23616,7 +23641,7 @@
         note: (drawerBody.querySelector("[data-schedule-note-field]") || {}).value || ""
       };
       var wizard = window.__scheduleSessionWizard || {};
-      if (!basic.dates.length || !basic.site || !basic.room || !basic.major || !basic.start || !basic.end || !basic.capacity) { toast("请完整填写场次基本信息，选择专业并至少选择1个考试日期"); return null; }
+      if (!basic.dates.length || !basic.site || !basic.room || !basic.majors.length || !basic.start || !basic.end || !basic.capacity) { toast("请完整填写场次基本信息，至少选择1个专业和1个考试日期"); return null; }
       if (basic.dates.some(function (date) { return (range[0] && date < range[0]) || (range[1] && date > range[1]); })) { toast("保存已阻断：所有考试日期必须在当前批次考试范围内"); return null; }
       if (basic.start >= basic.end) { toast("保存已阻断：结束时间必须晚于开始时间"); return null; }
       if (scheduleWizardTimeOverlaps(basic.start, basic.end, scheduleWizardBusyRanges(batch, basic, wizard.editingSessionId || ""))) { toast("保存已阻断：所选时段与至少一个已选日期的已有场次冲突"); return null; }
@@ -23629,17 +23654,26 @@
       var batch = context.batch;
       var basic = context.basic;
       var wizard = context.wizard;
+      basic.majors = scheduleSessionMajors(basic);
+      basic.major = basic.majors.join("、");
       var entryMode = scheduleWizardEntryMode();
       var records = scheduleArrangeSessionRows(batch, entryMode).slice();
       if (wizard.editingSessionId) {
         var editIndex = records.findIndex(function (record) { return record.id === wizard.editingSessionId; });
         if (editIndex < 0) { toast("未找到需要编辑的场次，请刷新后重试"); return; }
         var current = records[editIndex];
+        var assignedIds = current.candidateIds || [];
+        var removedMajor = scheduleSessionMajors(current).some(function (major) { return basic.majors.indexOf(major) === -1; });
+        var assignedMismatch = scheduleWizardCandidateSource(batch).some(function (candidate) { return assignedIds.indexOf(candidate.id) > -1 && basic.majors.indexOf(candidate.major) === -1; });
+        var unknownAssigned = Number(current.assigned || 0) > assignedIds.length || assignedIds.some(function (candidateId) { return !scheduleWizardCandidateSource(batch).some(function (candidate) { return candidate.id === candidateId; }); });
+        if (assignedMismatch || (removedMajor && unknownAssigned)) { toast("保存已阻断：移除的专业仍有已分配考生，请先调整考生分配"); return; }
+        if (Math.max(Number(current.assigned || 0), assignedIds.length) > basic.capacity) { toast("保存已阻断：预估人数不能小于已分配人数"); return; }
         records[editIndex] = Object.assign({}, current, {
           date: basic.date,
           time: basic.start + "-" + basic.end,
           site: basic.site,
           room: scheduleRoomName(basic.room),
+          majors: basic.majors.slice(),
           major: basic.major,
           capacity: basic.capacity,
           result: "无冲突",
@@ -23674,7 +23708,7 @@
       if (selectedIds.length > Number(basic.capacity || 0)) { toast("保存已阻断：已分配考生数不能超过预估人数"); return; }
       var conflictIds = scheduleWizardCandidateConflictIds(batch, basic, wizard.editingSessionId || "");
       if (selectedIds.some(function (candidateId) { return conflictIds.indexOf(candidateId) > -1; })) { toast("保存已阻断：存在同日重叠时段已分配的报名记录"); return; }
-      var mismatched = scheduleWizardCandidateSource(batch).some(function (candidate) { return selectedIds.indexOf(candidate.id) > -1 && candidate.major !== basic.major; });
+      var mismatched = selectedIds.some(function (candidateId) { return !scheduleWizardCandidateSource(batch).some(function (candidate) { return candidate.id === candidateId && scheduleSessionMajors(records[index]).indexOf(candidate.major) > -1; }); });
       if (mismatched) { toast("保存已阻断：已选择考生中存在与场次专业不匹配的报名记录"); return; }
       var current = records[index];
       var oldIds = Array.isArray(current.candidateIds) ? current.candidateIds.slice() : [];
@@ -23763,12 +23797,12 @@
       var rowHtml = rows.map(function (row) {
         var key = scheduleRoomKey(row.site, row.room);
         var hidden = key === selectedKey ? "" : " hidden";
-        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(row.major || "") + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(row.major || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button><button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
+        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(scheduleSessionMajors(row).join("、")) + '" data-schedule-session-majors="' + escapeHtml(JSON.stringify(scheduleSessionMajors(row))) + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(scheduleSessionMajors(row).join("、") || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button><button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
       }).join("");
       var initialCount = roomCounts[selectedKey] || 0;
       var selectedLabel = selectedSite && selectedRoom ? selectedSite + " / " + selectedRoom : "未选择考场";
       var empty = '<tr data-schedule-room-empty="sessions"' + (initialCount ? ' hidden' : '') + '><td colspan="8"><div class="empty-state"><strong>该考场尚未创建场次</strong><span>请点击“创建场次”，维护专业、考试日期、时间及考生分配。</span></div></td></tr>';
-      return '<div class="schedule-room-workbench" data-schedule-room-tree data-schedule-room-label-suffix=" · 考试日期须在 ' + escapeHtml(batch.examWindow) + ' 内"><aside class="table-card schedule-room-tree-card"><div class="table-tools"><div><h2 class="table-title">考点-考场</h2><span class="muted">选择考场查看场次</span></div></div><div class="schedule-room-tree" role="tree" aria-label="考点考场资源树">' + treeHtml + '</div></aside><section class="table-card schedule-room-session-card"><div class="table-tools"><div><h2 class="table-title">场次列表</h2><span class="muted" data-schedule-selected-room>' + escapeHtml(selectedLabel) + ' · 考试日期须在 ' + escapeHtml(batch.examWindow) + ' 内</span></div><div class="page-actions"><span class="tag blue" data-schedule-room-session-count>' + escapeHtml(String(initialCount)) + '个场次</span>' + (canCreateSession ? '<button class="btn primary" data-schedule-step-create>创建场次</button>' : '') + (rows.length ? '<button class="btn" data-schedule-recheck>重新校验</button>' : '') + '</div></div><div class="table-wrap"><table class="schedule-room-session-table"><thead><tr><th>场次编号</th><th>考试日期</th><th>考试时间</th><th>专业</th><th>已分配/预估人数</th><th>校验结果</th><th>状态</th><th>操作</th></tr></thead><tbody>' + rowHtml + empty + '</tbody></table></div><div class="info-banner" style="margin-top:14px"><strong>排期规则：</strong>每个场次仅允许分配同专业考生；同一考场同一日期同时段不可重复。</div></section></div>';
+      return '<div class="schedule-room-workbench" data-schedule-room-tree data-schedule-room-label-suffix=" · 考试日期须在 ' + escapeHtml(batch.examWindow) + ' 内"><aside class="table-card schedule-room-tree-card"><div class="table-tools"><div><h2 class="table-title">考点-考场</h2><span class="muted">选择考场查看场次</span></div></div><div class="schedule-room-tree" role="tree" aria-label="考点考场资源树">' + treeHtml + '</div></aside><section class="table-card schedule-room-session-card"><div class="table-tools"><div><h2 class="table-title">场次列表</h2><span class="muted" data-schedule-selected-room>' + escapeHtml(selectedLabel) + ' · 考试日期须在 ' + escapeHtml(batch.examWindow) + ' 内</span></div><div class="page-actions"><span class="tag blue" data-schedule-room-session-count>' + escapeHtml(String(initialCount)) + '个场次</span>' + (canCreateSession ? '<button class="btn primary" data-schedule-step-create>创建场次</button>' : '') + (rows.length ? '<button class="btn" data-schedule-recheck>重新校验</button>' : '') + '</div></div><div class="table-wrap"><table class="schedule-room-session-table"><thead><tr><th>场次编号</th><th>考试日期</th><th>考试时间</th><th>专业</th><th>已分配/预估人数</th><th>校验结果</th><th>状态</th><th>操作</th></tr></thead><tbody>' + rowHtml + empty + '</tbody></table></div><div class="info-banner" style="margin-top:14px"><strong>排期规则：</strong>每个场次可选择多个专业，仅允许分配专业属于已选范围的考生；同一考场同一日期同时段不可重复。</div></section></div>';
     }
     function syncScheduleArrangeRoomLinked(root) {
       if (!root) return;
@@ -23848,17 +23882,21 @@
         var key = scheduleRoomKey(session.site, session.room);
         var hidden = key === selectedKey && (!selectedDate || session.date === selectedDate) ? "" : " hidden";
         var detailId = "schedule-preview-assigned-" + String(session.id || sessionIndex).replace(/[^A-Za-z0-9_-]/g, "-");
-        var mockCandidateCount = Math.min(Math.max(Number(session.assigned) || 0, 0), 5);
+        var assignedCandidates = (session.candidateIds || []).map(function (candidateId) { return scheduleWizardCandidateSource(batch).find(function (candidate) { return candidate.id === candidateId; }); }).filter(Boolean);
+        var useAssignedCandidates = assignedCandidates.length === Number(session.assigned || 0);
+        var mockCandidateCount = useAssignedCandidates ? assignedCandidates.length : Math.min(Math.max(Number(session.assigned) || 0, 0), 5);
         var mockCandidateRows = Array.from({ length: mockCandidateCount }, function (_, candidateIndex) {
+          var assignedCandidate = useAssignedCandidates ? assignedCandidates[candidateIndex] : null;
           var poolIndex = (sessionIndex * 2 + candidateIndex) % candidateNames.length;
           var majorLevel = candidateMajors[(sessionIndex + candidateIndex) % candidateMajors.length];
-          majorLevel = [session.major || majorLevel[0], majorLevel[1]];
-          var enrollmentCode = "EN" + String(session.date || "").replace(/-/g, "").slice(2) + String((sessionIndex + 1) * 10 + candidateIndex + 1).padStart(4, "0");
+          var sessionMajors = scheduleSessionMajors(session);
+          majorLevel = assignedCandidate ? [assignedCandidate.major, assignedCandidate.level] : [sessionMajors[candidateIndex % sessionMajors.length] || majorLevel[0], majorLevel[1]];
+          var enrollmentCode = assignedCandidate ? assignedCandidate.code : "EN" + String(session.date || "").replace(/-/g, "").slice(2) + String((sessionIndex + 1) * 10 + candidateIndex + 1).padStart(4, "0");
           var maskedId = "420106********" + String((sessionIndex + 1) * 10 + candidateIndex + 1).padStart(4, "0").slice(-4);
-          return '<tr><td>' + escapeHtml(enrollmentCode) + '</td><td><strong>' + escapeHtml(candidateNames[poolIndex]) + '</strong><br><span class="muted">' + escapeHtml(maskedId) + '</span></td><td>' + escapeHtml(organizationName || "报名机构") + '</td><td>' + escapeHtml(majorLevel[0] + " " + majorLevel[1]) + '</td><td>' + escapeHtml(String(candidateIndex + 1).padStart(2, "0")) + '</td><td><button type="button" class="btn link" data-toast="考生排期详情已打开">查看</button></td></tr>';
+          return '<tr><td>' + escapeHtml(enrollmentCode) + '</td><td><strong>' + escapeHtml(assignedCandidate ? assignedCandidate.name : candidateNames[poolIndex]) + '</strong><br><span class="muted">' + escapeHtml(maskedId) + '</span></td><td>' + escapeHtml(assignedCandidate ? assignedCandidate.organization || organizationName || "报名机构" : organizationName || "报名机构") + '</td><td>' + escapeHtml(majorLevel[0] + " " + majorLevel[1]) + '</td><td>' + escapeHtml(String(candidateIndex + 1).padStart(2, "0")) + '</td><td><button type="button" class="btn link" data-toast="考生排期详情已打开">查看</button></td></tr>';
         }).join("");
         var mainRow = '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-room-date="' + escapeHtml(session.date) + '"' + hidden + '><td>' + escapeHtml(session.id) + '</td><td>' + escapeHtml(session.date) + '</td><td>' + escapeHtml(session.time) + '</td><td>' + escapeHtml(session.major || "-") + '</td><td><button type="button" class="btn link schedule-preview-assigned-toggle" data-schedule-preview-session-toggle="' + escapeHtml(session.id) + '" aria-expanded="false" aria-controls="' + escapeHtml(detailId) + '"><strong>' + escapeHtml(String(session.assigned) + "/" + String(session.capacity)) + '</strong><em data-schedule-preview-toggle-text>展开</em></button></td><td>' + batchTagHtml(session.result === "无冲突" ? "green" : "orange", session.result) + '</td><td>' + batchTagHtml("blue", session.status) + '</td><td><button class="btn link" data-toast="场次排期详情已打开">查看</button></td></tr>';
-        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已分配考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已分配考生</strong><span>共 ' + escapeHtml(String(session.assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + ' 条 mock 数据</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + mockCandidateRows + '</tbody></table></div></div></td></tr>';
+        var detailRow = '<tr id="' + escapeHtml(detailId) + '" class="schedule-preview-candidate-detail" data-schedule-preview-session-detail="' + escapeHtml(session.id) + '" hidden><td colspan="8"><div class="schedule-preview-candidate-subtable" role="region" aria-label="' + escapeHtml(session.id) + ' 已分配考生"><div class="schedule-preview-candidate-subtable-head"><strong>' + escapeHtml(session.id) + ' · 已分配考生</strong><span>共 ' + escapeHtml(String(session.assigned)) + ' 人，当前展示 ' + escapeHtml(String(mockCandidateCount)) + (useAssignedCandidates ? ' 条报名数据' : ' 条 mock 数据') + '</span></div><div class="table-wrap"><table><thead><tr><th>报名编号</th><th>考生/证件号</th><th>报名机构</th><th>专业/级别</th><th>座位号</th><th>操作</th></tr></thead><tbody>' + mockCandidateRows + '</tbody></table></div></div></td></tr>';
         return mainRow + detailRow;
       }).join("");
       var initialSessionCount = sessions.filter(function (session) { return scheduleRoomKey(session.site, session.room) === selectedKey && (!selectedDate || session.date === selectedDate); }).length;
@@ -24061,7 +24099,7 @@
     DRAWER["schedule-assign"] = {
       title: "创建场次",
       wide: true,
-      body: function () { var roomContext = window.__scheduleCreateRoomContext || {}; var editContext = window.__scheduleEditSessionContext; window.__scheduleCreateRoomContext = null; window.__scheduleEditSessionContext = null; window.__scheduleSessionWizard = editContext ? { step: 1, basic: { site: editContext.site || "", room: editContext.room || "", major: editContext.major || "", capacity: Number(editContext.capacity || 20), date: editContext.date || "", start: editContext.start || "09:00", end: editContext.end || "12:00", note: editContext.note || "" }, selectedIds: editContext.candidateIds || [], editingSessionId: editContext.id || "", existingAssigned: Number(editContext.assigned || 0), separateDialog: true } : { step: 1, basic: { site: roomContext.site || "", room: roomContext.room || "", major: "" }, selectedIds: [], separateDialog: true }; return scheduleSessionWizardHtml(currentBatchContext(), window.__scheduleSessionWizard); },
+      body: function () { var roomContext = window.__scheduleCreateRoomContext || {}; var editContext = window.__scheduleEditSessionContext; window.__scheduleCreateRoomContext = null; window.__scheduleEditSessionContext = null; window.__scheduleSessionWizard = editContext ? { step: 1, basic: { site: editContext.site || "", room: editContext.room || "", majors: scheduleSessionMajors(editContext), major: scheduleSessionMajors(editContext).join("、"), capacity: Number(editContext.capacity || 20), date: editContext.date || "", start: editContext.start || "09:00", end: editContext.end || "12:00", note: editContext.note || "" }, selectedIds: editContext.candidateIds || [], editingSessionId: editContext.id || "", existingAssigned: Number(editContext.assigned || 0), separateDialog: true } : { step: 1, basic: { site: roomContext.site || "", room: roomContext.room || "", majors: [], major: "" }, selectedIds: [], separateDialog: true }; return scheduleSessionWizardHtml(currentBatchContext(), window.__scheduleSessionWizard); },
       foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-schedule-save-basic>保存场次</button>'
     };
     DRAWER["schedule-candidate-assign"] = {
