@@ -6,9 +6,9 @@ import vm from "node:vm";
 const html = fs.readFileSync(new URL("../current/admin/index.html", import.meta.url), "utf8");
 const source = html.slice(html.indexOf("    var TRAINING_ACTIVITY_STORAGE_KEY"), html.indexOf("    function prepareTrainingActivityRows"));
 const valid = () => ({
-  name: "教师能力培训", direction: "钢琴教学", target: "艺术教师", location: "武汉培训中心",
+  name: "教师能力培训", direction: "钢琴教学", location: "武汉培训中心",
   start: "2026-11-10", end: "2026-11-12", registrationStart: "2026-10-01", registrationEnd: "2026-11-09",
-  capacity: "50", fee: "1280.50", contactName: "测试老师", contactPhone: "13800000000", description: "培训介绍\n第二行"
+  capacity: "50", fee: "1280.50", description: "培训介绍\n第二行"
 });
 
 function fixture() {
@@ -25,7 +25,7 @@ function fixture() {
     window: { localStorage: { getItem: key => stored.get(key) ?? null, setItem: (key, value) => stored.set(key, value) } },
     document: {
       querySelector: () => tbody,
-      createElement: () => ({ dataset: {}, setAttribute() {}, innerHTML: "" })
+      createElement: () => { const row = { dataset: {}, setAttribute() {}, innerHTML: "", remove() { rows.splice(rows.indexOf(row), 1); } }; return row; }
     },
     escapeHtml: value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]),
     trainingStatusTag: value => `<span>${value}</span>`,
@@ -35,8 +35,8 @@ function fixture() {
   });
   vm.runInContext(source, context);
   const form = (data = valid(), nativeValid = true) => ({
-    reportValidity: () => nativeValid,
-    querySelectorAll: () => Object.entries(data).map(([name, value]) => ({ name, value }))
+    dataset: {}, reportValidity: () => nativeValid,
+    querySelectorAll: selector => selector === '[name]' ? Object.entries(data).map(([name, value]) => ({ name, value })) : []
   });
   return { context, stored, messages, rows, form };
 }
@@ -46,10 +46,10 @@ test("create button opens a registered drawer instead of showing a toast", () =>
   assert.doesNotMatch(html, /data-toast="培训活动新增表单已打开"/);
   assert.match(html, /DRAWER\["training-create"\] = .*body: trainingActivityFormHtml/);
   assert.match(html, /type="submit" form="training-create-form"/);
-  assert.match(html, /if \(trainingForm\) \{ event.preventDefault\(\); saveTrainingActivity\(trainingForm\); return; \}/);
+  assert.match(html, /saveTrainingActivity\(trainingForm,.*data-training-save-draft/);
 });
 
-test("form has labelled fields, fixed offline mode, required validation and cancel", () => {
+test("form matches screenshot fields, fixed offline mode and optional media", () => {
   const f = fixture();
   const form = f.context.trainingActivityFormHtml();
   for (const field of Object.keys(valid())) {
@@ -57,20 +57,25 @@ test("form has labelled fields, fixed offline mode, required validation and canc
     assert.ok(form.includes(`for="training-create-${field}"`), field);
   }
   assert.match(form, /value="线下培训" readonly/);
-  assert.match(form, /name="description" required/);
-  assert.match(html, /DRAWER\["training-create"\].*data-close-drawer>取消/);
+  assert.doesNotMatch(form, /name="description" required/);
+  assert.doesNotMatch(form, /name="(?:target|contactName|contactPhone)"/);
+  assert.match(form, /系统自动生成/);
+  assert.match(form, /data-training-media="video"/);
+  assert.match(form, /data-training-media="cover"/);
+  assert.match(html, /DRAWER\["training-create"\].*data-close-drawer>关闭/);
+  assert.match(html, /formnovalidate data-training-save-draft/);
 });
 
-test("valid activity, free activity, same-day dates and landline are accepted", () => {
+test("valid activity, free activity and same-day dates are accepted", () => {
   const { context } = fixture();
-  for (const overrides of [{}, { fee: "0" }, { contactPhone: "027-88889999" }, { start: "2026-11-10", end: "2026-11-10", registrationStart: "2026-11-10", registrationEnd: "2026-11-10" }]) {
+  for (const overrides of [{}, { fee: "0" }, { start: "2026-11-10", end: "2026-11-10", registrationStart: "2026-11-10", registrationEnd: "2026-11-10" }]) {
     assert.equal(context.trainingActivityValidation({ ...valid(), ...overrides }), "");
   }
 });
 
 test("missing, whitespace and overlength text cannot be published", () => {
   const { context } = fixture();
-  for (const field of ["name", "direction", "target", "location", "contactName", "contactPhone", "description"]) {
+  for (const field of ["name", "direction", "location"]) {
     for (const value of [undefined, "", "   ", "x".repeat(5001)]) {
       assert.notEqual(context.trainingActivityValidation({ ...valid(), [field]: value }), "", field);
     }
@@ -84,7 +89,7 @@ test("invalid dates and reversed or overlapping periods are rejected", () => {
   }
 });
 
-test("capacity, amount and telephone constraints are enforced", () => {
+test("capacity, amount and description limits are enforced", () => {
   const { context } = fixture();
   for (const field of ["capacity", "fee"]) {
     for (const value of ["", "-1", "Infinity", "NaN", "1.111", "1000001"]) {
@@ -92,7 +97,7 @@ test("capacity, amount and telephone constraints are enforced", () => {
     }
   }
   assert.notEqual(context.trainingActivityValidation({ ...valid(), capacity: "0" }), "");
-  assert.notEqual(context.trainingActivityValidation({ ...valid(), contactPhone: "123456" }), "");
+  assert.notEqual(context.trainingActivityValidation({ ...valid(), description: "x".repeat(5001) }), "");
 });
 
 test("publishing persists all fields, adds exactly one row and resets filters", () => {
@@ -179,4 +184,59 @@ test("created row and read-only detail escape user content", () => {
   f.context.window.__activeTrainingActivity = JSON.parse(f.rows[0].dataset.trainingActivityRecord);
   assert.doesNotMatch(f.context.createdTrainingActivityDetailHtml(), /<script>/);
   assert.match(f.context.createdTrainingActivityDetailHtml(), /&lt;script&gt;/);
+});
+
+test("draft accepts only a name, survives reload and can be completed without duplicating", async () => {
+  const f = fixture();
+  await f.context.saveTrainingActivity(f.form({ name: "培训草稿" }, false), true);
+  assert.equal(f.rows.length, 1);
+  const draft = f.context.readCreatedTrainingActivities()[0];
+  assert.equal(draft.publishStatus, "草稿");
+  assert.equal(f.context.trainingActivityRegistrationStatus(draft), "未开始");
+  assert.match(f.rows[0].innerHTML, /data-training-edit/);
+  const form = f.form(valid());
+  form.dataset.recordId = draft.id;
+  await f.context.saveTrainingActivity(form);
+  assert.equal(f.rows.length, 1);
+  assert.equal(f.rows[0].dataset.trainingActivityId, draft.id);
+  assert.equal(f.context.readCreatedTrainingActivities()[0].publishStatus, "已发布");
+});
+
+test("draft validates entered values and publishing accepts optional description", () => {
+  const f = fixture();
+  assert.notEqual(f.context.trainingActivityValidation({ name: "" }, true), "");
+  assert.notEqual(f.context.trainingActivityValidation({ name: "草稿", fee: "-1" }, true), "");
+  assert.equal(f.context.trainingActivityValidation({ name: "草稿", start: "2026-11-10", end: "" }, true), "");
+  assert.equal(f.context.trainingActivityValidation({ ...valid(), description: "" }), "");
+});
+
+test("cover and video enforce exact types, size limits and nonempty files", () => {
+  const f = fixture();
+  const validate = f.context.trainingMediaValidation;
+  assert.equal(validate({ name: "封面.PNG", type: "image/png", size: 2 * 1024 ** 2 }, "cover"), "");
+  assert.equal(validate({ name: "视频.mp4", type: "video/mp4", size: 100 * 1024 ** 2 }, "video"), "");
+  for (const file of [{ name: "x.png", type: "image/png", size: 0 }, { name: "x.jpg", type: "image/jpeg", size: 2 * 1024 ** 2 + 1 }, { name: "x.svg", type: "image/svg+xml", size: 10 }, { name: "x.png", type: "text/html", size: 10 }]) assert.notEqual(validate(file, "cover"), "");
+  for (const file of [{ name: "x.mov", type: "video/quicktime", size: 1 }, { name: "x.mp4", type: "video/mp4", size: 100 * 1024 ** 2 + 1 }]) assert.notEqual(validate(file, "video"), "");
+});
+
+test("media is persisted before activity metadata, restores with draft, and failure never reports success", async () => {
+  const f = fixture();
+  const file = { name: "演示.mp4", type: "video/mp4", size: 20 };
+  const form = f.form();
+  const original = form.querySelectorAll;
+  form.querySelectorAll = selector => selector === "[data-training-media]" ? [{ dataset: { trainingMedia: "video" }, querySelector: () => ({ files: [file] }) }] : original(selector);
+  const files = new Map();
+  f.context.trainingMediaStore = async (mode, action) => action({ put: (value, key) => files.set(key, value) });
+  await f.context.saveTrainingActivity(form, true);
+  const record = f.context.readCreatedTrainingActivities()[0];
+  assert.equal(files.get(record.video.key), file);
+  assert.equal(record.video.name, "演示.mp4");
+  assert.doesNotMatch(JSON.stringify(record), /blob:|data:video/);
+  assert.equal(form.dataset.saving, undefined);
+  const other = fixture();
+  other.context.trainingMediaStore = async () => { throw new Error("quota"); };
+  await other.context.saveTrainingActivity(form);
+  assert.equal(other.rows.length, 0);
+  assert.equal(other.closed, undefined);
+  assert.match(other.messages.at(-1), /保存失败/);
 });

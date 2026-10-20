@@ -2073,6 +2073,21 @@
       .layout-body { grid-template-columns: 1fr; }
       .sider { position: static; max-height: none; }
     }
+    .training-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 16px; }
+    .training-form-grid .field { min-width:0; margin:0; }
+    .training-full { grid-column:1 / -1; min-width:0; }
+    .training-date-range { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:6px; }
+    .training-date-range .field > label { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
+    .training-date-range input { min-width:0; width:100%; }
+    .training-form-grid input[readonly] { background:#f4f5f7; color:#86909c; }
+    .training-media-content { display:flex; gap:12px; align-items:center; flex-wrap:wrap; overflow-wrap:anywhere; }
+    .training-media-preview { display:block; width:200px; max-width:100%; height:112px; object-fit:contain; background:#f4f5f7; border-radius:4px; }
+    [data-training-media] input { max-width:100%; }
+    .training-upload-button { position:relative; display:flex; width:100px; height:88px; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:1px dashed #d9dce2; border-radius:6px; background:#fafbfc; cursor:pointer; }
+    .training-upload-button:focus-within { outline:2px solid #1677ff; outline-offset:2px; }
+    .training-upload-button input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+    .training-upload-button span:first-child { font-size:22px; }
+    @media(max-width:640px) { .training-form-grid { grid-template-columns:minmax(0,1fr); } }
   </style>
 </head>
 <body>
@@ -13964,8 +13979,10 @@
         drawer.removeAttribute("data-context-label");
       }
       window.__configDrawerOrigin = document.querySelector('[data-page="config"].active') ? 'config' : '';
-      drawerTitle.textContent = conf.title;
+      drawerTitle.textContent = key === "training-create" && window.__editingTrainingActivity ? "编辑培训活动" : conf.title;
+      releaseTrainingMedia(drawerBody);
       drawerBody.innerHTML = typeof conf.body === "function" ? conf.body() : conf.body;
+      if (key === "training-create" || key === "training-detail") restoreTrainingMedia(drawerBody);
       if (key === "enroll-create") {
         drawerBody.querySelectorAll("option").forEach(function (option) {
           if (option.textContent.trim() === "个人报名") option.remove();
@@ -14306,6 +14323,8 @@
       dispatchRuleModal.setAttribute("aria-hidden", "true");
     }
     function closeDrawer() {
+      releaseTrainingMedia(drawerBody);
+      window.__editingTrainingActivity = null;
       drawer.classList.remove("open", "is-wide", "is-full");
       drawerMask.classList.remove("open");
       drawer.setAttribute("aria-hidden", "true");
@@ -18444,6 +18463,14 @@
       }
       if (event.target.closest("[data-training-activity-search]")) { filterTrainingActivities(false, false); return; }
       if (event.target.closest("[data-training-activity-reset]")) { filterTrainingActivities(true, false); return; }
+      var trainingRemove = event.target.closest("[data-training-media-remove]");
+      if (trainingRemove) { clearTrainingMedia(trainingRemove.closest("[data-training-media]")); return; }
+      var trainingEdit = event.target.closest("[data-training-edit]");
+      if (trainingEdit) {
+        window.__editingTrainingActivity = JSON.parse(trainingEdit.closest("[data-training-activity-record]").dataset.trainingActivityRecord);
+        openDrawer("training-create"); return;
+      }
+      if (event.target.closest('[data-drawer="training-create"]')) window.__editingTrainingActivity = null;
       if (event.target.closest("[data-training-enrollment-search]")) { filterTrainingEnrollments(false, false); return; }
       if (event.target.closest("[data-training-enrollment-reset]")) { filterTrainingEnrollments(true, false); return; }
       var trainingDetail = event.target.closest("[data-training-detail]");
@@ -20627,7 +20654,7 @@
     });
     document.body.addEventListener("submit", function (event) {
       var trainingForm = event.target.closest("[data-training-create-form]");
-      if (trainingForm) { event.preventDefault(); saveTrainingActivity(trainingForm); return; }
+      if (trainingForm) { event.preventDefault(); saveTrainingActivity(trainingForm, !!(event.submitter && event.submitter.hasAttribute("data-training-save-draft"))); return; }
       var recoveryForm = event.target.closest("[data-reset-form]");
       if (recoveryForm) { event.preventDefault(); authSubmitRecovery(recoveryForm); return; }
       var loginForm = event.target.closest("[data-login-form]");
@@ -20678,6 +20705,7 @@
       if (drawerBody.querySelector("[data-cert-wizard]")) certWizardSyncPropertyPanel();
     });
     document.body.addEventListener("change", function (event) {
+      if (event.target.matches("[data-training-media-input]")) { changeTrainingMedia(event.target); return; }
       var overviewCityScope = event.target.closest("[data-overview-city-scope]");
       if (overviewCityScope) {
         window.__overviewCityScope = overviewCityScope.value || "湖北省";
@@ -22395,37 +22423,116 @@
       };
     }
     var TRAINING_ACTIVITY_STORAGE_KEY = "hbyx_admin_training_activities_v1";
-    function trainingActivityFormHtml() {
-      function input(name, label, type, attributes) {
-        return '<div class="field"><label for="training-create-' + name + '">' + label + ' *</label><input class="input" id="training-create-' + name + '" name="' + name + '" type="' + (type || 'text') + '" required ' + (attributes || '') + '></div>';
-      }
-      return '<form id="training-create-form" data-training-create-form>' +
-        '<div class="drawer-section"><h3 class="drawer-section-title">基本信息</h3><div class="field-row-2">' + input('name', '活动名称', 'text', 'maxlength="100"') + input('direction', '培训方向', 'text', 'maxlength="50"') +
-        '</div><div class="field-row-2"><div class="field"><label for="training-create-mode">培训方式</label><input class="input" id="training-create-mode" value="线下培训" readonly></div>' + input('target', '培训对象', 'text', 'maxlength="200"') + '</div></div>' +
-        '<div class="drawer-section"><h3 class="drawer-section-title">培训安排</h3><div class="field-row-2">' + input('start', '培训开始日期', 'date') + input('end', '培训结束日期', 'date') + '</div>' + input('location', '培训地点', 'text', 'maxlength="200"') + '</div>' +
-        '<div class="drawer-section"><h3 class="drawer-section-title">报名设置</h3><div class="field-row-2">' + input('registrationStart', '报名开始日期', 'date') + input('registrationEnd', '报名截止日期', 'date') +
-        '</div><div class="field-row-2">' + input('capacity', '人数上限', 'number', 'min="1" max="100000" step="1"') + input('fee', '培训费用（元）', 'number', 'min="0" max="999999.99" step="0.01" value="0"') + '</div></div>' +
-        '<div class="drawer-section"><h3 class="drawer-section-title">联系与介绍</h3><div class="field-row-2">' + input('contactName', '联系人', 'text', 'maxlength="50"') + input('contactPhone', '联系电话', 'tel', 'maxlength="20"') +
-        '</div><div class="field"><label for="training-create-description">活动介绍 *</label><textarea class="textarea" id="training-create-description" name="description" required maxlength="5000" rows="5"></textarea></div></div></form>';
+    function trainingMediaValidation(file, kind) {
+      if (!file) return "";
+      var cover = kind === "cover";
+      if (!(cover ? /\.(jpe?g|png)$/i : /\.mp4$/i).test(file.name) || !(cover ? /^(image\/jpeg|image\/png)$/ : /^video\/mp4$/).test(file.type)) return cover ? "活动封面仅支持 JPEG、PNG 格式" : "视频仅支持 MP4 格式";
+      if (!file.size || file.size > (cover ? 2 : 100) * 1024 * 1024) return cover ? "活动封面不能为空且不能超过2MB" : "视频不能为空且不能超过100MB";
+      return "";
     }
-    function trainingActivityValidation(data) {
+    // Media blobs stay in IndexedDB; activity JSON contains metadata only, avoiding localStorage video quotas.
+    function trainingMediaStore(mode, action) {
+      return new Promise(function (resolve, reject) {
+        var request = window.indexedDB.open("hbyx_training_media_v1", 1);
+        request.onupgradeneeded = function () { request.result.createObjectStore("files"); };
+        request.onerror = function () { reject(request.error); };
+        request.onblocked = function () { reject(new Error("媒体存储被占用")); };
+        request.onsuccess = function () {
+          var db = request.result;
+          try {
+            var tx = db.transaction("files", mode);
+            var result = action(tx.objectStore("files"));
+            tx.oncomplete = function () { db.close(); resolve(result && result.result); };
+            tx.onabort = tx.onerror = function () { db.close(); reject(tx.error || new Error("媒体保存失败")); };
+          } catch (error) { db.close(); reject(error); }
+        };
+      });
+    }
+    function releaseTrainingMedia(root) {
+      root.querySelectorAll("[data-training-preview-url]").forEach(function (node) {
+        URL.revokeObjectURL(node.dataset.trainingPreviewUrl);
+        delete node.dataset.trainingPreviewUrl;
+        if (node.tagName === "VIDEO") node.pause();
+        node.removeAttribute("src");
+        if (node.tagName === "VIDEO") node.load();
+      });
+    }
+    function clearTrainingMedia(box) {
+      releaseTrainingMedia(box);
+      box.dataset.mediaRecord = "";
+      var input = box.querySelector("input");
+      if (input) input.value = "";
+      box.querySelector("[data-training-media-preview]").innerHTML = "";
+    }
+    function showTrainingMedia(box, file) {
+      releaseTrainingMedia(box);
+      var preview = box.querySelector("[data-training-media-preview]");
+      var kind = box.dataset.trainingMedia;
+      preview.innerHTML = (kind === "cover" ? '<img alt="活动封面预览"' : '<video controls preload="metadata"') + ' class="training-media-preview">' + (kind === "cover" ? '' : '</video>') + '<span>' + escapeHtml(file.name) + '</span><button class="btn link" type="button" data-training-media-remove>移除</button>';
+      var media = preview.querySelector("img,video");
+      media.dataset.trainingPreviewUrl = URL.createObjectURL(file);
+      media.src = media.dataset.trainingPreviewUrl;
+    }
+    function changeTrainingMedia(input) {
+      var box = input.closest("[data-training-media]");
+      var file = input.files[0];
+      if (!file) return;
+      var error = trainingMediaValidation(file, box.dataset.trainingMedia);
+      if (error) { input.value = ""; toast(error); return; }
+      box.dataset.mediaRecord = "";
+      showTrainingMedia(box, file);
+    }
+    function restoreTrainingMedia(root) {
+      root.querySelectorAll("[data-training-media]").forEach(function (box) {
+        if (!box.dataset.mediaRecord) return;
+        var meta = JSON.parse(box.dataset.mediaRecord);
+        trainingMediaStore("readonly", function (store) { return store.get(meta.key); }).then(function (file) {
+          if (!box.isConnected || box.dataset.mediaRecord !== JSON.stringify(meta)) return;
+          if (!file) throw new Error("文件不存在");
+          showTrainingMedia(box, file);
+          if (!box.querySelector("input")) box.querySelector("button").remove();
+        }).catch(function () { if (box.isConnected) box.querySelector("[data-training-media-preview]").textContent = "媒体文件无法读取，请重新上传"; });
+      });
+    }
+    function trainingMediaField(kind, data, readonly) {
+      var cover = kind === "cover", label = cover ? "活动封面" : "视频上传";
+      return '<div class="field" data-training-media="' + kind + '" data-media-record="' + escapeHtml(data[kind] ? JSON.stringify(data[kind]) : '') + '"><label for="training-create-' + kind + '">' + label + '</label>' + (readonly ? '' : '<label class="training-upload-button"><span aria-hidden="true">+</span><span>上传' + (cover ? '封面' : '视频') + '</span><input id="training-create-' + kind + '" aria-label="' + label + '" type="file" data-training-media-input accept="' + (cover ? 'image/jpeg,image/png' : 'video/mp4') + '"></label><span class="muted">' + (cover ? 'JPEG、PNG 格式，不超过 2MB' : 'MP4 格式，不超过 100MB') + '</span>') + '<div class="training-media-content" data-training-media-preview>' + (data[kind] ? escapeHtml(data[kind].name) : readonly ? '未上传' : '') + '</div></div>';
+    }
+    function trainingActivityFormHtml() {
+      var data = window.__editingTrainingActivity || {};
+      function input(name, label, type, attributes) {
+        return '<div class="field"><label for="training-create-' + name + '">' + label + ' *</label><input class="input" id="training-create-' + name + '" name="' + name + '" type="' + (type || 'text') + '" value="' + escapeHtml(data[name] || '') + '" required ' + (attributes || '') + '></div>';
+      }
+      function range(label, start, end) {
+        return '<div class="field"><label>' + label + ' *</label><div class="training-date-range">' + input(start, label + '开始', 'date') + '<span>至</span>' + input(end, label + (end === 'end' ? '结束' : '截止'), 'date') + '</div></div>';
+      }
+      return '<form id="training-create-form" data-training-create-form data-record-id="' + escapeHtml(data.id || '') + '"><div class="training-form-grid">' +
+        '<div class="field"><label for="training-create-id">活动编号</label><input class="input" id="training-create-id" readonly placeholder="系统自动生成" value="' + escapeHtml(data.id || '') + '"></div>' + input('name', '活动名称', 'text', 'maxlength="100"') +
+        input('direction', '培训方向', 'text', 'maxlength="50"') + '<div class="field"><label for="training-create-mode">培训方式</label><input class="input" id="training-create-mode" value="线下培训" readonly></div>' +
+        range('报名日期', 'registrationStart', 'registrationEnd') + range('培训日期', 'start', 'end') +
+        input('capacity', '人数上限', 'number', 'min="1" max="100000" step="1"') + input('fee', '培训费用（元）', 'number', 'min="0" max="999999.99" step="0.01"') +
+        '<div class="training-full">' + input('location', '培训地点', 'text', 'maxlength="200"') + '</div><div class="training-full">' + trainingMediaField('cover', data) + '</div><div class="training-full">' + trainingMediaField('video', data) +
+        '</div><div class="field training-full"><label for="training-create-description">活动说明</label><textarea class="textarea" id="training-create-description" name="description" maxlength="5000" rows="5">' + escapeHtml(data.description || '') + '</textarea></div></div></form>';
+    }
+    function trainingActivityValidation(data, draft) {
       if (!data || typeof data !== "object") return "请完善活动信息";
-      var limits = { name: 100, direction: 50, target: 200, location: 200, contactName: 50, contactPhone: 20, description: 5000 };
-      if (Object.keys(limits).some(function (key) { return typeof data[key] !== "string" || !data[key].trim() || data[key].length > limits[key]; })) return "请完善活动名称、方向、对象、地点、联系人和活动介绍";
+      var limits = { name: 100, direction: 50, location: 200, description: 5000 };
+      if (Object.keys(limits).some(function (key) { return (data[key] != null && (typeof data[key] !== "string" || data[key].length > limits[key])) || ((!draft && key !== "description" || key === "name") && (typeof data[key] !== "string" || !data[key].trim())); })) return "请完善活动名称、培训方向和培训地点，且不超过字数上限";
       if (![data.start, data.end, data.registrationStart, data.registrationEnd].every(function (value) {
+        if (draft && !value) return true;
         if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
         var date = new Date(value + "T00:00:00Z");
         return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
       })) return "请填写有效的培训日期和报名日期";
-      if (data.start > data.end) return "培训结束日期不能早于开始日期";
-      if (data.registrationStart > data.registrationEnd) return "报名截止日期不能早于开始日期";
-      if (data.registrationEnd > data.start) return "报名截止日期不能晚于培训开始日期";
-      if (!/^\d+$/.test(String(data.capacity)) || Number(data.capacity) < 1 || Number(data.capacity) > 100000) return "人数上限须为1至100000的整数";
-      if (!/^\d+(\.\d{1,2})?$/.test(String(data.fee)) || Number(data.fee) > 999999.99) return "培训费用须为非负金额，最多两位小数";
-      if (!/^(1[3-9]\d{9}|0\d{2,3}-?\d{7,8})$/.test(data.contactPhone)) return "请填写有效的手机号或座机号码";
+      if (data.start && data.end && data.start > data.end) return "培训结束日期不能早于开始日期";
+      if (data.registrationStart && data.registrationEnd && data.registrationStart > data.registrationEnd) return "报名截止日期不能早于开始日期";
+      if (data.registrationEnd && data.start && data.registrationEnd > data.start) return "报名截止日期不能晚于培训开始日期";
+      if ((!draft || data.capacity) && (!/^\d+$/.test(String(data.capacity)) || Number(data.capacity) < 1 || Number(data.capacity) > 100000)) return "人数上限须为1至100000的整数";
+      if ((!draft || data.fee) && (!/^\d+(\.\d{1,2})?$/.test(String(data.fee)) || Number(data.fee) > 999999.99)) return "培训费用须为非负金额，最多两位小数";
       return "";
     }
     function trainingActivityRegistrationStatus(data) {
+      if (data.publishStatus === "草稿") return "未开始";
       var now = new Date();
       var today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
       if (today > data.end) return "已结束";
@@ -22435,7 +22542,7 @@
     function readCreatedTrainingActivities() {
       try {
         var records = JSON.parse(window.localStorage.getItem(TRAINING_ACTIVITY_STORAGE_KEY) || "[]");
-        return Array.isArray(records) ? records.filter(function (data) { return !trainingActivityValidation(data) && typeof data.id === "string" && /^TA\d+(?:-\d+)?$/.test(data.id); }) : [];
+        return Array.isArray(records) ? records.filter(function (data) { return !trainingActivityValidation(data, data && data.publishStatus === "草稿") && typeof data.id === "string" && /^TA\d+(?:-\d+)?$/.test(data.id); }) : [];
       } catch (error) { return []; }
     }
     function renderCreatedTrainingActivity(data, tbody) {
@@ -22444,42 +22551,69 @@
       row.dataset.trainingActivityId = data.id;
       row.dataset.trainingActivityName = data.name;
       row.dataset.trainingActivityDirection = data.direction;
-      row.dataset.trainingActivityPublishStatus = "已发布";
+      row.dataset.trainingActivityPublishStatus = data.publishStatus || "已发布";
       row.dataset.trainingActivityRegistrationStatus = trainingActivityRegistrationStatus(data);
       row.dataset.trainingActivityRecord = JSON.stringify(data);
-      row.innerHTML = '<td>' + escapeHtml(data.id) + '</td><td><strong>' + escapeHtml(data.name) + '</strong><br><span class="muted">' + escapeHtml(data.direction) + '</span></td><td>线下培训</td><td>' + escapeHtml(data.start + ' 至 ' + data.end) + '<br><span class="muted">' + escapeHtml(data.location) + '</span></td><td>' + escapeHtml(data.registrationStart + ' 至 ' + data.registrationEnd) + '</td><td>0 / ' + escapeHtml(data.capacity) + '</td><td>' + trainingStatusTag('已发布') + '</td><td>' + trainingStatusTag(row.dataset.trainingActivityRegistrationStatus) + '</td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button></div></td>';
+      row.innerHTML = '<td>' + escapeHtml(data.id) + '</td><td><strong>' + escapeHtml(data.name) + '</strong><br><span class="muted">' + escapeHtml(data.direction || '-') + '</span></td><td>线下培训</td><td>' + escapeHtml((data.start || '-') + ' 至 ' + (data.end || '-')) + '<br><span class="muted">' + escapeHtml(data.location || '-') + '</span></td><td>' + escapeHtml((data.registrationStart || '-') + ' 至 ' + (data.registrationEnd || '-')) + '</td><td>0 / ' + escapeHtml(data.capacity || '-') + '</td><td>' + trainingStatusTag(row.dataset.trainingActivityPublishStatus) + '</td><td>' + trainingStatusTag(row.dataset.trainingActivityRegistrationStatus) + '</td><td><div class="operation"><button class="btn link" data-training-detail>查看详情</button>' + (data.publishStatus === '草稿' ? '<button class="btn link" data-training-edit data-platform-only>编辑</button>' : '') + '</div></td>';
       tbody.insertBefore(row, tbody.firstChild);
       return row;
     }
-    function saveTrainingActivity(form) {
+    async function saveTrainingActivity(form, draft) {
       if (!AUTH_SESSION || AUTH_SESSION.role !== "platform") { toast("仅平台可新增培训活动"); return; }
-      if (!form || !form.reportValidity()) return;
+      if (!form || form.dataset.saving || (!draft && !form.reportValidity())) return;
       var data = {};
       form.querySelectorAll("[name]").forEach(function (input) { data[input.name] = input.value.trim(); });
-      var error = trainingActivityValidation(data);
+      var error = trainingActivityValidation(data, draft);
       if (error) { toast(error); return; }
       var tbody = document.querySelector('[data-page="training"] [data-subview="publish"] tbody');
       if (!tbody) return;
       var records = readCreatedTrainingActivities();
+      var existing = records.find(function (item) { return item.id === form.dataset.recordId; });
+      if (existing && existing.publishStatus !== "草稿") { toast("已发布的活动不能通过草稿表单修改"); return; }
       var baseId = "TA" + Date.now();
-      data.id = baseId;
+      data.id = existing ? existing.id : baseId;
       var suffix = 0;
-      while (records.some(function (item) { return item.id === data.id; }) || Array.from(tbody.querySelectorAll("[data-training-activity-row]")).some(function (row) { return row.dataset.trainingActivityId === data.id; })) data.id = baseId + "-" + (++suffix);
-      records.push(data);
-      try { window.localStorage.setItem(TRAINING_ACTIVITY_STORAGE_KEY, JSON.stringify(records)); }
-      catch (error) { toast("保存失败，请检查浏览器存储后重试"); return; }
+      while (!existing && (records.some(function (item) { return item.id === data.id; }) || Array.from(tbody.querySelectorAll("[data-training-activity-row]")).some(function (row) { return row.dataset.trainingActivityId === data.id; }))) data.id = baseId + "-" + (++suffix);
+      data.publishStatus = draft ? "草稿" : "已发布";
+      var files = [];
+      form.querySelectorAll("[data-training-media]").forEach(function (box) {
+        var kind = box.dataset.trainingMedia, file = box.querySelector("input").files[0];
+        if (file) {
+          error = error || trainingMediaValidation(file, kind);
+          data[kind] = { key: data.id + '-' + kind + '-' + Date.now() + '-' + Math.random().toString(36).slice(2), name: file.name, type: file.type, size: file.size };
+          files.push({ key: data[kind].key, file: file });
+        } else if (box.dataset.mediaRecord) data[kind] = JSON.parse(box.dataset.mediaRecord);
+      });
+      if (error) { toast(error); return; }
+      form.dataset.saving = "true";
+      try {
+        if (files.length) await trainingMediaStore("readwrite", function (store) { files.forEach(function (item) { store.put(item.file, item.key); }); });
+        // Re-read after asynchronous media writes so another completed save is not overwritten.
+        records = readCreatedTrainingActivities().filter(function (item) { return item.id !== data.id; });
+        records.push(data);
+        window.localStorage.setItem(TRAINING_ACTIVITY_STORAGE_KEY, JSON.stringify(records));
+      } catch (error) {
+        if (files.length) trainingMediaStore("readwrite", function (store) { files.forEach(function (item) { store.delete(item.key); }); }).catch(function () {});
+        toast("保存失败，请检查浏览器存储后重试"); return;
+      }
+      finally { delete form.dataset.saving; }
+      if (existing) {
+        var removedKeys = ["cover", "video"].filter(function (kind) { return existing[kind] && (!data[kind] || existing[kind].key !== data[kind].key); }).map(function (kind) { return existing[kind].key; });
+        if (removedKeys.length) trainingMediaStore("readwrite", function (store) { removedKeys.forEach(function (key) { store.delete(key); }); }).catch(function () {});
+      }
+      Array.from(tbody.querySelectorAll("[data-training-activity-row]")).forEach(function (row) { if (row.dataset.trainingActivityId === data.id) row.remove(); });
       renderCreatedTrainingActivity(data, tbody);
       closeDrawer();
       filterTrainingActivities(true, true);
-      toast("培训活动已创建并发布");
+      toast(draft ? "培训活动草稿已保存" : "培训活动已创建并发布");
     }
     function createdTrainingActivityDetailHtml() {
       var data = window.__activeTrainingActivity;
       if (!data) return '<div class="empty-state">未找到培训活动。</div>';
-      var fields = { id: '活动编号', name: '活动名称', direction: '培训方向', target: '培训对象', location: '培训地点', capacity: '人数上限', contactName: '联系人', contactPhone: '联系电话' };
+      var fields = { id: '活动编号', name: '活动名称', direction: '培训方向', location: '培训地点', capacity: '人数上限' };
       var html = '<dl class="kv">';
-      Object.keys(fields).forEach(function (key) { html += '<dt>' + fields[key] + '</dt><dd>' + escapeHtml(data[key]) + '</dd>'; });
-      return html + '<dt>培训方式</dt><dd>线下培训</dd><dt>培训日期</dt><dd>' + escapeHtml(data.start + ' 至 ' + data.end) + '</dd><dt>报名周期</dt><dd>' + escapeHtml(data.registrationStart + ' 至 ' + data.registrationEnd) + '</dd><dt>培训费用</dt><dd>¥' + Number(data.fee).toFixed(2) + '</dd><dt>发布状态</dt><dd>已发布</dd><dt>报名状态</dt><dd>' + trainingActivityRegistrationStatus(data) + '</dd></dl><div class="drawer-section"><h3 class="drawer-section-title">活动介绍</h3><p style="white-space:pre-wrap;overflow-wrap:anywhere">' + escapeHtml(data.description) + '</p></div>';
+      Object.keys(fields).forEach(function (key) { html += '<dt>' + fields[key] + '</dt><dd>' + escapeHtml(data[key] || '-') + '</dd>'; });
+      return html + '<dt>培训方式</dt><dd>线下培训</dd><dt>培训日期</dt><dd>' + escapeHtml((data.start || '-') + ' 至 ' + (data.end || '-')) + '</dd><dt>报名周期</dt><dd>' + escapeHtml((data.registrationStart || '-') + ' 至 ' + (data.registrationEnd || '-')) + '</dd><dt>培训费用</dt><dd>' + (data.fee ? '¥' + Number(data.fee).toFixed(2) : '-') + '</dd><dt>发布状态</dt><dd>' + escapeHtml(data.publishStatus || '已发布') + '</dd><dt>报名状态</dt><dd>' + trainingActivityRegistrationStatus(data) + '</dd></dl>' + trainingMediaField('cover', data, true) + trainingMediaField('video', data, true) + '<div class="drawer-section"><h3 class="drawer-section-title">活动说明</h3><p style="white-space:pre-wrap;overflow-wrap:anywhere">' + escapeHtml(data.description || '-') + '</p></div>';
     }
     function prepareTrainingActivityRows(page) {
       var root = page || document.querySelector('[data-page="training"]');
@@ -23111,7 +23245,7 @@
       records.push(record);
       try { window.localStorage.setItem(COURSE_SHARED_ORDER_STORAGE_KEY, JSON.stringify(records)); } catch (error) { /* prototype storage is optional */ }
     }
-    DRAWER["training-create"] = { title: "新增培训活动", wide: true, body: trainingActivityFormHtml, foot: '<button class="btn" type="button" data-close-drawer>取消</button><button class="btn primary" type="submit" form="training-create-form" data-platform-only>保存并发布</button>' };
+    DRAWER["training-create"] = { title: "新增培训活动", wide: true, body: trainingActivityFormHtml, foot: '<button class="btn" type="button" data-close-drawer>关闭</button><button class="btn" type="submit" form="training-create-form" formnovalidate data-training-save-draft data-platform-only>保存草稿</button><button class="btn primary" type="submit" form="training-create-form" data-platform-only>保存并发布</button>' };
     DRAWER["training-detail"] = { title: "培训活动详情", wide: true, body: createdTrainingActivityDetailHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' };
     DRAWER["course-create"] = { title: "新增课程", wide: true, body: function () { return courseFormBodyHtml(false); }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-course-save-draft data-platform-only>保存草稿</button><button class="btn primary" data-course-save data-platform-only>保存并上架</button>' };
     DRAWER["course-edit"] = { title: "编辑课程", wide: true, body: function () { return courseFormBodyHtml(true); }, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-course-save data-platform-only>保存修改</button>' };
