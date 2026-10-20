@@ -16,7 +16,7 @@ function fixture(grouping = true, total = 31) {
     };
   });
   const pager = { matches: () => true, outerHTML: "", getAttribute: () => (pager.outerHTML.match(/data-pagination-render-key="([^"]+)"/) || [])[1] || null };
-  const table = { parentElement: { matches: () => true, nextElementSibling: pager }, tBodies: [{ children: rows }], closest: () => grouping ? {} : null };
+  const table = { hasAttribute: () => false, parentElement: { matches: () => true, nextElementSibling: pager }, tBodies: [{ children: rows }], closest: () => grouping ? {} : null };
   const c = vm.createContext({});
   vm.runInContext(source, c);
   const visible = () => rows.filter(row => !row.classes.has("pagination-page-hidden"));

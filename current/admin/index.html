@@ -530,6 +530,10 @@
     .schedule-entry-workbench h3 { font-size: 14px; margin: 8px 0; }
     .schedule-entry-workbench .page-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
     .schedule-entry-workbench .select { width: auto; min-width: 140px; flex: 0 1 200px; }
+    .entry-level-filter { position: relative; }
+    .entry-level-filter summary { cursor: pointer; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; min-width: 140px; }
+    .entry-level-options { position: absolute; z-index: 5; top: 100%; left: 0; background: #fff; border: 1px solid var(--line); box-shadow: 0 4px 12px #0002; padding: 8px; min-width: 160px; max-height: 240px; overflow: auto; }
+    .entry-level-options label { display: flex; align-items: center; gap: 8px; padding: 6px; white-space: nowrap; }
     .schedule-entry-workbench .table-wrap table { min-width: 0 !important; width: 100%; table-layout: fixed; }
     .schedule-entry-workbench th, .schedule-entry-workbench td { position: static !important; min-width: 0 !important; width: auto !important; padding: 8px 10px; white-space: normal; overflow-wrap: anywhere; }
     .schedule-entry-workbench td:last-child { white-space: nowrap; }
@@ -20727,6 +20731,16 @@
       if (drawerBody.querySelector("[data-cert-wizard]")) certWizardSyncPropertyPanel();
     });
     document.body.addEventListener("change", function (event) {
+      if (event.target.matches("[data-entry-filter-major], [data-entry-filter-level]")) { scheduleEntryFilterChanged(); return; }
+      if (event.target.matches("[data-entry-candidate], [data-entry-select-page]")) {
+        if (event.target.matches("[data-entry-select-page]")) {
+          drawerBody.querySelectorAll("[data-entry-pool] tbody tr").forEach(function (row) {
+            var input = row.querySelector("[data-entry-candidate]");
+            if (input && !row.hidden && !row.classList.contains("pagination-page-hidden")) input.checked = event.target.checked;
+          });
+        }
+        scheduleEntrySelectionSummary(); return;
+      }
       if (event.target.matches("[data-training-media-input]")) { changeTrainingMedia(event.target); return; }
       var overviewCityScope = event.target.closest("[data-overview-city-scope]");
       if (overviewCityScope) {
@@ -23596,9 +23610,15 @@
       if (!session) return '<div class="empty-state">场次不存在</div>';
       var validation = scheduleEntryValidation(batch, session, draft.groups, false);
       var pool = scheduleEntryDanceCandidates(batch, session);
+      var filters = draft.filters || { major: "", levels: [] };
+      var majors = Array.from(new Set(pool.map(function (candidate) { return candidate.major; })));
+      var levels = Array.from(new Set(pool.map(function (candidate) { return candidate.level; }))).sort(function (a, b) { return a.localeCompare(b, "zh-CN", { numeric: true }); });
+      var filtered = scheduleEntryFilterCandidates(validation.ungrouped, filters);
+      var filtersHtml = '<div class="page-actions"><label>专业 <select class="select" data-entry-filter-major aria-label="未分组专业筛选"><option value="">全部专业</option>' + majors.map(function (major) { return '<option value="' + escapeHtml(major) + '"' + (filters.major === major ? ' selected' : '') + '>' + escapeHtml(major) + '</option>'; }).join("") + '</select></label><details class="entry-level-filter"><summary data-entry-level-summary>级别：' + escapeHtml(filters.levels.length ? filters.levels.join("、") : "全部级别") + '</summary><div class="entry-level-options">' + levels.map(function (level) { return '<label><input type="checkbox" data-entry-filter-level value="' + escapeHtml(level) + '"' + (filters.levels.indexOf(level) > -1 ? ' checked' : '') + '>' + escapeHtml(level) + '</label>'; }).join("") + '</div></details><span data-entry-selection-summary aria-live="polite">筛选结果 ' + filtered.length + ' 人，已选 0 人</span></div>';
       var ungroupedRows = validation.ungrouped.map(function (candidate) {
-        return '<tr><td><input type="checkbox" data-entry-candidate value="' + escapeHtml(candidate.id) + '" aria-label="选择 ' + escapeHtml(candidate.name) + '"></td><td>' + escapeHtml(candidate.code || candidate.id) + '</td><td>' + escapeHtml(candidate.name) + '</td><td>' + escapeHtml(candidate.major) + '</td><td>' + escapeHtml(candidate.level) + '</td></tr>';
+        return '<tr data-entry-major="' + escapeHtml(candidate.major) + '" data-entry-level="' + escapeHtml(candidate.level) + '"' + (filtered.indexOf(candidate) < 0 ? ' hidden' : '') + '><td><input type="checkbox" data-entry-candidate value="' + escapeHtml(candidate.id) + '" aria-label="选择 ' + escapeHtml(candidate.name) + '"></td><td>' + escapeHtml(candidate.code || candidate.id) + '</td><td>' + escapeHtml(candidate.name) + '</td><td>' + escapeHtml(candidate.major) + '</td><td>' + escapeHtml(candidate.level) + '</td></tr>';
       }).join("");
+      ungroupedRows += '<tr data-entry-filter-empty data-pagination-empty' + (filtered.length ? ' hidden' : '') + '><td colspan="5">' + (validation.ungrouped.length ? '暂无符合条件的未分组考生' : '全部已分组') + '</td></tr>';
       var groupsHtml = draft.groups.map(function (group, groupIndex) {
         var members = group.candidateIds.map(function (id, index) {
           var candidate = pool.find(function (item) { return item.id === id; });
@@ -23607,7 +23627,43 @@
         }).join("");
         return '<section class="drawer-section"><div class="table-tools"><h3>第' + (groupIndex + 1) + '组 · ' + escapeHtml(pool.find(function (candidate) { return candidate.id === group.candidateIds[0]; })?.major || "") + ' · ' + group.candidateIds.length + '人</h3><div class="page-actions"><button class="btn" title="上移分组" aria-label="上移第' + (groupIndex + 1) + '组" data-entry-action="group-up" data-entry-group="' + groupIndex + '"' + (groupIndex ? '' : ' disabled') + '>↑</button><button class="btn" title="下移分组" aria-label="下移第' + (groupIndex + 1) + '组" data-entry-action="group-down" data-entry-group="' + groupIndex + '"' + (groupIndex < draft.groups.length - 1 ? '' : ' disabled') + '>↓</button><button class="btn" data-entry-action="dissolve" data-entry-group="' + groupIndex + '">解散分组</button></div></div><div class="table-wrap"><table><thead><tr><th>顺序</th><th>考生</th><th>专业</th><th>级别</th><th>操作</th></tr></thead><tbody>' + members + '</tbody></table></div></section>';
       }).join("");
-      return '<div class="schedule-entry-workbench"><div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>舞蹈考生 ' + validation.total + ' 人 · 已分组 ' + (validation.total - validation.ungrouped.length) + ' 人 · 未分组 ' + validation.ungrouped.length + ' 人 · 共 ' + draft.groups.length + ' 组</span></div><section class="drawer-section"><h3>未分组考生</h3><div class="page-actions"><button class="btn primary" data-entry-action="create">勾选成组</button><select class="select" data-entry-target aria-label="目标分组"><option value="">选择已有分组</option>' + draft.groups.map(function (group, index) { return '<option value="' + index + '">第' + (index + 1) + '组</option>'; }).join("") + '</select><button class="btn" data-entry-action="add">加入所选组</button></div><div class="table-wrap"><table><thead><tr><th>选择</th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th></tr></thead><tbody>' + (ungroupedRows || '<tr><td colspan="5">全部已分组</td></tr>') + '</tbody></table></div></section>' + groupsHtml + '</div>';
+      return '<div class="schedule-entry-workbench"><div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>舞蹈考生 ' + validation.total + ' 人 · 已分组 ' + (validation.total - validation.ungrouped.length) + ' 人 · 未分组 ' + validation.ungrouped.length + ' 人 · 共 ' + draft.groups.length + ' 组</span></div><section class="drawer-section"><h3>未分组考生</h3>' + filtersHtml + '<div class="page-actions"><button class="btn primary" data-entry-action="create">勾选成组</button><select class="select" data-entry-target aria-label="目标分组"><option value="">选择已有分组</option>' + draft.groups.map(function (group, index) { return '<option value="' + index + '">第' + (index + 1) + '组</option>'; }).join("") + '</select><button class="btn" data-entry-action="add">加入所选组</button></div><div class="table-wrap"><table data-entry-pool><thead><tr><th><input type="checkbox" data-entry-select-page aria-label="全选当前页" title="全选当前页"></th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th></tr></thead><tbody>' + ungroupedRows + '</tbody></table></div></section>' + groupsHtml + '</div>';
+    }
+    function scheduleEntryFilterCandidates(candidates, filters) {
+      return candidates.filter(function (candidate) {
+        return (!filters.major || candidate.major === filters.major) && (!filters.levels.length || filters.levels.indexOf(candidate.level) > -1);
+      });
+    }
+    function scheduleEntrySelectionSummary() {
+      var table = drawerBody.querySelector("[data-entry-pool]");
+      if (!table) return;
+      var inputs = Array.from(table.querySelectorAll("[data-entry-candidate]"));
+      var visible = inputs.filter(function (input) { var row = input.closest("tr"); return !row.hidden && !row.classList.contains("pagination-page-hidden"); });
+      var selectPage = table.querySelector("[data-entry-select-page]");
+      selectPage.checked = visible.length > 0 && visible.every(function (input) { return input.checked; });
+      selectPage.indeterminate = !selectPage.checked && visible.some(function (input) { return input.checked; });
+      selectPage.disabled = !visible.length;
+      var summary = drawerBody.querySelector("[data-entry-selection-summary]");
+      var text = "筛选结果 " + inputs.filter(function (input) { return !input.closest("tr").hidden; }).length + " 人，已选 " + inputs.filter(function (input) { return input.checked; }).length + " 人";
+      if (summary.textContent !== text) summary.textContent = text;
+    }
+    function scheduleEntryFilterChanged() {
+      var draft = window.__scheduleEntryGroupDraft;
+      var table = drawerBody.querySelector("[data-entry-pool]");
+      if (!draft || !table) return;
+      draft.filters = { major: drawerBody.querySelector("[data-entry-filter-major]").value, levels: Array.from(drawerBody.querySelectorAll("[data-entry-filter-level]:checked")).map(function (input) { return input.value; }) };
+      var count = 0;
+      table.querySelectorAll("tbody tr[data-entry-major]").forEach(function (row) {
+        row.hidden = !scheduleEntryFilterCandidates([{ major: row.getAttribute("data-entry-major"), level: row.getAttribute("data-entry-level") }], draft.filters).length;
+        row.querySelector("[data-entry-candidate]").checked = false;
+        if (!row.hidden) count += 1;
+      });
+      table.querySelector("[data-entry-filter-empty]").hidden = count > 0;
+      drawerBody.querySelector("[data-entry-level-summary]").textContent = "级别：" + (draft.filters.levels.join("、") || "全部级别");
+      var state = paginationStates.get(table);
+      if (state) state.page = 1;
+      paginationTable(table);
+      scheduleEntrySelectionSummary();
     }
     function scheduleEntryApplyAction(batch, session, groups, action, ids, groupIndex, memberIndex) {
       var next = JSON.parse(JSON.stringify(groups || []));
@@ -24604,6 +24660,7 @@
         pager.outerHTML = markup.replace("<nav ", '<nav data-pagination-render-key="' + renderKey + '" ');
       }
       paginationStates.set(table, state);
+      if (table.hasAttribute("data-entry-pool")) scheduleEntrySelectionSummary();
     }
 
     function refreshAllPagination() {

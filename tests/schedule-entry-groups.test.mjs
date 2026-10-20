@@ -43,6 +43,75 @@ test("same professional subject permits mixed levels and groups of one or more t
     assert.ok(f.action([], "create", ids).groups);
   }
 });
+test("ungrouped professional and multi-level filters intersect without mutating candidates", () => {
+  const f = fixture(), candidates = f.batch.scheduleCandidatePool;
+  assert.equal(f.c.scheduleEntryFilterCandidates(candidates, { major: "", levels: [] }).length, 14);
+  const matches = f.c.scheduleEntryFilterCandidates(candidates, { major: "中国舞", levels: ["2级", "5级"] });
+  assert.equal(matches.length, 8);
+  assert.ok(matches.every(item => item.major === "中国舞" && item.level !== "3级"));
+  assert.equal(f.c.scheduleEntryFilterCandidates(candidates, { major: "芭蕾舞", levels: ["5级"] }).length, 0);
+  assert.equal(candidates.length, 14);
+});
+test("filter controls use this session's dance pool and persist after group edits", () => {
+  const f = fixture(); f.c.openScheduleEntryGroups("S1");
+  const draft = f.c.window.__scheduleEntryGroupDraft;
+  draft.filters = { major: "中国舞", levels: ["2级", "3级"] };
+  draft.groups = [f.group(["d0"])];
+  const markup = f.c.scheduleEntryGroupsHtml();
+  assert.match(markup, /value="中国舞" selected/);
+  assert.match(markup, /data-entry-filter-level value="2级" checked/);
+  assert.match(markup, /筛选结果 6 人，已选 0 人/);
+  assert.match(markup, /data-entry-select-page/);
+  assert.ok(!markup.includes('<option value="钢琴"'));
+  assert.deepEqual(draft.groups, [f.group(["d0"])]);
+});
+test("filter changes clear all selections, reset page but retain page size and groups", () => {
+  const f = fixture(); f.c.openScheduleEntryGroups("S1");
+  const draft = f.c.window.__scheduleEntryGroupDraft;
+  draft.groups = [f.group(["d0"])];
+  const rows = [
+    { major: "中国舞", level: "2级" }, { major: "中国舞", level: "3级" }, { major: "芭蕾舞", level: "2级" }
+  ].map(candidate => {
+    const row = { hidden: false, classList: { contains: () => false }, getAttribute: name => name === "data-entry-major" ? candidate.major : candidate.level };
+    row.input = { checked: true, closest: () => row };
+    row.querySelector = () => row.input;
+    return row;
+  });
+  const empty = {}, header = {}, summary = { textContent: "" }, levelSummary = {};
+  const table = {
+    querySelectorAll: selector => selector === "[data-entry-candidate]" ? rows.map(row => row.input) : rows,
+    querySelector: selector => selector === "[data-entry-filter-empty]" ? empty : header
+  };
+  const state = { page: 4, pageSize: 20 };
+  f.c.paginationStates = new Map([[table, state]]);
+  let refreshed = false;
+  f.c.paginationTable = value => { assert.equal(value, table); refreshed = true; };
+  f.c.drawerBody = {
+    querySelector: selector => ({ "[data-entry-pool]": table, "[data-entry-filter-major]": { value: "中国舞" }, "[data-entry-level-summary]": levelSummary, "[data-entry-selection-summary]": summary })[selector],
+    querySelectorAll: () => [{ value: "2级" }]
+  };
+  f.c.scheduleEntryFilterChanged();
+  assert.deepEqual(rows.map(row => row.hidden), [false, true, true]);
+  assert.ok(rows.every(row => !row.input.checked));
+  assert.equal(state.page, 1); assert.equal(state.pageSize, 20); assert.ok(refreshed);
+  assert.equal(summary.textContent, "筛选结果 1 人，已选 0 人");
+  assert.equal(levelSummary.textContent, "级别：2级");
+  assert.equal(empty.hidden, true);
+  assert.deepEqual(draft.groups, [f.group(["d0"])]);
+  rows[0].input.checked = true; f.c.scheduleEntrySelectionSummary();
+  assert.equal(header.checked, true);
+  assert.equal(summary.textContent, "筛选结果 1 人，已选 1 人");
+  let writes = 0; const text = summary.textContent;
+  Object.defineProperty(summary, "textContent", { get: () => text, set: () => writes++ });
+  f.c.scheduleEntrySelectionSummary(); assert.equal(writes, 0);
+});
+test("empty filtered lists show a dedicated placeholder excluded from pagination", () => {
+  const f = fixture(); f.c.openScheduleEntryGroups("S1");
+  f.c.window.__scheduleEntryGroupDraft.filters = { major: "芭蕾舞", levels: ["5级"] };
+  const markup = f.c.scheduleEntryGroupsHtml();
+  assert.match(markup, /筛选结果 0 人，已选 0 人/);
+  assert.match(markup, /data-entry-filter-empty data-pagination-empty><td colspan="5">暂无符合条件/);
+});
 test("cross-subject, non-dance, unknown and duplicate members are rejected atomically", () => {
   const f = fixture();
   for (const ids of [["d0", "b"], ["p"], ["unknown"], ["d0", "d0"]]) {
