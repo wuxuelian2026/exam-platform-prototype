@@ -23702,7 +23702,7 @@
     }
     function scheduleRoleStep1Html(role, batch) {
       var state = scheduleStepState(batch);
-      var canCreateSession = state.phase === "编排中" && (role === "platform" || !state.done[0] && scheduleRoleCanWrite(role, state.phase));
+      var canCreateSession = state.phase === "编排中" && (role === "platform" || scheduleRoleCanWrite(role, state.phase));
       var canEditExistingSession = !state.done[0] && scheduleRoleCanWrite(role, state.phase);
       var hasSessions = state.done[0];
       var rows = hasSessions ? scheduleSessionRows(batch) : [];
@@ -23745,7 +23745,7 @@
     }
     function scheduleRoleArrangeStep1Html(role, batch, entryMode) {
       var state = scheduleStepState(batch);
-      var canCreateSession = state.phase === "编排中" && (role === "platform" || !state.done[0] && scheduleRoleCanWrite(role, state.phase));
+      var canCreateSession = state.phase === "编排中" && (role === "platform" || scheduleRoleCanWrite(role, state.phase));
       var rows = scheduleArrangeSessionRows(batch, entryMode);
       var resources = scheduleArrangeRoomResources(batch, rows);
       var firstResource = resources[0];
