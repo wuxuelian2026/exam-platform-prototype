@@ -114,7 +114,7 @@ test("training organization can select only itself and actual descendants", () =
   assert.deepEqual(ownerIds(f), ["inst-guanggu"]);
   f.units.push({ id: "branch", parent: "inst-guanggu", name: "下级培训点", type: "培训机构" });
   assert.deepEqual(ownerIds(f), ["inst-guanggu", "branch"]);
-  assert.ok(!f.context.AUTH_ROLE_CONFIG.training.routes.includes("plans/batch-create"));
+  assert.ok(f.context.AUTH_ROLE_CONFIG.training.routes.includes("plans/batch-create"));
 });
 
 test("scope uses the session organization ID and follows the full hierarchy", () => {

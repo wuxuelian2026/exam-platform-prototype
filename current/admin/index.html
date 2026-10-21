@@ -2247,7 +2247,7 @@
             <button class="menu-item menu-child" type="button" data-jump="org/site-review" data-platform-only><span class="menu-label">考点审核</span></button>
             <button class="menu-item menu-child" type="button" data-jump="org/sites"><span class="menu-label">考点库管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="org/rooms"><span class="menu-label">考场库</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="org/judges" data-role-deny="training"><span class="menu-label">考官库</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="org/judges" data-platform-only><span class="menu-label">考官库</span></button>
           </div>
         </div>
 
@@ -2264,9 +2264,9 @@
           <div class="menu-children">
             <button class="menu-item menu-child" type="button" data-jump="info/review" data-platform-only><span class="menu-label">信息审核</span></button>
             <button class="menu-item menu-child" type="button" data-jump="info/list"><span class="menu-label">信息发布管理</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="info/categories"><span class="menu-label">栏目分类</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="info/banners" data-role-deny="organizer training"><span class="menu-label">轮播图管理</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="info/protocols" data-role-deny="organizer training"><span class="menu-label">协议管理</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="info/categories" data-platform-only><span class="menu-label">栏目分类</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="info/banners" data-platform-only><span class="menu-label">轮播图管理</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="info/protocols" data-platform-only><span class="menu-label">协议管理</span></button>
           </div>
         </div>
 
@@ -2330,7 +2330,7 @@
             <button class="menu-item menu-child" type="button" data-jump="system/departments" data-nav-hidden="true" hidden><span class="menu-label">部门管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/unit-review" data-platform-only><span class="menu-label">单位审核</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/users"><span class="menu-label">后台用户管理</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="system/mini-users"><span class="menu-label">考生用户管理</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="system/mini-users" data-platform-only><span class="menu-label">考生用户管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/roles"><span class="menu-label">角色管理</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/logs"><span class="menu-label">操作日志</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/params"><span class="menu-label">系统参数</span></button>
@@ -2342,8 +2342,8 @@
         <div class="menu-sub" data-domain="shared" data-menu-root="system-operation">
           <button class="menu-item menu-parent" type="button" data-toggle-sub="system" data-default-sub="message-templates"><span class="menu-icon">消</span><span class="menu-label">消息推送</span><span class="menu-arrow" aria-hidden="true">+</span></button>
           <div class="menu-children">
-            <button class="menu-item menu-child" type="button" data-jump="system/message-templates" data-platform-only><span class="menu-label">消息模板管理</span></button>
-            <button class="menu-item menu-child" type="button" data-jump="system/message-send" data-platform-only><span class="menu-label">消息发送</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="system/message-templates"><span class="menu-label">消息模板管理</span></button>
+            <button class="menu-item menu-child" type="button" data-jump="system/message-send"><span class="menu-label">消息发送</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/message-records"><span class="menu-label">消息记录</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/my-messages"><span class="menu-label">我的消息</span><span class="topbar-badge" data-message-menu-badge>3</span></button>
             <button class="menu-item menu-child" type="button" data-jump="system/message-settings" data-platform-only><span class="menu-label">消息设置</span></button>
@@ -2393,9 +2393,9 @@
               <button class="notice-config-tab" type="button" role="tab" aria-selected="false" aria-controls="notice-panel-online-pre" data-notice-tab="online-pre">线上考前须知</button>
             </div>
             <div class="notice-editor-layout unified-notice-grid">
-              <div class="table-card unified-notice-editor notice-config-tab-panel active" id="notice-panel-online-enroll" role="tabpanel" data-notice-editor-card="online-enroll"><div class="table-tools"><h2 class="table-title">线上报名须知</h2><span class="tag green">线上批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="online-enroll">请确认实名信息、报考专业和级别，并按要求准备网络环境与线上考试材料。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="online-enroll">预览</button><button class="btn primary" data-unified-notice-save="online-enroll" data-platform-or-organizer>保存并发布</button></div></div>
-              <div class="table-card unified-notice-editor" data-notice-editor-card="offline-enroll"><div class="table-tools"><h2 class="table-title">线下报名须知</h2><span class="tag blue">线下批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="offline-enroll">请确认实名信息、报考专业和级别，并按报名批次要求准备现场材料。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="offline-enroll">预览</button><button class="btn primary" data-unified-notice-save="offline-enroll" data-platform-or-organizer>保存并发布</button></div></div>
-              <div class="table-card unified-notice-editor" data-notice-editor-card="online-pre"><div class="table-tools"><h2 class="table-title">线上考前须知</h2><span class="tag green">线上批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="online-pre">请提前调试网络、摄像头和设备，按线上考试安排完成身份核验。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="online-pre">预览</button><button class="btn primary" data-unified-notice-save="online-pre" data-platform-or-organizer>保存并发布</button></div></div>
+              <div class="table-card unified-notice-editor notice-config-tab-panel active" id="notice-panel-online-enroll" role="tabpanel" data-notice-editor-card="online-enroll"><div class="table-tools"><h2 class="table-title">线上报名须知</h2><span class="tag green">线上批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="online-enroll">请确认实名信息、报考专业和级别，并按要求准备网络环境与线上考试材料。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="online-enroll" data-platform-only>预览</button><button class="btn primary" data-unified-notice-save="online-enroll" data-platform-only>保存并发布</button></div></div>
+              <div class="table-card unified-notice-editor" data-notice-editor-card="offline-enroll"><div class="table-tools"><h2 class="table-title">线下报名须知</h2><span class="tag blue">线下批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="offline-enroll">请确认实名信息、报考专业和级别，并按报名批次要求准备现场材料。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="offline-enroll" data-platform-only>预览</button><button class="btn primary" data-unified-notice-save="offline-enroll" data-platform-only>保存并发布</button></div></div>
+              <div class="table-card unified-notice-editor" data-notice-editor-card="online-pre"><div class="table-tools"><h2 class="table-title">线上考前须知</h2><span class="tag green">线上批次</span></div><div class="rich-editor" style="margin:10px 16px 16px"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button></div><textarea class="textarea" data-unified-notice-editor="online-pre">请提前调试网络、摄像头和设备，按线上考试安排完成身份核验。</textarea></div><div class="notice-meta"><span>最近更新：2026-08-18 16:20</span><span>更新人：平台管理员</span><span class="tag green">已生效</span></div><div class="page-actions" style="padding:0 16px 16px"><button class="btn" data-notice-preview="online-pre" data-platform-only>预览</button><button class="btn primary" data-unified-notice-save="online-pre" data-platform-only>保存并发布</button></div></div>
             </div>
           </div>
           <div class="subview active" data-subview="subjects">
@@ -3077,7 +3077,7 @@
 
         <section class="page" data-page="info">
           <div class="subview" data-subview="review" hidden="hidden">
-            <div class="info-banner"><strong>信息审核规则：</strong>承办单位创建或修改的考级指南、通知公告需提交平台审核；审核通过后才可在信息发布管理中发布，驳回后可修改并重新提交。平台创建的信息无需审核。</div>
+            <div class="info-banner"><strong>信息审核规则：</strong>承办单位和培训机构创建或修改的考级指南、通知公告需提交平台审核；审核通过后才可在信息发布管理中发布，驳回后可修改并重新提交。平台创建的信息无需审核。</div>
             <div class="tabs info-review-tabs" role="tablist" aria-label="信息审核状态">
               <button class="tab active" type="button" data-info-review-tab="待审核" role="tab" aria-selected="true">待审核 <span class="tab-count">1</span></button>
               <button class="tab" type="button" data-info-review-tab="已通过" role="tab" aria-selected="false">已通过</button>
@@ -3121,10 +3121,10 @@
               <div class="table-tools"><div><h2 class="table-title">信息发布管理</h2><span class="muted" data-info-list-scope-note>考级指南、通知公告共用此列表；审核状态和发布状态独立维护，考级简章由独立菜单维护。</span></div><div class="page-actions"><span class="tag blue" data-info-list-count>3 条</span><button class="btn" data-jump="info/categories" data-platform-only>维护栏目分类</button><button class="btn primary" data-drawer="info-edit" data-content-publish>新增信息</button></div></div>
               <div class="table-wrap"><table class="is-sticky-table has-sticky-action"><thead><tr><th>封面图</th><th>标题/摘要</th><th>栏目分类</th><th>发布单位</th><th>创建时间</th><th>发布时间</th><th>是否置顶</th><th>审核状态</th><th>发布状态</th><th>操作</th></tr></thead><tbody>
                 <tr data-info-row data-info-id="INFO-2026-0001" data-info-title="平台通知：2026下半年考级报名安排" data-info-summary="报名时间、考试安排和准考证下载说明" data-info-body="请考生按报名窗口完成报名，准考证下载和考试安排以批次通知为准。" data-info-category="通知公告" data-info-org="湖北艺术职业学院" data-info-approval-status="无需审核" data-info-publish-status="已发布" data-info-publish-time="2026-07-28 11:45" data-info-publisher="平台管理员"><td><span class="tag blue">已上传</span></td><td><strong>平台通知：2026下半年考级报名安排</strong><span class="muted">报名时间、考试安排和准考证下载说明</span></td><td><span class="tag blue">通知公告</span></td><td>湖北艺术职业学院</td><td>2026-07-28 11:20</td><td>2026-07-28 11:45</td><td><label class="switch-control" data-content-direct-publish><input type="checkbox" data-switch-toast="信息已置顶" data-switch-off-toast="信息已取消置顶"><span>置顶</span></label></td><td><span class="tag blue" data-info-approval-label>无需审核</span></td><td><span class="tag green" data-info-publish-status-label>已发布</span></td><td><div class="operation"><button class="btn link" data-drawer="info-edit">编辑</button><button class="btn link" data-info-unpublish-action>撤回</button><button class="btn link" data-info-offline-action>下架</button><button class="btn link" data-info-detail>查看</button></div></td></tr>
-                <tr data-info-row data-info-id="INFO-2026-0002" data-info-title="2026下半年武汉考级指南" data-info-summary="考点安排、签到流程和考场规则" data-info-body="一、入场签到；二、候考与考试；三、成绩与证书。" data-info-category="考级指南" data-info-org="武汉承办中心" data-info-approval-status="审核通过" data-info-publish-status="待发布" data-info-publish-time="-" data-info-publisher="承办单位管理员"><td><span class="tag blue">已上传</span></td><td><strong>2026下半年武汉考级指南</strong><span class="muted">考点安排、签到流程和考场规则</span></td><td><span class="tag orange">考级指南</span></td><td>武汉承办中心</td><td>2026-07-28 11:20</td><td>-</td><td><label class="switch-control" data-content-publish><input type="checkbox" data-switch-toast="信息已置顶" data-switch-off-toast="信息已取消置顶"><span>置顶</span></label></td><td><span class="tag green" data-info-approval-label>审核通过</span></td><td><span class="tag orange" data-info-publish-status-label>待发布</span></td><td><div class="operation"><button class="btn link" data-drawer="info-edit">编辑</button><button class="btn link" data-info-publish-action="发布" data-content-publish>发布</button><button class="btn link" data-info-detail>查看</button></div></td></tr>
-                <tr data-info-row data-info-id="INFO-2026-0003" data-info-title="宜昌加场考级指南" data-info-summary="新增考试场次及报名材料要求" data-info-body="请补充考试时间、考点和报名材料要求后重新提交审核。" data-info-category="考级指南" data-info-org="宜昌承办中心" data-info-approval-status="审核驳回" data-info-publish-status="已下架" data-info-publish-time="-" data-info-publisher="承办单位管理员"><td><span class="tag">未上传</span></td><td><strong>宜昌加场考级指南</strong><span class="muted">新增考试场次及报名材料要求</span><span class="tag red" data-info-reject-reason>驳回：正文需补充考试时间</span></td><td><span class="tag orange">考级指南</span></td><td>宜昌承办中心</td><td>2026-07-30 14:10</td><td>-</td><td><label class="switch-control" data-content-publish><input type="checkbox" data-switch-toast="信息已置顶" data-switch-off-toast="信息已取消置顶"><span>置顶</span></label></td><td><span class="tag red" data-info-approval-label>审核驳回</span></td><td><span class="tag" data-info-publish-status-label>已下架</span></td><td><div class="operation"><button class="btn link" data-drawer="info-edit">编辑</button><button class="btn link" data-info-submit-review data-organizer-only>重新提交审核</button><button class="btn link" data-info-delete-action data-content-publish>删除</button><button class="btn link" data-info-detail>查看</button></div></td></tr>
+                    <tr data-info-row data-info-id="INFO-2026-0002" data-info-title="2026下半年武汉考级指南" data-info-summary="考点安排、签到流程和考场规则" data-info-body="一、入场签到；二、候考与考试；三、成绩与证书。" data-info-category="考级指南" data-info-org="武汉承办中心" data-info-approval-status="审核通过" data-info-publish-status="待发布" data-info-publish-time="-" data-info-publisher="承办单位管理员"><td><span class="tag blue">已上传</span></td><td><strong>2026下半年武汉考级指南</strong><span class="muted">考点安排、签到流程和考场规则</span></td><td><span class="tag orange">考级指南</span></td><td>武汉承办中心</td><td>2026-07-28 11:20</td><td>-</td><td><label class="switch-control" data-content-publish><input type="checkbox" data-switch-toast="信息已置顶" data-switch-off-toast="信息已取消置顶"><span>置顶</span></label></td><td><span class="tag green" data-info-approval-label>审核通过</span></td><td><span class="tag orange" data-info-publish-status-label>待发布</span></td><td><div class="operation"><button class="btn link" data-drawer="info-edit">编辑</button><button class="btn link" data-info-publish-action="发布" data-content-publish data-platform-only>发布</button><button class="btn link" data-info-detail>查看</button></div></td></tr>
+                <tr data-info-row data-info-id="INFO-2026-0003" data-info-title="宜昌加场考级指南" data-info-summary="新增考试场次及报名材料要求" data-info-body="请补充考试时间、考点和报名材料要求后重新提交审核。" data-info-category="考级指南" data-info-org="宜昌承办中心" data-info-approval-status="审核驳回" data-info-publish-status="已下架" data-info-publish-time="-" data-info-publisher="承办单位管理员"><td><span class="tag">未上传</span></td><td><strong>宜昌加场考级指南</strong><span class="muted">新增考试场次及报名材料要求</span><span class="tag red" data-info-reject-reason>驳回：正文需补充考试时间</span></td><td><span class="tag orange">考级指南</span></td><td>宜昌承办中心</td><td>2026-07-30 14:10</td><td>-</td><td><label class="switch-control" data-content-publish><input type="checkbox" data-switch-toast="信息已置顶" data-switch-off-toast="信息已取消置顶"><span>置顶</span></label></td><td><span class="tag red" data-info-approval-label>审核驳回</span></td><td><span class="tag" data-info-publish-status-label>已下架</span></td><td><div class="operation"><button class="btn link" data-drawer="info-edit">编辑</button><button class="btn link" data-info-submit-review data-auth-roles="organizer training">重新提交审核</button><button class="btn link" data-info-delete-action data-content-publish>删除</button><button class="btn link" data-info-detail>查看</button></div></td></tr>
               </tbody></table></div>
-              <div class="info-publish-rule-banner"><strong>发布规则：</strong>平台创建内容审核状态为“无需审核”，可直接发布；承办单位修改正文后必须重新提交审核；培训机构仅可查看已发布信息。已发布批次不受内容更新影响，发布记录由系统留痕。</div>
+              <div class="info-publish-rule-banner"><strong>发布规则：</strong>平台创建内容审核状态为“无需审核”，可直接发布；承办单位和培训机构创建或修改正文后必须重新提交审核。已发布批次不受内容更新影响，发布记录由系统留痕。</div>
             </div>
           </div>
           <div class="subview" data-subview="categories">
@@ -3936,7 +3936,7 @@
         <section class="page" data-page="certificates">
           <div class="page-head">
             <div><h1 class="page-title" data-page-heading>考级证书管理</h1></div>
-            <div class="page-actions"><button class="btn" data-toast="证书清单已导出">导出证书清单</button><button class="btn primary" data-drawer="cert-batch-generate">全部生成</button></div>
+            <div class="page-actions"><button class="btn" data-toast="证书清单已导出">导出证书清单</button><button class="btn primary" data-drawer="cert-batch-generate" data-platform-only>全部生成</button></div>
           </div>
           <div class="tabs" data-tabs>
             <button class="tab active" data-sub="list">批次制证工作台</button>
@@ -3973,7 +3973,7 @@
               <div class="table-card">
                 <div class="cert-action-bar">
                   <strong>批次证书列表</strong>
-                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate">全部生成</button><button class="btn" data-drawer="cert-clear-numbers">清除证书号</button><button class="btn success" data-drawer="cert-submit">发布</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
+                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate" data-platform-only>全部生成</button><button class="btn" data-drawer="cert-clear-numbers" data-platform-only>清除证书号</button><button class="btn success" data-drawer="cert-submit" data-platform-only>发布</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
                 </div>
                 <div class="table-wrap">
                   <table class="cert-table is-sticky-table has-sticky-action">
@@ -3982,7 +3982,7 @@
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">张三<br><span>REG20260001</span></td><td>420111********1234</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050012<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">李四<br><span>REG20260002</span></td><td>420106********5678</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050013<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王五<br><span>REG20260003</span></td><td>420102********8866</td><td>汉口美育培训学校</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">WH20260203040014<br><span>武汉 / 2026 / 中国舞 / 4级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:29</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
-                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">陈同学<br><span>REG20260005</span></td><td>420111********7788</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>8级</td><td>良好</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate">生成</button></td></tr>
+                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">陈同学<br><span>REG20260005</span></td><td>420111********7788</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>8级</td><td>良好</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate" data-platform-only>全部生成</button></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">周同学<br><span>REG20260006</span></td><td>420105********5521</td><td>汉口美育培训学校</td><td>中国舞</td><td>8级</td><td>优秀</td><td class="cert-no-cell">WH20260203080108</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:10</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button><button class="btn link" data-toast="防伪验证结果已打开">验真</button></div></td></tr>
                       <tr data-cert-batch-empty hidden><td colspan="11"><div class="empty-state"><strong>未查询到匹配证书</strong><span>请调整专业、级别、状态或考生信息后重试。</span></div></td></tr>
                     </tbody>
@@ -4094,10 +4094,10 @@
             <div class="table-card"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">消息模板列表</h2><span class="muted">预置模板不可删除，可编辑内容和渠道</span></div><button class="btn primary" data-drawer="message-template-edit" data-platform-only>新增模板</button></div><div class="table-wrap"><table class="message-table"><thead><tr><th>模板编码</th><th>模板名称</th><th>触发场景</th><th>通知渠道</th><th>模板标题</th><th>模板内容</th><th>状态</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-message-template-row data-template-keyword="单位审核通过通知 TPL-UNIT-APPROVE" data-template-scene="单位审核" data-template-channel="站内消息+短信" data-template-status="启用"><td>TPL-UNIT-APPROVE</td><td><strong>单位审核通过通知</strong></td><td>单位审核</td><td>站内消息+短信</td><td>【{unitName}】审核已通过</td><td>您提交的单位【{unitName}】已审核通过，可登录系统继续使用。</td><td><span class="tag green" data-template-status-label>启用</span></td><td>2026-08-18 14:20</td><td><div class="operation"><button class="btn link" data-drawer="message-template-edit" data-platform-only>编辑</button><button class="btn link" data-drawer="message-template-test" data-platform-only>测试发送</button><button class="btn link" data-message-template-toggle data-platform-only>停用</button></div></td></tr><tr data-message-template-row data-template-keyword="考官派遣通知 TPL-EXAMINER-DISPATCH" data-template-scene="考官派遣" data-template-channel="站内消息+短信" data-template-status="启用"><td>TPL-EXAMINER-DISPATCH</td><td><strong>考官派遣通知</strong></td><td>考官派遣</td><td>站内消息+短信</td><td>您已被派遣至【{batchName}】</td><td>考官【{examinerName}】，您已被派遣至【{batchName}】，请按排期完成任务。</td><td><span class="tag green" data-template-status-label>启用</span></td><td>2026-08-17 10:10</td><td><div class="operation"><button class="btn link" data-drawer="message-template-edit" data-platform-only>编辑</button><button class="btn link" data-drawer="message-template-test" data-platform-only>测试发送</button><button class="btn link" data-message-template-toggle data-platform-only>停用</button></div></td></tr><tr data-message-template-row data-template-keyword="成绩发布通知 TPL-SCORE-PUBLISH" data-template-scene="成绩证书" data-template-channel="站内消息+短信" data-template-status="启用"><td>TPL-SCORE-PUBLISH</td><td><strong>成绩发布通知</strong></td><td>成绩证书</td><td>站内消息+短信</td><td>【{batchName}】成绩已发布</td><td>【{batchName}】成绩已发布，请登录查看成绩结果。</td><td><span class="tag green" data-template-status-label>启用</span></td><td>2026-08-16 09:30</td><td><div class="operation"><button class="btn link" data-drawer="message-template-edit" data-platform-only>编辑</button><button class="btn link" data-drawer="message-template-test" data-platform-only>测试发送</button><button class="btn link" data-message-template-toggle data-platform-only>停用</button></div></td></tr><tr data-message-template-row data-template-keyword="证书发布通知 TPL-CERT-PUBLISH" data-template-scene="成绩证书" data-template-channel="站内消息+短信" data-template-status="启用"><td>TPL-CERT-PUBLISH</td><td><strong>证书发布通知</strong></td><td>成绩证书</td><td>站内消息+短信</td><td>您的证书已生成</td><td>考生【{studentName}】的证书已生成，可进入证书库查询下载。</td><td><span class="tag green" data-template-status-label>启用</span></td><td>2026-08-15 16:05</td><td><div class="operation"><button class="btn link" data-drawer="message-template-edit" data-platform-only>编辑</button><button class="btn link" data-drawer="message-template-test" data-platform-only>测试发送</button><button class="btn link" data-message-template-toggle data-platform-only>停用</button></div></td></tr><tr data-message-template-row data-template-keyword="密码重置通知 TPL-PASSWORD-RESET" data-template-scene="系统管理" data-template-channel="短信" data-template-status="停用"><td>TPL-PASSWORD-RESET</td><td><strong>密码重置通知</strong></td><td>系统管理</td><td>短信</td><td>后台账号密码重置</td><td>您的后台账号已完成密码重置，请使用新密码登录。</td><td><span class="tag red" data-template-status-label>停用</span></td><td>2026-08-08 11:40</td><td><div class="operation"><button class="btn link" data-drawer="message-template-edit" data-platform-only>编辑</button><button class="btn link" data-drawer="message-template-test" data-platform-only>测试发送</button><button class="btn link" data-message-template-toggle data-platform-only>启用</button></div></td></tr></tbody></table></div></div>
           </div>
           <div class="subview" data-subview="message-send">
-            <div class="message-page-head"><div><h2 class="table-title">消息发送</h2><span class="muted">平台运营方可按角色、组织或指定用户主动触达，单次最多 10000 人。</span></div><button class="btn primary" data-drawer="message-compose" data-platform-only>新建消息</button></div>
+          <div class="message-page-head"><div><h2 class="table-title">消息发送</h2><span class="muted">平台、承办单位和培训机构可按权限范围主动触达，单次最多 10000 人。</span></div><button class="btn primary" data-drawer="message-compose">新建消息</button></div>
             <div class="tabs message-tabs" data-message-send-tabs><button class="tab active" data-message-send-tab="drafts">草稿箱 <span class="tag">2</span></button><button class="tab" data-message-send-tab="scheduled">待发送 <span class="tag orange">1</span></button><button class="tab" data-message-send-tab="sent">已发送 <span class="tag green">8</span></button></div>
-            <div class="message-send-panel active" data-message-send-panel="drafts"><div class="table-card"><div class="table-tools"><h2 class="table-title">草稿箱</h2><span class="muted">可继续编辑后发送</span></div><div class="table-wrap"><table class="message-table"><thead><tr><th>消息标题</th><th>接收范围</th><th>通知渠道</th><th>更新时间</th><th>创建人</th><th>操作</th></tr></thead><tbody><tr><td><strong>2026下半年报名缴费提醒</strong></td><td>武汉承办中心 · 待缴费考生</td><td>站内消息+短信</td><td>2026-08-20 18:20</td><td>平台管理员</td><td><button class="btn link" data-drawer="message-compose" data-platform-only>继续编辑</button><button class="btn link" data-message-draft-delete data-platform-only>删除</button></td></tr><tr><td><strong>考点资料补充提醒</strong></td><td>承办单位管理员</td><td>站内消息</td><td>2026-08-19 09:45</td><td>平台管理员</td><td><button class="btn link" data-drawer="message-compose" data-platform-only>继续编辑</button><button class="btn link" data-message-draft-delete data-platform-only>删除</button></td></tr></tbody></table></div></div></div>
-            <div class="message-send-panel" data-message-send-panel="scheduled" hidden><div class="table-card"><div class="table-tools"><h2 class="table-title">待发送</h2><span class="muted">定时消息将在到达时间自动发送</span></div><div class="table-wrap"><table class="message-table"><thead><tr><th>消息标题</th><th>接收范围</th><th>发送时间</th><th>渠道</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td><strong>考试时间变更通知</strong></td><td>2026线上秋季 · 考生</td><td>2026-08-22 08:00</td><td>站内消息+短信</td><td><span class="tag orange">待发送</span></td><td><button class="btn link" data-drawer="message-compose" data-platform-only>编辑</button><button class="btn link" data-message-scheduled-cancel data-platform-only>取消定时</button></td></tr></tbody></table></div></div></div>
+            <div class="message-send-panel active" data-message-send-panel="drafts"><div class="table-card"><div class="table-tools"><h2 class="table-title">草稿箱</h2><span class="muted">可继续编辑后发送</span></div><div class="table-wrap"><table class="message-table"><thead><tr><th>消息标题</th><th>接收范围</th><th>通知渠道</th><th>更新时间</th><th>创建人</th><th>操作</th></tr></thead><tbody><tr><td><strong>2026下半年报名缴费提醒</strong></td><td>武汉承办中心 · 待缴费考生</td><td>站内消息+短信</td><td>2026-08-20 18:20</td><td>平台管理员</td><td><button class="btn link" data-drawer="message-compose">继续编辑</button><button class="btn link" data-message-draft-delete>删除</button></td></tr><tr><td><strong>考点资料补充提醒</strong></td><td>承办单位管理员</td><td>站内消息</td><td>2026-08-19 09:45</td><td>平台管理员</td><td><button class="btn link" data-drawer="message-compose">继续编辑</button><button class="btn link" data-message-draft-delete>删除</button></td></tr></tbody></table></div></div></div>
+            <div class="message-send-panel" data-message-send-panel="scheduled" hidden><div class="table-card"><div class="table-tools"><h2 class="table-title">待发送</h2><span class="muted">定时消息将在到达时间自动发送</span></div><div class="table-wrap"><table class="message-table"><thead><tr><th>消息标题</th><th>接收范围</th><th>发送时间</th><th>渠道</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td><strong>考试时间变更通知</strong></td><td>2026线上秋季 · 考生</td><td>2026-08-22 08:00</td><td>站内消息+短信</td><td><span class="tag orange">待发送</span></td><td><button class="btn link" data-drawer="message-compose">编辑</button><button class="btn link" data-message-scheduled-cancel>取消定时</button></td></tr></tbody></table></div></div></div>
             <div class="message-send-panel" data-message-send-panel="sent" hidden><div class="table-card"><div class="table-tools"><h2 class="table-title">已发送</h2><span class="muted">手动发送消息的批次记录</span></div><div class="table-wrap"><table class="message-table"><thead><tr><th>消息标题</th><th>接收范围</th><th>发送时间</th><th>渠道</th><th>送达人数</th><th>操作</th></tr></thead><tbody><tr><td><strong>证书已生成提醒</strong></td><td>2026成绩已发布批次 · 考生</td><td>2026-08-20 16:12</td><td>站内消息+短信</td><td>526 / 526</td><td><button class="btn link" data-drawer="message-record-detail">查看详情</button></td></tr><tr><td><strong>考官派遣通知</strong></td><td>宜昌承办中心 · 考官</td><td>2026-08-18 10:30</td><td>站内消息</td><td>12 / 12</td><td><button class="btn link" data-drawer="message-record-detail">查看详情</button></td></tr></tbody></table></div></div></div>
           </div>
           <div class="subview" data-subview="message-records">
@@ -4228,15 +4228,15 @@
         shared: true,
         routes: [
           "dashboard",
-          "org/sites", "org/site-review", "org/rooms", "org/judges",
+          "org/sites", "org/rooms",
           "plans/batches", "plans/batch-create", "plans/batch-detail", "plans/rollback",
-          "info/review", "info/list", "info/platform-brochures", "plans/guides", "exam/guides",
-          "config/subjects", "config/fee-standard", "config/score-dimension", "config/notice-config", "config/ticket-config", "config/cert-tpl", "config/cert-segment",
+          "info/list", "info/platform-brochures", "plans/guides", "exam/guides",
+          "config/subjects", "config/fee-standard", "config/score-dimension", "config/notice-config", "config/ticket-config", "config/cert-tpl",
           "batch-workbench/overview", "batch-workbench/enroll", "batch-workbench/schedule", "batch-workbench/dispatch",
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
           "enroll/list", "exam/schedule", "exam/tickets", "dispatch/list", "grades/list",
           "certificates/library", "analytics/board", "support/exceptions",
-          "system/units", "system/departments", "system/users", "system/roles", "system/message-records", "system/my-messages", "system/logs", "system/params", "system/dict"
+          "system/units", "system/departments", "system/users", "system/roles", "system/message-templates", "system/message-send", "system/message-records", "system/my-messages", "system/logs"
         ]
       },
       training: {
@@ -4249,11 +4249,13 @@
         routes: [
           "dashboard",
           "org/sites", "org/rooms",
-          "info/list", "info/platform-brochures", "plans/batch-detail",
+          "plans/batches", "plans/batch-create", "plans/batch-detail", "plans/rollback",
+          "info/list", "info/platform-brochures", "plans/guides", "exam/guides",
+          "config/subjects", "config/fee-standard", "config/score-dimension", "config/notice-config", "config/ticket-config", "config/cert-tpl",
           "batch-workbench/overview", "batch-workbench/enroll", "batch-workbench/schedule", "batch-workbench/dispatch",
           "batch-workbench/tickets", "batch-workbench/grades", "batch-workbench/certificates", "batch-workbench/reports",
           "enroll/list", "exam/schedule", "exam/tickets", "grades/list", "certificates/library",
-          "analytics/board", "analytics/export", "support/exceptions", "system/mini-users", "system/message-records", "system/my-messages"
+          "analytics/board", "analytics/export", "support/exceptions", "system/units", "system/users", "system/roles", "system/message-templates", "system/message-send", "system/message-records", "system/my-messages", "system/logs"
         ]
       }
     };
@@ -4504,6 +4506,11 @@
       if (view === "courses" || view === "training") return authCanAccessDomain(view === "courses" ? "course" : "training");
       var config = authRoleConfig(AUTH_SESSION && AUTH_SESSION.role);
       var route = authRouteKey(view, sub);
+      var platformOnlyRoutes = [
+        "plans/batch-review", "org/site-review", "org/judges", "info/review", "info/categories", "info/banners", "info/protocols",
+        "system/unit-review", "system/mini-users", "system/message-settings", "system/params", "system/dict", "config/cert-segment"
+      ];
+      if (platformOnlyRoutes.indexOf(route) > -1) return !!AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (view === "dashboard" && sub === "workbench") return !!AUTH_SESSION;
       if (view === "analytics" && (sub === "board" || sub === "export")) return !!AUTH_SESSION;
       if (view === "dashboard" && (sub === "overview" || sub === "batch-analysis")) return !!AUTH_SESSION;
@@ -4511,7 +4518,7 @@
       if (view === "org" && sub === "site-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (view === "info" && sub === "review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (view === "info" && ["org-brochures", "brochure-review"].indexOf(sub) > -1) return false;
-      if (view === "config" && (sub === "ticket-config" || sub === "cert-tpl" || sub === "cert-segment")) return (AUTH_SESSION && AUTH_SESSION.role) !== "training";
+      if (view === "config" && (sub === "ticket-config" || sub === "cert-tpl")) return !!AUTH_SESSION;
       if (view === "system" && sub === "unit-review") return AUTH_SESSION && AUTH_SESSION.role === "platform";
       if (!config.routes) return true;
       return config.routes.indexOf(route) > -1;
@@ -4519,6 +4526,9 @@
     function authRoleAllowsElement(item) {
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var deny = (item.getAttribute("data-role-deny") || "").split(/\s+/).filter(Boolean);
+      var allow = (item.getAttribute("data-auth-roles") || "").split(/\s+/).filter(Boolean);
+      if (allow.length && allow.indexOf(role) === -1) return false;
+      if (typeof item.hasAttribute === "function" && item.hasAttribute("data-platform-only") && role !== "platform") return false;
       return deny.indexOf(role) === -1;
     }
     function authRouteFromHash() {
@@ -4569,7 +4579,7 @@
       if (userName) userName.textContent = session.account || "个人中心";
       if (orgLabel) orgLabel.textContent = "当前单位：" + config.unit + " · " + config.label;
       syncRoleMenus();
-      syncRolePageActions();
+      if (typeof syncRolePageActions === "function") syncRolePageActions();
       syncBatchStageVisibility();
       renderBatchManagementDemoRows();
       filterBatchManagement(false, true);
@@ -4749,6 +4759,9 @@
       syncOrganizationPaymentQr();
       syncUnitStatusCells();
       document.querySelectorAll(".auth-role-hidden").forEach(function (item) { item.classList.remove("auth-role-hidden"); });
+      document.querySelectorAll("[data-auth-roles]").forEach(function (item) {
+        item.hidden = !authRoleAllowsElement(item);
+      });
       document.querySelectorAll("[data-platform-only]").forEach(function (item) {
         item.hidden = !isPlatform;
       });
@@ -4758,7 +4771,47 @@
       document.querySelectorAll("[data-platform-or-organizer]").forEach(function (item) { item.hidden = role === "training"; });
       document.querySelectorAll("[data-config-role-scope], [data-score-role-scope]").forEach(function (item) { item.textContent = isPlatform ? "平台可维护 · 其他角色只读" : "当前角色只读"; });
       document.querySelectorAll('[data-page="config"] [data-catalog-add]').forEach(function (item) { item.hidden = !isPlatform; });
-      var canManageContent = role === "platform" || role === "organizer";
+      var configPage = document.querySelector('[data-page="config"]');
+      if (configPage) {
+        configPage.querySelectorAll('[data-unified-notice-editor]').forEach(function (editor) {
+          editor.readOnly = !isPlatform;
+          editor.closest('.unified-notice-editor').querySelectorAll('.rich-editor-toolbar button').forEach(function (button) { button.hidden = !isPlatform; });
+        });
+        configPage.querySelectorAll('[data-standard-workbench="fee"]').forEach(function (workbench) {
+          configSetFeeEditState(workbench, false);
+          workbench.querySelectorAll('[data-fee-row-edit]').forEach(function (button) { button.hidden = !isPlatform; });
+          workbench.querySelectorAll('tbody .operation button').forEach(function (button) { button.hidden = !isPlatform && button.textContent.trim() !== "版本记录"; });
+        });
+        configPage.querySelectorAll('[data-standard-workbench="score"] .table-tools .page-actions button').forEach(function (button) { button.hidden = !isPlatform; });
+        configPage.querySelectorAll('[data-subview="repertoire"] .page-actions button, [data-subview="repertoire"] [data-repertoire-group-rule-action]').forEach(function (button) { button.hidden = !isPlatform; });
+        configPage.querySelectorAll('[data-subview="ticket-config"] input, [data-subview="ticket-config"] textarea, [data-subview="ticket-config"] select').forEach(function (control) { control.disabled = !isPlatform; });
+        configPage.querySelectorAll('[data-subview="ticket-config"] button, [data-subview="ticket-config"] [data-ticket-save]').forEach(function (button) {
+          if (/保存|上传/.test(button.textContent.trim()) || button.hasAttribute('data-ticket-save')) button.hidden = !isPlatform;
+        });
+        configPage.querySelectorAll('[data-subview="subjects"] [data-drawer="subject-create"]').forEach(function (button) { button.hidden = !isPlatform; });
+      }
+      document.querySelectorAll('[data-subview="units"] .table-tools .page-actions > button').forEach(function (button) {
+        if (/批量导入|新增组织/.test(button.textContent.trim())) button.hidden = !isPlatform;
+      });
+      document.querySelectorAll('[data-subview="departments"] .table-tools .page-actions > button').forEach(function (button) {
+        if (/批量导入|新增部门/.test(button.textContent.trim())) button.hidden = !isPlatform;
+      });
+      document.querySelectorAll('[data-subview="units"] [data-unit-row]').forEach(function (row) {
+        var unitType = row.getAttribute('data-unit-type') || '';
+        var unitId = row.getAttribute('data-unit-id') || '';
+        var operation = row.querySelector('.org-unit-action-cell .operation');
+        if (!operation) return;
+        var addChild = Array.from(operation.querySelectorAll('button')).find(function (button) { return button.textContent.trim() === '新增下级'; });
+        if (unitId !== 'platform' && unitType === '承办单位' && !addChild) {
+          operation.insertAdjacentHTML('afterbegin', '<button class="btn link" data-drawer="unit-create">新增下级</button>');
+          addChild = operation.querySelector('button[data-drawer="unit-create"]');
+        }
+        if (addChild) addChild.hidden = role === 'training' || (unitId === 'platform' && !isPlatform);
+        operation.querySelectorAll('button').forEach(function (button) {
+          if (button.textContent.trim() === '删除') button.hidden = role === 'training';
+        });
+      });
+      var canManageContent = ["platform", "organizer", "training"].indexOf(role) > -1;
       document.querySelectorAll('[data-page="info"] .subview').forEach(function (subview) {
         subview.querySelectorAll("[data-platform-only]").forEach(function (item) { item.hidden = !isPlatform; });
         subview.querySelectorAll("[data-content-publish]").forEach(function (item) { item.hidden = !canManageContent; });
@@ -4766,11 +4819,8 @@
         subview.querySelectorAll("[data-organizer-only]").forEach(function (item) { item.hidden = role !== "organizer"; });
         var sub = subview.getAttribute("data-subview");
         if (sub === "categories") {
-          subview.querySelectorAll("button").forEach(function (item) { item.hidden = !isPlatform && item.textContent.trim() !== "查询" && item.textContent.trim() !== "重置"; });
-        } else if (!canManageContent) {
           subview.querySelectorAll("button").forEach(function (item) {
-            var label = item.textContent.trim();
-            item.hidden = /新增|编辑|删除|上架|下架|置顶|启用|禁用|批量/.test(label);
+            if (!item.hasAttribute("data-platform-only")) item.hidden = !isPlatform;
           });
         }
       });
@@ -4792,10 +4842,6 @@
         if (role === "organizer") tab.classList.toggle("active", isPublishedTab);
       });
       syncRoleActionHidden("[data-judge-org-filter]", !isPlatform);
-      if (!isPlatform) {
-        syncRoleActionHidden('[data-page="org"] [data-subview="judges"] [data-drawer="judge-photo-import"], [data-page="org"] [data-subview="judges"] [data-drawer="judge-import"], [data-page="org"] [data-subview="judges"] [data-drawer="judge-create"], [data-page="org"] [data-subview="judges"] [data-drawer="judge-batch-status"], [data-page="org"] [data-subview="judges"] [data-judge-status-action], [data-page="org"] [data-subview="judges"] [data-drawer="judge-delete"]', true);
-        syncRoleActionHidden('[data-page="org"] [data-subview="sites"] [data-drawer="site-delete"]', true);
-      }
       var judgeOrgInput = document.querySelector("[data-judge-org]");
       if (!isPlatform && judgeOrgInput) judgeOrgInput.value = "";
       var judgeScopeTag = document.querySelector("[data-judge-scope-tag]");
@@ -4805,51 +4851,25 @@
       }
       syncResourceOrgTreeRoleVisibility(role);
       if (role === "training") {
-        syncRoleActionHidden('[data-page="org"] [data-subview="sites"] [data-drawer="site-import"], [data-page="org"] [data-subview="sites"] [data-drawer="site-create"], [data-page="org"] [data-subview="sites"] [data-site-status-action], [data-page="org"] [data-subview="sites"] [data-site-confirm-action]', true);
-        syncRoleActionHidden('[data-page="grades"] [data-drawer="result-entry"], [data-page="grades"] [data-drawer="result-batch-entry"], [data-page="grades"] [data-drawer="result-adjust"], [data-page="grades"] [data-drawer="result-return"], [data-page="grades"] [data-drawer="result-publish"], .batch-workbench[data-subview="grades"] [data-drawer="result-entry"], .batch-workbench[data-subview="grades"] [data-drawer="result-batch-entry"], .batch-workbench[data-subview="grades"] [data-drawer="result-adjust"], .batch-workbench[data-subview="grades"] [data-drawer="result-return"], .batch-workbench[data-subview="grades"] [data-drawer="result-publish"]', true);
-        document.querySelectorAll('[data-page="info"] [data-info-row]').forEach(function (row) {
-          row.classList.toggle("auth-role-hidden", row.getAttribute("data-info-publish-status") !== "已发布");
-        });
         document.querySelectorAll('.result-dashboard').forEach(function (root) {
-          root.querySelectorAll('[data-result-status-tab]').forEach(function (tab) {
-            tab.classList.toggle("auth-role-hidden", tab.getAttribute("data-result-status-tab") !== "已发布");
-          });
-          applyResultStatus(root, "已发布", true);
+          var activeStatus = root.querySelector('[data-result-status-tab].active');
+          applyResultStatus(root, activeStatus ? activeStatus.getAttribute("data-result-status-tab") : "待发布", true);
         });
       }
-      if (role === "organizer" || role === "training") {
-        syncRoleActionHidden('[data-drawer="cert-batch-generate"], [data-drawer="cert-clear-numbers"], [data-drawer="cert-submit"], [data-drawer="cert-void"], [data-drawer="cert-void-confirm"], [data-page="certificates"] [data-jump="config/cert-tpl"], .batch-workbench[data-subview="certificates"] [data-jump="config/cert-tpl"]', true);
-        syncRoleActionHidden('[data-page="certificates"] [data-subview="list"], .batch-workbench[data-subview="certificates"] [data-subview="list"]', true);
+      if (role !== "platform") {
         document.querySelectorAll('[data-page="certificates"], .batch-workbench[data-subview="certificates"]').forEach(function (root) {
-          var listTab = root.querySelector('.tab[data-sub="list"]');
-          var libraryTab = root.querySelector('.tab[data-sub="library"]');
-          var library = root.querySelector('[data-subview="library"]');
-          if (listTab) {
-            listTab.classList.remove("active");
-            listTab.classList.add("auth-role-hidden");
-          }
-          if (libraryTab) libraryTab.classList.add("active");
-          if (library) library.classList.add("active");
-        });
-        document.querySelectorAll('[data-page="dashboard"] .card.metric, [data-page="dashboard"] tbody tr').forEach(function (item) {
-          if (item.textContent.indexOf("证书待生成") > -1) item.classList.add("auth-role-hidden");
-        });
-      } else {
-        document.querySelectorAll('[data-page="certificates"], .batch-workbench[data-subview="certificates"]').forEach(function (root) {
-          if (root.matches('[data-page="certificates"].active') && root.querySelector('[data-subview="library"].active')) return;
           var listTab = root.querySelector('.tab[data-sub="list"]');
           var libraryTab = root.querySelector('.tab[data-sub="library"]');
           var list = root.querySelector('[data-subview="list"]');
           var library = root.querySelector('[data-subview="library"]');
           if (listTab) listTab.classList.add("active");
-          if (libraryTab) libraryTab.classList.remove("active");
+          if (libraryTab) libraryTab.classList.add("active");
           if (list) list.classList.add("active");
-          if (library) library.classList.remove("active");
+          if (library) library.classList.add("active");
         });
       }
       if (role === "training") {
         var trainingUnit = authRoleConfig(role).unit;
-        syncRoleActionHidden('[data-cert-org-filter], [data-drawer="cert-audit"], [data-cert-void], [data-page="certificates"] button[data-toast*="有效"], .batch-workbench[data-subview="certificates"] button[data-toast*="有效"]', true);
         document.querySelectorAll('.certificate-print-table tbody tr').forEach(function (row) {
           var registrationOrg = row.cells[7] ? row.cells[7].textContent.trim() : "";
           row.classList.toggle("auth-role-hidden", registrationOrg.indexOf(trainingUnit) === -1);
@@ -4857,12 +4877,6 @@
       }
       if (role === "organizer") {
         var organizerScope = organizerAllowedOrgNames();
-        hideOrganizerWriteActions('[data-page="config"]');
-        hideOrganizerWriteActions('[data-page="org"] [data-subview="judges"]');
-        hideOrganizerWriteActions('[data-subview="roles"]');
-        syncRoleActionHidden('[data-page="org"] [data-subview="judges"] [data-drawer="judge-cert"]', true);
-        syncRoleActionHidden('[data-page="org"] [data-subview="units"] button[data-toast*="删除"], [data-page="org"] [data-subview="units"] button[data-drawer="unit-delete"]', true);
-        syncRoleActionHidden('[data-page="system"] [data-subview="params"] button', true);
         document.querySelectorAll('[data-subview="units"] [data-unit-row]').forEach(function (row) {
           row.classList.toggle("auth-role-hidden", !organizerScope.ids[row.getAttribute("data-unit-id")]);
         });
@@ -4877,7 +4891,6 @@
           var roleName = row.cells[1] ? row.cells[1].textContent.trim() : "";
           row.classList.toggle("auth-role-hidden", roleName === "平台管理员");
         });
-        syncRoleActionHidden('[data-page="support"] [data-jump="system/message-templates"]', true);
         filterAnnualPlans(false, true);
       }
       var candidateUserScope = roleOrganizationDataScope(role);
@@ -9014,6 +9027,7 @@
       if (action.toast) attrs += ' data-toast="' + escapeHtml(action.toast) + '"';
       if (action.drawer) attrs += ' data-drawer="' + escapeHtml(action.drawer) + '"';
       if (action.rule) attrs += " data-open-dispatch-rule-modal";
+      if (action.roles && action.roles.length) attrs += ' data-auth-roles="' + escapeHtml(action.roles.join(" ")) + '"';
       return '<button class="btn' + (action.kind ? " " + escapeHtml(action.kind) : "") + '"' + attrs + ">" + escapeHtml(action.text) + "</button>";
     }
     function actionButtonsHtml(actions) {
@@ -9194,7 +9208,7 @@
       var pending = splitDemoCounts(batch.pendingSchedule, [0.50, 0.30, 0.20]);
       var rows;
       if (batch.status === "待排期") {
-        rows = [["待排期池", "待分配", escapeHtml(batch.examWindow), "全部专业", formatDemoNumber(batch.pendingSchedule), "等待生成场次", batchTagHtml("orange", "待排期"), '<button class="btn link" data-drawer="schedule-group">自动排期</button><button class="btn link" data-drawer="schedule-assign">新增场次</button>']];
+        rows = [["待排期池", "待分配", escapeHtml(batch.examWindow), "全部专业", formatDemoNumber(batch.pendingSchedule), "等待生成场次", batchTagHtml("orange", "待排期"), '<button class="btn link" data-drawer="schedule-group" data-auth-roles="platform organizer training">自动排期</button><button class="btn link" data-drawer="schedule-assign" data-auth-roles="platform organizer training">新增场次</button>']];
       } else if (batch.status === "待复核") {
         rows = [
           [site, "A201", escapeHtml(batch.examWindow.split(" 至 ")[0]), "钢琴 6-10级", formatDemoNumber(scheduled[0]), "资源占用冲突 " + formatDemoNumber(batch.conflicts) + " 项", batchTagHtml("orange", "待复核"), '<button class="btn link" data-drawer="schedule-exception">处理冲突</button>'],
@@ -9205,7 +9219,7 @@
         var isSchedulePublished = batch.status === "已发布";
         var isScheduleReview = batch.status === "待复核";
         var rowStatus = isSchedulePublished ? batchTagHtml("green", "已发布") : (isScheduleReview ? batchTagHtml("blue", "待复核") : batchTagHtml("orange", "编排中"));
-        var rowAction = isSchedulePublished || isScheduleReview ? '<button class="btn link" data-toast="已打开排期场次明细">查看</button>' : '<button class="btn link" data-drawer="schedule-assign">调整</button><button class="btn link" data-drawer="schedule-publish">提交</button>';
+        var rowAction = isSchedulePublished || isScheduleReview ? '<button class="btn link" data-toast="已打开排期场次明细">查看</button>' : '<button class="btn link" data-drawer="schedule-assign" data-auth-roles="platform organizer training">调整</button><button class="btn link" data-drawer="schedule-publish" data-auth-roles="platform organizer training">提交</button>';
         rows = [
           [site, "A201", escapeHtml(batch.examWindow.split(" 至 ")[0]), "钢琴 1-5级", formatDemoNumber(scheduled[0]), "待排期 " + formatDemoNumber(pending[0]), rowStatus, rowAction],
           [site, "B301", escapeHtml(batch.examWindow.split(" 至 ")[0]), "中国舞 4-8级", formatDemoNumber(scheduled[1]), "待排期 " + formatDemoNumber(pending[1]), rowStatus, rowAction],
@@ -9215,7 +9229,7 @@
       return {
         status: status,
         title: "排期编排处理列表",
-        actions: [{ text: "新增场次", kind: "primary", drawer: "schedule-assign" }, { text: "自动排期", drawer: "schedule-group" }, { text: "冲突校验", toast: "排期冲突已重新校验" }, { text: "提交排期", drawer: "schedule-publish" }],
+        actions: [{ text: "新增场次", kind: "primary", drawer: "schedule-assign", roles: ["platform", "organizer", "training"] }, { text: "自动排期", drawer: "schedule-group", roles: ["platform", "organizer", "training"] }, { text: "冲突校验", toast: "排期冲突已重新校验", roles: ["platform", "organizer", "training"] }, { text: "提交排期", drawer: "schedule-publish", roles: ["platform", "organizer", "training"] }],
         headers: ["考点", "考场", "考试日期", "专业/级别", "已排考生", "输出", "状态", "操作"],
         rows: rows,
         side: {
@@ -9228,7 +9242,7 @@
             batch.conflicts ? "需先处理冲突，才能提交排期。" : "排期发布后，考官派遣与准考证生成同时开放。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "自动排期", kind: "primary", drawer: "schedule-group" }, { text: "提交排期", drawer: "schedule-publish" }, { text: "进入考官派遣", jump: "batch-workbench/dispatch" }] }
+        next: { title: "快捷动作", actions: [{ text: "自动排期", kind: "primary", drawer: "schedule-group", roles: ["platform", "organizer", "training"] }, { text: "提交排期", drawer: "schedule-publish", roles: ["platform", "organizer", "training"] }, { text: "进入考官派遣", jump: "batch-workbench/dispatch" }] }
       };
     }
     function dispatchStageView(batch) {
@@ -9239,12 +9253,12 @@
       var dispatchCode = batch.dispatchStatusCode || (status.text === "待指派" ? "PENDING_ASSIGNMENT" : status.text === "已指派" ? "ASSIGNED" : "PUBLISHED");
       var assigned = dispatchCode === "ASSIGNED" || dispatchCode === "PUBLISHED";
       var rows = dispatchCode === "PENDING_ASSIGNMENT"
-        ? [["A201 上午场", "钢琴 1-5级", "待指派", batchTagHtml("orange", "待校验"), batchTagHtml("", "待指派"), "完成资格校验后指派", '<button class="btn link" data-drawer="judge-assign">指派</button><button class="btn link" data-drawer="judge-smart-match">智能匹配</button>']]
-        : [["A201 上午场", "钢琴 8级", "李文浩｜高级｜副教授", batchTagHtml("green", "通过"), batchTagHtml(dispatchCode === "PUBLISHED" ? "green" : "blue", dispatchCode === "PUBLISHED" ? "已发布" : "已指派"), dispatchCode === "PUBLISHED" ? "派遣已发布，考官端可查看任务" : "已完成指派，待发布派遣结果", '<button class="btn link" data-toast="派遣结果已发布">' + (dispatchCode === "PUBLISHED" ? "查看" : "发布") + '</button><button class="btn link" data-drawer="judge-assign">替换</button>'], ["B301 下午场", "中国舞 6级", "赵婷婷｜高级｜一级演员", batchTagHtml("green", "通过"), batchTagHtml(dispatchCode === "PUBLISHED" ? "green" : "blue", dispatchCode === "PUBLISHED" ? "已发布" : "已指派"), dispatchCode === "PUBLISHED" ? "派遣已发布，考官端可查看任务" : "已完成指派，待发布派遣结果", '<button class="btn link" data-drawer="judge-assign">替换</button>']];
+        ? [["A201 上午场", "钢琴 1-5级", "待指派", batchTagHtml("orange", "待校验"), batchTagHtml("", "待指派"), "完成资格校验后指派", '<button class="btn link" data-drawer="judge-assign" data-auth-roles="platform organizer">指派</button><button class="btn link" data-drawer="judge-smart-match" data-auth-roles="platform organizer">智能匹配</button>']]
+        : [["A201 上午场", "钢琴 8级", "李文浩｜高级｜副教授", batchTagHtml("green", "通过"), batchTagHtml(dispatchCode === "PUBLISHED" ? "green" : "blue", dispatchCode === "PUBLISHED" ? "已发布" : "已指派"), dispatchCode === "PUBLISHED" ? "派遣已发布，考官端可查看任务" : "已完成指派，待发布派遣结果", '<button class="btn link" data-toast="派遣结果已发布" data-auth-roles="platform organizer">' + (dispatchCode === "PUBLISHED" ? "查看" : "发布") + '</button><button class="btn link" data-drawer="judge-assign" data-auth-roles="platform organizer">替换</button>'], ["B301 下午场", "中国舞 6级", "赵婷婷｜高级｜一级演员", batchTagHtml("green", "通过"), batchTagHtml(dispatchCode === "PUBLISHED" ? "green" : "blue", dispatchCode === "PUBLISHED" ? "已发布" : "已指派"), dispatchCode === "PUBLISHED" ? "派遣已发布，考官端可查看任务" : "已完成指派，待发布派遣结果", '<button class="btn link" data-drawer="judge-assign" data-auth-roles="platform organizer">替换</button>']];
       return {
         status: status,
         title: "考官派遣处理列表",
-        actions: [{ text: "智能匹配", kind: "primary", drawer: "judge-smart-match" }, { text: "批量指派", drawer: "judge-batch-assign" }, { text: "发布派遣", toast: "派遣结果已发布" }, { text: "指派规则", rule: true }],
+        actions: [{ text: "智能匹配", kind: "primary", drawer: "judge-smart-match", roles: ["platform", "organizer"] }, { text: "批量指派", drawer: "judge-batch-assign", roles: ["platform", "organizer"] }, { text: "发布派遣", toast: "派遣结果已发布", roles: ["platform", "organizer"] }, { text: "指派规则", rule: true }],
         headers: ["场次", "专业/级别", "推荐/已选考官", "资格校验", "派遣状态", "流转结果", "操作"],
         rows: rows,
         side: {
@@ -9257,7 +9271,7 @@
             batch.risks ? "存在 " + formatDemoNumber(batch.risks) + " 项资格风险，需要替换考官后再发布。" : "系统按专业、级别、职级和职称进行资格校验。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "智能匹配", kind: "primary", drawer: "judge-smart-match" }, { text: "批量指派", drawer: "judge-batch-assign" }, { text: "进入准考证管理", jump: "batch-workbench/tickets" }] }
+        next: { title: "快捷动作", actions: [{ text: "智能匹配", kind: "primary", drawer: "judge-smart-match", roles: ["platform", "organizer"] }, { text: "批量指派", drawer: "judge-batch-assign", roles: ["platform", "organizer"] }, { text: "进入准考证管理", jump: "batch-workbench/tickets" }] }
       };
     }
     function onlineDispatchStageView(batch, status) {
@@ -9270,13 +9284,13 @@
         var eligible = index < Math.min(submitted, students.length);
         var isAssigned = index < Math.min(assigned, students.length);
         var assignment = isAssigned ? "李文浩 · " + dispatchExaminerPhone("李文浩") : "未指派";
-        var action = !eligible ? '<span class="muted">视频未提交，不可派遣</span>' : (isAssigned ? '<button class="btn link" data-toast="已打开' + escapeHtml(name) + '的视频">查看视频</button><button class="btn link" data-drawer="judge-assign">替换</button>' : '<button class="btn link" data-drawer="judge-assign" data-toast="线上任务已同步至考官端小程序">派遣</button>');
+        var action = !eligible ? '<span class="muted">视频未提交，不可派遣</span>' : (isAssigned ? '<button class="btn link" data-toast="已打开' + escapeHtml(name) + '的视频">查看视频</button><button class="btn link" data-drawer="judge-assign" data-auth-roles="platform organizer">替换</button>' : '<button class="btn link" data-drawer="judge-assign" data-toast="线上派遣已发布，任务已同步至考官端小程序" data-auth-roles="platform organizer">发布</button>');
         return [escapeHtml(name), "钢琴 5级", '<span class="tag green">视频已录制</span>', assignment, isAssigned ? batchTagHtml("green", "已指派") : batchTagHtml("orange", "待指派"), action];
       });
       return {
         status: status,
         title: "线上考官派遣 · 按考生",
-        actions: [{ text: "批量派遣", kind: "primary", drawer: "judge-batch-assign" }, { text: "发布", toast: "线上派遣已发布，任务已同步至考官端小程序" }],
+        actions: [{ text: "批量派遣", kind: "primary", drawer: "judge-batch-assign", roles: ["platform", "organizer"] }, { text: "发布", toast: "线上派遣已发布，任务已同步至考官端小程序", roles: ["platform", "organizer"] }],
         headers: ["考生", "专业/级别", "视频状态", "考官", "派遣状态", "操作"],
         rows: rows,
         side: { title: "", checks: [] },
@@ -9297,13 +9311,13 @@
         var rowStatus = status.text === "准考证生成中" ? batchTagHtml("blue", "生成中") : (regen ? batchTagHtml("orange", "待重生成") : (generated[index] >= available[index] && generated[index] ? batchTagHtml("green", "已生成") : batchTagHtml("orange", "待生成")));
         if (status.text === "生成后") rowStatus = batchTagHtml("green", "已生成");
         if (status.text === "已开放下载" || status.text === "考试待开始") rowStatus = batchTagHtml("green", "已开放下载");
-        var action = regen ? '<button class="btn link" data-toast="准考证已重生成">重生成</button>' : (generated[index] ? '<button class="btn link" data-drawer="ticket-preview">查看</button><button class="btn link" data-toast="准考证文件已下载">下载</button>' : '<button class="btn link" data-toast="准考证已生成">生成</button>');
+        var action = regen ? '<button class="btn link" data-toast="准考证已重生成" data-auth-roles="platform organizer">重生成</button>' : (generated[index] ? '<button class="btn link" data-drawer="ticket-preview">查看</button><button class="btn link" data-toast="准考证文件已下载">下载</button>' : '<button class="btn link" data-toast="准考证已生成" data-auth-roles="platform organizer">生成</button>');
         return [escapeHtml(org), formatDemoNumber(available[index]), formatDemoNumber(generated[index]), formatDemoNumber(printed[index]), formatDemoNumber(regen), rowStatus, action];
       });
       return {
         status: status,
         title: "准考证生成处理列表",
-        actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "下载打印", toast: "准考证文件已打包下载" }, { text: "准考证样式", drawer: "ticket-preview" }],
+        actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成", roles: ["platform", "organizer"] }, { text: "发布", toast: "准考证已发布", roles: ["platform", "organizer"] }, { text: "全部下载ZIP", toast: "准考证文件已全部打包下载" }, { text: "准考证样式", drawer: "ticket-preview" }],
         headers: ["报名机构", "可生成", "已生成", "已打印", "待重生成", "状态", "操作"],
         rows: rows,
         side: {
@@ -9316,7 +9330,7 @@
             batch.ticketsRegenerate ? "排期调整后需重生成对应准考证，再开放下载。" : "准考证开放后，学生和机构可查看下载。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "进入成绩管理", jump: "batch-workbench/grades" }] }
+        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成", roles: ["platform", "organizer"] }, { text: "发布", toast: "准考证已发布", roles: ["platform", "organizer"] }, { text: "进入成绩管理", jump: "batch-workbench/grades" }] }
       };
     }
     function onlineVideoStageView(batch, status) {
@@ -9333,7 +9347,7 @@
       return {
         status: status,
         title: "考生视频录制列表",
-        actions: [{ text: "导出考生名单", toast: "线上考生名单已导出" }, { text: "发布", kind: "primary", jump: "batch-workbench/dispatch" }],
+        actions: [{ text: "导出考生名单", toast: "线上考生名单已导出" }, { text: "发布", kind: "primary", jump: "batch-workbench/dispatch", roles: ["platform", "organizer"] }],
         headers: ["考生", "专业/级别", "缴费时间", "视频提交截止", "录制状态", "最终视频"],
         rows: rows,
         filters: true,
@@ -9424,7 +9438,7 @@
       return {
         status: status,
         title: "成绩处理列表",
-        actions: role !== "training" ? [{ text: "发布成绩", drawer: "result-publish" }, { text: "导出成绩", toast: "成绩清单已导出" }] : [{ text: "导出成绩", toast: "成绩清单已导出" }],
+        actions: [{ text: "发布成绩", drawer: "result-publish", roles: ["platform", "organizer"] }, { text: "导出成绩", toast: "成绩清单已导出" }],
         headers: ["专业/级别", "考试人数", "待评分", "待发布", "已发布", "状态", "操作"],
         rows: rows,
         side: {
@@ -9437,7 +9451,7 @@
             batch.status === "退回调整" ? "退回的数据需完成评分补正后再发布。" : "成绩发布后，通过名单进入证书生成池。"
           ]
         },
-        next: { title: "快捷动作", actions: role === "training" ? [{ text: "进入证书库查询", jump: "certificates/library" }] : [{ text: "发布成绩", drawer: "result-publish" }, { text: "进入考级证书管理", jump: "batch-workbench/certificates" }] }
+        next: { title: "快捷动作", actions: role === "training" ? [{ text: "进入证书库查询", jump: "certificates/library" }] : [{ text: "发布成绩", drawer: "result-publish", roles: ["platform", "organizer"] }, { text: "进入考级证书管理", jump: "batch-workbench/certificates" }] }
       };
     }
     function onlineGradesStageView(batch, status, role) {
@@ -9462,18 +9476,18 @@
     function certificatesStageView(batch) {
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var status = batchStageStatusView(batch, "certificates");
-      if (role === "organizer") {
+      if (role !== "platform") {
         return {
           status: status,
-          title: "证书阶段",
+            title: "证书阶段",
           actions: [],
           headers: ["证书阶段", "查询范围", "当前数据", "状态", "说明", "操作"],
           rows: [["已提交证书", "已完成证书入库", formatDemoNumber(batch.certLibrary) + "张", batch.certLibrary ? batchTagHtml("green", "已入库") : batchTagHtml("", "未入库"), "请在考级业务-证书库查询中统一检索", '<button class="btn link" data-jump="certificates/library">进入证书库查询</button>']],
           side: {
-            title: "承办单位证书权限",
+            title: role === "organizer" ? "承办单位证书权限" : "培训机构证书权限",
             tagText: "只读查询",
             tag: "green",
-            checks: ["证书生成、清除、提交和作废由平台统一处理。", "仅已提交入库的证书对承办单位开放。", "当前范围：本单位及下级培训机构。"]
+            checks: ["证书生成、清除、发布和作废由平台统一处理。", "仅已提交入库的证书对当前角色开放查询、预览、下载和验真。", role === "organizer" ? "当前范围：本单位及下级培训机构。" : "当前范围：本培训机构。"]
           },
           next: { title: "快捷动作", actions: [{ text: "进入证书库查询", jump: "certificates/library" }] }
         };
@@ -9482,13 +9496,13 @@
       if (batchStagePhase(batch, "certificates") === "done") return completedStageView(batch, "certificates");
       var certStatus = batch.status === "证书已入库" ? batchTagHtml("green", "证书库可查") : (batch.status === "号段重设" ? batchTagHtml("orange", "号段重设") : batchTagHtml(batch.statusTag, batch.status));
       var rows = [
-        ["通过名单", "成绩已发布且通过", formatDemoNumber(batch.passed) + "人", batchTagHtml("green", "可制证"), "生成电子证书", '<button class="btn link" data-drawer="cert-batch-generate">生成</button>'],
-        ["批次制证", "证书模板 + 号段", formatDemoNumber(batch.certGenerated) + "张", certStatus, batch.status === "已生成待提交" ? "待提交入库" : "提交后可在证书库查询", batch.status === "号段重设" ? '<button class="btn link" data-drawer="cert-clear-numbers">清除号段</button><button class="btn link" data-drawer="cert-batch-generate">重新生成</button>' : '<button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-drawer="cert-submit">提交</button>']
+        ["通过名单", "成绩已发布且通过", formatDemoNumber(batch.passed) + "人", batchTagHtml("green", "可制证"), "生成电子证书", '<button class="btn link" data-drawer="cert-batch-generate" data-auth-roles="platform">全部生成</button>'],
+        ["批次制证", "证书模板 + 号段", formatDemoNumber(batch.certGenerated) + "张", certStatus, batch.status === "已生成待提交" ? "待提交入库" : "提交后可在证书库查询", batch.status === "号段重设" ? '<button class="btn link" data-drawer="cert-clear-numbers" data-auth-roles="platform">清除号段</button><button class="btn link" data-drawer="cert-batch-generate" data-auth-roles="platform">全部生成</button>' : '<button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-drawer="cert-submit" data-auth-roles="platform">发布</button>']
       ];
       return {
         status: status,
         title: "证书处理列表",
-        actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate" }, { text: "清除证书号", drawer: "cert-clear-numbers" }, { text: "发布", drawer: "cert-submit" }, { text: "下载证书", toast: "电子证书已打包下载" }],
+        actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate", roles: ["platform"] }, { text: "清除证书号", drawer: "cert-clear-numbers", roles: ["platform"] }, { text: "发布", drawer: "cert-submit", roles: ["platform"] }, { text: "下载证书", toast: "电子证书已打包下载" }],
         headers: ["证书阶段", "触发条件", "当前数据", "状态", "流转结果", "操作"],
         rows: rows,
         side: {
@@ -9501,7 +9515,7 @@
             batch.status === "号段重设" ? "未提交证书号可清除重设，提交入库后不再允许直接重置。" : "证书入库后，家长或机构可查询下载。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate" }, { text: "发布", drawer: "cert-submit" }, { text: "进入运营分析", jump: "analytics/board" }] }
+        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate", roles: ["platform"] }, { text: "发布", drawer: "cert-submit", roles: ["platform"] }, { text: "进入运营分析", jump: "analytics/board" }] }
       };
     }
     function reportsStageView(batch) {
@@ -9831,7 +9845,7 @@
         if (tools) {
           var actions = tools.querySelector(".page-actions");
           if (!actions) { actions = document.createElement("div"); actions.className = "page-actions"; tools.appendChild(actions); }
-          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">全部下载 ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-batch-id="' + escapeHtml(batch.id) + '">全部生成</button><button class="btn primary" data-ticket-publish data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
+          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">全部下载ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-auth-roles="platform organizer" data-batch-id="' + escapeHtml(batch.id) + '">全部生成</button><button class="btn primary" data-ticket-publish data-auth-roles="platform organizer" data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
         }
       }
       panel.querySelectorAll('[data-toast*="全部生成"]').forEach(function (button) { button.removeAttribute("data-toast"); button.setAttribute("data-ticket-async-generate", ""); });
@@ -9911,7 +9925,7 @@
         flow.innerHTML = gradeStatuses.map(function (status) { return '<button class="' + (targetStatus === status ? "active" : "") + '" type="button" data-result-status-tab="' + status + '" role="tab" aria-selected="' + (targetStatus === status ? "true" : "false") + '">' + status + '</button>'; }).join("");
       }
       var actionBar = root.querySelector(".result-action-bar .page-actions");
-      if (actionBar) actionBar.innerHTML = '<button class="btn" data-result-action="grade-setting" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-result-action="publish" data-drawer="result-publish">发布</button><button class="btn" data-result-action="export" data-toast="成绩清单已导出">导出成绩</button>';
+      if (actionBar) actionBar.innerHTML = '<button class="btn" data-result-action="grade-setting" data-auth-roles="platform organizer" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-result-action="publish" data-auth-roles="platform organizer" data-drawer="result-publish">发布</button><button class="btn" data-result-action="export" data-auth-roles="platform organizer training" data-toast="成绩清单已导出">导出成绩</button>';
       if (publishedBatch) {
         var publishedMockBody = root.querySelector(".result-table tbody");
         if (publishedMockBody && !publishedMockBody.querySelector("[data-result-mock]")) {
@@ -10140,7 +10154,7 @@
         + '</dl><dl class="certificate-view-fields">'
         + field("其他", "other") + field("出生日期", "birthDate", "date") + field("民族", "ethnic") + field("等级", "level") + field("起止级", "levelRange") + field("发证时间", "issuedAt") + field("报名机构", "organization") + field("考生证号", "idNo")
         + '</dl><div class="certificate-view-photo"><div>照片</div></div></div><div class="page-actions" style="justify-content:center;margin-top:14px">'
-        + (editing ? '<button class="btn" data-certificate-detail-cancel>取消</button><button class="btn primary" data-certificate-detail-save>保存</button>' : '<button class="btn primary" data-certificate-detail-edit>修改</button>') + '</div></div>';
+        + (editing ? '<button class="btn" data-certificate-detail-cancel>取消</button><button class="btn primary" data-certificate-detail-save>保存</button>' : '<button class="btn primary" data-certificate-detail-edit data-platform-only>修改</button>') + '</div></div>';
     }
     function renderCertificateDetailDrawer() {
       drawerTitle.textContent = window.__certificateDetailEditMode ? "编辑证书" : "证书查看";
@@ -10348,7 +10362,7 @@
         if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>待生成</option><option>已生成</option><option>已提交</option>';
         if (isOnlineBatch(batch)) {
           var onlineCertificateBody = workbench.querySelector('.cert-table:not(.certificate-print-table) tbody');
-          if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105********1201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506********2302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504********3403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
+          if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105********1201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-auth-roles="platform" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506********2302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504********3403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
         }
         if (isOnlineBatch(batch) && batch.onlineCertificateMocks && batch.onlineCertificateMocks.length) {
           onlineCertificateBody.innerHTML = batch.onlineCertificateMocks.map(function (certificate) {
@@ -10356,7 +10370,7 @@
             var numberCell = certificate.certNo ? '<td class="cert-no-cell">' + escapeHtml(certificate.certNo) + '</td>' : '<td>-</td>';
             var dateCell = certificate.generatedAt ? escapeHtml(certificate.generatedAt) : '-';
             var actions = certificate.status === "待生成"
-              ? '<button class="btn link" data-drawer="cert-batch-generate">生成</button>'
+              ? '<button class="btn link" data-auth-roles="platform" data-drawer="cert-batch-generate">生成</button>'
               : '<div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button>' + (certificate.status !== "待生成" ? '<button class="btn link" data-toast="电子证书下载中">下载</button>' : '') + '</div>';
             return '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">' + escapeHtml(certificate.name) + '<br><span>' + escapeHtml(certificate.regNo) + '</span></td><td>' + escapeHtml(certificate.idNo) + '</td><td>' + escapeHtml(certificate.org) + '</td><td>' + escapeHtml(certificate.major) + '</td><td>' + escapeHtml(certificate.level) + '</td><td>' + escapeHtml(certificate.grade) + '</td>' + numberCell + '<td><span class="tag ' + statusTag + '">' + escapeHtml(certificate.status) + '</span></td><td>' + dateCell + '</td><td>' + actions + '</td></tr>';
           }).join("");
@@ -11332,6 +11346,7 @@
       syncBatchFlowSummaries(batch);
       syncBatchStageVisibility();
       renderBatchWorkbenchState(batch);
+      if (typeof syncRolePageActions === "function") syncRolePageActions();
     }
     function batchTagHtml(tagName, text) {
       return '<span class="tag ' + escapeHtml(tagName || "") + '">' + escapeHtml(text || "") + '</span>';
@@ -11486,11 +11501,12 @@
       batch.publishStatusTag = tag;
     }
     function batchLifecycleActions(batch) {
+      var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
       var lifecycle = batchLifecycleStatus(batch);
       if (batch.reviewStatus === "待审核") return [];
-      if (batch.reviewStatus === "已驳回") return (AUTH_SESSION && AUTH_SESSION.role === "organizer") ? ["edit", "submit-review", "delete"] : [];
-      if (batch.reviewStatus === "已通过" && batch.publishPending === true) return AUTH_SESSION && AUTH_SESSION.role === "platform" ? ["publish"] : [];
-      if (lifecycle === "未发布") return (AUTH_SESSION && AUTH_SESSION.role === "organizer") ? ["edit", "submit-review", "delete"] : ["edit", "publish", "delete"];
+      if (batch.reviewStatus === "已驳回") return role === "platform" ? ["edit", "delete"] : ["edit", "submit-review", "delete"];
+      if (batch.reviewStatus === "已通过" && batch.publishPending === true) return role === "platform" ? ["publish"] : [];
+      if (lifecycle === "未发布") return role === "platform" ? ["edit", "publish", "delete"] : ["edit", "submit-review", "delete"];
       if (lifecycle === "已结束") return batch.stage === "certificates" && (batchStageStatusLabel(batch) === "证书提交" || batch.certSubmitted) ? ["archive"] : [];
       if (lifecycle === "已归档") return ["analytics"];
       var actions = [];
@@ -14195,6 +14211,25 @@
         drawerBody.querySelectorAll('[data-drawer], [data-toast*="素材上传"]').forEach(function (item) { item.classList.add("auth-role-hidden"); });
         drawerFoot.querySelectorAll("button:not([data-close-drawer])").forEach(function (item) { item.classList.add("auth-role-hidden"); });
       }
+      if (drawerRole !== "platform") {
+        if (key === "message-template-edit") {
+          var messageTemplateSave = drawerFoot.querySelector("[data-message-template-save]");
+          if (messageTemplateSave) messageTemplateSave.hidden = true;
+        }
+        if (key === "message-template-test") {
+          var messageTemplateTest = drawerFoot.querySelector("[data-message-template-test-send]");
+          if (messageTemplateTest) messageTemplateTest.hidden = true;
+        }
+        if (key === "subject-score-dimension") {
+          drawerBody.querySelectorAll("[data-score-dimension-add], [data-score-dimension-remove]").forEach(function (item) { item.hidden = true; });
+          drawerBody.querySelectorAll("input:not([readonly]), textarea").forEach(function (item) { item.readOnly = true; });
+          var scoreDimensionSave = drawerFoot.querySelector("[data-score-dimension-save]");
+          if (scoreDimensionSave) scoreDimensionSave.hidden = true;
+        }
+        if (key === "score-version-history" || key === "fee-version-history") {
+          drawerBody.querySelectorAll("button").forEach(function (button) { if (/复制/.test(button.textContent.trim())) button.hidden = true; });
+        }
+      }
       syncStickyTableColumnsAsync(drawerBody);
     }
     document.addEventListener("click", function (event) {
@@ -14762,9 +14797,10 @@
       var platformUnit = authRoleConfig("platform").unit;
       var rowOrg = row.getAttribute("data-info-org") || "";
       var status = row.getAttribute("data-info-publish-status") || "";
-      var ownScope = role === "organizer" && organizerAllowedOrgNames().names[rowOrg];
+      var roleScope = role === "platform" ? { names: {} } : roleOrganizationDataScope(role);
+      var ownScope = role !== "platform" && !!roleScope.names[rowOrg];
       var platformPublished = rowOrg === platformUnit && status === "已发布";
-      var visible = role === "platform" || ownScope || platformPublished || (role === "training" && status === "已发布");
+      var visible = role === "platform" || ownScope || platformPublished;
       return { visible: !!visible, canManage: role === "platform" || !!ownScope };
     }
     function syncInfoListRoleScope() {
@@ -14791,15 +14827,15 @@
       });
       var orgFilter = root.querySelector("[data-info-list-org]");
       if (orgFilter) {
-        var allowedNames = role === "organizer" ? organizerAllowedOrgNames().names : {};
+        var allowedNames = role === "platform" ? {} : roleOrganizationDataScope(role).names;
         Array.from(orgFilter.options).forEach(function (option) {
-          var allowed = option.value === "全部发布单位" || role === "platform" || option.value === authRoleConfig("platform").unit || (role === "organizer" && allowedNames[option.value]);
+          var allowed = option.value === "全部发布单位" || role === "platform" || option.value === authRoleConfig("platform").unit || !!allowedNames[option.value];
           option.hidden = !allowed;
         });
         if (role !== "platform" && orgFilter.value !== "全部发布单位" && orgFilter.selectedOptions[0] && orgFilter.selectedOptions[0].hidden) orgFilter.value = "全部发布单位";
       }
       var scopeNote = root.querySelector("[data-info-list-scope-note]");
-      if (scopeNote) scopeNote.textContent = role === "platform" ? "考级指南、通知公告共用此列表；审核状态和发布状态独立维护，考级简章由独立菜单维护。" : role === "organizer" ? "展示平台已发布内容及本辖区信息；本辖区内容须审核通过后才能发布。" : "仅展示已发布信息；培训机构无新增、编辑、审核和发布权限。";
+      if (scopeNote) scopeNote.textContent = role === "platform" ? "考级指南、通知公告共用此列表；审核状态和发布状态独立维护，考级简章由独立菜单维护。" : "展示平台已发布内容及本单位及下级单位信息；非平台内容须提交平台审核后才能发布。";
       filterInfoList(false, true);
     }
     function syncInfoRowActions(row) {
@@ -14891,10 +14927,10 @@
         var allowed = role === "platform" || option.value === config.unit;
         option.hidden = !allowed;
       });
-      if (role === "organizer") {
+      if (role !== "platform") {
         orgInput.value = config.unit;
         orgInput.disabled = true;
-        if (publisherInput) publisherInput.value = "承办单位管理员";
+        if (publisherInput) publisherInput.value = role === "organizer" ? "承办单位管理员" : "培训机构管理员";
       } else if (role === "platform" && row) {
         orgInput.value = row.getAttribute("data-info-org") || authRoleConfig("platform").unit;
         orgInput.disabled = false;
@@ -14958,7 +14994,7 @@
       row.querySelectorAll("[data-info-publish-action], [data-info-unpublish-action], [data-info-offline-action]").forEach(function (button) { button.remove(); });
       var operation = row.querySelector(".operation");
       if (operation && status === "已发布") operation.insertAdjacentHTML("beforeend", '<button class="btn link" data-info-unpublish-action>撤回</button><button class="btn link" data-info-offline-action>下架</button>');
-      if (operation && ["待发布", "已撤回", "已下架"].indexOf(status) > -1 && ["审核通过", "无需审核"].indexOf(row.dataset.infoApprovalStatus) > -1) operation.insertAdjacentHTML("beforeend", '<button class="btn link" data-info-publish-action="发布" data-content-publish>发布</button>');
+      if (operation && ["待发布", "已撤回", "已下架"].indexOf(status) > -1 && ["审核通过", "无需审核"].indexOf(row.dataset.infoApprovalStatus) > -1) operation.insertAdjacentHTML("beforeend", '<button class="btn link" data-info-publish-action="发布" data-content-publish data-platform-only>发布</button>');
       syncInfoRowActions(row);
       filterInfoList(false, true);
     }
@@ -14977,7 +15013,7 @@
       if (summary && summary.value.length > 200) { toast("摘要最多200个字符"); return; }
       var activeInfoRow = window.__activeInfoRow;
       var role = (AUTH_SESSION && AUTH_SESSION.role) || "platform";
-      if (action === "submit" && role !== "organizer") { toast("仅承办单位可提交平台审核"); return; }
+      if (action === "submit" && role === "platform") { toast("平台内容可直接发布，无需提交审核"); return; }
       if (action === "publish" && role !== "platform") { toast("承办单位信息须经平台审核通过后发布"); return; }
       var contentChanged = !!(activeInfoRow && (
         title.value.trim() !== (activeInfoRow.dataset.infoTitle || "") ||
@@ -14987,9 +15023,9 @@
         (org ? org.value : "") !== (activeInfoRow.dataset.infoOrg || "")
       ));
       var onlyPublishPropertiesChanged = !!(activeInfoRow && !contentChanged && activeInfoRow.dataset.infoPublishStatus === "已发布");
-      var nextApprovalStatus = action === "submit" ? "待审核" : action === "publish" ? "无需审核" : (activeInfoRow && activeInfoRow.dataset.infoApprovalStatus) || (role === "organizer" ? "草稿" : "无需审核");
+      var nextApprovalStatus = action === "submit" ? "待审核" : action === "publish" ? "无需审核" : (activeInfoRow && activeInfoRow.dataset.infoApprovalStatus) || (role === "platform" ? "无需审核" : "草稿");
       var nextPublishStatus = action === "publish" ? "已发布" : action === "submit" ? "待发布" : (onlyPublishPropertiesChanged ? "已发布" : "草稿");
-      if (action === "draft" && role === "organizer" && contentChanged) nextApprovalStatus = "草稿";
+      if (action === "draft" && role !== "platform" && contentChanged) nextApprovalStatus = "草稿";
       var values = {
         title: title.value.trim(),
         summary: summary ? summary.value.trim() : "",
@@ -15381,7 +15417,6 @@
         resourceAudit("删除考官", row, "无派遣记录", "已删除");
         toast("考官已删除");
       } else if (kind === "site-delete") {
-        if (((AUTH_SESSION && AUTH_SESSION.role) || "platform") !== "platform") { toast("仅平台运营方可删除考点"); return; }
         var siteCode = row.dataset.siteCode;
         var hasRooms = Array.from(document.querySelectorAll("[data-room-row]")).some(function (roomRow) { return roomRow.dataset.roomSite === siteCode && roomRow.dataset.resourceDeleted !== "true"; });
         if (hasRooms) { toast("该考点存在关联考场，不能删除"); return; }
@@ -18239,8 +18274,8 @@
       var panel = page.querySelector('[data-message-send-panel="' + type + '"] tbody');
       if (!panel) return;
       var row = document.createElement("tr");
-      if (type === "drafts") row.innerHTML = "<td><strong>" + escapeHtml(data.title) + "</strong></td><td>自定义接收范围</td><td>" + escapeHtml(data.channel) + "</td><td>刚刚</td><td>当前操作人</td><td><button class=\"btn link\" data-drawer=\"message-compose\" data-platform-only>继续编辑</button><button class=\"btn link\" data-message-draft-delete data-platform-only>删除</button></td>";
-      if (type === "scheduled") row.innerHTML = "<td><strong>" + escapeHtml(data.title) + "</strong></td><td>自定义接收范围</td><td>" + escapeHtml(data.sendAt || "待定") + "</td><td>" + escapeHtml(data.channel) + "</td><td><span class=\"tag orange\">待发送</span></td><td><button class=\"btn link\" data-drawer=\"message-compose\" data-platform-only>编辑</button><button class=\"btn link\" data-message-scheduled-cancel data-platform-only>取消定时</button></td>";
+      if (type === "drafts") row.innerHTML = "<td><strong>" + escapeHtml(data.title) + "</strong></td><td>自定义接收范围</td><td>" + escapeHtml(data.channel) + "</td><td>刚刚</td><td>当前操作人</td><td><button class=\"btn link\" data-drawer=\"message-compose\">继续编辑</button><button class=\"btn link\" data-message-draft-delete>删除</button></td>";
+      if (type === "scheduled") row.innerHTML = "<td><strong>" + escapeHtml(data.title) + "</strong></td><td>自定义接收范围</td><td>" + escapeHtml(data.sendAt || "待定") + "</td><td>" + escapeHtml(data.channel) + "</td><td><span class=\"tag orange\">待发送</span></td><td><button class=\"btn link\" data-drawer=\"message-compose\">编辑</button><button class=\"btn link\" data-message-scheduled-cancel>取消定时</button></td>";
       if (type === "sent") row.innerHTML = "<td><strong>" + escapeHtml(data.title) + "</strong></td><td>自定义接收范围</td><td>刚刚</td><td>" + escapeHtml(data.channel) + "</td><td>1 / 1</td><td><button class=\"btn link\" data-drawer=\"message-record-detail\">查看详情</button></td>";
       panel.insertBefore(row, panel.firstChild);
       var tab = page.querySelector('[data-message-send-tab="' + type + '"] .tag');
@@ -21673,7 +21708,8 @@
       { id: "BR-2026-002", title: "【历史归档】2026宜昌戏曲戏剧考级简章", org: "宜昌承办中心", creator: "承办单位管理员", createdAt: "2026-08-10 14:20", updater: "承办单位管理员", updatedAt: "2026-08-12 09:10", publishStatus: "已归档", reviewStatus: "历史待人工确认", completion: "14/14", attachments: 1, references: 0, submittedAt: "2026-08-12 09:30", rejectReason: "当前门类不在首版四类枚举内", content: "历史戏曲戏剧门类简章，仅供归档核对，不可用于新建批次或当前报名。" },
       { id: "BR-2026-003", title: "《2026秋季美术考级简章》", org: "武汉承办中心", creator: "承办单位管理员", createdAt: "2026-08-05 11:00", updater: "承办单位管理员", updatedAt: "2026-08-06 16:40", publishStatus: "未发布", reviewStatus: "审核驳回", completion: "14/14", attachments: 1, references: 0, publishedBatchReferences: 0, brochureVersionId: "BR-2026-003-v1", objectVersion: 1, reviewVersion: 1, reviewId: "RV-BROCHURE-20260806-003", reviewDeadlineDate: "20260809", reviewDeadlineTime: "180000", overdueFlag: "否", notificationStatus: "发送失败", notificationTaskId: "NT-BROCHURE-20260806-003", notificationFailureReason: "站内消息渠道超时", auditEventId: "AE-BROCHURE-20260807-003", submittedAt: "2026-08-06 17:00", rejectReason: "请补充考试时间地点和联系地址信息。", content: "承办单位已根据平台意见待修改的美术考级简章。" },
       { id: "BR-2026-004", title: "《2026春季器乐考级简章》", org: "武汉承办中心", creator: "承办单位管理员", createdAt: "2026-07-18 10:15", updater: "平台审核员", updatedAt: "2026-07-20 15:40", publishStatus: "已发布", reviewStatus: "审核通过", completion: "14/14", attachments: 1, references: 1, publishedBatchReferences: 1, brochureVersionId: "BR-2026-004-v1", objectVersion: 1, reviewVersion: 1, reviewId: "RV-BROCHURE-20260720-004", reviewDeadlineDate: "20260721", reviewDeadlineTime: "180000", overdueFlag: "否", notificationStatus: "已发送", notificationTaskId: "NT-BROCHURE-20260720-004", auditEventId: "AE-BROCHURE-20260720-004", submittedAt: "2026-07-18 10:30", rejectReason: "", content: "承办单位提交的器乐类考级简章，已通过平台审核并正式发布。", templateId: "BR-2026-001", templateTitle: "《2026年社会艺术水平考级简章》", reviewer: "平台审核员", reviewedAt: "2026-07-20 15:40", audit: [{ at: "2026-07-18 10:30", operator: "承办单位管理员", action: "提交审核", remark: "内容完整，等待平台审核" }, { at: "2026-07-20 15:40", operator: "平台审核员", action: "审核通过", remark: "审核通过，进入待发布" }, { at: "2026-07-20 15:40", operator: "平台审核员", action: "正式发布", remark: "发布版本 BR-2026-004-v1" }] },
-      { id: "BR-2026-005", title: "《2026秋季舞蹈考级简章》", org: "宜昌承办中心", creator: "承办单位管理员", createdAt: "2026-08-19 09:20", updater: "承办单位管理员", updatedAt: "2026-08-19 09:20", publishStatus: "未发布", reviewStatus: "待审核", completion: "14/14", attachments: 2, references: 0, publishedBatchReferences: 0, brochureVersionId: "BR-2026-005-v1", objectVersion: 1, reviewVersion: 1, reviewId: "RV-BROCHURE-20260819-005", reviewDeadlineDate: "20260822", reviewDeadlineTime: "180000", overdueFlag: "否", notificationStatus: "待发送", notificationTaskId: "NT-BROCHURE-20260819-005", auditEventId: "AE-BROCHURE-20260819-005", submittedAt: "2026-08-19 09:20", rejectReason: "", content: "宜昌承办中心提交的舞蹈类考级简章，等待平台审核。" }
+      { id: "BR-2026-005", title: "《2026秋季舞蹈考级简章》", org: "宜昌承办中心", creator: "承办单位管理员", createdAt: "2026-08-19 09:20", updater: "承办单位管理员", updatedAt: "2026-08-19 09:20", publishStatus: "未发布", reviewStatus: "待审核", completion: "14/14", attachments: 2, references: 0, publishedBatchReferences: 0, brochureVersionId: "BR-2026-005-v1", objectVersion: 1, reviewVersion: 1, reviewId: "RV-BROCHURE-20260819-005", reviewDeadlineDate: "20260822", reviewDeadlineTime: "180000", overdueFlag: "否", notificationStatus: "待发送", notificationTaskId: "NT-BROCHURE-20260819-005", auditEventId: "AE-BROCHURE-20260819-005", submittedAt: "2026-08-19 09:20", rejectReason: "", content: "宜昌承办中心提交的舞蹈类考级简章，等待平台审核。" },
+      { id: "BR-2026-006", title: "《2026秋季声乐考级简章（草稿）》", org: "湖北艺术职业学院", creator: "平台管理员", createdAt: "2026-08-21 09:10", updater: "平台管理员", updatedAt: "2026-08-21 09:10", publishStatus: "未发布", reviewStatus: "无需审核", completion: "14/14", attachments: 1, references: 0, publishedBatchReferences: 0, brochureVersionId: "BR-2026-006-v1", objectVersion: 1, reviewVersion: 1, reviewId: "-", reviewDeadlineDate: "-", reviewDeadlineTime: "-", overdueFlag: "否", notificationStatus: "-", notificationTaskId: "-", auditEventId: "AE-BROCHURE-20260821-006", submittedAt: "-", rejectReason: "", content: "平台侧未发布演示简章，可编辑、删除或发布。" }
     ];
     BROCHURE_DATA[0].audit = [{ at: "2026-05-01 10:00", operator: "平台管理员", action: "发布简章", remark: "平台简章直接发布" }];
     BROCHURE_DATA[1].templateId = "BR-2026-001";
@@ -21700,7 +21736,8 @@
       var createButton = isPlatformScope
         ? (role === "platform" ? '<button class="btn primary" data-drawer="syllabus-create" data-brochure-create>新增平台简章</button>' : "")
         : (role !== "platform" ? '<button class="btn primary" data-drawer="syllabus-create" data-brochure-create>新增机构简章</button>' : "");
-      return '<div class="info-banner"><strong>' + title + '：</strong>' + note + '</div><div class="filter-card" data-brochure-list-filter><div class="field"><label>发布状态</label><select class="select" data-brochure-status><option>全部状态</option><option>未发布</option><option>待发布</option><option>已发布</option></select></div>' + (isPlatformScope ? "" : '<div class="field"><label>发布机构</label><select class="select" data-brochure-org><option>全部发布机构</option><option>武汉承办中心</option><option>宜昌承办中心</option></select></div>') + '<div class="field"><label>标题关键词</label><input class="input" data-brochure-keyword placeholder="请输入简章标题"></div><div class="field"><label>创建时间</label><input class="input" type="date" data-brochure-date></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-brochure-search>查询</button><button class="btn" data-brochure-reset>重置</button></div></div></div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">' + title + '列表</h2><span class="muted">结构化维护 14 个必填板块；仅已发布简章可被批次关联。已发布版本只读，批次保存简章版本快照。</span></div><div class="page-actions"><span class="tag blue" data-brochure-count>0 条</span>' + createButton + '</div></div><div class="table-wrap"><table class="brochure-list-table"><thead><tr><th>申请/简章编号</th><th>简章标题</th><th>发布机构</th><th>创建人/时间</th><th>更新人/时间</th><th>完成度</th><th>发布状态</th><th>审核状态</th><th>简章版本</th><th>批次引用</th><th>操作</th></tr></thead><tbody data-brochure-list-body></tbody></table></div></div>';
+      var statusOptions = isPlatformScope ? '<option>全部状态</option><option>未发布</option><option>已发布</option>' : '<option>全部状态</option><option>未发布</option><option>待发布</option><option>已发布</option>';
+      return '<div class="info-banner"><strong>' + title + '：</strong>' + note + '</div><div class="filter-card" data-brochure-list-filter><div class="field"><label>发布状态</label><select class="select" data-brochure-status>' + statusOptions + '</select></div>' + (isPlatformScope ? "" : '<div class="field"><label>发布机构</label><select class="select" data-brochure-org><option>全部发布机构</option><option>武汉承办中心</option><option>宜昌承办中心</option></select></div>') + '<div class="field"><label>标题关键词</label><input class="input" data-brochure-keyword placeholder="请输入简章标题"></div><div class="field"><label>创建时间</label><input class="input" type="date" data-brochure-date></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-brochure-search>查询</button><button class="btn" data-brochure-reset>重置</button></div></div></div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">' + title + '列表</h2><span class="muted">结构化维护 14 个必填板块；仅已发布简章可被批次关联。已发布版本只读，批次保存简章版本快照。</span></div><div class="page-actions"><span class="tag blue" data-brochure-count>0 条</span>' + createButton + '</div></div><div class="table-wrap"><table class="brochure-list-table"><thead><tr><th>申请/简章编号</th><th>简章标题</th><th>发布机构</th><th>创建人/时间</th><th>更新人/时间</th><th>完成度</th><th>发布状态</th><th>审核状态</th><th>简章版本</th><th>批次引用</th><th>操作</th></tr></thead><tbody data-brochure-list-body></tbody></table></div></div>';
     }
     function brochureActionHtml(item, role, scope) {
       var actions = '<button class="btn link" type="button" data-brochure-action="preview" data-brochure-id="' + escapeHtml(item.id) + '">预览</button>';
@@ -21709,7 +21746,11 @@
       if (canWrite && item.publishStatus === "未发布" && item.reviewStatus !== "待审核") actions += '<button class="btn link" type="button" data-brochure-action="publish" data-brochure-id="' + escapeHtml(item.id) + '">' + (role !== "platform" ? "提交审核" : "发布") + '</button>';
       if (role === "platform" && item.publishStatus === "待发布" && item.reviewStatus === "审核通过") actions += '<button class="btn link primary-text" type="button" data-brochure-action="publish" data-brochure-id="' + escapeHtml(item.id) + '">正式发布</button>';
       if (canWrite && item.publishStatus === "已发布") actions += '<button class="btn link" type="button" data-brochure-action="copy-version" data-brochure-id="' + escapeHtml(item.id) + '">复制新版本</button>';
-      if (canWrite && item.publishStatus === "已发布" && Number(item.references || 0) === 0) actions += '<button class="btn link" type="button" data-brochure-action="unpublish" data-brochure-id="' + escapeHtml(item.id) + '">下架</button>';
+      if (canWrite && item.publishStatus === "已发布") {
+        actions += Number(item.references || 0) === 0
+          ? '<button class="btn link" type="button" data-brochure-action="unpublish" data-brochure-id="' + escapeHtml(item.id) + '">下架</button>'
+          : '<button class="btn link disabled" type="button" disabled aria-disabled="true" title="已有已发布批次引用，不可下架">下架</button>';
+      }
       return '<div class="operation">' + actions + '</div>';
     }
     function brochureMatchesScope(item, role, scope) {
@@ -22078,7 +22119,7 @@
         title: "新增/编辑信息发布内容",
         wide: true,
         body: '<div class="info-banner"><strong>通知公告与考级指南共用此表单：</strong>平台创建的信息审核状态为“无需审核”，可直接发布；承办单位创建或修改正文后，审核状态为“待审核”，须平台审核通过后才能发布。</div><div class="field-row-2"><div class="field"><label>标题 *</label><input class="input" data-info-form-title value="2026下半年武汉考级指南"></div><div class="field"><label>栏目分类 *</label><select class="select" data-info-form-category><option>考级指南</option><option>通知公告</option></select></div></div><div class="field-row-2"><div class="field"><label>摘要</label><textarea class="textarea" data-info-form-summary maxlength="200" rows="2">考点安排、签到流程和考场规则</textarea><span class="muted">最多200字，用于列表和考生端卡片展示</span></div><div class="field"><label>发布时间</label><div class="field-row-2"><input class="input" data-info-form-publish-date type="date" value="2026-08-01" aria-label="发布时间日期"><input class="input" data-info-form-publish-time type="time" step="1" value="09:00:00" aria-label="发布时间时间"></div><span class="muted">日期 YYYYMMDD，时间 hhmmss，默认当前时间，可手动设置。</span></div></div><div class="field-row-3"><div class="field"><label>发布单位 *</label><select class="select" data-info-form-org><option>湖北艺术职业学院</option><option>武汉承办中心</option><option>宜昌承办中心</option></select></div><div class="field"><label>发布人 *</label><input class="input" data-info-form-publisher value="平台管理员"></div><div class="field"><label>是否置顶</label><label class="switch-control"><input type="checkbox"><span>置顶</span></label></div></div><div class="field"><label>封面图</label><div class="upload-box"><div class="upload-mark">图</div></div><button class="btn" data-toast="请选择信息封面图文件">上传封面图</button><span class="muted">非必填，建议比例16:9，大小不超过2MB。</span></div><div class="field"><label>正文 *</label><div class="rich-editor"><div class="rich-editor-toolbar"><button class="btn" type="button">B</button><button class="btn" type="button">I</button><button class="btn" type="button">H1</button><button class="btn" type="button">列表</button><button class="btn" type="button">图片</button><button class="btn" type="button">链接</button></div><textarea class="textarea" data-info-form-body rows="12">一、入场签到&#10;考生凭准考证和有效证件到达考点，完成身份核验和签到。&#10;&#10;二、候考与考试&#10;按专业、级别、考场分组候考。&#10;&#10;三、成绩与证书&#10;成绩发布后可在小程序查询，通过考生可查询下载电子证书。</textarea></div></div>',
-        foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-info-form-save>保存草稿</button><button class="btn" data-info-form-submit data-organizer-only>提交平台审核</button><button class="btn primary" data-info-form-publish data-platform-only>保存并发布</button>'
+        foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-info-form-save>保存草稿</button><button class="btn" data-info-form-submit data-auth-roles="organizer training">提交平台审核</button><button class="btn primary" data-info-form-publish data-platform-only>保存并发布</button>'
       },
       "guide-edit": {
         title: "新增/编辑考级指南",
