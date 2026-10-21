@@ -2751,8 +2751,8 @@
           </div>
           <div class="card login-card">
             <div class="weui-navbar login-navbar" role="tablist" aria-label="登录方式">
-              <button class="weui-navbar__item weui-bar__item_on" type="button" data-login-mode="code" role="tab" aria-selected="true">验证码登录</button>
-              <button class="weui-navbar__item" type="button" data-login-mode="password" role="tab" aria-selected="false">密码登录</button>
+              <button class="weui-navbar__item" type="button" data-login-mode="code" role="tab" aria-selected="false">验证码登录</button>
+              <button class="weui-navbar__item weui-bar__item_on" type="button" data-login-mode="password" role="tab" aria-selected="true">密码登录</button>
             </div>
             <div class="login-mode-panel" data-login-panel="code" role="tabpanel">
               <div class="weui-cells">
@@ -2767,15 +2767,15 @@
                 </div>
               </div>
             </div>
-            <div class="login-mode-panel" data-login-panel="password" role="tabpanel" hidden>
+            <div class="login-mode-panel" data-login-panel="password" role="tabpanel">
               <div class="weui-cells">
                 <div class="weui-cell weui-cell_input">
                   <div class="weui-cell__hd"><label class="weui-label" for="judge-phone-password">手机号</label></div>
-                  <div class="weui-cell__bd"><input class="weui-input" id="judge-phone-password" type="tel" inputmode="numeric" autocomplete="tel" placeholder="请输入已启用的手机号" data-login-phone-password></div>
+                  <div class="weui-cell__bd"><input class="weui-input" id="judge-phone-password" type="tel" inputmode="numeric" autocomplete="tel" placeholder="请输入已启用的手机号" value="13247185696" data-login-phone-password></div>
                 </div>
                 <div class="weui-cell weui-cell_input">
                   <div class="weui-cell__hd"><label class="weui-label" for="judge-password">密码</label></div>
-                  <div class="weui-cell__bd"><input class="weui-input" id="judge-password" type="password" autocomplete="current-password" placeholder="请输入密码" data-login-password></div>
+                  <div class="weui-cell__bd"><input class="weui-input" id="judge-password" type="password" autocomplete="current-password" placeholder="请输入密码" value="185696" data-login-password></div>
                 </div>
               </div>
               <div class="login-link-row"><a class="weui-link" href="#" data-forgot-password>忘记密码？</a></div>
@@ -3480,7 +3480,7 @@
         return next;
       }
 
-      var loginMode = "code";
+      var loginMode = "password";
       var codeCountdownTimer = null;
       var currentScheduleId = "piano-afternoon";
       function localDateKey(date) {

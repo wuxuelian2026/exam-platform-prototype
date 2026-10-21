@@ -3797,7 +3797,7 @@
               <div class="page-actions">
                 <button class="btn" data-drawer="ticket-config">准考证配置</button>
                 <button class="btn" data-drawer="ticket-preview">准考证样式查看</button>
-                <button class="btn primary" data-toast="已为编排完成的记录批量生成准考证">批量生成</button>
+                <button class="btn primary" data-toast="已为编排完成的记录全部生成准考证">全部生成</button>
               </div>
             </div>
             <div class="ticket-summary-grid">
@@ -3936,7 +3936,7 @@
         <section class="page" data-page="certificates">
           <div class="page-head">
             <div><h1 class="page-title" data-page-heading>考级证书管理</h1></div>
-            <div class="page-actions"><button class="btn" data-toast="证书清单已导出">导出证书清单</button><button class="btn primary" data-drawer="cert-batch-generate">生成证书</button></div>
+            <div class="page-actions"><button class="btn" data-toast="证书清单已导出">导出证书清单</button><button class="btn primary" data-drawer="cert-batch-generate">全部生成</button></div>
           </div>
           <div class="tabs" data-tabs>
             <button class="tab active" data-sub="list">批次制证工作台</button>
@@ -3973,15 +3973,15 @@
               <div class="table-card">
                 <div class="cert-action-bar">
                   <strong>批次证书列表</strong>
-                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate">生成证书</button><button class="btn" data-drawer="cert-clear-numbers">清除证书号</button><button class="btn success" data-drawer="cert-submit">提交证书</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
+                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate">全部生成</button><button class="btn" data-drawer="cert-clear-numbers">清除证书号</button><button class="btn success" data-drawer="cert-submit">发布</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
                 </div>
                 <div class="table-wrap">
                   <table class="cert-table is-sticky-table has-sticky-action">
                     <thead><tr><th class="sticky-left-cell" style="width:56px">选择</th><th class="sticky-left-cell">考生</th><th>证件号码</th><th>报名机构</th><th>专业</th><th>级别</th><th>成绩等级</th><th>证书编号</th><th>证书状态</th><th>生成时间</th><th>操作</th></tr></thead>
                     <tbody data-cert-batch-table-body>
-                      <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">张三<br><span>REG20260001</span></td><td>420111********1234</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050012<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button></div></td></tr>
-                      <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">李四<br><span>REG20260002</span></td><td>420106********5678</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050013<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button></div></td></tr>
-                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王五<br><span>REG20260003</span></td><td>420102********8866</td><td>汉口美育培训学校</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">WH20260203040014<br><span>武汉 / 2026 / 中国舞 / 4级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:29</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button></div></td></tr>
+                      <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">张三<br><span>REG20260001</span></td><td>420111********1234</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050012<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
+                      <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">李四<br><span>REG20260002</span></td><td>420106********5678</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050013<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
+                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王五<br><span>REG20260003</span></td><td>420102********8866</td><td>汉口美育培训学校</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">WH20260203040014<br><span>武汉 / 2026 / 中国舞 / 4级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:29</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">陈同学<br><span>REG20260005</span></td><td>420111********7788</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>8级</td><td>良好</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate">生成</button></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">周同学<br><span>REG20260006</span></td><td>420105********5521</td><td>汉口美育培训学校</td><td>中国舞</td><td>8级</td><td>优秀</td><td class="cert-no-cell">WH20260203080108</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:10</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button><button class="btn link" data-toast="防伪验证结果已打开">验真</button></div></td></tr>
                       <tr data-cert-batch-empty hidden><td colspan="11"><div class="empty-state"><strong>未查询到匹配证书</strong><span>请调整专业、级别、状态或考生信息后重试。</span></div></td></tr>
@@ -7991,7 +7991,7 @@
       var context = batchCurrentStandardContext();
       return [
         '<div class="batch-standard-shell" data-batch-standard>',
-        '<div class="drawer-section batch-standard-head">' + batchStandardSnapshotHtml(context) + '<div class="batch-standard-summary-note">当前打开的是单个专业-级别的评分维度快照；收费标准请在“报名机构”页签按组织维护。</div></div>',
+        '<div class="drawer-section batch-standard-head">' + batchStandardSnapshotHtml(context) + '<div class="batch-standard-summary-note">当前打开的是单个专业-级别的评分维度快照；平台报名费用仅在“报名机构”页签只读查看，作为线下结算基准。</div></div>',
         '<div class="batch-standard-panel active" data-batch-standard-panel="score">' + batchStandardScorePanelHtml(context) + '</div>',
         '</div>'
       ].join("");
@@ -8032,7 +8032,7 @@
         var disabled = selectable ? "" : " disabled";
         var muted = checked ? "" : " is-muted";
         var search = [org.code, org.name, org.type, org.parent, org.defaultSite, org.scope, org.status].join(" ");
-        return '<tr class="batch-picker-row' + muted + '" data-batch-row data-batch-kind="org" data-type="' + escapeHtml(org.type) + '" data-status="' + escapeHtml(org.status) + '" data-search="' + escapeHtml(search) + '"><td class="batch-select-cell"><input type="checkbox" data-batch-select aria-label="选择' + escapeHtml(org.name) + '"' + checked + disabled + '></td><td><strong>' + escapeHtml(org.name) + '</strong><div class="major-path">' + escapeHtml(org.code) + '</div></td><td><span class="tag orange">' + escapeHtml(org.type) + '</span></td><td>' + escapeHtml(org.parent) + '</td><td><select class="select" data-batch-control' + (org.selected && selectable ? "" : " disabled") + '>' + batchSiteOptionsHtml(org.defaultSite) + '</select></td><td class="level-cell">' + escapeHtml(org.scope) + '</td><td><span class="tag ' + (org.status === "启用" ? "green" : "orange") + '">' + escapeHtml(org.status) + '</span></td><td><button class="btn link" type="button" data-drawer="batch-org-fee-config" data-batch-org-fee-org="' + escapeHtml(org.name) + '">报名费用配置</button></td></tr>';
+        return '<tr class="batch-picker-row' + muted + '" data-batch-row data-batch-kind="org" data-type="' + escapeHtml(org.type) + '" data-status="' + escapeHtml(org.status) + '" data-search="' + escapeHtml(search) + '"><td class="batch-select-cell"><input type="checkbox" data-batch-select aria-label="选择' + escapeHtml(org.name) + '"' + checked + disabled + '></td><td><strong>' + escapeHtml(org.name) + '</strong><div class="major-path">' + escapeHtml(org.code) + '</div></td><td><span class="tag orange">' + escapeHtml(org.type) + '</span></td><td>' + escapeHtml(org.parent) + '</td><td><select class="select" data-batch-control' + (org.selected && selectable ? "" : " disabled") + '>' + batchSiteOptionsHtml(org.defaultSite) + '</select></td><td class="level-cell">' + escapeHtml(org.scope) + '</td><td><span class="tag ' + (org.status === "启用" ? "green" : "orange") + '">' + escapeHtml(org.status) + '</span></td><td><button class="btn link" type="button" data-drawer="batch-org-fee-config" data-batch-org-fee-org="' + escapeHtml(org.name) + '">查看报名费用</button></td></tr>';
       }).join("");
       return '<div class="table-card" data-batch-picker="org" style="margin-top:14px">' + batchPickerHeadHtml("报名机构（仅培训机构，生成二维码）", "org", "已选机构", "按批次+培训机构生成二维码") + '<div class="batch-picker-toolbar"><div class="field"><label>搜索培训机构</label><input class="input" data-batch-keyword="org" placeholder="输入机构名称、编码、默认考点"></div><div class="field"><label>组织类型</label><select class="select" data-batch-filter-type="org"><option>全部组织类型</option><option>培训机构</option></select></div><div class="field"><label>状态</label><select class="select" data-batch-filter-status="org"><option>全部状态</option><option>启用</option><option>停用</option></select></div><div class="page-actions"><button class="btn primary" data-batch-select-visible="org">全选当前结果</button><button class="btn" data-batch-clear="org">清空</button></div></div><div class="table-wrap"><table class="batch-picker-table"><thead><tr><th class="batch-select-cell">选择</th><th>报名机构</th><th>类型</th><th>上级组织</th><th>默认考点</th><th>可报名专业范围</th><th>状态</th><th>操作</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
     }
@@ -8093,30 +8093,18 @@
       var root = sourceNode && sourceNode.matches && sourceNode.matches('[data-batch-page="create"]') ? sourceNode : batchCreateRoot();
       var draft = batchEnsureOrgFeeConfig(root);
       var orgs = entries.orgs.filter(function (org) { return !orgName || org.name.trim() === orgName; });
-      if (!orgs.length || !entries.executions.length) return '<tr><td colspan="7"><div class="batch-picker-empty">请先勾选当前报名机构，并选择执行专业与级别后再配置费用。</div></td></tr>';
+      if (!orgs.length || !entries.executions.length) return '<tr><td colspan="7"><div class="batch-picker-empty">请先勾选当前报名机构，并选择执行专业与级别后再查看平台报名费用。</div></td></tr>';
       return orgs.map(function (org) {
         return entries.executions.map(function (execution) {
           var feeKey = batchFeeConfigKey({ org: org.name.trim(), categoryCode: execution.categoryCode, category: execution.category, subject: execution.name, subjectCode: execution.subjectCode, level: execution.level, levelCode: execution.levelCode });
           var fee = draft.find(function (item) { return batchFeeConfigKey(item) === feeKey; }) || batchFeePreset(execution.level, execution.name);
-          return '<tr data-batch-org-fee-row data-batch-fee-org="' + escapeHtml(org.name.trim()) + '" data-batch-fee-category-code="' + escapeHtml(execution.categoryCode || '') + '" data-batch-fee-category="' + escapeHtml(execution.category) + '" data-batch-fee-subject="' + escapeHtml(execution.name) + '" data-batch-fee-subject-code="' + escapeHtml(execution.subjectCode || '') + '" data-batch-fee-level="' + escapeHtml(execution.level) + '" data-batch-fee-level-code="' + escapeHtml(execution.levelCode || levelCodeFromName(execution.level)) + '"><td><strong>' + escapeHtml(org.name.trim()) + '</strong></td><td><strong>' + escapeHtml(execution.category) + '</strong><br><span class="muted">' + escapeHtml(execution.group.replace(execution.category + ' / ', '')) + '</span></td><td><strong>' + escapeHtml(execution.level) + '</strong></td><td><input class="input" type="number" min="0" step="1" value="' + fee.enroll + '" data-batch-org-fee-input aria-label="' + escapeHtml(org.name.trim() + execution.name + execution.level + '报名费') + '"></td><td><input class="input" type="number" min="0" step="1" value="' + fee.exam + '" data-batch-org-fee-input aria-label="' + escapeHtml(org.name.trim() + execution.name + execution.level + '考务费') + '"></td><td><input class="input" type="number" min="0" step="1" value="' + fee.cert + '" data-batch-org-fee-input aria-label="' + escapeHtml(org.name.trim() + execution.name + execution.level + '证书费') + '"></td><td><strong data-batch-org-fee-total>¥' + fee.total + '</strong></td></tr>';
+          return '<tr data-batch-org-fee-row data-batch-fee-org="' + escapeHtml(org.name.trim()) + '" data-batch-fee-category-code="' + escapeHtml(execution.categoryCode || '') + '" data-batch-fee-category="' + escapeHtml(execution.category) + '" data-batch-fee-subject="' + escapeHtml(execution.name) + '" data-batch-fee-subject-code="' + escapeHtml(execution.subjectCode || '') + '" data-batch-fee-level="' + escapeHtml(execution.level) + '" data-batch-fee-level-code="' + escapeHtml(execution.levelCode || levelCodeFromName(execution.level)) + '"><td><strong>' + escapeHtml(org.name.trim()) + '</strong></td><td><strong>' + escapeHtml(execution.category) + '</strong><br><span class="muted">' + escapeHtml(execution.group.replace(execution.category + ' / ', '')) + '</span></td><td><strong>' + escapeHtml(execution.level) + '</strong></td><td>¥' + fee.enroll + '</td><td>¥' + fee.exam + '</td><td>¥' + fee.cert + '</td><td><strong data-batch-org-fee-total>¥' + fee.total + '</strong></td></tr>';
         }).join('');
       }).join('');
     }
     function batchOrgFeeConfigDrawerHtml() {
       var orgName = window.__activeBatchFeeOrg || "当前报名机构";
-      return '<div class="info-banner"><strong>配置对象：</strong>' + escapeHtml(orgName) + '<br><span>默认读取平台收费配置，可按门类和级别调整本批次报名费、考务费与证书费。</span></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">报名费用配置</h2><span class="tag blue">按组织配置</span></div><div class="table-wrap"><table class="batch-picker-table batch-standard-table"><thead><tr><th>报名机构</th><th>门类/分类</th><th>级别</th><th>报名费（元）</th><th>考务费（元）</th><th>证书费（元）</th><th>费用合计（元）</th></tr></thead><tbody data-batch-org-fee-body>' + batchOrgFeeConfigRowsHtml(batchCreateRoot(), orgName) + '</tbody></table></div></div>';
-    }
-    function batchSaveOrgFeeConfig() {
-      var root = batchCreateRoot();
-      if (!root) return;
-      var draft = batchEnsureOrgFeeConfig(root);
-      drawerBody.querySelectorAll('[data-batch-org-fee-row]').forEach(function (row) {
-        var key = batchFeeConfigKey({ org: row.dataset.batchFeeOrg, categoryCode: row.dataset.batchFeeCategoryCode, category: row.dataset.batchFeeCategory, subject: row.dataset.batchFeeSubject, subjectCode: row.dataset.batchFeeSubjectCode, level: row.dataset.batchFeeLevel, levelCode: row.dataset.batchFeeLevelCode });
-        var item = draft.find(function (entry) { return batchFeeConfigKey(entry) === key; });
-        var values = Array.from(row.querySelectorAll('[data-batch-org-fee-input]')).map(function (input) { return Math.max(0, Number(input.value) || 0); });
-        if (item) Object.assign(item, { enroll: values[0], exam: values[1], cert: values[2], total: values[0] + values[1] + values[2] });
-      });
-      root.__batchOrgFeeConfigDraft = draft;
+      return '<div class="info-banner"><strong>查看对象：</strong>' + escapeHtml(orgName) + '<br><span>以下为平台统一报名费用标准的批次只读快照，仅用于承办单位/培训机构与平台线下结算；培训机构面向考生的实际收款金额不在平台维护，考生端不展示具体费用。</span></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">平台报名费用</h2><span class="tag blue">只读</span></div><div class="table-wrap"><table class="batch-picker-table batch-standard-table"><thead><tr><th>报名机构</th><th>门类/分类</th><th>级别</th><th>报名费（元）</th><th>考务费（元）</th><th>证书费（元）</th><th>费用合计（元）</th></tr></thead><tbody data-batch-org-fee-body>' + batchOrgFeeConfigRowsHtml(batchCreateRoot(), orgName) + '</tbody></table></div></div>';
     }
     function syncBatchOrgFeeConfig(sourceNode) {
       var page = sourceNode && sourceNode.closest ? sourceNode.closest('[data-batch-page="create"]') : batchCreateRoot();
@@ -8157,7 +8145,7 @@
       return [
         '<div class="table-card batch-execution-main" data-batch-picker="execution">',
         batchPickerHeadHtml("执行专业与标准", "execution", "已选专业", "点行内按钮查看门类评分维度"),
-        batchSectionNoteHtml("执行专业与标准", "每个专业仅展示一行，级别列回显该专业的全部级别；收费请在“报名机构”页签按组织和级别配置。", ['<span class="tag blue">专业总览</span>', '<span class="tag">门类评分维度</span>', '<span class="tag green">批次快照</span>']),
+        batchSectionNoteHtml("执行专业与标准", "每个专业仅展示一行，级别列回显该专业的全部级别；平台报名费用在“报名机构”页签只读查看，作为线下结算基准。", ['<span class="tag blue">专业总览</span>', '<span class="tag">门类评分维度</span>', '<span class="tag green">批次快照</span>']),
         '<div class="batch-picker-toolbar"><div class="field"><label>搜索专业/级别</label><input class="input" data-batch-keyword="execution" placeholder="输入门类、分类、专业、级别或编码"></div><div class="field"><label>门类</label><select class="select" data-batch-filter-category="execution">' + batchCategoryOptionsHtml() + '</select></div><div class="field"><label>分类</label><select class="select" data-batch-filter-group="execution">' + batchGroupOptionsHtml() + '</select></div><div class="page-actions"><button class="btn primary" data-batch-select-visible="execution">全选当前结果</button><button class="btn" data-batch-clear="execution">清空</button></div></div>',
         '<div class="table-wrap"><table class="batch-picker-table batch-standard-table"><thead><tr><th class="batch-select-cell">选择</th><th>专业</th><th>门类/分类</th><th>级别</th><th>门类评分维度</th><th>操作</th></tr></thead><tbody>' + batchExecutionRowsHtml() + '</tbody></table></div>',
         '</div>'
@@ -8472,7 +8460,7 @@
       if (action !== "draft") {
         if (mode.value === "offline" && !orgCount) return { ok: false, message: "线下考试至少选择一个报名机构" };
         if (mode.value === "offline" && !siteCount) return { ok: false, message: "线下考试至少选择一个已生效考点" };
-        if (mode.value === "offline" && batchReadOrgFeeConfig(root).some(function (item) { return item.enroll < 0 || item.exam < 0 || item.cert < 0 || Number.isNaN(item.enroll) || Number.isNaN(item.exam) || Number.isNaN(item.cert); })) return { ok: false, message: "请填写有效的报名费用" };
+        if (mode.value === "offline" && batchReadOrgFeeConfig(root).some(function (item) { return item.enroll < 0 || item.exam < 0 || item.cert < 0 || Number.isNaN(item.enroll) || Number.isNaN(item.exam) || Number.isNaN(item.cert); })) return { ok: false, message: "平台报名费用标准无效，请联系平台维护收费标准" };
         if (!executionCount) return { ok: false, message: "至少选择一个执行专业" };
       }
       var contactName = root.querySelector("[data-batch-contact-name]");
@@ -8701,15 +8689,6 @@
       }, 0);
       var totalNode = row.querySelector("[data-batch-fee-total]");
       if (totalNode) totalNode.textContent = "¥" + total;
-    }
-    function updateBatchOrgFeeTotal(input) {
-      var row = input && input.closest('[data-batch-org-fee-row]');
-      if (!row) return;
-      var total = Array.from(row.querySelectorAll('[data-batch-org-fee-input]')).reduce(function (sum, item) {
-        return sum + Math.max(0, Number(item.value) || 0);
-      }, 0);
-      var totalNode = row.querySelector('[data-batch-org-fee-total]');
-      if (totalNode) totalNode.textContent = '¥' + total;
     }
     function setTreeChildrenVisibility(parentId, hidden) {
       document.querySelectorAll('[data-tree-parent="' + parentId + '"]').forEach(function (row) {
@@ -9297,7 +9276,7 @@
       return {
         status: status,
         title: "线上考官派遣 · 按考生",
-        actions: [{ text: "批量派遣", kind: "primary", drawer: "judge-batch-assign" }, { text: "同步考官端任务", toast: "线上任务已同步至考官端小程序" }],
+        actions: [{ text: "批量派遣", kind: "primary", drawer: "judge-batch-assign" }, { text: "发布", toast: "线上派遣已发布，任务已同步至考官端小程序" }],
         headers: ["考生", "专业/级别", "视频状态", "考官", "派遣状态", "操作"],
         rows: rows,
         side: { title: "", checks: [] },
@@ -9324,7 +9303,7 @@
       return {
         status: status,
         title: "准考证生成处理列表",
-        actions: [{ text: "批量生成", kind: "primary", toast: "准考证已批量生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "下载打印", toast: "准考证文件已打包下载" }, { text: "准考证样式", drawer: "ticket-preview" }],
+        actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "下载打印", toast: "准考证文件已打包下载" }, { text: "准考证样式", drawer: "ticket-preview" }],
         headers: ["报名机构", "可生成", "已生成", "已打印", "待重生成", "状态", "操作"],
         rows: rows,
         side: {
@@ -9337,7 +9316,7 @@
             batch.ticketsRegenerate ? "排期调整后需重生成对应准考证，再开放下载。" : "准考证开放后，学生和机构可查看下载。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "批量生成", kind: "primary", toast: "准考证已批量生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "进入成绩管理", jump: "batch-workbench/grades" }] }
+        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", toast: "准考证已全部生成" }, { text: "开放下载", toast: "准考证已开放下载" }, { text: "进入成绩管理", jump: "batch-workbench/grades" }] }
       };
     }
     function onlineVideoStageView(batch, status) {
@@ -9354,7 +9333,7 @@
       return {
         status: status,
         title: "考生视频录制列表",
-        actions: [{ text: "导出考生名单", toast: "线上考生名单已导出" }, { text: "提交派遣", kind: "primary", jump: "batch-workbench/dispatch" }],
+        actions: [{ text: "导出考生名单", toast: "线上考生名单已导出" }, { text: "发布", kind: "primary", jump: "batch-workbench/dispatch" }],
         headers: ["考生", "专业/级别", "缴费时间", "视频提交截止", "录制状态", "最终视频"],
         rows: rows,
         filters: true,
@@ -9509,7 +9488,7 @@
       return {
         status: status,
         title: "证书处理列表",
-        actions: [{ text: "生成证书", kind: "primary", drawer: "cert-batch-generate" }, { text: "清除证书号", drawer: "cert-clear-numbers" }, { text: "提交入库", drawer: "cert-submit" }, { text: "下载证书", toast: "电子证书已打包下载" }],
+        actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate" }, { text: "清除证书号", drawer: "cert-clear-numbers" }, { text: "发布", drawer: "cert-submit" }, { text: "下载证书", toast: "电子证书已打包下载" }],
         headers: ["证书阶段", "触发条件", "当前数据", "状态", "流转结果", "操作"],
         rows: rows,
         side: {
@@ -9522,7 +9501,7 @@
             batch.status === "号段重设" ? "未提交证书号可清除重设，提交入库后不再允许直接重置。" : "证书入库后，家长或机构可查询下载。"
           ]
         },
-        next: { title: "快捷动作", actions: [{ text: "生成证书", kind: "primary", drawer: "cert-batch-generate" }, { text: "提交入库", drawer: "cert-submit" }, { text: "进入运营分析", jump: "analytics/board" }] }
+        next: { title: "快捷动作", actions: [{ text: "全部生成", kind: "primary", drawer: "cert-batch-generate" }, { text: "发布", drawer: "cert-submit" }, { text: "进入运营分析", jump: "analytics/board" }] }
       };
     }
     function reportsStageView(batch) {
@@ -9852,10 +9831,10 @@
         if (tools) {
           var actions = tools.querySelector(".page-actions");
           if (!actions) { actions = document.createElement("div"); actions.className = "page-actions"; tools.appendChild(actions); }
-          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">批量下载 ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-batch-id="' + escapeHtml(batch.id) + '">批量生成</button><button class="btn primary" data-ticket-publish data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
+          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">全部下载 ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-batch-id="' + escapeHtml(batch.id) + '">全部生成</button><button class="btn primary" data-ticket-publish data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
         }
       }
-      panel.querySelectorAll('[data-toast*="批量生成"]').forEach(function (button) { button.removeAttribute("data-toast"); button.setAttribute("data-ticket-async-generate", ""); });
+      panel.querySelectorAll('[data-toast*="全部生成"]').forEach(function (button) { button.removeAttribute("data-toast"); button.setAttribute("data-ticket-async-generate", ""); });
       renderTicketCandidateRows(panel, batch);
       updateTicketSummary(panel, batch);
     }
@@ -10369,7 +10348,7 @@
         if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>待生成</option><option>已生成</option><option>已提交</option>';
         if (isOnlineBatch(batch)) {
           var onlineCertificateBody = workbench.querySelector('.cert-table:not(.certificate-print-table) tbody');
-          if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105********1201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506********2302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504********3403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
+          if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105********1201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506********2302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504********3403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
         }
         if (isOnlineBatch(batch) && batch.onlineCertificateMocks && batch.onlineCertificateMocks.length) {
           onlineCertificateBody.innerHTML = batch.onlineCertificateMocks.map(function (certificate) {
@@ -10378,7 +10357,7 @@
             var dateCell = certificate.generatedAt ? escapeHtml(certificate.generatedAt) : '-';
             var actions = certificate.status === "待生成"
               ? '<button class="btn link" data-drawer="cert-batch-generate">生成</button>'
-              : '<div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button>' + (certificate.status === "已提交" ? '<button class="btn link" data-toast="电子证书下载中">下载</button>' : '') + '</div>';
+              : '<div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button>' + (certificate.status !== "待生成" ? '<button class="btn link" data-toast="电子证书下载中">下载</button>' : '') + '</div>';
             return '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">' + escapeHtml(certificate.name) + '<br><span>' + escapeHtml(certificate.regNo) + '</span></td><td>' + escapeHtml(certificate.idNo) + '</td><td>' + escapeHtml(certificate.org) + '</td><td>' + escapeHtml(certificate.major) + '</td><td>' + escapeHtml(certificate.level) + '</td><td>' + escapeHtml(certificate.grade) + '</td>' + numberCell + '<td><span class="tag ' + statusTag + '">' + escapeHtml(certificate.status) + '</span></td><td>' + dateCell + '</td><td>' + actions + '</td></tr>';
           }).join("");
         }
@@ -11129,9 +11108,6 @@
       if (activeTab) switchEmbeddedCertificatesTab(activeTab);
       enhanceCertificatesWorkbenchPanel(panel, batch);
       if (panel && panel.classList.contains("batch-workbench")) {
-        panel.querySelectorAll('.cert-table tbody td:last-child button').forEach(function (button) {
-          if (["预览", "下载", "验真"].indexOf(button.textContent.trim()) > -1) button.remove();
-        });
         panel.querySelectorAll('.cert-action-bar .page-actions button').forEach(function (button) {
           if (button.textContent.trim() === "审计记录" || button.hasAttribute("data-cert-audit-open")) button.remove();
         });
@@ -14093,7 +14069,7 @@
         drawerBody.innerHTML = batchBrochureDetailBodyHtml(brochureBatch);
       }
       if (key === "batch-org-fee-config") {
-        drawerTitle.textContent = "报名费用配置 · " + (window.__activeBatchFeeOrg || "当前报名机构");
+        drawerTitle.textContent = "查看平台报名费用 · " + (window.__activeBatchFeeOrg || "当前报名机构");
       }
       if (key === "result-publish") {
         var resultBatch = currentBatchContext();
@@ -16846,7 +16822,7 @@
       return '<div class="batch-detail-summary"><div class="table-card"><div class="table-tools"><h2 class="table-title">批次基本信息</h2>' + batchTagHtml(batch.statusTag || "blue", batch.status) + '</div><div style="padding:16px"><dl class="kv"><dt>批次 ID</dt><dd><code>' + escapeHtml(batch.id) + '</code></dd><dt>考试方式</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "线上考试" : "线下考试") + '</dd><dt>关联简章</dt><dd>' + escapeHtml(batch.brochureName) + '</dd><dt>所属单位</dt><dd>' + escapeHtml(batch.org) + '</dd><dt>报名时间</dt><dd>' + escapeHtml(batch.enrollWindow) + '</dd><dt>考试时间</dt><dd>' + escapeHtml(batch.examWindow) + '</dd><dt>默认考点</dt><dd>' + escapeHtml(isOnlineBatch(batch) ? "不适用（线上考试）" : batch.site) + '</dd><dt>约束校验</dt><dd>' + batchTagHtml(batch.constraintTag || "green", batch.constraint) + '</dd></dl></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">批次数据</h2></div><div style="padding:16px"><div class="site-summary-grid" style="padding:0;border:0;background:transparent;grid-template-columns:repeat(2,minmax(0,1fr));"><div class="site-summary-item"><span>报名人数</span><strong>' + formatDemoNumber(batch.enrolled) + '</strong></div><div class="site-summary-item"><span>已缴费人数</span><strong>' + formatDemoNumber(batch.paid) + '</strong></div><div class="site-summary-item"><span>' + (isOnlineBatch(batch) ? "已提交视频人数" : "执行专业数量") + '</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.videoSubmitted : batch.majorCount) + '</strong></div><div class="site-summary-item"><span>已关联考官数</span><strong>' + formatDemoNumber(isOnlineBatch(batch) ? batch.assignedStudents : batch.assignedSessions) + '</strong></div></div></div></div></div><div class="table-card"><div class="table-tools"><h2 class="table-title">主流程状态</h2><span class="muted">当前阶段：' + escapeHtml(batchStageLabel(batch, batch.stage)) + '</span></div><div style="padding:16px"><div class="batch-detail-flow">' + order.filter(function (stage) { return stage !== "overview"; }).map(function (stage) { var active = order.indexOf(stage) === stageIndex; return '<span class="' + (active ? "active" : "") + '">' + escapeHtml(batchStageLabel(batch, stage)) + '</span>'; }).join("") + '</div></div></div>';
     }
     function batchDetailExecutionHtml(batch) {
-      return '<div class="info-banner"><strong>批次执行快照：</strong>' + escapeHtml(batch.name) + '（' + escapeHtml(batch.id) + '）的执行专业、级别和门类评分维度按本批次快照读取；费用在报名机构页签维护。</div>' + batchExecutionDetailTableHtml();
+      return '<div class="info-banner"><strong>批次执行快照：</strong>' + escapeHtml(batch.name) + '（' + escapeHtml(batch.id) + '）的执行专业、级别和门类评分维度按本批次快照读取；平台报名费用在报名机构页签只读查看，作为线下结算基准。</div>' + batchExecutionDetailTableHtml();
     }
     function batchOrgQrBodyHtml(batch) {
       batch = batch || currentBatchContext();
@@ -16917,7 +16893,7 @@
       return rows.join("") || '<tr><td colspan="4"><div class="batch-picker-empty">暂无执行专业与级别</div></td></tr>';
     }
     function batchDetailExecutionPanelHtml(batch) {
-      return '<div class="table-card batch-execution-main"><div class="table-tools"><h2 class="table-title">执行专业与标准</h2><span class="tag blue">只读回显</span></div><div class="batch-resource-note">以下为当前批次已纳入的专业、级别和门类评分维度快照；本页不展示收费快照，费用统一在“报名机构”页签按组织、门类和级别维护。</div><div class="table-wrap"><table class="batch-picker-table batch-standard-table"><thead><tr><th>专业</th><th>门类/分类</th><th>级别</th><th>门类评分维度</th></tr></thead><tbody>' + batchDetailExecutionRowsHtml() + '</tbody></table></div></div>';
+      return '<div class="table-card batch-execution-main"><div class="table-tools"><h2 class="table-title">执行专业与标准</h2><span class="tag blue">只读回显</span></div><div class="batch-resource-note">以下为当前批次已纳入的专业、级别和门类评分维度快照；平台报名费用在“报名机构”页签只读查看，作为线下结算基准。</div><div class="table-wrap"><table class="batch-picker-table batch-standard-table"><thead><tr><th>专业</th><th>门类/分类</th><th>级别</th><th>门类评分维度</th></tr></thead><tbody>' + batchDetailExecutionRowsHtml() + '</tbody></table></div></div>';
     }
     function batchQrEligible(batch) {
       return !!batch && !isOnlineBatch(batch) && ["已发布", "已结束", "已归档"].indexOf(batchLifecycleStatus(batch)) > -1;
@@ -17017,13 +16993,13 @@
     function paymentConfirmBodyHtml() {
       if (window.__activeCourseOrderRow) return courseOrderPaymentConfirmSharedBodyHtml();
       var item = getEnrollmentSnapshot();
-      return '<div class="drawer-section"><h3 class="drawer-section-title">报名信息</h3><dl class="kv"><dt>报名编号</dt><dd>' + escapeHtml(item.code) + '</dd><dt>考生姓名</dt><dd>' + escapeHtml(item.name) + '</dd><dt>报考专业</dt><dd>' + escapeHtml(item.majorLevel) + '</dd><dt>报名渠道</dt><dd>' + escapeHtml(item.channel) + '</dd><dt>培训机构</dt><dd>' + escapeHtml(item.institute) + '</dd><dt>报名批次</dt><dd>' + escapeHtml(item.batch) + '</dd></dl></div><div class="drawer-section"><h3 class="drawer-section-title">收款确认</h3><div class="field-row-2"><div class="field"><label>应收金额</label><input class="input" value="' + escapeHtml(item.amount) + '" readonly></div><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>现金</option><option>机构转账</option><option>银行转账</option></select></div></div><div class="field-row-2" style="margin-top:12px"><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div><div class="field"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写转账流水或收款账户"></div></div><div class="field" style="margin-top:12px"><label>确认备注</label><textarea class="textarea" data-payment-reason placeholder="请输入收款确认备注"></textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>收款方式、收款日期、收款账户/流水号、确认备注、操作人和操作时间将同步写入收款记录。</div></div>';
-      return '<div class="drawer-section"><h3 class="drawer-section-title">报名信息</h3><dl class="kv"><dt>报名编号</dt><dd>' + escapeHtml(item.code) + '</dd><dt>考生姓名</dt><dd>' + escapeHtml(item.name) + '</dd><dt>报考专业</dt><dd>' + escapeHtml(item.majorLevel) + '</dd><dt>报名渠道</dt><dd>' + escapeHtml(item.channel) + '</dd><dt>培训机构</dt><dd>' + escapeHtml(item.institute) + '</dd><dt>报名批次</dt><dd>' + escapeHtml(item.batch) + '</dd></dl></div><div class="drawer-section"><h3 class="drawer-section-title">收款确认</h3><div class="field-row-2"><div class="field"><label>应收金额</label><input class="input" value="' + escapeHtml(item.amount) + '" readonly></div><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>现金</option><option>机构转账</option><option>银行转账</option></select></div></div><div class="field-row-2" style="margin-top:12px"><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div><div class="field"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写转账流水或收款账户"></div></div><div class="field" style="margin-top:12px"><label>确认备注</label><textarea class="textarea" data-payment-reason placeholder="请输入收款确认备注"></textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>收款方式、收款日期、收款账户/流水号、确认备注、操作人和操作时间将同步写入收款记录。</div></div>';
+      return '<div class="info-banner"><strong>平台结算口径：</strong>培训机构须按平台报名费用标准线下转账至平台后，再确认缴费。本次确认记录与平台的结算，不记录机构向考生实际收取的金额；系统不自动核验银行到账。</div><div class="drawer-section"><h3 class="drawer-section-title">报名信息</h3><dl class="kv"><dt>报名编号</dt><dd>' + escapeHtml(item.code) + '</dd><dt>考生姓名</dt><dd>' + escapeHtml(item.name) + '</dd><dt>报考专业</dt><dd>' + escapeHtml(item.majorLevel) + '</dd><dt>报名渠道</dt><dd>' + escapeHtml(item.channel) + '</dd><dt>培训机构</dt><dd>' + escapeHtml(item.institute) + '</dd><dt>报名批次</dt><dd>' + escapeHtml(item.batch) + '</dd></dl></div><div class="drawer-section"><h3 class="drawer-section-title">收款确认</h3><div class="field-row-2"><div class="field"><label>平台结算金额</label><input class="input" value="' + escapeHtml(item.amount) + '" readonly></div><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>现金</option><option>机构转账</option><option>银行转账</option></select></div></div><div class="field-row-2" style="margin-top:12px"><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div><div class="field"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写转账流水或收款账户"></div></div><div class="field" style="margin-top:12px"><label>确认备注</label><textarea class="textarea" data-payment-reason placeholder="请输入收款确认备注"></textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>收款方式、收款日期、收款账户/流水号、确认备注、操作人和操作时间将同步写入收款记录。</div></div>';
+      return '<div class="info-banner"><strong>平台结算口径：</strong>培训机构须按平台报名费用标准线下转账至平台后，再确认缴费。本次确认记录与平台的结算，不记录机构向考生实际收取的金额；系统不自动核验银行到账。</div><div class="drawer-section"><h3 class="drawer-section-title">报名信息</h3><dl class="kv"><dt>报名编号</dt><dd>' + escapeHtml(item.code) + '</dd><dt>考生姓名</dt><dd>' + escapeHtml(item.name) + '</dd><dt>报考专业</dt><dd>' + escapeHtml(item.majorLevel) + '</dd><dt>报名渠道</dt><dd>' + escapeHtml(item.channel) + '</dd><dt>培训机构</dt><dd>' + escapeHtml(item.institute) + '</dd><dt>报名批次</dt><dd>' + escapeHtml(item.batch) + '</dd></dl></div><div class="drawer-section"><h3 class="drawer-section-title">收款确认</h3><div class="field-row-2"><div class="field"><label>平台结算金额</label><input class="input" value="' + escapeHtml(item.amount) + '" readonly></div><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>现金</option><option>机构转账</option><option>银行转账</option></select></div></div><div class="field-row-2" style="margin-top:12px"><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div><div class="field"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写转账流水或收款账户"></div></div><div class="field" style="margin-top:12px"><label>确认备注</label><textarea class="textarea" data-payment-reason placeholder="请输入收款确认备注"></textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>收款方式、收款日期、收款账户/流水号、确认备注、操作人和操作时间将同步写入收款记录。</div></div>';
     }
     function paymentBatchConfirmBodyHtml() {
       var selected = Array.from(activeEnrollmentScope().querySelectorAll("[data-enroll-check]:checked")).map(function (input) { return input.closest("[data-enroll-row]"); }).filter(function (row) { return row && !row.hidden && row.dataset.registration === "待缴费"; });
       var list = selected.slice(0, 6).map(function (row) { var item = getEnrollmentSnapshot(row); return '<li>' + escapeHtml(item.name) + ' · ' + escapeHtml(item.majorLevel) + ' · ' + escapeHtml(item.amount) + '</li>'; }).join("");
-      return '<div class="drawer-section"><h3 class="drawer-section-title">批量收款信息</h3><div class="field-row-2"><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>机构转账</option><option>现金</option><option>银行转账</option></select></div><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div></div><div class="field" style="margin-top:12px"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写统一收款账户或流水号"></div><div class="field" style="margin-top:12px"><label>统一确认备注</label><textarea class="textarea" data-payment-reason>机构统一转账，后台批量确认。</textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>批量确认会将以上收款方式、日期、收款账户/流水号、备注和当前操作人/时间写入每条收款记录。</div></div><div class="drawer-section"><h3 class="drawer-section-title">待缴费名单</h3><ul class="timeline-list">' + (list || '<li><span>-</span><strong>请先在列表勾选待缴费记录</strong></li>') + '</ul></div>';
+      return '<div class="info-banner"><strong>平台结算口径：</strong>培训机构须按平台报名费用标准线下转账至平台后，再确认缴费。本次确认记录与平台的结算，不记录机构向考生实际收取的金额；系统不自动核验银行到账。</div><div class="drawer-section"><h3 class="drawer-section-title">批量收款信息</h3><div class="field-row-2"><div class="field"><label>收款方式 *</label><select class="select" data-payment-method><option>机构转账</option><option>现金</option><option>银行转账</option></select></div><div class="field"><label>收款日期 *</label><input class="input" type="date" data-payment-date value="2026-07-28"></div></div><div class="field" style="margin-top:12px"><label>收款账户/流水号</label><input class="input" data-payment-account placeholder="可填写统一收款账户或流水号"></div><div class="field" style="margin-top:12px"><label>统一确认备注</label><textarea class="textarea" data-payment-reason>机构统一转账，后台批量确认。</textarea></div><div class="info-banner" style="margin-top:12px"><strong>保存口径：</strong>批量确认会将以上收款方式、日期、收款账户/流水号、备注和当前操作人/时间写入每条收款记录。</div></div><div class="drawer-section"><h3 class="drawer-section-title">待缴费名单</h3><ul class="timeline-list">' + (list || '<li><span>-</span><strong>请先在列表勾选待缴费记录</strong></li>') + '</ul></div>';
     }
     function enrollmentFeeLinesHtml(item) {
       var lines = (item.paymentItems || []).map(function (feeItem) {
@@ -20118,9 +20094,9 @@
       if (event.target.closest("[data-cert-submit-confirm]")) {
         var submitBatch = currentBatchContext();
         var submitCount = Math.max((Number(submitBatch.certGenerated) || 0) - (Number(submitBatch.certSubmitted) || 0), 0);
-        if (!submitCount) { toast("当前没有可提交的已生成证书"); return; }
+        if (!submitCount) { toast("当前没有可发布的已生成证书"); return; }
         window.__certificateAudit = window.__certificateAudit || [];
-        window.__certificateAudit.push({ batchId: submitBatch.id, action: "提交证书", operator: "当前用户", time: formatDateTime(new Date()), reason: "证书文件、编号和防伪二维码校验通过" });
+        window.__certificateAudit.push({ batchId: submitBatch.id, action: "发布", operator: "当前用户", time: formatDateTime(new Date()), reason: "证书文件、编号和防伪二维码校验通过" });
         submitBatch.certSubmitted = submitBatch.certGenerated;
         submitBatch.certLibrary = submitBatch.certSubmitted;
         closeDrawer();
@@ -20458,12 +20434,6 @@
         return;
       }
       if (event.target.closest("[data-cert-browser-print]")) { printCertificatePreview(); return; }
-      if (event.target.closest("[data-batch-org-fee-save]")) {
-        batchSaveOrgFeeConfig();
-        closeDrawer();
-        toast("报名费用配置已保存");
-        return;
-      }
       var courseTab = event.target.closest("[data-course-tab]");
       if (courseTab) {
         switchCourseTab(courseTab.closest("[data-course-form]"), courseTab.getAttribute("data-course-tab"));
@@ -21218,7 +21188,6 @@
       var batchKeyword = event.target.closest("[data-batch-keyword]");
       if (batchKeyword) filterBatchPicker(batchKeyword.getAttribute("data-batch-keyword"), false, true, batchKeyword);
       if (event.target.closest("[data-batch-fee-input]")) updateBatchFeeTotal(event.target);
-      if (event.target.closest("[data-batch-org-fee-input]")) updateBatchOrgFeeTotal(event.target);
       if (event.target.closest("[data-repertoire-tree-search]")) filterRepertoireTree(true);
       if (event.target.closest("[data-user-org-tree-search]")) filterUserOrgTree();
       if (event.target.closest("[data-site-org-tree-search]")) filterResourceOrgTree("site");
@@ -21511,8 +21480,8 @@
     function certSubmitBodyHtml() {
       var batch = currentBatchContext();
       return [
-        '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>提交证书数量</dt><dd>' + formatDemoNumber(batch.certGenerated - batch.certSubmitted) + '本</dd><dt>证书编号段</dt><dd>当前批次号段快照</dd><dt>提交后状态</dt><dd><span class="tag green">已提交</span></dd><dt>开放范围</dt><dd>平台、承办单位、培训机构、学生/家长按权限查看、下载、打印。</dd></dl>',
-        '<div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">提交前检查</h2><span class="tag green">可提交</span></div><div class="table-wrap"><table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody><tr><td>证书编号唯一</td><td><span class="tag green">通过</span></td></tr><tr><td>证书文件生成</td><td><span class="tag green">132本已生成</span></td></tr><tr><td>防伪二维码</td><td><span class="tag green">已生成</span></td></tr><tr><td>待生成证书</td><td><span class="tag orange">3本，可本次排除</span></td></tr></tbody></table></div></div>'
+        '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>发布证书数量</dt><dd>' + formatDemoNumber(batch.certGenerated - batch.certSubmitted) + '本</dd><dt>证书编号段</dt><dd>当前批次号段快照</dd><dt>发布后状态</dt><dd><span class="tag green">已提交</span></dd><dt>开放范围</dt><dd>平台、承办单位、培训机构、学生/家长按权限查看、下载、打印。</dd></dl>',
+        '<div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">发布前检查</h2><span class="tag green">可发布</span></div><div class="table-wrap"><table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody><tr><td>证书编号唯一</td><td><span class="tag green">通过</span></td></tr><tr><td>证书文件生成</td><td><span class="tag green">132本已生成</span></td></tr><tr><td>防伪二维码</td><td><span class="tag green">已生成</span></td></tr><tr><td>待生成证书</td><td><span class="tag orange">3本，可本次排除</span></td></tr></tbody></table></div></div>'
       ].join("");
     }
     function certVoidBodyHtml() {
@@ -21688,7 +21657,7 @@
       ["评审标准", "评审维度按业务配置的门类评分维度执行，具体评价要求以考试现场及考生端规则为准。"],
       ["证书奖励", "通过考级的考生可按平台证书规则申请或领取对应证书，奖励说明以平台公告为准。"],
       ["报名手续", "完成实名认证、选择考试方式和批次、提交报名资料并按页面提示缴费。"],
-      ["费用", "费用按门类与级别收费标准配置执行，具体金额以报名页展示为准。"],
+      ["费用", "平台报名费用仅作为机构与平台线下结算基准；考生端不展示金额，培训机构实际向考生收取的金额由机构线下告知，平台不维护。"],
       ["成绩公布", "成绩审核发布后，考生可在考生端查询成绩和证书信息。"],
       ["考试时间地点", "考试时间、考点和考场以批次发布信息及准考证为准。"],
       ["开考科目", "钢琴、中国舞、小提琴等，具体科目与级别由已发布批次关联。"],
@@ -22268,7 +22237,7 @@
       "result-publish": { title: "发布成绩", wide: true, body: resultPublishBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-result-publish-confirm>发布成绩</button>' },
       "result-detail": { title: "成绩详情", wide: true, body: resultDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-standard-detail": { title: "专业级别评分维度", wide: true, body: batchStandardDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
-      "batch-org-fee-config": { title: "报名费用配置", wide: true, body: batchOrgFeeConfigDrawerHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-batch-org-fee-save>保存配置</button>' },
+      "batch-org-fee-config": { title: "查看平台报名费用", wide: true, body: batchOrgFeeConfigDrawerHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-create": { title: "新增考级批次", wide: true, body: '<div class="field-row-2"><div class="field"><label>关联年度规划</label><select class="select"><option>PLAN-2026-001 · 2026年度社会艺术水平考级工作规划</option><option>不关联规划（独立简章批次）</option></select></div><div class="field"><label>关联考级简章 *</label><select class="select"><option>《2026年社会艺术水平考级简章》 · 已发布</option><option>《2026宜昌戏曲戏剧考级简章》 · 草稿</option></select></div></div><div class="field-row-2"><div class="field"><label>批次名称 *</label><input class="input" value="2026下半年 · 武汉"></div><div class="field"><label>承办单位 *</label><select class="select"><option>武汉承办中心</option><option>宜昌承办中心</option></select></div></div><div class="field-row-2"><div class="field"><label>报名开始时间 *</label><input class="input" value="2026-07-01"></div><div class="field"><label>报名截止时间 *</label><input class="input" value="2026-08-15"></div></div><div class="field-row-2"><div class="field"><label>考试开始时间 *</label><input class="input" value="2026-08-18"></div><div class="field"><label>考试结束时间 *</label><input class="input" value="2026-08-24"></div></div><div class="field"><label>关联考点 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 湖北艺术职业学院光谷校区（所属单位：湖北艺术职业学院）</label><label class="level-check"><input type="checkbox"> 武汉音乐学院合作考点（所属单位：武汉承办中心）</label><label class="level-check"><input type="checkbox"> 宜昌青少年美育中心考点（待平台确认）</label></div></div><div class="field"><label>报名机构（生成二维码） *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 光谷少儿艺术中心（培训机构，默认考点：湖北艺术职业学院光谷校区）</label><label class="level-check"><input type="checkbox" checked> 汉口美育培训学校（培训机构，默认考点：湖北艺术职业学院光谷校区）</label></div><p class="form-hint">线下批次至少选择一个已启用的可报名培训机构；个人报名也必须在这些机构中选择一个。</p></div><div class="field"><label>执行专业与级别 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 钢琴 1-10级</label><label class="level-check"><input type="checkbox" checked> 中国舞 1-10级</label><label class="level-check"><input type="checkbox"> 小提琴 1-6级</label></div></div>', foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-toast="批次草稿已保存">保存草稿</button><button class="btn primary" data-toast="批次已发布，报名二维码将按批次+报名机构生成">发布批次</button>' },
       "batch-detail": { title: "批次详情 · 2026下半年武汉", wide: true, body: '<dl class="kv"><dt>关联规划</dt><dd>PLAN-2026-001 · 2026年度社会艺术水平考级工作规划</dd><dt>关联简章</dt><dd>《2026年社会艺术水平考级简章》</dd><dt>承办单位</dt><dd>武汉承办中心</dd><dt>考试时间/考点</dt><dd>2026-08-18 至 2026-08-24 / 湖北艺术职业学院光谷校区</dd><dt>报名二维码</dt><dd><button class="btn link" data-drawer="batch-org-qr">查看批次+报名机构二维码</button></dd><dt>执行专业数量</dt><dd><button class="btn link" data-toast="已切换到执行专业与级别分页签">2个专业</button></dd><dt>报名人数</dt><dd><button class="btn link" data-jump="enroll/list">2,486</button></dd><dt>已缴费人数</dt><dd><button class="btn link" data-jump="enroll/list">2,109</button></dd><dt>已关联考官数</dt><dd><button class="btn link" data-jump="batch-workbench/dispatch">12</button></dd><dt>约束校验</dt><dd><span class="tag green">在规划和简章范围内</span></dd><dt>主流程</dt><dd>报名与缴费 → 排期编排 → 考官派遣 → 准考证 → 成绩 → 证书 → 批次报表</dd></dl><div class="tabs" aria-label="批次详情分页签" style="margin-top:14px"><button class="tab">基本信息</button><button class="tab active">执行专业与级别</button><button class="tab">报名二维码</button><button class="tab">报名缴费</button><button class="tab">排期准考证</button><button class="tab">成绩证书</button></div><div class="table-card"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">执行专业与级别</h2></div><span class="tag blue">2个专业 / 20个级别</span></div><div class="table-wrap"><table class="tree-table"><thead><tr><th class="major-name-cell">树结构</th><th>级别范围</th><th class="level-cell">考级曲目</th><th class="level-cell">评分标准</th><th>收费标准</th><th>状态</th></tr></thead><tbody><tr class="tree-row-level-1"><td class="major-name-cell"><span class="tree-node"><button class="tree-toggle" type="button" aria-expanded="true">-</button><strong>钢琴</strong><span class="tree-count">10级</span></span></td><td>1-10级</td><td class="level-cell">按级别读取曲目库</td><td class="level-cell">按级别读取评分维度</td><td>按级别读取</td><td><span class="tag green">启用</span></td></tr><tr><td class="major-name-cell"><span class="tree-node"><span class="tree-indent"></span><span class="tree-leaf-dot"></span><strong>1级</strong></span></td><td>1级</td><td class="level-cell">C大调音阶 / 小步舞曲 / 基础练习曲</td><td class="level-cell">按评分模板评价：音准与节奏、演奏技巧、音乐表现、完整度</td><td>260元</td><td><span class="tag green">已配置</span></td></tr><tr><td class="major-name-cell"><span class="tree-node"><span class="tree-indent"></span><span class="tree-leaf-dot"></span><strong>6级</strong></span></td><td>6级</td><td class="level-cell">复调作品 / 练习曲 / 自选乐曲</td><td class="level-cell">按评分模板评价：技巧控制、作品完整、音乐表现、舞台规范</td><td>420元</td><td><span class="tag green">已配置</span></td></tr><tr class="tree-row-level-1"><td class="major-name-cell"><span class="tree-node"><button class="tree-toggle" type="button" aria-expanded="true">-</button><strong>中国舞</strong><span class="tree-count">10级</span></span></td><td>1-10级</td><td class="level-cell">按级别读取曲目库</td><td class="level-cell">按级别读取评分维度</td><td>按级别读取</td><td><span class="tag green">启用</span></td></tr><tr><td class="major-name-cell"><span class="tree-node"><span class="tree-indent"></span><span class="tree-leaf-dot"></span><strong>4级</strong></span></td><td>4级</td><td class="level-cell">基本功组合 / 民族民间舞组合 / 表演组合</td><td class="level-cell">按评分模板评价：动作规范、节奏与协调、表现力、礼仪规范</td><td>360元</td><td><span class="tag green">已配置</span></td></tr><tr><td class="major-name-cell"><span class="tree-node"><span class="tree-indent"></span><span class="tree-leaf-dot"></span><strong>8级</strong></span></td><td>8级</td><td class="level-cell">综合训练组合 / 剧目片段 / 技巧展示</td><td class="level-cell">按评分模板评价：技术完成、风格把握、艺术表现、考场规范</td><td>480元</td><td><span class="tag green">已配置</span></td></tr></tbody></table></div></div><div class="table-card" style="margin-top:14px"><div class="table-tools"><div class="major-table-title"><h2 class="table-title">报名机构二维码</h2></div><button class="btn primary" data-drawer="batch-org-qr">查看二维码</button></div><div class="batch-qr-grid"><div class="batch-qr-card"><div><strong>光谷少儿艺术中心</strong><span>批次：2026下半年 · 武汉<br>码值：BATCH-2026-WH + ORG-GG001<br>报名机构类型：培训机构<br>默认考点：湖北艺术职业学院光谷校区</span></div><div class="ticket-mini-qr">报名码</div><div class="batch-qr-lock">扫码进入后强制锁定本批次与本报名机构，不展示批次或报名机构切换入口。</div></div></div></div>', foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-org-qr": { title: "批次报名机构二维码", wide: true, body: '<div class="batch-qr-grid"><div class="batch-qr-card"><div><strong>光谷少儿艺术中心</strong><span>批次：2026下半年 · 武汉<br>报名机构编码：ORG-GG001<br>组织类型：培训机构<br>默认考点：湖北艺术职业学院光谷校区</span></div><div class="ticket-mini-qr">报名码</div><div class="batch-qr-lock">培训机构报名码面向本机构考生；扫码后仅展示该批次下本机构可报名的专业与级别。</div></div><div class="batch-qr-card"><div><strong>汉口美育培训学校</strong><span>批次：2026下半年 · 武汉<br>报名机构编码：ORG-HK001<br>组织类型：培训机构<br>默认考点：湖北艺术职业学院光谷校区</span></div><div class="ticket-mini-qr">报名码</div><div class="batch-qr-lock">仅为当前批次已配置的培训机构生成报名码；扫码后锁定本批次和该报名机构。</div></div></div>', foot: '<button class="btn" data-close-drawer>关闭</button><button class="btn primary" data-toast="报名二维码已下载">下载二维码</button>' },
@@ -22371,9 +22340,9 @@
       },
       "cert-print": { title: "选择打印模板", wide: true, body: certPrintBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-print-preview>预览模板</button>' },
       "cert-print-preview": { title: "证书打印预览", wide: true, body: certificatePrintPreviewBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
-      "cert-batch-generate": { title: "生成证书", wide: true, body: certBatchGenerateBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-toast="证书已生成，状态更新为已生成">确认生成</button>' },
+      "cert-batch-generate": { title: "全部生成证书", wide: true, body: certBatchGenerateBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-toast="证书已生成，状态更新为已生成">确认生成</button>' },
       "cert-clear-numbers": { title: "清除证书号", body: certClearNumbersBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-clear-confirm>确认清除</button>' },
-      "cert-submit": { title: "提交证书", wide: true, body: certSubmitBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-submit-confirm>确认提交</button>' },
+      "cert-submit": { title: "发布证书", wide: true, body: certSubmitBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-submit-confirm>确认发布</button>' },
       "cert-void-confirm": { title: "作废证书", body: certVoidBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-void-confirm>确认作废</button>' },
       "cert-number-segment": { title: "证书号码段查看", wide: true, body: certNumberSegmentBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button><button class="btn" data-jump="config/cert-segment" data-close-drawer>去号段配置</button>' },
       "cert-audit": { title: "证书审计记录", wide: true, body: function () { return certificateAuditHtml(currentBatchContext()); }, foot: '<button class="btn" data-close-drawer>关闭</button>' },
