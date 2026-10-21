@@ -17,6 +17,9 @@
     h1 { margin:0; font-size:27px; line-height:1.2; }
     .brand-sub { margin:4px 0 0; color:var(--muted); font-size:13px; }
     .top-actions { color:var(--muted); font-size:12px; flex-wrap:wrap; justify-content:flex-end; }
+    .year-picker { display:inline-flex; align-items:center; gap:6px; color:var(--muted); }
+    .year-picker label { white-space:nowrap; }
+    .year-picker select { min-width:92px; height:36px; padding:0 28px 0 10px; border:1px solid var(--line); background:var(--panel); color:var(--text); cursor:pointer; }
     .control { height:36px; padding:0 12px; background:var(--panel); color:var(--text); border:1px solid var(--line); cursor:pointer; }
     .explain-dialog { position:fixed; inset:0; z-index:20; display:flex; justify-content:flex-end; background:rgba(3,8,15,.68); }
     .explain-dialog[hidden] { display:none; }
@@ -67,8 +70,10 @@
     .category-legend-row strong { color:var(--text); font-weight:600; }
     .ring-key { display:flex; flex-wrap:wrap; gap:6px 10px; font-size:10px; color:var(--muted); }
     .major-body { padding:10px 14px; min-height:0; display:grid; grid-template-rows:minmax(0,1fr) auto; gap:7px; }
-    .major-list { display:grid; grid-template-rows:repeat(6,minmax(0,1fr)); gap:4px; }
-    .major-row { min-width:0; display:grid; grid-template-columns:76px minmax(48px,1fr) 124px; gap:8px; align-items:center; font-size:11px; }
+    .scroll-viewport { min-height:0; overflow-y:auto; scrollbar-width:none; }
+    .scroll-viewport::-webkit-scrollbar { display:none; }
+    .major-list { display:grid; gap:4px; }
+    .major-row { min-width:0; min-height:22px; display:grid; grid-template-columns:76px minmax(48px,1fr) 124px; gap:8px; align-items:center; font-size:11px; }
     .major-row strong { font-weight:600; line-height:1.2; overflow-wrap:anywhere; }
     .major-track { height:10px; width:var(--enroll-width); min-width:2px; border-radius:3px; background:var(--cyan); position:relative; overflow:hidden; }
     .major-track i { position:absolute; inset:0 auto 0 0; width:var(--cert-ratio); background:var(--green); }
@@ -83,7 +88,8 @@
     .chart-label { fill:var(--muted); font-size:11px; }
     .chart-title { fill:var(--muted); font-size:10px; }
     .chart-line { fill:none; stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
-    .table-wrap { min-height:0; padding:0 12px 8px; }
+    .table-wrap { min-height:0; padding:0 12px 8px; display:grid; grid-template-rows:minmax(0,1fr); }
+    .ranking-scroll { min-height:0; }
     table { width:100%; border-collapse:collapse; table-layout:fixed; }
     th,td { padding:7px 5px; border-bottom:1px solid var(--line); font-size:12px; text-align:left; }
     th { color:var(--muted); font-weight:500; white-space:nowrap; }
@@ -158,15 +164,15 @@
 <body>
   <div class="cockpit">
     <header class="topbar">
-      <div class="brand"><div class="brand-mark">考</div><div><h1>考级运营总览</h1><p class="brand-sub">全平台 · 2026年度 · 截至10月13日</p></div></div>
-      <div class="top-actions"><span>数据更新时间：<time data-updated-at datetime="2026-10-13T10:07:00+08:00">2026-10-13 10:07</time></span><button class="control" type="button" data-refresh>刷新数据</button><button class="control" type="button" data-explain>页面说明</button><button class="control" type="button" data-fullscreen>全屏</button></div>
+      <div class="brand"><div class="brand-mark">考</div><div><h1>考级运营总览</h1><p class="brand-sub" data-brand-sub>全平台 · 2026年度 · 截至10月13日</p></div></div>
+      <div class="top-actions"><span>数据更新时间：<time data-updated-at datetime="2026-10-13T10:07:00+08:00">2026-10-13 10:07</time></span><div class="year-picker"><label for="dashboard-year">统计年度</label><select id="dashboard-year" data-year-picker aria-label="选择统计年度"></select></div><button class="control" type="button" data-refresh>刷新数据</button><button class="control" type="button" data-explain>页面说明</button><button class="control" type="button" data-fullscreen>全屏</button></div>
     </header>
     <main class="main">
       <section class="cell cell-pie"><div class="panel-head"><h2>报名与获证人次门类占比</h2></div><div class="category-compare" data-category-chart></div></section>
       <section class="cell cell-ring"><div class="panel-head"><h2>报名与获证人次级别分布</h2></div><div class="category-compare" data-level-chart></div></section>
       <section class="cell cell-bars">
         <div class="panel-head"><h2>重点专业报名与获证情况</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div>
-        <div class="major-body"><div class="major-list" data-major-list></div><div class="major-summary" data-major-summary></div></div>
+        <div class="major-body"><div class="scroll-viewport" data-major-scroll role="region" aria-label="重点专业 Top 10 排名，可自动滚动"><div class="major-list" data-major-list></div></div><div class="major-summary" data-major-summary></div></div>
       </section>
       <section class="cell cell-heat">
         <div class="panel-head"><h2>区域热力地图</h2><div class="panel-tools"><nav class="heat-crumbs" data-heat-crumbs aria-label="区域下钻路径"></nav><div class="heat-tabs" role="group" aria-label="地图统计指标"><button class="heat-tab active" type="button" data-heat-metric="enroll" aria-pressed="true">报名</button><button class="heat-tab" type="button" data-heat-metric="cert" aria-pressed="false">获证</button></div></div></div>
@@ -178,12 +184,12 @@
         </div>
         <div class="heat-body"><div class="heat-canvas" data-heat-canvas><svg data-heat-svg role="group" aria-label="全国报名热力地图"></svg><div class="heat-overlay"><span class="heat-scope" data-heat-scope></span></div><div class="heat-tip" data-heat-tip hidden></div><div class="heat-foot"><div class="heat-legend"><span data-heat-min></span><i class="heat-ramp" aria-hidden="true"></i><span data-heat-max></span><span class="heat-empty"><i></i>无数据</span></div><span data-heat-note></span></div></div></div>
       </section>
-      <section class="cell cell-trend"><div class="panel-head"><h2>本年度月度报名与获证人次</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-month-chart><svg role="img" aria-label="2026年度每月新增报名与获证人次"></svg></div></section>
+      <section class="cell cell-trend"><div class="panel-head"><h2 data-month-title>2026年度月度报名与获证人次</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-month-chart><svg role="img" data-month-chart-label aria-label="2026年度每月新增报名与获证人次"></svg></div></section>
       <section class="cell cell-years"><div class="panel-head"><h2>近五年报名与获证对比</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-year-chart><svg role="img" aria-label="2022年至2026年报名与获证人次，2026年截至10月13日"></svg></div></section>
-      <section class="cell cell-organizer"><div class="panel-head"><h2>承办单位报名人次排行</h2><span class="series-legend">Top 5</span></div><div class="table-wrap"><table><thead><tr><th>排名</th><th>承办单位</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-organizer-rows></tbody></table></div></section>
-      <section class="cell cell-training"><div class="panel-head"><h2>培训机构报名人次排行</h2><span class="series-legend">Top 5</span></div><div class="table-wrap"><table><thead><tr><th>排名</th><th>培训机构</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-training-rows></tbody></table></div></section>
+      <section class="cell cell-organizer"><div class="panel-head"><h2>承办单位报名人次排行</h2><span class="series-legend">Top 10</span></div><div class="table-wrap"><div class="scroll-viewport ranking-scroll" data-organizer-scroll role="region" aria-label="承办单位报名人次 Top 10 排名，可自动滚动"><table><thead><tr><th>排名</th><th>承办单位</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-organizer-rows></tbody></table></div></div></section>
+      <section class="cell cell-training"><div class="panel-head"><h2>培训机构报名人次排行</h2><span class="series-legend">Top 10</span></div><div class="table-wrap"><div class="scroll-viewport ranking-scroll" data-training-scroll role="region" aria-label="培训机构报名人次 Top 10 排名，可自动滚动"><table><thead><tr><th>排名</th><th>培训机构</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-training-rows></tbody></table></div></div></section>
     </main>
-    <footer class="footer"><span>演示数据 · 地区按批次所属组织归属 · 线上报名不归入培训机构</span><span class="refresh-status" role="status" aria-live="polite" data-refresh-status></span><span>快照日期：2026-10-13</span></footer>
+    <footer class="footer"><span>演示数据 · 地区按批次所属组织归属 · 线上报名不归入培训机构</span><span class="refresh-status" role="status" aria-live="polite" data-refresh-status></span><span data-snapshot-label>快照日期：2026-10-13</span></footer>
   </div>
   <div class="explain-dialog" data-explain-dialog hidden>
     <aside class="explain-panel" role="dialog" aria-modal="true" aria-labelledby="explain-title">
@@ -278,7 +284,30 @@
         return facts;
       }
       var facts=buildFacts();
-      var current=facts.filter(function(r){return r.year===SNAPSHOT_YEAR;});
+      var selectedYear=SNAPSHOT_YEAR;
+      var current=facts.filter(function(r){return r.year===selectedYear;});
+      function selectedMonthCount() { return selectedYear===SNAPSHOT_YEAR ? SNAPSHOT_MONTH : 12; }
+      function updateYearLabels() {
+        var monthCount=selectedMonthCount(),suffix=monthCount===12?"全年":"截至"+monthCount+"月"+ (selectedYear===SNAPSHOT_YEAR?"13日":"");
+        document.querySelector("[data-brand-sub]").textContent="全平台 · "+selectedYear+"年度 · "+suffix;
+        document.querySelector("[data-month-title]").textContent=selectedYear+"年度月度报名与获证人次";
+        document.querySelector("[data-month-chart-label]").setAttribute("aria-label",selectedYear+"年度每月新增报名与获证人次");
+        document.querySelector("[data-snapshot-label]").textContent=selectedYear===SNAPSHOT_YEAR?"快照日期：2026-10-13":"统计年度："+selectedYear+"全年";
+      }
+      function populateYearPicker() {
+        var picker=document.querySelector("[data-year-picker]");
+        picker.innerHTML=YEAR_SEEDS.map(function(seed){return '<option value="'+seed[0]+'">'+seed[0]+"年"+(seed[0]===SNAPSHOT_YEAR?"（当前）":"")+"</option>";}).join("");
+        picker.value=String(selectedYear);
+      }
+      function selectYear(year) {
+        if(!YEAR_SEEDS.some(function(seed){return seed[0]===year;})) return;
+        selectedYear=year;
+        current=facts.filter(function(r){return r.year===selectedYear;});
+        updateYearLabels();
+        document.querySelector("[data-year-picker]").value=String(selectedYear);
+        heatState.path=[];
+        renderDashboard();
+      }
       function counts(rows) {
         var enrolled=new Set(),certified=new Set();
         rows.forEach(function(r){enrolled.add(r.registration);if(r.certMonth!==null)certified.add(r.registration);});
@@ -297,15 +326,33 @@
         container.innerHTML='<div class="double-donut" role="img" aria-label="'+label+'：外环报名，内环获证" style="background:'+gradient(enrollPct)+'"><div class="double-donut-inner" style="background:'+gradient(certPct)+'"><div class="double-donut-center"><span>'+label+'</span><b>占比</b></div></div></div><div class="category-legend"><div class="category-legend-head"><span></span><span>'+label+'</span><span>报名</span><span>获证</span></div>'+rows.map(function(r,i){return '<div class="category-legend-row"><i style="--c:'+colors[i]+'"></i><span>'+esc(r.name)+'</span><strong>'+enrollPct[i].toFixed(1)+'%</strong><strong>'+certPct[i].toFixed(1)+'%</strong></div>';}).join("")+'<div class="ring-key"><span>外环：报名</span><span>内环：获证</span></div></div>';
       }
       function renderMajorList() {
-        var groups=ordered(groupRows(current,"major")),top=groups.slice(0,6),max=top[0].enroll;
+        var groups=ordered(groupRows(current,"major")),top=groups.slice(0,10),max=top[0] ? top[0].enroll : 1;
         document.querySelector("[data-major-list]").innerHTML=top.map(function(r){
           return '<div class="major-row"><strong>'+esc(r.name)+'</strong><div class="major-track" role="img" aria-label="'+esc(r.name)+'报名'+r.enroll+'人次，获证'+r.cert+'人次" style="--enroll-width:'+(r.enroll/max*100)+'%;--cert-ratio:'+(r.cert/r.enroll*100)+'%"><i></i></div><div class="major-stats"><span>报名 <b>'+fmt(r.enroll)+'</b></span><span>获证 <b>'+fmt(r.cert)+'</b></span></div></div>';
         }).join("");
-        var rest=groups.slice(6).reduce(function(s,r){s.enroll+=r.enroll;s.cert+=r.cert;return s;},{enroll:0,cert:0});
+        var rest=groups.slice(10).reduce(function(s,r){s.enroll+=r.enroll;s.cert+=r.cert;return s;},{enroll:0,cert:0});
         document.querySelector("[data-major-summary]").innerHTML='<span>其他专业</span><span>报名 <b>'+fmt(rest.enroll)+'</b> · 获证 <b>'+fmt(rest.cert)+'</b></span>';
+        document.querySelector("[data-major-scroll]").scrollTop=0;
       }
       function renderRanking(selector,key) {
-        document.querySelector(selector).innerHTML=ordered(groupRows(current,key)).slice(0,5).map(function(r,i){return '<tr><td><span class="rank">'+(i+1)+'</span></td><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td>'+fmt(r.enroll)+'</td><td>'+fmt(r.cert)+'</td></tr>';}).join("");
+        document.querySelector(selector).innerHTML=ordered(groupRows(current,key)).slice(0,10).map(function(r,i){return '<tr><td><span class="rank">'+(i+1)+'</span></td><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td>'+fmt(r.enroll)+'</td><td>'+fmt(r.cert)+'</td></tr>';}).join("");
+        var scrollSelector=selector.indexOf("organizer")>-1?"[data-organizer-scroll]":"[data-training-scroll]";
+        document.querySelector(scrollSelector).scrollTop=0;
+      }
+      function bindAutoScroll(selector) {
+        var viewport=document.querySelector(selector);
+        if(!viewport)return;
+        var paused=false;
+        function tick(){
+          if(paused||document.hidden||viewport.scrollHeight<=viewport.clientHeight+1)return;
+          viewport.scrollTop+=1;
+          if(viewport.scrollTop+viewport.clientHeight>=viewport.scrollHeight)viewport.scrollTop=0;
+        }
+        viewport.addEventListener("mouseenter",function(){paused=true;});
+        viewport.addEventListener("mouseleave",function(){paused=false;});
+        viewport.addEventListener("focusin",function(){paused=true;});
+        viewport.addEventListener("focusout",function(){paused=false;});
+        window.setInterval(tick,70);
       }
       function chartFrame(selector,max,units) {
         var svg=document.querySelector(selector+" svg"),box=svg.getBoundingClientRect(),w=Math.max(280,box.width),h=Math.max(170,box.height);
@@ -320,16 +367,17 @@
       }
       function renderCharts() {
         var monthRows=[];
+        var monthCount=selectedMonthCount();
         for(var m=1;m<=12;m++){monthRows.push({month:m,enroll:current.filter(function(r){return r.month===m;}).length,cert:current.filter(function(r){return r.certMonth===m;}).length});}
         var max=Math.ceil(Math.max.apply(null,monthRows.map(function(r){return r.enroll;}))/1000)*1000;
         var plot=chartFrame("[data-month-chart]",max),step=(plot.right-plot.left)/12;
-        monthRows.forEach(function(r,i){plot.svg.appendChild(svgEl("text",{x:plot.left+step*(i+.5),y:plot.bottom+19,"text-anchor":"middle",class:"chart-label",style:plot.w<400?"font-size:9px":"",opacity:r.month>SNAPSHOT_MONTH?.45:1},r.month+"月"));});
+        monthRows.forEach(function(r,i){plot.svg.appendChild(svgEl("text",{x:plot.left+step*(i+.5),y:plot.bottom+19,"text-anchor":"middle",class:"chart-label",style:plot.w<400?"font-size:9px":"",opacity:r.month>monthCount?.45:1},r.month+"月"));});
         ["enroll","cert"].forEach(function(key){
-          var color=key==="enroll"?"#52e0d0":"#77e6a5",available=monthRows.slice(0,SNAPSHOT_MONTH);
+          var color=key==="enroll"?"#52e0d0":"#77e6a5",available=monthRows.slice(0,monthCount);
           plot.svg.appendChild(svgEl("polyline",{points:available.map(function(r,i){return (plot.left+step*(i+.5))+","+plot.y(r[key]);}).join(" "),stroke:color,class:"chart-line"}));
           available.forEach(function(r,i){var dot=svgEl("circle",{cx:plot.left+step*(i+.5),cy:plot.y(r[key]),r:3,fill:color});dot.appendChild(svgEl("title",{},r.month+"月"+(key==="enroll"?"报名":"获证")+" "+fmt(r[key])+"人次"));plot.svg.appendChild(dot);});
         });
-        plot.svg.appendChild(svgEl("text",{x:plot.right,y:plot.h-4,"text-anchor":"end",class:"chart-title"},"10月截至13日；11–12月未发生"));
+        plot.svg.appendChild(svgEl("text",{x:plot.right,y:plot.h-4,"text-anchor":"end",class:"chart-title"},selectedYear===SNAPSHOT_YEAR?"10月截至13日；11–12月未发生":selectedYear+"年全年"));
         var years=YEAR_SEEDS.map(function(seed){var c=counts(facts.filter(function(r){return r.year===seed[0];}));return {year:seed[0],enroll:c.enroll,cert:c.cert};});
         var annual=chartFrame("[data-year-chart]",24000),group=(annual.right-annual.left)/5,bar=Math.min(18,group*.26);
         years.forEach(function(r,i){
@@ -423,6 +471,7 @@
       document.querySelector("[data-heat-crumbs]").addEventListener("click",function(event){var button=event.target.closest("[data-heat-crumb]");if(button){heatState.path=heatState.path.slice(0,Number(button.getAttribute("data-heat-crumb")));renderHeat();}});
       document.querySelectorAll("[data-heat-metric]").forEach(function(button){button.addEventListener("click",function(){heatState.metric=button.getAttribute("data-heat-metric");document.querySelectorAll("[data-heat-metric]").forEach(function(b){var active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active);});renderHeat();});});
       function renderDashboard() {
+        updateYearLabels();
         var totals=counts(current);
         document.querySelector("[data-total-enroll]").textContent=fmt(totals.enroll);
         document.querySelector("[data-total-cert]").textContent=fmt(totals.cert);
@@ -439,6 +488,7 @@
       if(window.ResizeObserver){var observer=new ResizeObserver(resizeCharts);observer.observe(heatCanvas);document.querySelectorAll(".chart").forEach(function(node){observer.observe(node);});}
       else window.addEventListener("resize",resizeCharts);
       var statusTimer;
+      document.querySelector("[data-year-picker]").addEventListener("change",function(event){selectYear(Number(event.target.value));});
       document.querySelector("[data-refresh]").addEventListener("click",function(){renderDashboard();clearTimeout(statusTimer);document.querySelector("[data-refresh-status]").textContent="演示数据已重新加载";statusTimer=setTimeout(function(){document.querySelector("[data-refresh-status]").textContent="";},3000);});
       var explainDialog=document.querySelector("[data-explain-dialog]"),explainOpen=document.querySelector("[data-explain]"),explainClose=document.querySelector("[data-explain-close]");
       function closeExplain(){if(explainDialog)explainDialog.hidden=true;}
@@ -447,6 +497,10 @@
       if(explainDialog)explainDialog.addEventListener("click",function(event){if(event.target===explainDialog)closeExplain();});
       document.addEventListener("keydown",function(event){if(event.key==="Escape"&&explainDialog&&!explainDialog.hidden)closeExplain();});
       document.querySelector("[data-fullscreen]").addEventListener("click",function(){var root=document.querySelector(".cockpit");if(!document.fullscreenElement&&root.requestFullscreen)root.requestFullscreen();else if(document.exitFullscreen)document.exitFullscreen();});
+      populateYearPicker();
+      bindAutoScroll("[data-major-scroll]");
+      bindAutoScroll("[data-organizer-scroll]");
+      bindAutoScroll("[data-training-scroll]");
       renderDashboard();
     }());
   </script>
