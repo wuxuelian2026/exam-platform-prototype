@@ -180,26 +180,26 @@
           <article class="heat-metric"><span class="metric-label">年度报名人次</span><strong class="metric-value" data-total-enroll></strong><div class="metric-foot">有效报名记录数</div></article>
           <article class="heat-metric"><span class="metric-label">年度获证人次</span><strong class="metric-value" data-total-cert></strong><div class="metric-foot">有效获证结果</div></article>
           <article class="heat-metric"><span class="metric-label">覆盖培训机构数</span><strong class="metric-value" data-total-training></strong><div class="metric-foot">本年度有报名</div></article>
-          <article class="heat-metric"><span class="metric-label">开展批次数</span><strong class="metric-value" data-total-batches></strong><div class="metric-foot">本年度实际开展</div></article>
+          <article class="heat-metric"><span class="metric-label">开展批次数</span><strong class="metric-value" data-total-batches></strong><div class="metric-foot">本年度开考批次</div></article>
         </div>
         <div class="heat-body"><div class="heat-canvas" data-heat-canvas><svg data-heat-svg role="group" aria-label="全国报名热力地图"></svg><div class="heat-overlay"><span class="heat-scope" data-heat-scope></span></div><div class="heat-tip" data-heat-tip hidden></div><div class="heat-foot"><div class="heat-legend"><span data-heat-min></span><i class="heat-ramp" aria-hidden="true"></i><span data-heat-max></span><span class="heat-empty"><i></i>无数据</span></div><span data-heat-note></span></div></div></div>
       </section>
-      <section class="cell cell-trend"><div class="panel-head"><h2 data-month-title>2026年度月度报名与获证人次</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-month-chart><svg role="img" data-month-chart-label aria-label="2026年度每月新增报名与获证人次"></svg></div></section>
-      <section class="cell cell-years"><div class="panel-head"><h2>近五年报名与获证对比</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-year-chart><svg role="img" aria-label="2022年至2026年报名与获证人次，2026年截至10月13日"></svg></div></section>
+      <section class="cell cell-trend"><div class="panel-head"><h2 data-month-title>2026年度月度报名与获证人次</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span></div></div><div class="chart" data-month-chart><svg role="img" data-month-chart-label aria-label="2026年度各报名月报名与获证人次（同届口径）"></svg></div></section>
+      <section class="cell cell-years"><div class="panel-head"><h2>近五年报名与获证对比</h2><div class="series-legend"><span><i></i>报名</span><span><i class="cert"></i>获证</span><span><i style="background:#f5c36b"></i>获证率</span></div></div><div class="chart" data-year-chart><svg role="img" aria-label="2022年至2026年报名与获证人次及获证率，2026年截至10月13日"></svg></div></section>
       <section class="cell cell-organizer"><div class="panel-head"><h2>承办单位报名人次排行</h2><span class="series-legend">Top 10</span></div><div class="table-wrap"><div class="scroll-viewport ranking-scroll" data-organizer-scroll role="region" aria-label="承办单位报名人次 Top 10 排名，可自动滚动"><table><thead><tr><th>排名</th><th>承办单位</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-organizer-rows></tbody></table></div></div></section>
       <section class="cell cell-training"><div class="panel-head"><h2>培训机构报名人次排行</h2><span class="series-legend">Top 10</span></div><div class="table-wrap"><div class="scroll-viewport ranking-scroll" data-training-scroll role="region" aria-label="培训机构报名人次 Top 10 排名，可自动滚动"><table><thead><tr><th>排名</th><th>培训机构</th><th>报名人次</th><th>获证人次</th></tr></thead><tbody data-training-rows></tbody></table></div></div></section>
     </main>
-    <footer class="footer"><span>演示数据 · 地区按批次所属组织归属 · 线上报名不归入培训机构</span><span class="refresh-status" role="status" aria-live="polite" data-refresh-status></span><span data-snapshot-label>快照日期：2026-10-13</span></footer>
+    <footer class="footer"><span>演示数据 · 地区按考生报名地区归属 · 线上报名不归入培训机构</span><span class="refresh-status" role="status" aria-live="polite" data-refresh-status></span><span data-snapshot-label>快照日期：2026-10-13</span></footer>
   </div>
   <div class="explain-dialog" data-explain-dialog hidden>
     <aside class="explain-panel" role="dialog" aria-modal="true" aria-labelledby="explain-title">
       <div class="explain-head"><div><h2 id="explain-title">考级运营总览页面说明</h2><p>指标口径、数据来源、计算规则与交互说明</p></div><button class="explain-close" type="button" data-explain-close aria-label="关闭页面说明">×</button></div>
-      <section class="explain-section"><h3>一、页面范围与通用口径</h3><p><strong>数据范围：</strong>全平台考级业务；当前原型使用本地演示数据，正式系统应替换为后端统计接口。</p><p><strong>统计周期：</strong>年度口径为当前年度，截至页面标注的快照日期；历史年度按自然年统计。</p><p><strong>人次定义：</strong>以有效报名记录为统计单位。同一考生报名多个专业、级别或批次时，按多条报名记录计数，不按自然人去重。</p><p><strong>有效记录：</strong>纳入已提交且未取消的报名记录；待缴费、已取消记录不计入报名人次。</p></section>
-      <section class="explain-section"><h3>二、区域热力地图内核心指标</h3><ul class="explain-list"><li><strong>年度报名人次：</strong>定义为当前年度有效报名记录数；来源为报名记录的 registration、year、报名状态字段；公式为 COUNT(有效报名记录)。</li><li><strong>年度获证人次：</strong>定义为当前年度已形成有效获证结果的报名记录数；来源为成绩/证书结果关联的 registration 与 certMonth；公式为 COUNT(有效报名记录且已获证)。</li><li><strong>覆盖培训机构数：</strong>定义为当前年度存在有效报名的培训机构去重数量；来源为报名记录 training 字段；公式为 COUNT(DISTINCT training)，平台直属或无培训机构归属不计入机构数。</li><li><strong>开展批次数：</strong>定义为当前年度实际开展考试的批次去重数量；来源为报名记录 batch 字段及批次实际开展状态；公式为 COUNT(DISTINCT batch)。</li></ul></section>
-      <section class="explain-section"><h3>三、门类占比与级别分布</h3><p><strong>门类占比：</strong>外环为报名人次，内环为获证人次；按音乐类、美术类、舞蹈类、朗诵类分组。各类占比 = 本类人次 ÷ 全部有效人次 × 100%，百分比按展示精度四舍五入，合计可能因四舍五入出现 1 个百分点误差。</p><p><strong>级别分布：</strong>按 1–3 级、4–6 级、7–10 级分组，计算方式与门类一致。图例、悬浮提示和中心文字用于区分报名与获证两个口径，无点击下钻。</p></section>
-      <section class="explain-section"><h3>四、重点专业报名与获证情况</h3><p>按专业报名人次降序展示 Top 6；蓝绿色底条表示报名人次相对最大专业的比例，绿色覆盖部分表示获证人次占该专业报名人次的比例。右侧展示报名人次与获证人次。其余专业合并为“其他专业”，只展示汇总数，不参与 Top 6 条形排名。</p><p><strong>获证率：</strong>获证人次 ÷ 报名人次 × 100%。当前页面以数值和条形覆盖表达规模与转化关系，不承载专业筛选或点击跳转。</p></section>
-      <section class="explain-section"><h3>五、区域热力地图</h3><p><strong>数据来源：</strong>报名记录的 province、city、district 与报名/获证结果字段；地图颜色按当前选中的报名或获证口径计算区域值，颜色越亮表示人数越多。</p><ul class="explain-list"><li>默认展示全国省级地图，点击湖北省进入省级市州地图。</li><li>点击市州进入市级区县地图，点击区县进入区县聚焦视图。</li><li>面包屑支持返回全国、省、市任一层级；“报名/获证”按钮切换地图统计口径。</li><li>无下级地理边界资源的地区只展示当前层级，不伪造市县地图；无数据区域显示为无数据。</li></ul></section>
-      <section class="explain-section"><h3>六、趋势、近五年与排行</h3><p><strong>本年度月度趋势：</strong>按报名月份统计报名人次，按获证月份统计获证人次；横轴为月份，纵轴为人次。未到月份不绘制数据，避免把未来月份误显示为 0。</p><p><strong>近五年对比：</strong>按自然年对比报名人次、获证人次和获证率；当前年度按快照日期统计，历史年度按完整年度统计。报名与获证使用同一人数轴，获证率使用右侧百分比轴。</p><p><strong>承办单位/培训机构排行：</strong>按报名人次降序取 Top 5，同时展示对应获证人次；承办单位按报名记录 organiser 归属，培训机构按 training 归属。线上报名无培训机构归属，不纳入培训机构排行。</p></section>
+      <section class="explain-section"><h3>一、页面范围与通用口径</h3><p><strong>数据范围：</strong>全平台考级业务；当前原型使用本地演示数据，正式系统应替换为后端统计接口。</p><p><strong>统计周期：</strong>年度口径为当前年度，截至页面标注的快照日期；历史年度按自然年统计。</p><p><strong>数据范围：</strong>当前角色可见的已发布、已结束、已归档批次；待发布批次不计入。</p><p><strong>人次定义：</strong>以有效报名记录为统计单位。同一考生报名多个专业、级别或批次时，按多条报名记录计数，不按自然人去重。</p><p><strong>有效报名：</strong>已缴费、待退款的报名计入；待缴费、已取消、已退款不计入（待退款在退款完成前仍计入，退款完成后剔除）。</p><p><strong>获证归年：</strong>报名与获证均按报名 cohort 口径归属统计年度——以报名提交时间归年，该届的获证结果不按证书生效时间另归年度；证书以首次实际生效（发布）为准，预生成记录不计入获证，获证日期仅用于判断该届报名是否获证，不参与归年归月。</p><p><strong>历史年度：</strong>历史年度数据按当前有效状态回算，非冻结快照；跨年退款、撤销会导致历史年度数字调整。</p></section>
+      <section class="explain-section"><h3>二、区域热力地图内核心指标</h3><ul class="explain-list"><li><strong>年度报名人次：</strong>定义为当前年度有效报名记录数；来源为报名记录的 registration、year、报名状态字段；公式为 COUNT(有效报名记录)，有效报名状态见第一节。</li><li><strong>年度获证人次：</strong>定义为当前年度报名 cohort 中已获证的报名记录数；以首次实际生效（发布）的获证结果为准，预生成不计入；获证日期仅用于判断该届报名是否获证，不参与归年归月。</li><li><strong>覆盖培训机构数：</strong>定义为当前年度存在有效报名的培训机构去重数量；来源为报名记录 training 字段；公式为 COUNT(DISTINCT training)，平台直属或无培训机构归属不计入机构数。</li><li><strong>开展批次数：</strong>定义为统计年度内开展考试的批次去重数量；来源为批次的计划开考时间（exam_start_time）与生命周期状态；口径为 exam_start_time 落在统计年度内、且生命周期处于已发布、已结束、已归档的批次去重数。</li></ul></section>
+      <section class="explain-section"><h3>三、门类占比与级别分布</h3><p><strong>门类占比：</strong>外环为报名人次，内环为获证人次；按音乐类、美术类、舞蹈类、朗诵类分组。各类占比 = 本类人次 ÷ 全部有效人次 × 100%，百分比按展示精度四舍五入，合计可能因四舍五入出现 1 个百分点误差。</p><p><strong>级别分布：</strong>按 1–3 级、4–6 级、7 级及以上三组统计，11 级（表演文凭级）计入第三组；计算方式与门类一致。图例、悬浮提示和中心文字用于区分报名与获证两个口径，无点击下钻。</p></section>
+      <section class="explain-section"><h3>四、重点专业报名与获证情况</h3><p>按专业报名人次降序展示 Top 10；蓝绿色底条表示报名人次相对最大专业的比例，绿色覆盖部分表示获证人次占该专业报名人次的比例。右侧展示报名人次与获证人次。其余专业合并为“其他专业”，只展示汇总数，不参与 Top 10 条形排名。</p><p><strong>获证率：</strong>获证人次 ÷ 报名人次 × 100%。当前页面以数值和条形覆盖表达规模与转化关系，不承载专业筛选或点击跳转。</p></section>
+      <section class="explain-section"><h3>五、区域热力地图</h3><p><strong>数据来源：</strong>按考生报名所在地区汇总报名与获证结果（取考生地区，不取报名机构地址、不取考点地址；线上批次无考点，同样按考生地区归类；未归属地区单独计量，不归入默认地区）；地图颜色按当前选中的报名或获证口径计算区域值，颜色越亮表示人数越多。</p><ul class="explain-list"><li>默认展示全国省级地图，点击湖北省进入省级市州地图。</li><li>点击市州进入市级区县地图，点击区县进入区县聚焦视图。</li><li>面包屑支持返回全国、省、市任一层级；“报名/获证”按钮切换地图统计口径。</li><li>无下级地理边界资源的地区只展示当前层级，不伪造市县地图；无数据区域显示为无数据。</li></ul></section>
+      <section class="explain-section"><h3>六、趋势、近五年与排行</h3><p><strong>本年度月度趋势：</strong>按报名提交月份统计报名人次；获证人次按所属报名月份统计（同届 cohort 口径，不按证书生效月份另归）。横轴为月份，纵轴为人次。未到月份不绘制数据，避免把未来月份误显示为 0。</p><p><strong>近五年对比：</strong>按自然年对比报名人次、获证人次和获证率；当前年度按快照日期统计，历史年度按完整年度统计且为当前有效状态回算值（见第一节）。获证率 = 该年度报名 cohort 的获证人次 ÷ 报名人次（同届转化）。报名与获证使用同一人数轴，获证率使用右侧百分比轴。</p><p><strong>承办单位/培训机构排行：</strong>按报名人次降序取 Top 10，同时展示对应获证人次；承办单位按报名记录 organiser 归属，培训机构按 training 归属。承办单位榜仅纳入组织类型为承办单位的批次所属单位，平台直属批次与培训机构自有批次不进入承办榜，其数据仍计入总览及其他分布。线上报名无培训机构归属，不纳入培训机构排行。</p></section>
       <section class="explain-section"><h3>七、刷新与权限</h3><p><strong>刷新数据：</strong>当前为原型演示按钮，点击后重新计算本地演示数据并更新更新时间；正式系统应调用驾驶舱统计接口后再更新页面。</p><p><strong>页面权限：</strong>驾驶舱只读，不提供报名、成绩、证书等业务操作；正式系统应按平台、承办单位和培训机构的数据权限返回可见范围。</p></section>
     </aside>
   </div>
@@ -277,7 +277,7 @@
                 training=city==="武汉市"?["光谷少儿艺术中心","武昌美育中心","武汉青少年艺术中心"][schoolIndex]:city.replace(/市$/,"")+"艺术培训"+(schoolIndex+1)+"校";
               }
               var month=months[(serial*monthStep)%total],issued=j<certQuotas[majorIndex];
-              facts.push({registration:year*100000+serial,candidate:year*100000+cohortIndex,year:year,month:month,certMonth:issued?Math.min(year===SNAPSHOT_YEAR?10:12,month+1):null,province:province,city:city,district:district,organiser:organiser,training:training,category:major[1],major:major[0],level:(serial+majorIndex)%10+1,batch:year+"-"+organiser+"-"+(online?"线上":"线下")+"-"+(cohortIndex%3+1)});
+              facts.push({registration:year*100000+serial,candidate:year*100000+cohortIndex,year:year,month:month,certMonth:issued?Math.min(year===SNAPSHOT_YEAR?10:12,month+1):null,province:province,city:city,district:district,organiser:organiser,training:training,category:major[1],major:major[0],level:(serial+majorIndex)%37===0?11:(serial+majorIndex)%10+1,batch:year+"-"+organiser+"-"+(online?"线上":"线下")+"-"+(cohortIndex%3+1)});
             }
           });
         });
@@ -354,10 +354,10 @@
         viewport.addEventListener("focusout",function(){paused=false;});
         window.setInterval(tick,70);
       }
-      function chartFrame(selector,max,units) {
+      function chartFrame(selector,max,units,rightPad) {
         var svg=document.querySelector(selector+" svg"),box=svg.getBoundingClientRect(),w=Math.max(280,box.width),h=Math.max(170,box.height);
         svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+w+" "+h);
-        var plot={svg:svg,w:w,h:h,left:48,right:w-14,top:20,bottom:h-36,max:max};
+        var plot={svg:svg,w:w,h:h,left:48,right:w-(rightPad||14),top:20,bottom:h-36,max:max};
         plot.y=function(v){return plot.bottom-v/max*(plot.bottom-plot.top);};
         for(var i=0;i<=4;i++){var value=max*i/4,y=plot.y(value);svg.appendChild(svgEl("line",{x1:plot.left,y1:y,x2:plot.right,y2:y,class:"chart-grid"}));svg.appendChild(svgEl("text",{x:plot.left-7,y:y+4,"text-anchor":"end",class:"chart-label"},fmt(value)));}
         svg.appendChild(svgEl("line",{x1:plot.left,y1:plot.top,x2:plot.left,y2:plot.bottom,class:"chart-axis"}));
@@ -368,7 +368,7 @@
       function renderCharts() {
         var monthRows=[];
         var monthCount=selectedMonthCount();
-        for(var m=1;m<=12;m++){monthRows.push({month:m,enroll:current.filter(function(r){return r.month===m;}).length,cert:current.filter(function(r){return r.certMonth===m;}).length});}
+        for(var m=1;m<=12;m++){monthRows.push({month:m,enroll:current.filter(function(r){return r.month===m;}).length,cert:current.filter(function(r){return r.month===m&&r.certMonth!==null;}).length});}
         var max=Math.ceil(Math.max.apply(null,monthRows.map(function(r){return r.enroll;}))/1000)*1000;
         var plot=chartFrame("[data-month-chart]",max),step=(plot.right-plot.left)/12;
         monthRows.forEach(function(r,i){plot.svg.appendChild(svgEl("text",{x:plot.left+step*(i+.5),y:plot.bottom+19,"text-anchor":"middle",class:"chart-label",style:plot.w<400?"font-size:9px":"",opacity:r.month>monthCount?.45:1},r.month+"月"));});
@@ -378,8 +378,10 @@
           available.forEach(function(r,i){var dot=svgEl("circle",{cx:plot.left+step*(i+.5),cy:plot.y(r[key]),r:3,fill:color});dot.appendChild(svgEl("title",{},r.month+"月"+(key==="enroll"?"报名":"获证")+" "+fmt(r[key])+"人次"));plot.svg.appendChild(dot);});
         });
         plot.svg.appendChild(svgEl("text",{x:plot.right,y:plot.h-4,"text-anchor":"end",class:"chart-title"},selectedYear===SNAPSHOT_YEAR?"10月截至13日；11–12月未发生":selectedYear+"年全年"));
-        var years=YEAR_SEEDS.map(function(seed){var c=counts(facts.filter(function(r){return r.year===seed[0];}));return {year:seed[0],enroll:c.enroll,cert:c.cert};});
-        var annual=chartFrame("[data-year-chart]",24000),group=(annual.right-annual.left)/5,bar=Math.min(18,group*.26);
+        var years=YEAR_SEEDS.map(function(seed){var c=counts(facts.filter(function(r){return r.year===seed[0];}));return {year:seed[0],enroll:c.enroll,cert:c.cert,rate:c.enroll?c.cert/c.enroll*100:0};});
+        var annual=chartFrame("[data-year-chart]",24000,"人次",42),group=(annual.right-annual.left)/5,bar=Math.min(18,group*.26);
+        var rateMax=Math.max(10,Math.ceil(Math.max.apply(null,years.map(function(r){return r.rate;}))/10)*10);
+        for(var ti=0;ti<=4;ti++){var ty=annual.top+(annual.bottom-annual.top)*ti/4;annual.svg.appendChild(svgEl("text",{x:annual.right+7,y:ty+4,"text-anchor":"start",class:"chart-label"},(rateMax*(1-ti/4)).toFixed(0)+"%"));}
         years.forEach(function(r,i){
           var x=annual.left+group*(i+.5);
           ["enroll","cert"].forEach(function(key,index){
@@ -388,6 +390,9 @@
           });
           annual.svg.appendChild(svgEl("text",{x:x,y:annual.bottom+19,"text-anchor":"middle",class:"chart-label"},r.year+(r.year===SNAPSHOT_YEAR?"*":"")));
         });
+        var ratePoints=years.map(function(r,i){return (annual.left+group*(i+.5))+","+(annual.bottom-r.rate/rateMax*(annual.bottom-annual.top));});
+        annual.svg.appendChild(svgEl("polyline",{points:ratePoints.join(" "),stroke:"#f5c36b",class:"chart-line"}));
+        years.forEach(function(r,i){var dot=svgEl("circle",{cx:annual.left+group*(i+.5),cy:annual.bottom-r.rate/rateMax*(annual.bottom-annual.top),r:3,fill:"#f5c36b"});dot.appendChild(svgEl("title",{},r.year+(r.year===SNAPSHOT_YEAR?"（截至10月13日）":"")+" 获证率 "+r.rate.toFixed(1)+"%"));annual.svg.appendChild(dot);});
         annual.svg.appendChild(svgEl("text",{x:annual.right,y:annual.h-4,"text-anchor":"end",class:"chart-title"},"*2026截至10月13日"));
       }
       var heatCanvas=document.querySelector("[data-heat-canvas]"),heatSvg=document.querySelector("[data-heat-svg]"),heatTip=document.querySelector("[data-heat-tip]");
@@ -479,8 +484,8 @@
         document.querySelector("[data-total-batches]").textContent=fmt(new Set(current.map(function(r){return r.batch;})).size);
         var categories=groupRows(current,"category"),categoryOrder=["音乐类","美术类","舞蹈类","朗诵类"];
         renderDonut("[data-category-chart]",categoryOrder.map(function(name){return categories.find(function(r){return r.name===name;});}),"门类",CATEGORY_COLORS);
-        var levels=groupRows(current,function(r){return r.level<=3?"1–3级":r.level<=6?"4–6级":"7–10级";});
-        renderDonut("[data-level-chart]",["1–3级","4–6级","7–10级"].map(function(name){return levels.find(function(r){return r.name===name;});}),"级别",["#62a8ff","#f5c36b","#ff8e7a"]);
+        var levels=groupRows(current,function(r){return r.level<=3?"1–3级":r.level<=6?"4–6级":"7级及以上";});
+        renderDonut("[data-level-chart]",["1–3级","4–6级","7级及以上"].map(function(name){return levels.find(function(r){return r.name===name;});}),"级别",["#62a8ff","#f5c36b","#ff8e7a"]);
         renderMajorList();renderRanking("[data-organizer-rows]","organiser");renderRanking("[data-training-rows]","training");renderCharts();renderHeat();
       }
       var resizeFrame=0;
