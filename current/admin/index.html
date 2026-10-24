@@ -1022,9 +1022,11 @@
     .overview-hero h2 { margin: 0; color: #172b4d; font-size: 20px; }
     .overview-hero p { margin: 0; color: var(--muted); font-size: 12px; }
     .overview-hero-meta { display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: 12px; white-space: nowrap; }
-    .overview-kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+    .overview-kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
     .overview-kpi { min-width: 0; min-height: 118px; padding: 14px; display: grid; align-content: space-between; gap: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: inherit; text-align: left; font: inherit; cursor: pointer; }
     .overview-kpi:hover { border-color: #a9c9ef; box-shadow: 0 3px 10px rgba(35, 82, 132, .08); }
+    .overview-kpi.is-static { cursor: default; }
+    .overview-kpi.is-static:hover { border-color: var(--border); box-shadow: none; }
     .overview-kpi-label { color: var(--sub); font-size: 12px; }
     .overview-kpi strong { color: #172b4d; font-size: 25px; line-height: 1.1; font-variant-numeric: tabular-nums; }
     .overview-kpi small { color: var(--muted); font-size: 11px; }
@@ -2365,10 +2367,10 @@
           <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="overview" role="tab" aria-selected="false">总览</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
           <div class="subview active" data-subview="workbench">
             <div class="grid-4">
-              <div class="card metric" data-jump="batch-workbench/enroll">报名人数<strong>2,486</strong><span class="muted">当前报名中批次</span></div>
+              <div class="card metric" data-jump="batch-workbench/enroll">报考人次<strong>2,685</strong><span class="muted">当前报名中批次</span></div>
               <div class="card metric" data-jump="batch-workbench/enroll">已缴费<strong>2,109</strong><span class="muted">缴费后进入待排期</span></div>
               <div class="card metric" data-jump="batch-workbench/schedule">已排期<strong>1,960</strong><span class="muted">待派遣/准考证</span></div>
-              <div class="card metric" data-jump="batch-workbench/certificates">证书待生成<strong>356</strong><span class="muted">提交入库后可下载</span></div>
+              <div class="card metric" data-jump="batch-workbench/certificates">证书待生成<strong>356</strong><span class="muted">发布后可下载</span></div>
             </div>
             <div class="table-card"><div class="table-tools"><h2 class="table-title">批次主链待办</h2><div class="page-actions"><button class="btn primary" data-jump="batch-workbench/overview">进入批次工作台</button></div></div>
               <div class="table-wrap"><table><thead><tr><th>待办</th><th>批次</th><th>状态</th><th>入口</th></tr></thead><tbody>
@@ -3982,7 +3984,7 @@
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">张三<br><span>REG20260001</span></td><td>420111********1234</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050012<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">李四<br><span>REG20260002</span></td><td>420106********5678</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050013<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王五<br><span>REG20260003</span></td><td>420102********8866</td><td>汉口美育培训学校</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">WH20260203040014<br><span>武汉 / 2026 / 中国舞 / 4级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:29</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
-                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">陈同学<br><span>REG20260005</span></td><td>420111********7788</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>8级</td><td>良好</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate" data-platform-only>全部生成</button></td></tr>
+                      <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">陈同学<br><span>REG20260005</span></td><td>420111********7788</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>8级</td><td>良好</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-drawer="cert-batch-generate" data-platform-only>生成</button></td></tr>
                       <tr><td><input type="checkbox"></td><td class="cert-candidate-cell">周同学<br><span>REG20260006</span></td><td>420105********5521</td><td>汉口美育培训学校</td><td>中国舞</td><td>8级</td><td>优秀</td><td class="cert-no-cell">WH20260203080108</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:10</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button><button class="btn link" data-toast="防伪验证结果已打开">验真</button></div></td></tr>
                       <tr data-cert-batch-empty hidden><td colspan="11"><div class="empty-state"><strong>未查询到匹配证书</strong><span>请调整专业、级别、状态或考生信息后重试。</span></div></td></tr>
                     </tbody>
@@ -4991,8 +4993,8 @@
       { stage: "grades", status: "待发布", name: "2026成绩待发布 · 荆州", city: "荆州", org: "荆州承办中心", site: "荆州少儿美育考点", enrollWindow: "2026-07-08 至 2026-07-28", examWindow: "2026-08-25 至 2026-08-26", summary: "评分已提交，可校验后直接发布。", tag: "green", constraint: "范围内", constraintTag: "green" },
       { stage: "grades", status: "已发布", name: "2026成绩已发布 · 黄石", city: "黄石", org: "黄石承办中心", site: "黄石文化艺术中心考点", enrollWindow: "2026-07-10 至 2026-07-30", examWindow: "2026-08-27 至 2026-08-28", summary: "成绩已发布，通过考生进入证书生成池。", tag: "green", constraint: "范围内", constraintTag: "green" },
       { stage: "certificates", status: "待生成", name: "2026证书待生成 · 武汉", city: "武汉", org: "湖北艺术职业学院", site: "湖北艺术职业学院光谷校区", enrollWindow: "2026-07-01 至 2026-07-20", examWindow: "2026-08-18 至 2026-08-20", summary: "成绩已发布且存在通过名单，等待平台生成电子证书。", tag: "orange", constraint: "范围内", constraintTag: "green" },
-      { stage: "certificates", status: "已生成", name: "2026证书已生成 · 宜昌", city: "宜昌", org: "湖北艺术职业学院", site: "宜昌青少年美育中心考点", enrollWindow: "2026-07-01 至 2026-07-20", examWindow: "2026-08-21 至 2026-08-22", summary: "电子证书已生成并占用证书号段，等待提交入库。", tag: "blue", constraint: "范围内", constraintTag: "green" },
-      { stage: "certificates", status: "已提交", publishStatus: "已结束", name: "2026证书已提交 · 襄阳", city: "襄阳", org: "湖北艺术职业学院", site: "襄阳艺术教育中心考点", enrollWindow: "2026-07-05 至 2026-07-25", examWindow: "2026-08-23 至 2026-08-24", summary: "电子证书已提交入库，家长或机构可查询下载。", tag: "green", constraint: "范围内", constraintTag: "green" }
+      { stage: "certificates", status: "已生成", name: "2026证书已生成 · 宜昌", city: "宜昌", org: "湖北艺术职业学院", site: "宜昌青少年美育中心考点", enrollWindow: "2026-07-01 至 2026-07-20", examWindow: "2026-08-21 至 2026-08-22", summary: "电子证书已生成并占用证书号段，等待发布。", tag: "blue", constraint: "范围内", constraintTag: "green" },
+      { stage: "certificates", status: "已发布", publishStatus: "已结束", name: "2026证书已发布 · 襄阳", city: "襄阳", org: "湖北艺术职业学院", site: "襄阳艺术教育中心考点", enrollWindow: "2026-07-05 至 2026-07-25", examWindow: "2026-08-23 至 2026-08-24", summary: "电子证书已发布，家长或机构可查询下载。", tag: "green", constraint: "范围内", constraintTag: "green" }
     ];
     var BATCH_DEMO_CITIES = ["武汉", "宜昌", "襄阳", "荆州", "黄石", "十堰", "孝感", "荆门", "鄂州", "咸宁", "随州", "黄冈"];
     var BATCH_DEMO_SITES = ["湖北艺术职业学院光谷校区", "武汉音乐学院合作考点", "宜昌青少年美育中心考点", "襄阳艺术教育中心考点", "荆州少儿美育考点", "黄石文化艺术中心考点"];
@@ -5009,7 +5011,6 @@
     function batchStatusTag(status) {
       if (status === "已发布") return "green";
       if (status === "已结束" || status === "已归档") return "blue";
-      if (status === "已暂停") return "red";
       return "orange";
     }
     function normalizeBatchStatus(status) {
@@ -5174,7 +5175,7 @@
           certGenerated = passed;
           certSubmitted = 0;
           certLibrary = 0;
-        } else if (status.status === "已提交") {
+        } else if (status.status === "已发布") {
           certGenerated = passed;
           certSubmitted = passed;
           certLibrary = passed;
@@ -5339,7 +5340,7 @@
       batch.onlineCertificateMocks = [
         { name: "李同学", regNo: "REG-ONLINE-001", idNo: "420105********1201", org: "宜昌承办中心", major: "钢琴", level: "5级", grade: "优秀", status: "待生成", certNo: "", generatedAt: "" },
         { name: "王同学", regNo: "REG-ONLINE-002", idNo: "420506********2302", org: "宜昌承办中心", major: "钢琴", level: "6级", grade: "良好", status: "已生成", certNo: "YC20260102060002", generatedAt: "2026-08-30 10:32" },
-        { name: "赵同学", regNo: "REG-ONLINE-003", idNo: "420504********3403", org: "宜昌承办中心", major: "中国舞", level: "4级", grade: "合格", status: "已提交", certNo: "YC20260203040003", generatedAt: "2026-08-29 16:20" }
+        { name: "赵同学", regNo: "REG-ONLINE-003", idNo: "420504********3403", org: "宜昌承办中心", major: "中国舞", level: "4级", grade: "合格", status: "已发布", certNo: "YC20260203040003", generatedAt: "2026-08-29 16:20" }
       ];
       return batch;
     }
@@ -5350,14 +5351,14 @@
       createOnlineStageDemo("grades", "成绩录入", "2026线上成绩录入 · 宜昌", "batch-online-demo-20"),
       createOnlineCertificateStageDemo("batch-online-demo-21")
     );
-    var archivedBatchDemo = createBatchDemo({ stage: "certificates", status: "已提交", publishStatus: "已归档", name: "2025年度秋季考级 · 武汉", org: "湖北艺术职业学院", site: "湖北艺术职业学院光谷校区", enrollWindow: "2025-09-01 至 2025-09-15", examWindow: "2025-09-20 至 2025-09-21", summary: "证书已提交入库，批次数据已归档。", tag: "green", constraint: "归档完成", constraintTag: "blue" }, BATCH_DEMO_LIST.length + 1);
+    var archivedBatchDemo = createBatchDemo({ stage: "certificates", status: "已发布", publishStatus: "已归档", name: "2025年度秋季考级 · 武汉", org: "湖北艺术职业学院", site: "湖北艺术职业学院光谷校区", enrollWindow: "2025-09-01 至 2025-09-15", examWindow: "2025-09-20 至 2025-09-21", summary: "证书已发布，批次数据已归档。", tag: "green", constraint: "归档完成", constraintTag: "blue" }, BATCH_DEMO_LIST.length + 1);
     archivedBatchDemo.id = "batch-archive-demo-01";
     archivedBatchDemo.code = "BATCH-2025-WH-001";
     archivedBatchDemo.publishStatus = "已归档";
     archivedBatchDemo.publishStatusTag = "blue";
     archivedBatchDemo.reviewStatus = "无需审核";
-    archivedBatchDemo.stageStatus = "证书提交";
-    archivedBatchDemo.status = "已提交";
+    archivedBatchDemo.stageStatus = "证书发布";
+    archivedBatchDemo.status = "已发布";
     archivedBatchDemo.certSubmitted = Math.max(Number(archivedBatchDemo.certSubmitted) || 0, 86);
     archivedBatchDemo.certLibrary = archivedBatchDemo.certSubmitted;
     archivedBatchDemo.exportJobs = 6;
@@ -8726,7 +8727,7 @@
       return Number(value).toLocaleString("zh-CN");
     }
     function isPublishedBatch(batch) {
-      return batch && ["已发布", "已暂停", "已结束", "已归档"].indexOf(batch.publishStatus) > -1;
+      return batch && ["已发布", "已结束", "已归档"].indexOf(batch.publishStatus) > -1;
     }
     function isOfflinePublishedBatch(batch) {
       return batch && batch.publishStatus === "已发布" && (batch.examMode || batch.mode || "线下考试") !== "线上考试";
@@ -9845,7 +9846,7 @@
         if (tools) {
           var actions = tools.querySelector(".page-actions");
           if (!actions) { actions = document.createElement("div"); actions.className = "page-actions"; tools.appendChild(actions); }
-          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">全部下载ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-auth-roles="platform organizer" data-batch-id="' + escapeHtml(batch.id) + '">全部生成</button><button class="btn primary" data-ticket-publish data-auth-roles="platform organizer" data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
+          actions.innerHTML = '<button class="btn" data-ticket-bulk-download data-batch-id="' + escapeHtml(batch.id) + '">全部下载ZIP</button><button class="btn" data-ticket-bulk-print data-batch-id="' + escapeHtml(batch.id) + '">打印准考证</button><button class="btn primary" data-ticket-async-generate data-auth-roles="platform organizer training" data-batch-id="' + escapeHtml(batch.id) + '">全部生成</button><button class="btn primary" data-ticket-publish data-auth-roles="platform organizer training" data-batch-id="' + escapeHtml(batch.id) + '">发布</button>';
         }
       }
       panel.querySelectorAll('[data-toast*="全部生成"]').forEach(function (button) { button.removeAttribute("data-toast"); button.setAttribute("data-ticket-async-generate", ""); });
@@ -10092,7 +10093,7 @@
       var meta = {
         "待生成": ["orange", "待生成"],
         "已生成": ["blue", "已生成"],
-        "已提交": ["green", "已提交"],
+        "已发布": ["green", "已发布"],
         "已作废": ["", "已作废"],
         "有效": ["green", "有效"],
         "无效": ["red", "无效"]
@@ -10350,7 +10351,7 @@
         var batchTitle = batchCard && batchCard.querySelector(".cert-batch-main strong");
         if (batchTitle) batchTitle.textContent = batch.name;
         var batchMeta = batchCard && batchCard.querySelector(".cert-batch-main > span");
-        if (batchMeta) batchMeta.textContent = "批次 ID：" + batch.id + " ｜ 成绩发布状态：" + (batch.scorePublished ? "已发布" : "待发布") + " ｜ 证书状态：" + (batch.certSubmitted ? "已提交" : batch.certGenerated ? "已生成" : "待生成");
+        if (batchMeta) batchMeta.textContent = "批次 ID：" + batch.id + " ｜ 成绩发布状态：" + (batch.scorePublished ? "已发布" : "待发布") + " ｜ 证书状态：" + (batch.certSubmitted ? "已发布" : batch.certGenerated ? "已生成" : "待生成");
         var batchSelect = batchCard && batchCard.querySelector(".cert-batch-select");
         if (batchSelect) {
           batchSelect.innerHTML = BATCH_DEMO_LIST.filter(isPublishedBatch).map(function (item) { return '<option value="' + escapeHtml(item.id) + '">' + escapeHtml(item.name) + '</option>'; }).join("");
@@ -10359,14 +10360,14 @@
         var statValues = [batch.passed, batch.certGenerated, batch.certPending, batch.certSubmitted];
         workbench.querySelectorAll(".cert-summary-grid .cert-stat strong").forEach(function (node, index) { if (statValues[index] != null) node.textContent = formatDemoNumber(statValues[index]); });
         var statusFilter = workbench.querySelector('[data-cert-batch-status-filter]');
-        if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>待生成</option><option>已生成</option><option>已提交</option>';
+        if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>待生成</option><option>已生成</option><option>已发布</option>';
         if (isOnlineBatch(batch)) {
           var onlineCertificateBody = workbench.querySelector('.cert-table:not(.certificate-print-table) tbody');
           if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105********1201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-auth-roles="platform" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506********2302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504********3403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
         }
         if (isOnlineBatch(batch) && batch.onlineCertificateMocks && batch.onlineCertificateMocks.length) {
           onlineCertificateBody.innerHTML = batch.onlineCertificateMocks.map(function (certificate) {
-            var statusTag = certificate.status === "已提交" ? "green" : certificate.status === "已生成" ? "blue" : "orange";
+            var statusTag = certificate.status === "已发布" ? "green" : certificate.status === "已生成" ? "blue" : "orange";
             var numberCell = certificate.certNo ? '<td class="cert-no-cell">' + escapeHtml(certificate.certNo) + '</td>' : '<td>-</td>';
             var dateCell = certificate.generatedAt ? escapeHtml(certificate.generatedAt) : '-';
             var actions = certificate.status === "待生成"
@@ -10376,7 +10377,7 @@
           }).join("");
         }
         filterCertificateBatchRows(workbench, false, false);
-        var isCertificateSubmitted = batch.status === "已提交" || batch.status === "证书已入库";
+        var isCertificateSubmitted = batch.status === "已发布" || batch.status === "证书已入库";
         if (isCertificateSubmitted) {
           workbench.querySelectorAll('[data-drawer="cert-batch-generate"], [data-drawer="cert-clear-numbers"], [data-drawer="cert-submit"]').forEach(function (node) { node.remove(); });
         }
@@ -10432,12 +10433,19 @@
     }
     function analyticsTrendHtml(batch) {
       var seed = [0.08, 0.14, 0.11, 0.19, 0.24, 0.16, 0.08];
-      var total = Number(batch.enrolled) || 0;
+      var total = Number(batch.attempts) || Math.round((Number(batch.enrolled) || 0) * 1.08);
       return seed.map(function (ratio, index) {
         var value = total ? Math.max(1, Math.round(total * ratio)) : 0;
         var height = total ? Math.max(5, Math.round(value * 100 / Math.max(total * 0.24, 1))) : 5;
-        return '<div class="analytics-trend-item"><i title="新增报名 ' + value + ' 人" style="height:' + Math.min(height, 100) + '%"></i><span>第' + (index + 1) + '日</span></div>';
+        return '<div class="analytics-trend-item"><i title="新增报考 ' + value + ' 人次" style="height:' + Math.min(height, 100) + '%"></i><span>第' + (index + 1) + '日</span></div>';
       }).join("");
+    }
+    function analyticsDefaultBatch() {
+      var scoped = dashboardTodoBatchesForRole(dashboardTodoRole()).filter(isPublishedBatch);
+      var latest = scoped.slice().sort(function (left, right) {
+        return (Number(right.publishOrder) || 0) - (Number(left.publishOrder) || 0);
+      })[0];
+      return latest || scoped[0] || null;
     }
     function analyticsBatchOptions(batch) {
       var scoped = dashboardTodoBatchesForRole(dashboardTodoRole()).filter(isPublishedBatch);
@@ -10450,9 +10458,10 @@
     function analyticsBatchAnalysisHtml(batch) {
       var role = dashboardTodoRole();
       var scopeLabel = role === "platform" ? "全平台" : role === "organizer" ? "本承办单位及下级机构" : "本培训机构";
-      var paidRate = analyticsPercent(batch.paid, batch.enrolled);
+      var batchAttempts = Number(batch.attempts) || Math.round((Number(batch.enrolled) || 0) * 1.08);
+      var paidRate = analyticsPercent(batch.paid, batchAttempts);
       var certRate = analyticsPercent(batch.certSubmitted, batch.passed);
-      var majorTotal = Number(batch.enrolled) || 0;
+      var majorTotal = batchAttempts;
       var majorRows = [["钢琴", Math.round(majorTotal * .42), "#2f80ed"], ["中国舞", Math.round(majorTotal * .28), "#56a3f1"], ["小提琴", Math.round(majorTotal * .18), "#7cb8f5"], ["声乐", Math.max(0, majorTotal - Math.round(majorTotal * .88)), "#a8d0f7"]];
       var orgNames = role === "platform" ? batchDemoOrgs(batch) : [roleConfig.unit];
       var orgRows = orgNames.map(function (name, index) { return [name, Math.round(majorTotal * [0.46, 0.32, 0.22][index])]; });
@@ -10462,8 +10471,8 @@
       var gradeRows = [["优秀", Math.round(passed * .36), "#16a34a"], ["良好", Math.round(passed * .34), "#56a3f1"], ["合格", Math.max(0, passed - Math.round(passed * .7)), "#7cb8f5"], ["不合格", Math.max(0, published - passed), "#ef4444"], ["缺考", Math.max(0, (Number(batch.enrolled) || 0) - published), "#98a2b3"]];
       return '<div data-batch-analytics-root>' +
         '<div class="analytics-batch-toolbar"><div class="batch-context-banner" data-batch-analytics-context><strong>批次分析</strong><span>' + escapeHtml(batch.name) + ' · 批次 ID：' + escapeHtml(batch.id) + ' · ' + escapeHtml(batch.org) + '</span><span class="tag blue">' + escapeHtml(scopeLabel + " · " + batchStageLabel(batch, batch.stage) + " · " + batch.status) + '</span></div><div class="field"><label for="analytics-batch-select">分析批次</label><select class="select" id="analytics-batch-select" data-analytics-batch-select aria-label="选择分析批次">' + analyticsBatchOptions(batch) + '</select></div></div>' +
-        '<div class="analytics-kpi-grid"><div class="card analytics-kpi"><span>总报名人数</span><strong>' + analyticsStageValue(batch, "enroll", formatDemoNumber(batch.enrolled)) + '</strong><small>当前批次提交报名</small></div><div class="card analytics-kpi"><span>已缴费人数</span><strong>' + analyticsStageValue(batch, "enroll", formatDemoNumber(batch.paid)) + '</strong><small>缴费率 ' + analyticsStageValue(batch, "enroll", paidRate) + '</small></div><div class="card analytics-kpi"><span>排期完成率</span><strong>' + analyticsStageValue(batch, "schedule", batch.scheduleRate) + '</strong><small>已排期 / 已缴费</small></div><div class="card analytics-kpi"><span>成绩已发布</span><strong>' + analyticsStageValue(batch, "grades", formatDemoNumber(batch.scorePublished)) + '</strong><small>通过率 ' + analyticsStageValue(batch, "grades", batch.passRate || "0%") + '</small></div><div class="card analytics-kpi"><span>证书已提交</span><strong>' + analyticsStageValue(batch, "certificates", formatDemoNumber(batch.certSubmitted)) + '</strong><small>制证率 ' + analyticsStageValue(batch, "certificates", certRate) + '</small></div></div>' +
-        '<div class="analytics-section-grid"><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>报名趋势</strong><span>按报名周期估算新增报名</span></div><span class="tag blue">人数</span></div><div class="analytics-trend">' + analyticsTrendHtml(batch) + '</div><div class="analytics-legend"><span><i></i>每日新增报名</span><span>累计报名 ' + formatDemoNumber(batch.enrolled) + ' 人</span></div></div><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>各专业报名分布</strong><span>报名人数</span></div><button class="btn link" data-jump="batch-workbench/enroll">查看明细</button></div><div class="analytics-bars">' + analyticsBarRows(majorRows) + '</div></div><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>各报名机构排行</strong><span>按报名人数降序</span></div><button class="btn link" data-jump="batch-workbench/enroll">查看明细</button></div><table class="analytics-ranking-table"><thead><tr><th>机构</th><th>报名</th><th>缴费率</th></tr></thead><tbody>' + orgRows.map(function (row) { return '<tr><td><strong>' + escapeHtml(row[0]) + '</strong></td><td>' + formatDemoNumber(row[1]) + '</td><td>' + paidRate + '</td></tr>'; }).join("") + '</tbody></table></div></div>' +
+        '<div class="analytics-kpi-grid"><div class="card analytics-kpi"><span>总报考人次</span><strong>' + analyticsStageValue(batch, "enroll", formatDemoNumber(batchAttempts)) + '</strong><small>当前批次报名记录</small></div><div class="card analytics-kpi"><span>已缴费人次</span><strong>' + analyticsStageValue(batch, "enroll", formatDemoNumber(batch.paid)) + '</strong><small>缴费率 ' + analyticsStageValue(batch, "enroll", paidRate) + '</small></div><div class="card analytics-kpi"><span>排期完成率</span><strong>' + analyticsStageValue(batch, "schedule", batch.scheduleRate) + '</strong><small>已排期 / 已缴费</small></div><div class="card analytics-kpi"><span>成绩已发布</span><strong>' + analyticsStageValue(batch, "grades", formatDemoNumber(batch.scorePublished)) + '</strong><small>通过率 ' + analyticsStageValue(batch, "grades", batch.passRate || "0%") + '</small></div><div class="card analytics-kpi"><span>证书已发布</span><strong>' + analyticsStageValue(batch, "certificates", formatDemoNumber(batch.certSubmitted)) + '</strong><small>制证率 ' + analyticsStageValue(batch, "certificates", certRate) + '</small></div></div>' +
+        '<div class="analytics-section-grid"><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>报名趋势</strong><span>按报名周期估算新增报考</span></div><span class="tag blue">人次</span></div><div class="analytics-trend">' + analyticsTrendHtml(batch) + '</div><div class="analytics-legend"><span><i></i>每日新增报考</span><span>累计报考 ' + formatDemoNumber(batchAttempts) + ' 人次</span></div></div><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>各专业报名分布</strong><span>报考人次</span></div><button class="btn link" data-jump="batch-workbench/enroll">查看明细</button></div><div class="analytics-bars">' + analyticsBarRows(majorRows) + '</div></div><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>各报名机构排行</strong><span>按报名人次降序</span></div><button class="btn link" data-jump="batch-workbench/enroll">查看明细</button></div><table class="analytics-ranking-table"><thead><tr><th>机构</th><th>报名人次</th><th>缴费率</th></tr></thead><tbody>' + orgRows.map(function (row) { return '<tr><td><strong>' + escapeHtml(row[0]) + '</strong></td><td>' + formatDemoNumber(row[1]) + '</td><td>' + paidRate + '</td></tr>'; }).join("") + '</tbody></table></div></div>' +
         '<div class="analytics-section-grid analytics-section-grid-2"><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>排期场次利用率</strong><span>已分配 / 待排期 / 冲突</span></div></div><div class="analytics-bars">' + analyticsBarRows(sessionRows) + '</div></div><div class="table-card analytics-panel"><div class="analytics-panel-head"><div><strong>成绩等级分布</strong><span>已发布成绩</span></div><button class="btn link" data-jump="batch-workbench/grades">查看明细</button></div><div class="analytics-bars">' + analyticsBarRows(gradeRows) + '</div></div></div>' +
         '</div>';
     }
@@ -10485,14 +10494,14 @@
       if (role === "training") {
         var trainingStage = batch.stage || "enroll";
         var trainingStatus = batch.status || "-";
-        if (trainingStage === "enroll" && trainingStatus === "报名中") return { todo: "完善报名资料", detail: "提交本机构考生报名信息并跟进缴费", route: "batch-workbench/enroll", priority: "紧急", priorityTag: "red", order: 1 };
-        if (trainingStage === "enroll") return { todo: "查看报名安排", detail: "当前批次尚未开放本机构报名", route: "batch-workbench/enroll", priority: "一般", priorityTag: "blue", order: 5 };
+        if (trainingStage === "enroll" && trainingStatus === "报名中") return { todo: "完善报名资料", detail: "新增/批量导入报名、单条或批量确认缴费、取消报名、发起退款、确认退款", route: "batch-workbench/enroll", priority: "紧急", priorityTag: "red", order: 1 };
+        if (trainingStage === "enroll") return { todo: "查看报名安排", detail: "当前批次尚未开放本机构报名", route: "batch-workbench/enroll", priority: "一般", priorityTag: "blue", order: 5, done: true };
         if (trainingStage === "schedule" && trainingStatus === "待排期") return { todo: "完成本机构排期", detail: "为本机构已缴费考生分配考点、考场和时段", route: "batch-workbench/schedule", priority: "紧急", priorityTag: "red", order: 1 };
         if (trainingStage === "schedule") return { todo: "继续本机构排期", detail: "检查排期冲突并提交本机构排期", route: "batch-workbench/schedule", priority: "重要", priorityTag: "orange", order: 2 };
-        if (trainingStage === "dispatch") return { todo: "查看考官派遣进度", detail: "查看本机构考生或场次的考官派遣状态", route: "batch-workbench/dispatch", priority: "一般", priorityTag: "blue", order: 4 };
-        if (trainingStage === "tickets") return { todo: "查看准考证", detail: "确认本机构考生准考证已生成并可下载", route: "batch-workbench/tickets", priority: "一般", priorityTag: "blue", order: 4 };
-        if (trainingStage === "grades") return { todo: "查看成绩进度", detail: "查看本机构考生成绩录入与发布状态", route: "batch-workbench/grades", priority: "重要", priorityTag: "orange", order: 2 };
-        if (trainingStage === "certificates") return { todo: "查看证书进度", detail: "查询本机构考生证书生成与入库状态", route: "batch-workbench/certificates", priority: "一般", priorityTag: "blue", order: 4, done: true };
+        if (trainingStage === "dispatch") return { todo: "查看考官派遣进度", detail: "查看本机构考生或场次的考官派遣状态", route: "batch-workbench/dispatch", priority: "一般", priorityTag: "blue", order: 4, done: true };
+        if (trainingStage === "tickets") return { todo: "生成本机构考生准考证", detail: "为本机构考生生成准考证并下载/打印，发布由平台/承办单位操作", route: "batch-workbench/tickets", priority: "重要", priorityTag: "orange", order: 2 };
+        if (trainingStage === "grades") return { todo: "查看成绩进度", detail: "查看本机构考生成绩录入与发布状态", route: "batch-workbench/grades", priority: "重要", priorityTag: "orange", order: 2, done: true };
+        if (trainingStage === "certificates") return { todo: "查看证书进度", detail: "查询本机构考生证书生成与发布状态", route: "batch-workbench/certificates", priority: "一般", priorityTag: "blue", order: 4, done: true };
       }
       var online = isOnlineBatch(batch);
       var stage = batch.stage || "enroll";
@@ -10500,11 +10509,11 @@
       var meta = { todo: "查看批次状态", detail: batchStageStatusLabel(batch), route: "plans/batches", priority: "一般", priorityTag: "blue", order: 5, done: false };
       if (online) {
         if (stage === "tickets" && status === "视频录制中") meta = { todo: "查看视频录制状态", detail: "视频录制进行中", route: "batch-workbench/tickets", priority: "紧急", priorityTag: "red", order: 1 };
-        else if (stage === "tickets" && status === "视频已录制") meta = { todo: "提交考官派遣", detail: "已提交视频可进入派遣候选列表", route: "batch-workbench/dispatch", priority: "重要", priorityTag: "orange", order: 2 };
-        else if (stage === "dispatch") meta = { todo: "提交考官派遣", detail: "发布线上派遣任务后同步考官端", route: "batch-workbench/dispatch", priority: "重要", priorityTag: "orange", order: 2 };
+        else if (stage === "tickets" && status === "视频已录制") meta = { todo: "发布考官派遣", detail: "视频已提交，可进入派遣候选列表", route: "batch-workbench/dispatch", priority: "重要", priorityTag: "orange", order: 2 };
+        else if (stage === "dispatch") meta = { todo: "发布考官派遣", detail: "发布线上派遣任务后同步考官端", route: "batch-workbench/dispatch", priority: "重要", priorityTag: "orange", order: 2 };
         else if (stage === "grades") meta = { todo: "接收线上评分", detail: "按考生查看视频和考官评分提交状态", route: "batch-workbench/grades", priority: "紧急", priorityTag: "red", order: 1 };
-        else if (stage === "certificates" && status === "待生成") meta = { todo: "生成线上证书", detail: "成绩已发布，等待生成证书", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2 };
-        else if (stage === "certificates" && status === "已提交") meta = { todo: "查看证书库", detail: "线上证书已提交入库", route: "certificates/library", priority: "已完成", priorityTag: "green", order: 6, done: true };
+        else if (stage === "certificates" && status === "待生成") meta = { todo: "生成线上证书", detail: "成绩已发布，等待生成证书", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2, done: role !== "platform" };
+        else if (stage === "certificates" && status === "已发布") meta = { todo: "查看证书库", detail: "线上证书已发布", route: "certificates/library", priority: "已完成", priorityTag: "green", order: 6, done: true };
         else meta = { todo: "查看线上批次", detail: batchStageStatusLabel(batch), route: "batch-workbench/" + stage, priority: "一般", priorityTag: "blue", order: 4 };
       } else if (stage === "enroll" && status === "报名未开始") meta = { todo: "等待报名开放", detail: "报名窗口尚未开始", route: "plans/batches", priority: "一般", priorityTag: "blue", order: 5 };
       else if (stage === "enroll") meta = { todo: "处理报名与缴费", detail: "关注待缴费和异常报名记录", route: "batch-workbench/enroll", priority: "紧急", priorityTag: "red", order: 1 };
@@ -10514,11 +10523,11 @@
       else if (stage === "dispatch") meta = { todo: "发布考官派遣", detail: "完成考官指派并发布任务", route: "batch-workbench/dispatch", priority: "重要", priorityTag: "orange", order: 2 };
       else if (stage === "tickets" && status === "待生成") meta = { todo: "生成准考证", detail: "排期完成后批量生成准考证", route: "batch-workbench/tickets", priority: "重要", priorityTag: "orange", order: 2 };
       else if (stage === "tickets") meta = { todo: "发布准考证", detail: "准考证已生成，等待发布", route: "batch-workbench/tickets", priority: "重要", priorityTag: "orange", order: 2 };
-      else if (stage === "grades" && gradeStatusLabel(status) === "待发布") meta = { todo: "发布成绩", detail: "评分已提交，发布后进入证书阶段", route: "batch-workbench/grades", priority: "重要", priorityTag: "orange", order: 2 };
-      else if (stage === "grades" && status === "已发布") meta = { todo: "进入证书待生成", detail: "成绩已发布，自动进入制证流程", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2 };
-      else if (stage === "certificates" && status === "待生成") meta = { todo: "生成证书", detail: "通过考生等待电子证书生成", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2 };
-      else if (stage === "certificates" && status === "已生成") meta = { todo: "提交证书入库", detail: "证书号已生成，等待提交入库", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2 };
-      else if (stage === "certificates" && status === "已提交") meta = { todo: "查看证书库", detail: "证书已提交入库，可查询下载", route: "certificates/library", priority: "已完成", priorityTag: "green", order: 6, done: true };
+      else if (stage === "grades" && gradeStatusLabel(status) === "待发布") meta = { todo: "待发布成绩", detail: "评分已提交，发布后进入证书阶段", route: "batch-workbench/grades", priority: "重要", priorityTag: "orange", order: 2 };
+      else if (stage === "grades" && status === "已发布") meta = { todo: "进入证书待生成", detail: "成绩已发布，自动进入制证流程", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2, done: role !== "platform" };
+      else if (stage === "certificates" && status === "待生成") meta = { todo: "生成证书", detail: "通过考生等待电子证书生成", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2, done: role !== "platform" };
+      else if (stage === "certificates" && status === "已生成") meta = { todo: "发布证书", detail: "证书已生成，等待发布", route: "batch-workbench/certificates", priority: "重要", priorityTag: "orange", order: 2, done: role !== "platform" };
+      else if (stage === "certificates" && status === "已发布") meta = { todo: "查看证书库", detail: "证书已发布，可查询下载", route: "certificates/library", priority: "已完成", priorityTag: "green", order: 6, done: true };
       return meta;
     }
     function dashboardTodoMeta(batch, role) {
@@ -10530,7 +10539,7 @@
       else if (batch.stage === "tickets") count = isOnlineBatch(batch) ? (Number(batch.videoPending) || 0) : Math.max(0, (Number(batch.ticketAvailable) || 0) - (Number(batch.ticketsGenerated) || 0));
       else if (batch.stage === "grades") count = (Number(batch.scorePendingInput) || 0) + (Number(batch.scorePendingConfirm) || 0);
       else if (batch.stage === "certificates") count = Number(batch.certPending) || 0;
-      meta.todoCount = meta.done ? 0 : Math.max(1, count);
+      meta.todoCount = (meta.done || !count) ? 0 : count;
       meta.deadline = batch.todoDeadline || (batch.stage === "enroll" ? String(batch.enrollWindow || "").split(" 至 ").pop() : String(batch.examWindow || "").split(" 至 ").pop()) || "待业务节点确认";
       meta.owner = role === "platform" ? "平台运营方" : role === "organizer" ? "承办单位" : "培训机构";
       return meta;
@@ -10546,7 +10555,7 @@
       }).filter(function (item) {
         var modeMatch = mode === "all" || (mode === "online" ? isOnlineBatch(item.batch) : !isOnlineBatch(item.batch));
         var stageMatch = stage === "all" || item.batch.stage === stage;
-        return modeMatch && stageMatch;
+        return modeMatch && stageMatch && !item.meta.done && (Number(item.meta.todoCount) || 0) > 0;
       }).sort(function (left, right) {
         return left.meta.order - right.meta.order || (left.batch.stage || "").localeCompare(right.batch.stage || "") || left.batch.name.localeCompare(right.batch.name);
       });
@@ -10590,12 +10599,12 @@
       if (!root) return;
       var role = dashboardTodoRole();
       var all = dashboardTodoBatchesForRole(role);
-      var pending = all.map(function (batch) { return { batch: batch, meta: dashboardTodoMeta(batch, role) }; }).filter(function (item) { return !item.meta.done; });
+      var pending = all.map(function (batch) { return { batch: batch, meta: dashboardTodoMeta(batch, role) }; }).filter(function (item) { return !item.meta.done && (Number(item.meta.todoCount) || 0) > 0; });
       var online = pending.filter(function (item) { return isOnlineBatch(item.batch); }).length;
       var offline = pending.length - online;
       var todoTotal = pending.reduce(function (sum, item) { return sum + (Number(item.meta.todoCount) || 0); }, 0);
       var roleLabel = role === "platform" ? "平台全量批次" : role === "organizer" ? "本承办单位批次" : "本机构关联批次";
-      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色责任范围汇总下一步操作，已完成批次保留查看入口。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
+      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色责任范围汇总下一步操作，已完成批次不进入待办。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
       renderDashboardTodoRows(root.querySelector(".dashboard-todo-shell"));
     }
     var ANALYTICS_STAT_LEVELS = LEVEL_DICTIONARY.slice();
@@ -10639,11 +10648,11 @@
       return ANALYTICS_STAT_ROWS;
     }
     function analyticsStatisticsMetricValue(row, metric) {
-      var factor = { count: 1, attempts: 1.08, paid: .82, passed: .76, certificates: .68 }[metric] || 1;
+      var factor = { attempts: 1.08, paid: .82, passed: .76, certificates: .68 }[metric] || 1;
       return Math.round((Number(row.total) || 0) * factor);
     }
     function analyticsStatisticsMetricLabel(metric) {
-      return { count: "考生人数", attempts: "报考人次", paid: "缴费人数", passed: "通过人数", certificates: "证书数" }[metric] || "考生人数";
+      return { attempts: "报考人次", paid: "缴费人次", passed: "通过人数", certificates: "证书数" }[metric] || "报考人次";
     }
     function analyticsStatisticsRowHtml(row, groupBy, metric) {
       var total = analyticsStatisticsMetricValue(row, metric);
@@ -10661,10 +10670,10 @@
       var max = Math.max.apply(null, rows.map(function (row) { return row.total; }).concat([1]));
       return '<section class="table-card analytics-statistics-panel" data-analytics-stat-root>' +
         '<div class="overview-panel-head"><div><h3>多维考级数据分析</h3><p>用于跨批次筛选、指标切换和图表钻取，上方固定看板仅承担经营快览</p></div><span class="tag blue">默认按批次</span></div>' +
-        '<div class="analytics-stat-filter"><div class="field"><label>承办单位</label><select class="select" data-analytics-stat-filter="unit"><option value="all">全部承办单位</option><option>武汉承办中心</option><option>宜昌承办中心</option><option>襄阳承办中心</option></select></div><div class="field"><label>计划 / 批次</label><select class="select" data-analytics-stat-filter="batch"><option value="all">全部已发布批次</option><option>2026下半年 · 武汉</option><option>2026线上秋季 · 宜昌</option><option>2026暑期收尾 · 宜昌</option></select></div><div class="field"><label>发证时间</label><div class="field-row-2"><input class="input" type="date" data-analytics-stat-filter="issue-start" aria-label="发证开始日期"><input class="input" type="date" data-analytics-stat-filter="issue-end" aria-label="发证结束日期"></div><span class="muted">按证书发证日期筛选</span></div><div class="field"><label>门类</label><select class="select" data-analytics-stat-filter="category"><option value="all">全部门类</option><option value="MUSIC">音乐类</option><option value="FINE_ARTS">美术类</option><option value="DANCE">舞蹈类</option><option value="RECITATION">朗诵类</option></select></div><div class="field"><label>专业</label><select class="select" data-analytics-stat-filter="major"><option value="all">全部专业</option><option>钢琴</option><option>中国舞</option><option>小提琴</option><option>声乐</option><option>素描</option><option>朗诵</option></select></div><div class="field"><label>级别</label><select class="select" data-analytics-stat-filter="level"><option value="all">全部级别</option>' + LEVEL_OPTIONS.map(function (item) { return '<option value="' + item.code + '">' + item.name + '</option>'; }).join("") + '</select></div><div class="field"><label>横轴选项</label><select class="select" data-analytics-stat-filter="x"><option value="batch">考级批次</option><option value="plan">计划名称</option><option value="month">月份</option><option value="category">门类</option><option value="major">专业</option><option value="level">级别</option><option value="org">承办单位</option><option value="gender">性别</option><option value="score">考评成绩</option></select></div><div class="field"><label>纵轴指标</label><select class="select" data-analytics-stat-filter="y"><option value="count">考生人数</option><option value="attempts">报考人次</option><option value="paid">缴费人数</option><option value="passed">通过人数</option><option value="certificates">证书数</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" type="button" data-analytics-stat-search>查询</button><button class="btn" type="button" data-analytics-stat-reset>重置</button></div></div></div>' +
-        '<div class="analytics-stat-toolbar"><div class="tabs" role="tablist" aria-label="考生统计范围"><button class="tab active" type="button" data-analytics-stat-scope="all">全部考生</button><button class="tab" type="button" data-analytics-stat-scope="passed">获证人数统计</button></div><span class="muted">横轴：考级批次 · 纵轴：考生人数</span><button class="btn" type="button" data-analytics-stat-export>导出当前统计 Excel</button></div>' +
-        '<div class="analytics-stat-chart" data-analytics-stat-chart>' + rows.map(function (row) { return '<div class="analytics-stat-bar"><span>' + escapeHtml(row.name) + '</span><i style="height:' + Math.max(8, Math.round(row.total * 132 / max)) + 'px" title="' + escapeHtml(row.name) + ' ' + formatDemoNumber(row.total) + ' 人"></i><strong>' + formatDemoNumber(row.total) + '</strong></div>'; }).join("") + '</div>' +
-        '<div data-analytics-stat-detail>' + analyticsStatisticsDetailHtml(rows, "batch", "count") + '</div>' +
+        '<div class="analytics-stat-filter"><div class="field"><label>承办单位</label><select class="select" data-analytics-stat-filter="unit"><option value="all">全部承办单位</option><option>武汉承办中心</option><option>宜昌承办中心</option><option>襄阳承办中心</option></select></div><div class="field"><label>计划 / 批次</label><select class="select" data-analytics-stat-filter="batch"><option value="all">全部已发布批次</option><option>2026下半年 · 武汉</option><option>2026线上秋季 · 宜昌</option><option>2026暑期收尾 · 宜昌</option></select></div><div class="field"><label>发证时间</label><div class="field-row-2"><input class="input" type="date" data-analytics-stat-filter="issue-start" aria-label="发证开始日期"><input class="input" type="date" data-analytics-stat-filter="issue-end" aria-label="发证结束日期"></div><span class="muted">按证书发证日期筛选</span></div><div class="field"><label>门类</label><select class="select" data-analytics-stat-filter="category"><option value="all">全部门类</option><option value="MUSIC">音乐类</option><option value="FINE_ARTS">美术类</option><option value="DANCE">舞蹈类</option><option value="RECITATION">朗诵类</option></select></div><div class="field"><label>专业</label><select class="select" data-analytics-stat-filter="major"><option value="all">全部专业</option><option>钢琴</option><option>中国舞</option><option>小提琴</option><option>声乐</option><option>素描</option><option>朗诵</option></select></div><div class="field"><label>级别</label><select class="select" data-analytics-stat-filter="level"><option value="all">全部级别</option>' + LEVEL_OPTIONS.map(function (item) { return '<option value="' + item.code + '">' + item.name + '</option>'; }).join("") + '</select></div><div class="field"><label>横轴选项</label><select class="select" data-analytics-stat-filter="x"><option value="batch">考级批次</option><option value="plan">计划名称</option><option value="month">月份</option><option value="category">门类</option><option value="major">专业</option><option value="level">级别</option><option value="org">承办单位</option><option value="gender">性别</option><option value="score">考评成绩</option></select></div><div class="field"><label>纵轴指标</label><select class="select" data-analytics-stat-filter="y"><option value="attempts">报考人次</option><option value="paid">缴费人次</option><option value="passed">通过人数</option><option value="certificates">证书数</option></select></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" type="button" data-analytics-stat-search>查询</button><button class="btn" type="button" data-analytics-stat-reset>重置</button></div></div></div>' +
+        '<div class="analytics-stat-toolbar"><div class="tabs" role="tablist" aria-label="考生统计范围"><button class="tab active" type="button" data-analytics-stat-scope="all">全部考生</button><button class="tab" type="button" data-analytics-stat-scope="passed">获证人数统计</button></div><span class="muted">横轴：考级批次 · 纵轴：报考人次</span><button class="btn" type="button" data-analytics-stat-export>导出当前统计 Excel</button></div>' +
+        '<div class="analytics-stat-chart" data-analytics-stat-chart>' + rows.map(function (row) { return '<div class="analytics-stat-bar"><span>' + escapeHtml(row.name) + '</span><i style="height:' + Math.max(8, Math.round(row.total * 132 / max)) + 'px" title="' + escapeHtml(row.name) + ' ' + formatDemoNumber(row.total) + ' 人次"></i><strong>' + formatDemoNumber(row.total) + '</strong></div>'; }).join("") + '</div>' +
+        '<div data-analytics-stat-detail>' + analyticsStatisticsDetailHtml(rows, "batch", "attempts") + '</div>' +
         '</section>';
     }
     function renderAnalyticsStatistics(root) {
@@ -10678,15 +10687,23 @@
       var xAxis = root.querySelector('[data-analytics-stat-filter="x"]');
       var yAxis = root.querySelector('[data-analytics-stat-filter="y"]');
       var groupBy = xAxis ? xAxis.value : "batch";
-      var metric = yAxis ? yAxis.value : "count";
+      var metric = yAxis ? yAxis.value : "attempts";
       var rows = analyticsStatisticsRows(groupBy);
       var selectedMajor = root.querySelector('[data-analytics-stat-filter="major"]');
       var selectedCategory = root.querySelector('[data-analytics-stat-filter="category"]');
       if (groupBy === "major" && selectedMajor && selectedMajor.value !== "all") rows = rows.filter(function (row) { return row.name === selectedMajor.value; });
       if (groupBy === "category" && selectedCategory && selectedCategory.value !== "all") rows = rows.filter(function (row) { return row.categoryCode === selectedCategory.value; });
+      var statScope = root.getAttribute("data-analytics-stat-scope-value") || "all";
+      if (statScope === "passed") rows = rows.filter(function (row) { return (Number(row.total) || 0) > 0; }).map(function (row) {
+        var copy = {};
+        Object.keys(row).forEach(function (key) { copy[key] = row[key]; });
+        copy.total = Math.round((Number(row.total) || 0) * 0.68);
+        copy.name = row.name;
+        return copy;
+      });
       var max = Math.max.apply(null, rows.map(function (row) { return analyticsStatisticsMetricValue(row, metric); }).concat([1]));
       var chart = root.querySelector("[data-analytics-stat-chart]");
-      if (chart) chart.innerHTML = rows.map(function (row) { var value = analyticsStatisticsMetricValue(row, metric); return '<div class="analytics-stat-bar"><span>' + escapeHtml(row.name) + '</span><i style="height:' + Math.max(8, Math.round(value * 132 / max)) + 'px" title="' + escapeHtml(row.name) + ' ' + formatDemoNumber(value) + ' 人"></i><strong>' + formatDemoNumber(value) + '</strong></div>'; }).join("");
+      if (chart) chart.innerHTML = rows.map(function (row) { var value = analyticsStatisticsMetricValue(row, metric); return '<div class="analytics-stat-bar"><span>' + escapeHtml(row.name) + '</span><i style="height:' + Math.max(8, Math.round(value * 132 / max)) + 'px" title="' + escapeHtml(row.name) + ' ' + formatDemoNumber(value) + ' 人次"></i><strong>' + formatDemoNumber(value) + '</strong></div>'; }).join("");
       var detail = root.querySelector("[data-analytics-stat-detail]");
       if (detail) detail.innerHTML = analyticsStatisticsDetailHtml(rows, groupBy, metric);
       var count = root.querySelector("[data-analytics-stat-count]");
@@ -10704,7 +10721,7 @@
         result.scorePublished += Number(item.scorePublished) || 0;
         result.passed += Number(item.passed) || 0;
         result.certSubmitted += Number(item.certSubmitted) || 0;
-        if (["已发布", "已暂停"].indexOf(item.publishStatus) > -1) result.activeBatches += 1;
+        if (["已发布"].indexOf(item.publishStatus) > -1) result.activeBatches += 1;
       });
       if (!result.attempts) result.attempts = Math.round(result.enrolled * 1.08);
       result.paidRate = analyticsPercent(result.paid, result.enrolled);
@@ -10716,9 +10733,10 @@
       var grouped = {};
       batches.forEach(function (item) {
         var key = item[field] || (field === "trainingOrg" ? "未关联机构" : "未填写");
-        if (!grouped[key]) grouped[key] = { name: key, batches: 0, entries: 0, paid: 0, scorePublished: 0, passed: 0, institutions: 0 };
+        if (!grouped[key]) grouped[key] = { name: key, batches: 0, entries: 0, attempts: 0, paid: 0, scorePublished: 0, passed: 0, institutions: 0 };
         grouped[key].batches += 1;
         grouped[key].entries += Number(item.enrolled) || 0;
+        grouped[key].attempts += Number(item.attempts) || Math.round((Number(item.enrolled) || 0) * 1.08);
         grouped[key].paid += Number(item.paid) || 0;
         grouped[key].scorePublished += Number(item.scorePublished) || 0;
         grouped[key].passed += Number(item.passed) || 0;
@@ -10739,23 +10757,23 @@
     function overviewCityHeatmapHtml(cityGroups, cityScope) {
       var groupByCity = {};
       cityGroups.forEach(function (item) { groupByCity[item.name] = item; });
-      var maxEntries = Math.max.apply(Math, cityGroups.map(function (item) { return Number(item.entries) || 0; }).concat([1]));
+      var maxEntries = Math.max.apply(Math, cityGroups.map(function (item) { return Number(item.attempts) || 0; }).concat([1]));
       var mapItems = OVERVIEW_CITY_MAP_POINTS.map(function (point) {
-        var item = groupByCity[point.name] || { name: point.name, entries: 0, batches: 0 };
-        var entries = Number(item.entries) || 0;
+        var item = groupByCity[point.name] || { name: point.name, attempts: 0, batches: 0 };
+        var entries = Number(item.attempts) || 0;
         var level = entries ? Math.max(1, Math.min(5, Math.ceil(entries / maxEntries * 5))) : 0;
         var selected = cityScope !== "湖北省" && cityScope === point.name;
-        var markerAttrs = groupByCity[point.name] ? ' tabindex="0" role="button" data-overview-city-marker="' + escapeHtml(point.name) + '" aria-label="' + escapeHtml(point.name + '，报名' + formatDemoNumber(entries) + '人，承办' + formatDemoNumber(item.batches) + '个批次') + '"' : '';
-        return '<g class="overview-city-map-point level-' + level + (selected ? ' is-selected' : '') + '" transform="translate(' + point.x + ' ' + point.y + ')' + '"' + markerAttrs + '><title>' + escapeHtml(point.name + '：' + formatDemoNumber(entries) + '人 · ' + formatDemoNumber(item.batches) + '个批次') + '</title><circle r="6"></circle><text y="-10">' + escapeHtml(point.name) + '</text></g>';
+        var markerAttrs = groupByCity[point.name] ? ' tabindex="0" role="button" data-overview-city-marker="' + escapeHtml(point.name) + '" aria-label="' + escapeHtml(point.name + '，报考' + formatDemoNumber(entries) + '人次，承办' + formatDemoNumber(item.batches) + '个批次') + '"' : '';
+        return '<g class="overview-city-map-point level-' + level + (selected ? ' is-selected' : '') + '" transform="translate(' + point.x + ' ' + point.y + ')' + '"' + markerAttrs + '><title>' + escapeHtml(point.name + '：' + formatDemoNumber(entries) + '人次 · ' + formatDemoNumber(item.batches) + '个批次') + '</title><circle r="6"></circle><text y="-10">' + escapeHtml(point.name) + '</text></g>';
       }).join("");
       var topItems = (cityScope === "湖北省" ? cityGroups.slice() : cityGroups.filter(function (item) { return item.name === cityScope; })).sort(function (left, right) {
-        return (Number(right.entries) || 0) - (Number(left.entries) || 0);
+        return (Number(right.attempts) || 0) - (Number(left.attempts) || 0);
       }).slice(0, 5);
       var rankingRows = topItems.map(function (item, index) {
-        return '<button class="overview-city-ranking-row' + (cityScope === item.name ? ' is-selected' : '') + '" type="button" data-overview-city-marker="' + escapeHtml(item.name) + '" aria-label="查看' + escapeHtml(item.name) + '热度"><em>' + (index + 1) + '</em><strong>' + escapeHtml(item.name) + '</strong><span>' + formatDemoNumber(item.entries) + '人 · ' + formatDemoNumber(item.batches) + '批</span></button>';
+        return '<button class="overview-city-ranking-row' + (cityScope === item.name ? ' is-selected' : '') + '" type="button" data-overview-city-marker="' + escapeHtml(item.name) + '" aria-label="查看' + escapeHtml(item.name) + '热度"><em>' + (index + 1) + '</em><strong>' + escapeHtml(item.name) + '</strong><span>' + formatDemoNumber(item.attempts) + '人次 · ' + formatDemoNumber(item.batches) + '批</span></button>';
       }).join("");
       if (!rankingRows) rankingRows = '<div class="overview-city-ranking-empty">当前范围暂无城市数据</div>';
-      return '<div class="overview-city-heatmap"><div class="overview-city-map" title="颜色越深表示报名人数越多"><svg viewBox="0 0 320 238" role="img" aria-label="湖北省各城市报名人数热力图"><path class="province-shape" d="M35 77L59 58L77 53L93 38L116 30L139 36L158 28L184 39L206 50L224 64L247 73L268 91L286 101L278 121L288 138L273 153L278 174L257 184L242 203L216 198L196 214L171 207L149 219L130 207L112 214L94 199L73 193L64 176L46 165L51 147L37 132L45 113L32 99Z"></path><path class="province-river" d="M48 132C93 117 135 130 169 133C207 136 239 124 278 138"></path>' + mapItems + '<text class="overview-city-map-caption" x="160" y="232" text-anchor="middle">湖北省示意图 · 点击城市查看</text></svg><div class="overview-city-map-legend"><span>低</span><i></i><span>高</span></div></div><div class="overview-city-ranking"><div class="overview-city-ranking-head"><strong>' + (cityScope === "湖北省" ? "Top 5 城市" : "当前城市") + '</strong><span>报名人数</span></div><div class="overview-city-ranking-list">' + rankingRows + '</div></div></div>';
+      return '<div class="overview-city-heatmap"><div class="overview-city-map" title="颜色越深表示报考人次越多"><svg viewBox="0 0 320 238" role="img" aria-label="湖北省各城市报考人次热力图"><path class="province-shape" d="M35 77L59 58L77 53L93 38L116 30L139 36L158 28L184 39L206 50L224 64L247 73L268 91L286 101L278 121L288 138L273 153L278 174L257 184L242 203L216 198L196 214L171 207L149 219L130 207L112 214L94 199L73 193L64 176L46 165L51 147L37 132L45 113L32 99Z"></path><path class="province-river" d="M48 132C93 117 135 130 169 133C207 136 239 124 278 138"></path>' + mapItems + '<text class="overview-city-map-caption" x="160" y="232" text-anchor="middle">湖北省示意图 · 点击城市查看</text></svg><div class="overview-city-map-legend"><span>低</span><i></i><span>高</span></div></div><div class="overview-city-ranking"><div class="overview-city-ranking-head"><strong>' + (cityScope === "湖北省" ? "Top 5 城市" : "当前城市") + '</strong><span>报考人次</span></div><div class="overview-city-ranking-list">' + rankingRows + '</div></div></div>';
     }
     function analyticsOverviewHtml(batch, publishedBatches) {
       var role = dashboardTodoRole();
@@ -10773,17 +10791,17 @@
         return right.entries - left.entries;
       });
       var trendBase = [0.06, 0.08, 0.09, 0.1, 0.12, 0.1, 0.11, 0.12, 0.09, 0.1, 0.12, 0.13];
-      var trend = trendBase.map(function (ratio) { return Math.max(0, Math.round(aggregate.enrolled * ratio)); });
+      var trend = trendBase.map(function (ratio) { return Math.max(0, Math.round(aggregate.attempts * ratio)); });
       var months = ["9月", "10月", "11月", "12月", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月"];
       var maxTrend = Math.max.apply(Math, trend.concat([1]));
       var trendBars = trend.map(function (value, index) {
         return '<div class="overview-trend-column"><button type="button" title="按' + months[index] + '分析" style="--bar-height:' + Math.max(12, Math.round(value / maxTrend * 128)) + 'px" data-overview-stat-drill="month" data-overview-drill-value="' + months[index] + '" aria-label="按' + months[index] + '分析报名数据"></button><span>' + months[index] + '</span></div>';
       }).join("");
       var organizerRows = organizers.map(function (item, index) {
-        return '<tr><td>' + (index + 1) + '</td><td><button class="btn link" type="button" data-jump="plans/batches">' + escapeHtml(item.name) + '</button></td><td>' + formatDemoNumber(item.batches) + '</td><td>' + formatDemoNumber(item.entries) + '</td><td><strong>' + item.rate + '</strong></td><td>' + formatDemoNumber(item.institutions) + '</td></tr>';
+        return '<tr><td>' + (index + 1) + '</td><td><button class="btn link" type="button" data-jump="plans/batches">' + escapeHtml(item.name) + '</button></td><td>' + formatDemoNumber(item.batches) + '</td><td>' + formatDemoNumber(item.attempts) + '</td><td><strong>' + item.rate + '</strong></td><td>' + formatDemoNumber(item.institutions) + '</td></tr>';
       }).join("");
       var majorRows = [
-        ["钢琴", scopeNumber(aggregate.enrolled * .38), 100], ["中国舞", scopeNumber(aggregate.enrolled * .27), 83], ["小提琴", scopeNumber(aggregate.enrolled * .16), 57], ["声乐", scopeNumber(aggregate.enrolled * .1), 48], ["素描", scopeNumber(aggregate.enrolled * .06), 35], ["朗诵", scopeNumber(aggregate.enrolled * .03), 30]
+        ["钢琴", scopeNumber(aggregate.attempts * .38), 100], ["中国舞", scopeNumber(aggregate.attempts * .27), 83], ["小提琴", scopeNumber(aggregate.attempts * .16), 57], ["声乐", scopeNumber(aggregate.attempts * .1), 48], ["素描", scopeNumber(aggregate.attempts * .06), 35], ["朗诵", scopeNumber(aggregate.attempts * .03), 30]
       ].map(function (item) {
         return '<button class="overview-major-row" type="button" data-overview-stat-drill="major" data-overview-drill-value="' + item[0] + '" aria-label="按' + item[0] + '分析报名数据"><span>' + item[0] + '</span><div class="overview-major-track"><i style="width:' + item[2] + '%"></i></div><strong>' + formatDemoNumber(item[1]) + '</strong></button>';
       }).join("");
@@ -10803,19 +10821,18 @@
       return '<div class="analytics-overview-shell" data-overview-root>' +
         '<div class="overview-hero"><div class="overview-hero-copy"><span class="overview-eyebrow">' + escapeHtml(scopeLabel) + " · 跨批次数据" + '</span><h2>运营总览</h2><p>汇总当前数据范围内的考级业务规模、质量趋势与待处理事项，支持从指标直接钻取。</p></div><div class="overview-hero-meta"><span>最后更新：' + refreshTime + '</span><button class="btn" type="button" data-overview-refresh>刷新数据</button></div></div>' +
         '<div class="overview-kpi-grid">' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报名人数</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">当前角色范围内已发布批次</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报考人次</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">按报名记录汇总</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/grades"><span class="overview-kpi-label">总通过率</span><strong>' + aggregate.passRate + '</strong><small class="up">已发布成绩加权计算</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="system/units"><span class="overview-kpi-label">活跃承办单位</span><strong>' + organizers.length + '</strong><small class="up">当前范围内有已发布批次</small></button>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">总报考人次</span><strong>' + formatDemoNumber(aggregate.attempts) + '</strong><small class="up">按报名记录汇总</small></div>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">总通过率</span><strong>' + aggregate.passRate + '</strong><small class="up">已发布成绩加权计算</small></div>' +
+          '<button class="card overview-kpi" type="button" data-jump="system/units"><span class="overview-kpi-label">活跃承办单位</span><strong>' + organizers.length + '</strong><small class="up">当前范围内有已发布/已结束/已归档批次</small></button>' +
           '<button class="card overview-kpi" type="button" data-jump="plans/batches"><span class="overview-kpi-label">进行中批次</span><strong>' + formatDemoNumber(aggregate.activeBatches) + '</strong><small class="up">已发布</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="certificates/library"><span class="overview-kpi-label">证书发放数</span><strong>' + formatDemoNumber(aggregate.certSubmitted) + '</strong><small class="up">已提交入库累计</small></button>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">证书发放数</span><strong>' + formatDemoNumber(aggregate.certSubmitted) + '</strong><small class="up">已发布证书累计</small></div>' +
         '</div>' +
-        '<div class="overview-chart-grid"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>近 12 个月报名趋势</h3><p>报名人数与报考人次按月变化</p></div><button class="btn link" type="button" data-overview-stat-drill="month" aria-label="进入月份分析">进入分析</button></div><div class="overview-trend">' + trendBars + '<svg class="overview-trend-line" viewBox="0 0 120 100" preserveAspectRatio="none" aria-label="报考人次趋势折线"><polyline points="3,78 13,70 23,73 33,61 43,56 53,62 63,47 73,38 83,43 93,31 103,25 117,14"></polyline><circle cx="3" cy="78" r="1.6"></circle><circle cx="13" cy="70" r="1.6"></circle><circle cx="23" cy="73" r="1.6"></circle><circle cx="33" cy="61" r="1.6"></circle><circle cx="43" cy="56" r="1.6"></circle><circle cx="53" cy="62" r="1.6"></circle><circle cx="63" cy="47" r="1.6"></circle><circle cx="73" cy="38" r="1.6"></circle><circle cx="83" cy="43" r="1.6"></circle><circle cx="93" cy="31" r="1.6"></circle><circle cx="103" cy="25" r="1.6"></circle><circle cx="117" cy="14" r="1.6"></circle></svg></div><div class="overview-legend"><span><i></i>报名人数</span><span><i class="line"></i>报考人次</span><span><i class="dashed"></i>去年同期参考线</span></div></section>' +
+        '<div class="overview-chart-grid"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>本年度报名趋势</h3><p>报考人次按月变化（本年度）</p></div><button class="btn link" type="button" data-overview-stat-drill="month" aria-label="进入月份分析">进入分析</button></div><div class="overview-trend">' + trendBars + '<svg class="overview-trend-line" viewBox="0 0 120 100" preserveAspectRatio="none" aria-label="报考人次趋势折线"><polyline points="3,78 13,70 23,73 33,61 43,56 53,62 63,47 73,38 83,43 93,31 103,25 117,14"></polyline><circle cx="3" cy="78" r="1.6"></circle><circle cx="13" cy="70" r="1.6"></circle><circle cx="23" cy="73" r="1.6"></circle><circle cx="33" cy="61" r="1.6"></circle><circle cx="43" cy="56" r="1.6"></circle><circle cx="53" cy="62" r="1.6"></circle><circle cx="63" cy="47" r="1.6"></circle><circle cx="73" cy="38" r="1.6"></circle><circle cx="83" cy="43" r="1.6"></circle><circle cx="93" cy="31" r="1.6"></circle><circle cx="103" cy="25" r="1.6"></circle><circle cx="117" cy="14" r="1.6"></circle></svg></div><div class="overview-legend"><span><i class="line"></i>报考人次</span><span><i class="dashed"></i>去年同期参考线</span></div></section>' +
           '<section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各门类报名占比</h3><p>识别热门门类与结构变化</p></div><button class="btn link" type="button" data-overview-stat-drill="category" aria-label="进入门类分析">进入分析</button></div><div class="overview-donut-wrap"><div class="overview-donut" aria-label="各门类报名占比环形图"></div><div class="overview-donut-legend">' + categoryRows + '</div></div></section>' +
           '<section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各专业报考排行</h3><p>年度报名人次 Top 6</p></div><button class="btn link" type="button" data-overview-stat-drill="major" aria-label="进入专业分析">进入分析</button></div><div class="overview-major-list">' + majorRows + '</div></section></div>' +
-        '<div class="overview-three-column overview-leadership-row"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各承办单位年度运营排行</h3><p>按年度报名人数排序，可点击单位钻取批次</p></div><span class="tag blue">' + organizers.length + ' 家重点单位</span></div><div class="overview-ranking-wrap"><table class="overview-ranking-table"><thead><tr><th>排名</th><th>承办单位</th><th><button class="btn link" type="button" data-overview-sort="batches">批次数 ↕</button></th><th><button class="btn link" type="button" data-overview-sort="entries">报名人数 ↕</button></th><th><button class="btn link" type="button" data-overview-sort="rate">通过率 ↕</button></th><th>活跃机构数</th></tr></thead><tbody>' + organizerRows + '</tbody></table></div></section><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>近 6 个月通过率趋势</h3><p>基准线：85% · 全平台加权平均</p></div><span class="tag green">质量稳定</span></div><div class="overview-rate-chart"><svg viewBox="0 0 120 100" preserveAspectRatio="none" aria-label="近六个月通过率趋势"><line x1="0" y1="56" x2="120" y2="56"></line><polyline points="4,62 26,53 48,58 70,42 92,36 116,28"></polyline><circle cx="4" cy="62" r="1.8"></circle><circle cx="26" cy="53" r="1.8"></circle><circle cx="48" cy="58" r="1.8"></circle><circle cx="70" cy="42" r="1.8"></circle><circle cx="92" cy="36" r="1.8"></circle><circle cx="116" cy="28" r="1.8"></circle></svg></div><div class="overview-rate-labels"><span>3月</span><span>4月</span><span>5月</span><span>6月</span><span>7月</span><span>8月</span></div></section><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各城市考级热度</h3><p>湖北省热力图 · 报名人数与承办批次数量</p></div><select class="select overview-city-scope-select" data-overview-city-scope aria-label="选择城市范围">' + cityScopeOptions + '</select></div>' + cityHeatmap + '</section></div>' +
+        '<div class="overview-three-column overview-leadership-row"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各承办单位年度运营排行</h3><p>按年度报名人次排序，可点击单位钻取批次</p></div><span class="tag blue">' + organizers.length + ' 家重点单位</span></div><div class="overview-ranking-wrap"><table class="overview-ranking-table"><thead><tr><th>排名</th><th>承办单位</th><th><button class="btn link" type="button" data-overview-sort="batches">批次数 ↕</button></th><th><button class="btn link" type="button" data-overview-sort="entries">报名人次 ↕</button></th><th><button class="btn link" type="button" data-overview-sort="rate">通过率 ↕</button></th><th>活跃机构数</th></tr></thead><tbody>' + organizerRows + '</tbody></table></div></section><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>本年度通过率趋势</h3><p>基准线：85% · 固定参考线</p></div><span class="tag green">质量稳定</span></div><div class="overview-rate-chart"><svg viewBox="0 0 120 100" preserveAspectRatio="none" aria-label="近六个月通过率趋势"><line x1="0" y1="56" x2="120" y2="56"></line><polyline points="4,62 26,53 48,58 70,42 92,36 116,28"></polyline><circle cx="4" cy="62" r="1.8"></circle><circle cx="26" cy="53" r="1.8"></circle><circle cx="48" cy="58" r="1.8"></circle><circle cx="70" cy="42" r="1.8"></circle><circle cx="92" cy="36" r="1.8"></circle><circle cx="116" cy="28" r="1.8"></circle></svg></div><div class="overview-rate-labels"><span>3月</span><span>4月</span><span>5月</span><span>6月</span><span>7月</span><span>8月</span></div></section><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>各城市考级热度</h3><p>湖北省热力图 · 报考人次与承办批次数量</p></div><select class="select overview-city-scope-select" data-overview-city-scope aria-label="选择城市范围">' + cityScopeOptions + '</select></div>' + cityHeatmap + '</section></div>' +
         analyticsStatisticsHtml() +
-        '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布批次 · 统计周期：近一年 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
+        '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布/已结束/已归档批次 · 统计周期：本年度 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
     }
     function dashboardOverviewHtml(batch, publishedBatches) {
       var role = dashboardTodoRole();
@@ -10826,15 +10843,14 @@
       return '<div class="analytics-overview-shell" data-overview-root>' +
         '<div class="overview-hero"><div class="overview-hero-copy"><span class="overview-eyebrow">' + escapeHtml(scopeLabel) + ' · 跨批次数据</span><h2>运营总览</h2><p>仅展示后台核心业务规模和待处理入口，复杂趋势、占比和排行请进入大屏驾驶舱。</p></div><div class="overview-hero-meta"><span>最后更新：' + refreshTime + '</span><button class="btn" type="button" data-overview-refresh>刷新数据</button></div></div>' +
         '<div class="overview-kpi-grid">' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报名人数</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">当前角色范围内已发布批次</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/enroll"><span class="overview-kpi-label">总报考人次</span><strong>' + formatDemoNumber(aggregate.enrolled) + '</strong><small class="up">按报名记录汇总</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="batch-workbench/grades"><span class="overview-kpi-label">总通过率</span><strong>' + aggregate.passRate + '</strong><small class="up">已发布成绩加权计算</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="system/units"><span class="overview-kpi-label">活跃承办单位</span><strong>' + scopedBatches.map(function (item) { return item.org; }).filter(Boolean).filter(function (value, index, list) { return list.indexOf(value) === index; }).length + '</strong><small class="up">当前范围内有已发布批次</small></button>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">总报考人次</span><strong>' + formatDemoNumber(aggregate.attempts) + '</strong><small class="up">按报名记录汇总</small></div>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">总通过率</span><strong>' + aggregate.passRate + '</strong><small class="up">已发布成绩加权计算</small></div>' +
+          '<button class="card overview-kpi" type="button" data-jump="system/units"><span class="overview-kpi-label">活跃承办单位</span><strong>' + scopedBatches.map(function (item) { return item.org; }).filter(Boolean).filter(function (value, index, list) { return list.indexOf(value) === index; }).length + '</strong><small class="up">当前范围内有已发布/已结束/已归档批次</small></button>' +
           '<button class="card overview-kpi" type="button" data-jump="plans/batches"><span class="overview-kpi-label">进行中批次</span><strong>' + formatDemoNumber(aggregate.activeBatches) + '</strong><small class="up">已发布</small></button>' +
-          '<button class="card overview-kpi" type="button" data-jump="certificates/library"><span class="overview-kpi-label">证书发放数</span><strong>' + formatDemoNumber(aggregate.certSubmitted) + '</strong><small class="up">已提交入库累计</small></button>' +
+          '<div class="card overview-kpi is-static"><span class="overview-kpi-label">证书发放数</span><strong>' + formatDemoNumber(aggregate.certSubmitted) + '</strong><small class="up">已发布证书累计</small></div>' +
         '</div>' +
         '<div class="overview-two-column"><section class="table-card overview-panel"><div class="overview-panel-head"><div><h3>大屏驾驶舱</h3><p>趋势、门类占比、专业排行、承办单位排行、通过率趋势和城市热力图统一在大屏查看。</p></div></div><div class="page-actions" style="padding:16px"><a class="btn primary" href="exam-dashboard-cockpit.html" target="_blank">进入大屏驾驶舱</a></div></section></div>' +
-        '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布批次 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
+        '<div class="muted" style="font-size:11px">数据范围：' + escapeHtml(scopeLabel) + '已发布/已结束/已归档批次 · 统计周期：本年度 · 当前演示样例批次数：' + formatDemoNumber(scopedBatches.length || publishedBatches.length) + ' · 当前批次：' + escapeHtml(batch.name) + '</div></div>';
     }
     function enhanceAnalyticsPage(page, batch) {
       if (!page || !batch) return;
@@ -10844,7 +10860,7 @@
       var board = page.querySelector('[data-subview="board"], [data-subview="overview"]');
       var exportView = page.querySelector('[data-subview="export"], [data-subview="batch-analysis"]');
       var publishedBatches = BATCH_DEMO_LIST.filter(isPublishedBatch);
-      if (board) board.innerHTML = page.getAttribute("data-page") === "dashboard" ? dashboardOverviewHtml(batch, publishedBatches) : analyticsOverviewHtml(batch, publishedBatches);
+      if (board) board.innerHTML = analyticsOverviewHtml(batch, publishedBatches);
       if (exportView) exportView.innerHTML = analyticsBatchAnalysisHtml(batch);
       page.querySelectorAll("button, a").forEach(function (node) { if (!node.hasAttribute("data-batch-id")) node.setAttribute("data-batch-id", batch.id); });
     }
@@ -11514,7 +11530,7 @@
       return actions;
     }
     function batchLifecycleActionName(action) {
-      return { edit: "编辑", publish: "发布批次", "submit-review": "提交平台审核", withdraw: "撤回发布", pause: "暂停批次", resume: "恢复批次", "close-enrollment": "关闭报名", end: "结束计划", archive: "归档计划", analytics: "统计分析", delete: "删除未发布计划" }[action] || action;
+      return { edit: "编辑", publish: "发布批次", "submit-review": "提交平台审核", withdraw: "撤回发布", "close-enrollment": "关闭报名", end: "结束计划", archive: "归档计划", analytics: "统计分析", delete: "删除未发布计划" }[action] || action;
     }
     function batchLifecycleActionDescription(action) {
       return {
@@ -11522,8 +11538,6 @@
         publish: "平台创建的计划可直发布；审核通过但处于待发布的承办单位批次，必须由平台校验版本后正式发布。已结束或已归档批次不可原地重新发布。",
         "submit-review": "提交后进入平台审核队列；审核通过按发布策略自动发布或进入待发布，审核期间不可进入工作台。驳回重提必须创建新审核实例和批次版本。",
         withdraw: "撤回后关闭报名入口与工作台写操作，批次回到未发布状态。",
-        pause: "暂停后保留历史数据，报名、缴费和下游处理暂时停止。",
-        resume: "恢复后沿用原批次配置和已生成数据，继续当前流程。",
         "close-enrollment": "关闭报名后不再接受新的报名，已缴费数据继续进入后续排期。",
         end: "未到证书提交阶段时，结束表示计划作废；已到证书提交阶段时，结束表示计划已完成，可选择同步归档。结束后计划内写操作全部锁定。",
         archive: "归档后计划数据固定，只支持查看详情、工作台只读视图和统计分析。",
@@ -11802,7 +11816,7 @@
     }
     function batchLifecycleActionsHtml(batch) {
       return batchLifecycleActions(batch).map(function (action) {
-        var buttonClass = action === "delete" ? "btn link danger-text" : action === "publish" || action === "resume" || action === "submit-review" ? "btn link primary-text" : "btn link";
+        var buttonClass = action === "delete" ? "btn link danger-text" : action === "publish" || action === "submit-review" ? "btn link primary-text" : "btn link";
         var blockedDelete = action === "delete" && batchHasRegistrationData(batch);
         return '<button class="' + buttonClass + '"' + (blockedDelete ? ' disabled" disabled title="已有报名或下游数据，不可删除"' : '"') + ' data-batch-lifecycle-action="' + escapeHtml(action) + '" data-batch-id="' + escapeHtml(batch.id) + '">' + escapeHtml(batchLifecycleActionName(action)) + '</button>';
       }).join("");
@@ -11874,12 +11888,6 @@
       } else if (action === "withdraw") {
         setBatchStatus(batch, "未发布");
         toast("批次已撤回发布");
-      } else if (action === "pause") {
-        setBatchStatus(batch, "已暂停");
-        toast("批次已暂停，历史数据仍可查看");
-      } else if (action === "resume") {
-        setBatchStatus(batch, "已发布");
-        toast("批次已恢复");
       } else if (action === "close-enrollment") {
         batch.status = "报名截止";
         batch.statusTag = "orange";
@@ -13896,6 +13904,13 @@
           if (certificateTabs) certificateTabs.hidden = isCertificateLibrary;
           if (certificatePageActions) certificatePageActions.hidden = isCertificateLibrary;
           enhanceCertificatesWorkbenchPanel(page, currentBatchContext());
+        }
+        if (view === "dashboard" && ["overview", "batch-analysis"].indexOf(sub) > -1) {
+          var defaultAnalyticsBatch = analyticsDefaultBatch();
+          if (defaultAnalyticsBatch && currentBatchDemoId !== defaultAnalyticsBatch.id) {
+            currentBatchDemoId = defaultAnalyticsBatch.id;
+            window.__activeBatchId = defaultAnalyticsBatch.id;
+          }
         }
         if ((view === "analytics" && ["board", "export"].indexOf(sub) > -1) || (view === "dashboard" && ["overview", "batch-analysis"].indexOf(sub) > -1)) enhanceAnalyticsPage(page, currentBatchContext());
         if (view === "dashboard" && sub === "workbench") renderDashboardWorkbench(page);
@@ -18632,7 +18647,7 @@
       var analyticsStatRoot = event.target.closest("[data-analytics-stat-root]");
       if (analyticsStatRoot && event.target.closest("[data-analytics-stat-search]")) { renderAnalyticsStatistics(analyticsStatRoot); toast("统计分析已按当前条件刷新"); return; }
       if (analyticsStatRoot && event.target.closest("[data-analytics-stat-reset]")) {
-        analyticsStatRoot.querySelectorAll("[data-analytics-stat-filter]").forEach(function (field) { var key = field.getAttribute("data-analytics-stat-filter"); field.value = key === "x" ? "batch" : key === "y" ? "count" : (key === "issue-start" || key === "issue-end" ? "" : "all"); });
+        analyticsStatRoot.querySelectorAll("[data-analytics-stat-filter]").forEach(function (field) { var key = field.getAttribute("data-analytics-stat-filter"); field.value = key === "x" ? "batch" : key === "y" ? "attempts" : (key === "issue-start" || key === "issue-end" ? "" : "all"); });
         renderAnalyticsStatistics(analyticsStatRoot);
         toast("统计分析筛选已重置");
         return;
@@ -18641,7 +18656,12 @@
       var analyticsStatScope = event.target.closest("[data-analytics-stat-scope]");
       if (analyticsStatScope) {
         var scopeRoot = analyticsStatScope.closest("[data-analytics-stat-root]");
-        if (scopeRoot) scopeRoot.querySelectorAll("[data-analytics-stat-scope]").forEach(function (tab) { tab.classList.toggle("active", tab === analyticsStatScope); });
+        if (scopeRoot) {
+          scopeRoot.querySelectorAll("[data-analytics-stat-scope]").forEach(function (tab) { tab.classList.toggle("active", tab === analyticsStatScope); });
+          scopeRoot.setAttribute("data-analytics-stat-scope-value", analyticsStatScope.getAttribute("data-analytics-stat-scope"));
+          renderAnalyticsStatistics(scopeRoot);
+          toast(analyticsStatScope.getAttribute("data-analytics-stat-scope") === "passed" ? "已切换获证人数统计（按已发布证书）" : "已切换全部考生统计");
+        }
         return;
       }
       var overviewStatDrill = event.target.closest("[data-overview-stat-drill]");
@@ -18654,7 +18674,7 @@
           var drillXAxis = overviewStatRoot.querySelector('[data-analytics-stat-filter="x"]');
           var drillYAxis = overviewStatRoot.querySelector('[data-analytics-stat-filter="y"]');
           if (drillXAxis) drillXAxis.value = drillType === "month" ? "month" : drillType === "category" ? "category" : "major";
-          if (drillYAxis) drillYAxis.value = drillType === "month" || drillType === "major" ? "attempts" : "count";
+          if (drillYAxis) drillYAxis.value = "attempts";
           var drillMajor = overviewStatRoot.querySelector('[data-analytics-stat-filter="major"]');
           var drillCategory = overviewStatRoot.querySelector('[data-analytics-stat-filter="category"]');
           if (drillMajor && drillType === "major") drillMajor.value = Array.from(drillMajor.options).some(function (option) { return option.value === drillValue; }) ? drillValue : "all";

@@ -216,3 +216,8 @@ test("online recording and dispatch retain their original sequential flow", () =
     assert.equal(f.context.offlineScheduleIsPublished(f.batch), false);
   }
 });
+
+test("ticket generation and publication actions are visible to all operating roles", () => {
+  assert.match(html, /data-ticket-async-generate data-auth-roles="platform organizer training"[^>]*>全部生成/);
+  assert.match(html, /data-ticket-publish data-auth-roles="platform organizer training"[^>]*>发布/);
+});

@@ -225,6 +225,12 @@ test("grade and certificate stages omit review-loop buttons without removing oth
   assert.match(html, /data-review-object-type="SCHEDULE"/);
 });
 
+test("certificate list uses row-level generation label", () => {
+  const certificates = between('        <section class="page" data-page="certificates">', '        <section class="page" data-page="courses">');
+  assert.match(certificates, /<td><button class="btn link" data-drawer="cert-batch-generate" data-platform-only>生成<\/button><\/td>/);
+  assert.doesNotMatch(certificates, /<td><button class="btn link" data-drawer="cert-batch-generate" data-platform-only>全部生成<\/button><\/td>/);
+});
+
 test("offline grades are not initialized again after embedded navigation removes their tabs", () => {
   for (const overrides of [{}, { stage: "certificates", status: "待生成", scorePublished: 3 }]) {
     const f = fixture(overrides);
