@@ -71,7 +71,12 @@
       position: relative;
       width: min(376px, calc(100vw - 16px));
       height: min(752px, calc(100vh - 24px));
-      min-height: 680px;
+      /* dvh 动态视口：手机浏览器/内嵌 WebView 中 100vh 含被地址栏遮挡的区域，
+         会导致壳底部永远落在可视区外（表现为滚不到底、底部内容看不到）。 */
+      height: min(752px, calc(100dvh - 24px));
+      /* 去掉 680px 最小高度：窗口较矮时壳必须完整落在视口内，
+         否则 .app 滚动到底后底部内容（如成绩评价）仍在窗口外无法看到。 */
+      min-height: 0;
       border: 4px solid #111827;
       border-radius: 28px;
       overflow: hidden;
@@ -82,6 +87,7 @@
     .app {
       height: 100%;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* 老 iOS WKWebView 惯性滚动 */
       background: var(--bg-body);
       padding-bottom: calc(var(--tabbar-height) + 18px + var(--safe-bottom));
       scrollbar-width: none;
@@ -1192,8 +1198,8 @@
       overflow: hidden; padding: 0; background: #fff;
     }
     .candidate-editor-top {
-      display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 12px;
-      padding: 14px; align-items: start;
+      display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px;
+      padding: 14px; justify-items: center;
     }
     .candidate-photo-panel {
       display: grid; gap: 10px; justify-items: center; align-content: start;
@@ -1217,7 +1223,8 @@
       background: #C8102E; color: #fff; font-size: 12px; font-weight: 900;
     }
     .candidate-photo-notice {
-      margin: 0; color: var(--text-secondary); font-size: 11px; line-height: 1.55;
+      margin: 0; align-self: start; width: 100%;
+      color: var(--text-secondary); font-size: 11px; line-height: 1.6;
     }
     .candidate-field-list { display: grid; padding: 0 14px; }
     .candidate-field {
@@ -1232,6 +1239,44 @@
       background: transparent; color: var(--text-primary); font: inherit; font-size: 13px;
     }
     .candidate-field input::placeholder { color: var(--text-light); }
+    /* 证件号：右侧扫一扫 OCR 识别入口 */
+    .candidate-id-input { position: relative; display: flex; align-items: center; min-width: 0; }
+    .candidate-id-input input { flex: 1; min-width: 0; padding-right: 36px; }
+    .candidate-id-scan {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 30px; height: 30px; display: grid; place-items: center;
+      padding: 0; border: 0; border-radius: 8px;
+      background: rgba(200, 16, 46, .07); color: var(--brand-primary);
+    }
+    .candidate-id-scan:active { background: rgba(200, 16, 46, .15); }
+    .candidate-id-scan svg { width: 17px; height: 17px; display: block; }
+    /* 证件号扫一扫 · OCR 识别弹层 */
+    .id-scan-stage {
+      position: relative; display: grid; justify-items: center; gap: 10px; padding: 18px 0 16px;
+      border-radius: 14px; background: radial-gradient(120% 90% at 50% 0%, #3A3A40, #1C1C1F);
+    }
+    .id-scan-frame {
+      position: relative; width: 232px; height: 132px; overflow: hidden; border-radius: 12px;
+      background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
+    }
+    .id-scan-frame::before,
+    .id-scan-frame::after { content: ""; position: absolute; width: 22px; height: 22px; border: 0 solid var(--brand-gold); }
+    .id-scan-frame::before { left: 0; top: 0; border-top-width: 3px; border-left-width: 3px; border-radius: 12px 0 0 0; }
+    .id-scan-frame::after { right: 0; bottom: 0; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 12px 0; }
+    .id-scan-beam {
+      position: absolute; left: 10px; right: 10px; top: 12%; height: 2px; border-radius: 2px;
+      background: linear-gradient(90deg, rgba(232, 168, 56, 0), #E8A838, rgba(232, 168, 56, 0));
+      box-shadow: 0 0 10px rgba(232, 168, 56, .7);
+      animation: id-scan-sweep 1.5s ease-in-out infinite;
+    }
+    @keyframes id-scan-sweep { 0% { top: 12%; } 50% { top: 82%; } 100% { top: 12%; } }
+    .id-scan-tip { margin: 0; color: rgba(255, 255, 255, .78); font-size: 12px; font-weight: 700; }
+    .id-scan-result { margin: 0; color: #6FE3A1; font-size: 15px; font-weight: 900; letter-spacing: .06em; }
+    .id-scan-stage.is-done { background: radial-gradient(120% 90% at 50% 0%, #2C3B33, #1C1C1F); }
+    .id-scan-stage.is-done .id-scan-frame { box-shadow: inset 0 0 0 2px rgba(111, 227, 161, .7); }
+    .id-scan-stage.is-done .id-scan-beam { display: none; }
+    .id-scan-note { margin: 12px 0 0; color: var(--text-light); font-size: 11px; line-height: 1.6; }
+    .id-scan-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
     .candidate-editor-actions {
       display: grid; gap: 10px; padding: 14px;
     }
@@ -1476,6 +1521,45 @@
     .posture-countdown { min-height: 20px; margin: 0 0 8px; color: rgba(255,255,255,.76); font-size: 12px; text-align: center; }
     .posture-adjust-button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .posture-adjust-button-row .ghost-action { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.5); color: #fff; }
+    /* 模拟考试·演练准备：自检清单改为点击「已就位」后弹窗展示，
+       页面只保留沉浸式预览 + 一行引导，避免清单常驻遮挡取景画面。 */
+    .mock-posture-adjust-view .posture-adjust-page {
+      min-height: 0; justify-content: flex-start;
+      background: var(--bg-body); color: var(--text-primary);
+    }
+    .mock-posture-adjust-view .posture-camera-preview {
+      position: relative; inset: auto; width: 100%; height: 460px; flex: none;
+    }
+    .mock-posture-adjust-view .posture-camera-hint { bottom: 12px; }
+    .mock-posture-adjust-view .mx-guide {
+      position: relative; z-index: 3; flex: none;
+      display: grid; gap: 4px; margin: 12px 12px 0; padding: 12px 14px;
+      border-radius: var(--radius); background: var(--bg-card);
+      box-shadow: var(--shadow-card); color: var(--text-primary);
+      font-size: 12px; line-height: 1.6;
+    }
+    .mock-posture-adjust-view .mx-guide strong { font-size: 13px; font-weight: 900; }
+    .mock-posture-adjust-view .mx-guide span { color: var(--text-secondary); }
+    .mock-posture-adjust-view .posture-adjust-actions {
+      position: relative; margin-top: 12px; background: var(--bg-card);
+      padding: 10px 12px calc(16px + var(--safe-bottom));
+    }
+    .mock-posture-adjust-view .posture-countdown { color: var(--text-secondary); }
+    .mock-posture-adjust-view .posture-adjust-button-row .ghost-action {
+      background: #fff; border-color: var(--border-color); color: var(--text-primary);
+    }
+    /* 环境自检弹窗 */
+    .mock-env-dialog-card {
+      width: min(330px, 100%); max-height: calc(100% - 48px); overflow-y: auto;
+      gap: 10px; color: var(--text-primary);
+    }
+    .mock-env-dialog-card .mx-check-list { gap: 6px; margin-top: 0; }
+    .mock-env-dialog-card .mx-check-item { padding: 7px 9px; color: var(--text-primary); }
+    .mock-env-dialog-card .mx-check-item.is-missing {
+      border-color: var(--brand-primary); background: rgba(200, 16, 46, .06);
+    }
+    .mock-env-dialog-card .mx-note { margin: 0; }
+    .mock-env-dialog-card .action-row .ghost-action { height: 42px; }
     .stage-btn {
       border: 0; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 900;
       color: #fff; text-align: center; display: inline-flex; align-items: center; justify-content: center;
@@ -2101,6 +2185,11 @@
       background: var(--bg-subtle);
       font-size: 12px;
     }
+    .personal-record-badge.is-fail {
+      color: var(--color-danger);
+      border-color: rgba(212, 83, 83, .30);
+      background: rgba(212, 83, 83, .10);
+    }
     .score-detail-page {
       min-height: calc(100% - 20px);
       padding: 24px 16px;
@@ -2381,6 +2470,7 @@
       body { place-items: stretch; background: var(--bg-body); }
       .phone-shell {
         width: 100vw; height: 100vh; min-height: 100vh;
+        height: 100dvh; min-height: 100dvh;
         border: 0; border-radius: 0; box-shadow: none;
       }
     }
@@ -2712,7 +2802,6 @@
       height: 42px; border: 0; cursor: pointer;
     }
 
-
     /* —— 页面清单补齐样式 —— */
     .identity-strip {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -2847,7 +2936,9 @@
     .phone-shell {
       width: min(375px, 100vw);
       height: min(812px, 100vh);
-      min-height: 680px;
+      height: min(812px, 100dvh);
+      /* 同上：不设最小高度，保证壳高度不超过视口。 */
+      min-height: 0;
       border: 0;
       border-radius: 0;
       box-shadow: 0 20px 48px rgba(11, 26, 48, .2);
@@ -7577,6 +7668,144 @@
       background: var(--color-danger-bg);
     }
 
+    /* 成绩评价：是否通过 + 整体评分 + 整体评语 */
+    .score-verdict-row { border-bottom: 1px solid var(--border-color); }
+
+    .score-verdict {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 66px;
+      height: 26px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(31, 138, 84, .22);
+      background: rgba(31, 138, 84, .10);
+      color: #1F8A54;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .score-verdict[data-passed="fail"] {
+      color: var(--color-danger);
+      border-color: rgba(196, 61, 61, .22);
+      background: var(--color-danger-bg);
+    }
+
+    .score-verdict[data-passed="none"] {
+      color: var(--text-light);
+      border-color: var(--border-color);
+      background: var(--bg-subtle);
+    }
+
+    .score-summary-row {
+      margin-top: 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .score-overall-comment:last-child { padding-bottom: 0; }
+
+    /* 成绩分析与建议：雷达图 + 维度评级 + 提升建议 */
+    .score-radar-well {
+      margin: 6px 0 2px;
+      padding: 4px 0 10px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .score-radar svg {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .score-radar-ring { fill: none; stroke: #ECECEF; stroke-width: 1; }
+    .score-radar-axis { stroke: #E3E3E6; stroke-width: 1; }
+    .score-radar-area { fill: rgba(200, 16, 46, .14); stroke: #C8102E; stroke-width: 1.8; stroke-linejoin: round; }
+    .score-radar-dot { fill: #fff; stroke: #C8102E; stroke-width: 2; }
+    .score-radar-label { fill: #5C5C61; font-size: 11.5px; font-weight: 700; }
+
+    .score-radar-legend {
+      margin: 6px 0 0;
+      color: var(--text-light);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .score-analysis-subtitle {
+      margin: 14px 0 2px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .score-analysis-empty {
+      padding: 14px 0;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    .score-rating-label {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .score-dim-flag {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(243, 154, 24, .14);
+      color: #B87400;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .score-advice-list {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .score-advice-list li {
+      position: relative;
+      padding: 10px 12px 10px 30px;
+      border-radius: 10px;
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .score-advice-list li::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 16px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--brand-primary);
+    }
+
+    .score-advice-list li.is-good::before { background: #1F8A54; }
+    .score-advice-list li.is-warn::before { background: var(--color-danger); }
+    /* 成绩详情页底部：我的提升计划入口（只做导航，推荐内容仍在学习页） */
+    .score-detail-plan-card { display: grid; gap: 10px; }
+    .score-detail-plan-note { margin: 0; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+    .score-detail-plan-card .primary-action { width: 100%; }
+
     .score-track-groups,
     .score-track-group,
     .score-track-list {
@@ -8023,7 +8252,48 @@
       font-weight: 600;
       overflow-wrap: anywhere;
     }
-  </style>
+  
+    /* ==== CR-20261102-01 考级活动：关键字搜索 + 离我最近 / 报名截止排序（城市级定位，不展示公里数） ==== */
+    .activity-toolbar { display: flex; align-items: center; gap: 8px; margin: 0 0 9px; }
+    .activity-search { min-width: 0; flex: 1; height: 44px; padding: 0 11px; border-radius: 10px; box-shadow: 0 5px 14px rgba(28, 28, 31, .07); }
+    .activity-search input { width: 100%; min-width: 0; border: 0; outline: none; background: transparent; font-size: 14px; color: var(--text-primary); }
+    .activity-search input::placeholder { color: var(--text-light); }
+    .activity-locate-btn { flex: 0 0 auto; height: 44px; padding: 0 10px; border: 0; border-radius: 10px; background: #fff; box-shadow: 0 5px 14px rgba(28, 28, 31, .07); display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--brand-primary); white-space: nowrap; }
+    .activity-locate-btn .course-filter-icon { color: var(--brand-primary); }
+    .activity-sort { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; }
+    .activity-sort button { height: 28px; padding: 0 12px; border: 1px solid var(--border-color); border-radius: 14px; background: #fff; color: var(--text-secondary); font-size: 12px; font-weight: 800; }
+    .activity-sort button[aria-pressed="true"] { border-color: var(--brand-primary); background: rgba(200, 16, 46, .08); color: var(--brand-primary); }
+    .activity-count { margin-left: auto; padding-right: 2px; color: var(--text-light); font-size: 12px; font-weight: 700; }
+    .activity-locate-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 9px; padding: 8px 10px; border-radius: 10px; background: rgba(232, 168, 56, .13); color: #8A6700; font-size: 12px; font-weight: 700; }
+    .activity-locate-bar button { flex: 0 0 auto; border: 0; background: transparent; color: var(--brand-primary); font-size: 12px; font-weight: 800; padding: 0; }
+    .batch-loc { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text-light); font-size: 11px; font-weight: 700; }
+    .batch-loc .loc-tag { flex: 0 0 auto; padding: 1px 5px; border-radius: 4px; background: rgba(200, 16, 46, .10); color: var(--brand-primary); font-size: 10px; font-weight: 800; }
+    .batch-loc .loc-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .activity-search-placeholder { color: var(--text-light); font-size: 13px; font-weight: 600; }
+    .activity-modal-note { margin: 0 0 12px; color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
+    .activity-locate-primary { width: 100%; height: 42px; border: 0; border-radius: 10px; background: var(--brand-primary); color: #fff; font-size: 14px; font-weight: 800; }
+    .activity-locate-secondary { width: 100%; height: 36px; margin-top: 8px; border: 0; border-radius: 10px; background: #F1F2F6; color: var(--text-secondary); font-size: 13px; font-weight: 800; }
+    .activity-city-title { margin: 16px 0 8px; color: var(--text-secondary); font-size: 12px; font-weight: 800; }
+    .activity-city-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .activity-city-grid button { height: 34px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; color: var(--text-primary); font-size: 12px; font-weight: 700; }
+    .activity-city-grid button[aria-pressed="true"] { border-color: var(--brand-primary); background: rgba(200, 16, 46, .08); color: var(--brand-primary); }
+    .exam-nav-row { display: flex; justify-content: flex-end; margin-top: 1px; }
+    .exam-nav-btn { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 12px; border: 1px solid rgba(200, 16, 46, .35); border-radius: 13px; background: #fff; color: var(--brand-primary); font-size: 12px; font-weight: 800; line-height: 1; cursor: pointer; }
+    .exam-nav-btn:active { background: rgba(200, 16, 46, .08); }
+    .exam-nav-btn::before { content: ""; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--brand-primary); transform: rotate(180deg); margin-top: 2px; }
+    .exam-schedule-card.is-done .exam-nav-row { display: none; }
+    .nav-venue-list { display: flex; flex-direction: column; gap: 8px; margin: 0 0 4px; }
+    .nav-venue-item { text-align: left; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; cursor: pointer; }
+    .nav-venue-item[aria-pressed="true"] { border-color: var(--brand-primary); background: rgba(200, 16, 46, .06); }
+    .nav-venue-name { display: block; font-size: 13px; font-weight: 800; color: var(--text-primary); }
+    .nav-venue-coord { display: block; margin-top: 2px; font-size: 11px; font-weight: 600; color: var(--text-light); }
+    .nav-map-title { margin: 14px 0 8px; color: var(--text-secondary); font-size: 12px; font-weight: 800; }
+    .nav-map-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .nav-map-grid button { height: 38px; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; font-size: 13px; font-weight: 800; color: var(--text-primary); cursor: pointer; }
+    .nav-map-grid button:active { background: #F1F2F6; }
+    .activity-nav-toast { position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%); max-width: 82%; padding: 9px 14px; border-radius: 8px; background: rgba(28, 28, 31, .88); color: #fff; font-size: 12px; font-weight: 700; line-height: 1.5; opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 999; }
+    .activity-nav-toast.show { opacity: 1; }
+</style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/weui@2.6.6/dist/style/weui.min.css">
   <style>
     /* ===== WeUI 品牌色覆盖（深蓝 + 红色） ===== */
@@ -9805,6 +10075,102 @@
       font-size: var(--font-size-level-3) !important;
     }
 
+    /* ===== 我的提升计划：考级视频列表顶部薄弱环节筛选行 ===== */
+    .plan-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 8px;
+      margin: 8px 14px 2px;
+    }
+
+    .plan-strip[hidden] { display: none !important; }
+
+    .plan-strip-label {
+      flex: 0 0 auto;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .plan-strip-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .plan-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 2px 12px;
+      border: 1.5px solid rgba(28, 28, 31, .16);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .plan-chip[aria-pressed="true"] {
+      border-color: var(--brand-primary);
+      background: rgba(200, 16, 46, .05);
+      color: var(--brand-primary);
+    }
+
+    .course-plan-badge {
+      justify-self: start;
+      padding: 0 6px;
+      border: 1px solid rgba(200, 16, 46, .35);
+      border-radius: 4px;
+      background: rgba(200, 16, 46, .05);
+      color: var(--brand-primary);
+      font-size: 9px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 15px;
+    }
+
+
+    /* ===== 模拟考试升级 CR-20261105-20：L1 真功能 / L2 演示态 ===== */
+    .mx-block { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 16px; margin: 0 0 12px; }
+    .mx-title { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .mx-desc { margin: 0 0 10px; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+    .mx-note { margin: 8px 0 0; font-size: 11px; line-height: 1.6; color: var(--text-light); }
+    .mx-footer-note { margin: 4px 2px 16px; padding: 10px 12px; border-radius: var(--radius-sm); background: #F5F5F0; font-size: 11px; line-height: 1.6; color: var(--text-secondary); }
+    .mx-link-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-color); text-decoration: none; color: var(--text-primary); }
+    .mx-link-row strong { display: block; font-size: 13px; font-weight: 700; }
+    .mx-link-row small { display: block; margin-top: 3px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); }
+    .mx-arrow { flex: none; font-size: 20px; color: var(--text-light); }
+    .mx-demo-banner { display: inline-block; padding: 4px 9px; margin-bottom: 10px; border: 1px solid rgba(200,16,46,.35); border-radius: var(--radius-full); background: rgba(200,16,46,.06); color: var(--brand-primary); font-size: 10px; font-weight: 800; letter-spacing: .3px; }
+    .mx-demo-watermark { position: sticky; top: 0; z-index: 3; margin: 0 0 10px; padding: 6px 10px; border-radius: var(--radius-sm); background: rgba(200,16,46,.10); color: var(--brand-primary); font-size: 11px; font-weight: 800; text-align: center; letter-spacing: 2px; }
+    .mx-check-list { display: grid; gap: 8px; margin-top: 10px; }
+    .mx-check-item { display: flex; align-items: flex-start; gap: 8px; padding: 9px 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 12px; line-height: 1.5; color: var(--text-primary); }
+    .mx-check-item input { flex: none; width: 16px; height: 16px; margin: 1px 0 0; accent-color: var(--brand-primary); }
+    .mx-grade-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mx-grade-chip { padding: 5px 9px; border: 1px solid var(--border-color); border-radius: var(--radius-full); background: #FAFAF7; font-size: 11px; line-height: 1.6; color: var(--text-secondary); }
+    .mx-grade-chip strong { color: var(--text-primary); }
+    .mx-dim-list { display: grid; gap: 8px; }
+    .mx-dim-item { display: flex; align-items: flex-start; gap: 8px; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-primary); }
+    .mx-dim-item input { flex: none; width: 16px; height: 16px; margin: 1px 0 0; accent-color: var(--brand-primary); }
+    .mx-dim-item small { display: block; margin-top: 4px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); }
+    .mx-advice-list { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+    .mx-advice-list li { margin-bottom: 6px; }
+    .mx-empty { margin-left: -18px; list-style: none; color: var(--text-light); }
+    .mx-static-frame { position: relative; display: flex; align-items: center; justify-content: center; height: 168px; border: 1px dashed #B9B9C2; border-radius: var(--radius-sm); background: repeating-linear-gradient(135deg, #FAFAF7, #FAFAF7 12px, #F2F2EC 12px, #F2F2EC 24px); overflow: hidden; }
+    .mx-frame-label { position: absolute; top: 8px; left: 8px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,.85); font-size: 10px; color: var(--text-light); }
+    .mx-frame-figure { width: 54px; height: 88px; border-radius: 26px 26px 8px 8px; background: rgba(28,28,31,.14); }
+    .mx-sample-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .mx-sample-list li { display: flex; align-items: flex-start; gap: 8px; padding: 9px 10px; border-radius: var(--radius-sm); background: #F7F7F3; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+    .mx-sample-list strong { color: var(--text-primary); }
+    .mx-tag { flex: none; padding: 1px 6px; border-radius: 4px; background: var(--brand-gold-light); color: var(--brand-gold-dark); font-size: 10px; font-weight: 700; }
+    .mx-done-actions .mx-link-row { padding: 11px 0; }
+    .mx-notice-links { margin-top: 12px; border-top: 1px solid var(--border-color); }
+    /* 作者样式的 display 会覆盖 UA 的 [hidden]，显式兜底保证演示入口在对外包不可见 */
+    [data-demo-only][hidden] { display: none !important; }
   </style>
 </head>
 <body class="is-guest">
@@ -9864,7 +10230,8 @@
           <div class="quick-actions">
             <a class="quick-btn" href="#exam-guide-list"><span class="quick-icon" data-quick-icon="news" aria-hidden="true"></span><span>考级简章</span></a>
             <a class="quick-btn" href="#subjects"><span class="quick-icon" data-quick-icon="apply" aria-hidden="true"></span><span>考级活动</span></a>
-            <a class="quick-btn" href="#mock-select"><span class="quick-icon" data-quick-icon="mock" aria-hidden="true"></span><span>模拟考试</span></a>
+            <!-- 常驻入口：不设任何开关，不按专业/级别/批次/账号过滤，未登录也可进入 -->
+            <a class="quick-btn" href="#mock-select" data-mock-entry="always-on"><span class="quick-icon" data-quick-icon="mock" aria-hidden="true"></span><span>模拟考试</span></a>
             <a class="quick-btn" href="#certificate-query"><span class="quick-icon" data-quick-icon="cert" aria-hidden="true"></span><span>证书查询</span></a>
           </div>
         </section>
@@ -9891,7 +10258,7 @@
             <h2 class="section-title" id="home-activity-title">考级活动</h2>
             <a class="section-link" href="#subjects">查看全部</a>
           </div>
-          <div class="home-activity-list">
+<div class="home-activity-list">
             <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-wuhan" data-select-batch="2026h2-wuhan">
               <span class="batch-cover" data-cover="武汉"><span class="batch-mode-tag">线下考试</span></span>
               <span class="batch-cover-main">
@@ -9939,11 +10306,32 @@
 
       <!-- 模拟考试模块 开始 -->
       <!-- 模拟考试-选择专业与级别 -->
-      <main class="content screen-view" id="mock-select-view" data-view="mock-select" hidden>
+      <main class="content screen-view" id="mock-select-view" data-view="mock-select" data-mock-layer="L1" hidden>
         <section class="section major-select-page" data-mock-select-form>
           <div class="card page-summary">
             <h2>模拟考试</h2>
             <p>选择专业与级别，使用内置演示曲目熟悉考试操作。</p>
+          </div>
+          <div class="mx-block">
+            <h2 class="mx-title">练习辅助</h2>
+            <p class="mx-desc">随版本开放，用于理解评分标准，不产生分数、等级或任何评价结论。</p>
+            <a class="mx-link-row" href="#mock-rubric" data-mock-layer="L1">
+              <span><strong>评分维度对照</strong><small>查看评分维度与评级档位说明，勾选关注维度获取练习提示</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
+          </div>
+          <div class="mx-block mx-demo-only" data-demo-only hidden>
+            <div class="mx-demo-banner">功能演示 · 仅评审/演示包可见</div>
+            <h2 class="mx-title">能力预览（远期能力示意）</h2>
+            <p class="mx-desc">以下为固定样例示意页，不含 AI 推理、影像采集与评分结论，不随对外版本发布。</p>
+            <a class="mx-link-row" href="#mock-proctor-demo" data-mock-layer="L2">
+              <span><strong>AI 监考模拟（示意）</strong><small>静态示意画面与秩序提示样例</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
+            <a class="mx-link-row" href="#mock-score-preview-demo" data-mock-layer="L2">
+              <span><strong>智能评分预演（示意）</strong><small>固定样例考生的关注维度提示</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
           </div>
           <div class="major-select-section">
             <h2 class="major-select-heading">选择门类</h2>
@@ -9984,12 +10372,18 @@
       </main>
 
       <!-- 模拟考试-考前必读 -->
-      <main class="content screen-view" id="mock-read-view" data-view="mock-read" hidden>
+      <main class="content screen-view" id="mock-read-view" data-view="mock-read" data-mock-layer="L1" hidden>
         <section class="section">
           <div class="card exam-notice-page">
             <div class="exam-notice-body">
               <p class="exam-notice-warning">请阅读模拟考试说明</p>
-              <p class="exam-notice-copy">本流程仅用于熟悉考试页面和操作，不做人脸校验、不启用摄像头、不录制视频、不生成文件，也不会产生真实考试记录。考试内容为系统内置演示曲目。</p>
+              <p class="exam-notice-copy">本流程仅用于熟悉考试页面和操作：不做人脸校验、不启用摄像头、不读取相册、不录制或上传视频、不生成或保存任何文件、不出分、不落库、不计入正式录制的 3 次上限，也不会产生真实考试记录。考试内容为系统内置演示曲目。</p>
+              <div class="mx-notice-links">
+                <a class="mx-link-row mx-demo-only" href="#mock-proctor-demo" data-demo-only data-mock-layer="L2" hidden>
+                  <span><strong>能力预览（功能演示）</strong><small>仅演示包可见，不含 AI 推理能力</small></span>
+                  <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+                </a>
+              </div>
               <p class="form-hint" data-mock-read-countdown>请阅读，5秒后可继续</p>
             </div>
             <a class="primary-action is-disabled" href="#mock-posture-adjust" data-mock-read-submit aria-disabled="true">我已阅读，进入模拟（5）</a>
@@ -9997,9 +10391,9 @@
         </section>
       </main>
 
-      <!-- 模拟考试-录制准备 -->
-      <main class="content screen-view posture-adjust-view mock-posture-adjust-view" id="mock-posture-adjust-view" data-view="mock-posture-adjust" hidden>
-        <section class="posture-adjust-page" aria-label="模拟录制准备">
+      <!-- 模拟考试-演练准备 -->
+      <main class="content screen-view posture-adjust-view mock-posture-adjust-view" id="mock-posture-adjust-view" data-view="mock-posture-adjust" data-mock-layer="L1" hidden>
+        <section class="posture-adjust-page" aria-label="流程演练准备">
           <div class="posture-camera-preview" aria-label="模拟摄像头预览（模拟考试）">
             <div class="posture-camera-label"><span class="posture-camera-dot"></span>模拟摄像头预览 · 请确认完整入镜</div>
             <div class="posture-guide-frame is-default" data-mock-posture-frame data-posture-subject="default" aria-label="模拟考试正确入镜姿势虚线框">
@@ -10023,8 +10417,12 @@
             </div>
             <p class="posture-camera-hint" data-mock-posture-hint>请调整拍摄角度，确认考生完整入镜</p>
           </div>
+          <div class="mx-guide">
+            <strong>开始演练前请完成环境自检</strong>
+            <span>点击下方「已就位」逐项确认 5 项检查；静态检查项不调用摄像头、不上传任何数据，勾选结果不留存。</span>
+          </div>
           <div class="posture-adjust-actions">
-            <p class="posture-countdown" data-mock-posture-countdown>调整角度并确认就位后开始模拟录制</p>
+            <p class="posture-countdown" data-mock-posture-countdown>调整角度并确认就位后开始流程演练</p>
             <div class="posture-adjust-button-row">
               <button class="ghost-action" type="button" data-mock-posture-angle>改变角度</button>
               <button class="primary-action" type="button" data-mock-posture-ready>已就位</button>
@@ -10033,67 +10431,155 @@
         </section>
       </main>
 
-      <!-- 模拟考试-完整录制 -->
-      <main class="content screen-view" id="mock-exam-view" data-view="mock-exam" hidden>
+      <!-- 模拟考试-流程演练 -->
+      <main class="content screen-view" id="mock-exam-view" data-view="mock-exam" data-mock-layer="L1" hidden>
         <section class="section">
           <div class="card recording-stage mock-stage">
-            <div class="recording-stage-top"><span>模拟录制剩余 <strong data-mock-exam-time>05分00秒</strong></span><span data-mock-recording-status>等待开始</span></div>
+            <div class="recording-stage-top"><span>演练剩余 <strong data-mock-exam-time>05分00秒</strong></span><span data-mock-recording-status>等待开始</span></div>
             <div class="recording-stage-info">
               <strong><span data-mock-subject-title>钢琴</span> · <span data-mock-level-title>3级</span></strong>
-              <span class="mock-stage-badge">模拟录制 · 不启用摄像头</span>
+              <span class="mock-stage-badge">流程演练 · 不启用摄像头、不生成文件</span>
               <span>本次模拟包含全部考试内容</span>
               <span>教材：<strong data-mock-textbook>社会艺术水平考级钢琴教材</strong></span>
               <span>曲目：<strong data-mock-repertoire>《练习曲》1首；《自选乐曲》1首</strong></span>
-              <span>请保持页面稳定，完成后点击结束录制</span>
-              <span class="recording-countdown" data-mock-recording-countdown>点击开始录制后倒计时</span>
+              <span>请保持页面稳定，完成后点击结束演练</span>
+              <span class="recording-countdown" data-mock-recording-countdown>点击开始演练后倒计时</span>
             </div>
             <div class="recording-stage-controls" data-recording-state="ready">
-              <button class="stage-btn start" type="button" data-mock-record-start>开始录制</button>
-              <button class="stage-btn finish" type="button" data-mock-finish hidden>结束录制</button>
+              <button class="stage-btn start" type="button" data-mock-record-start>开始演练</button>
+              <button class="stage-btn finish" type="button" data-mock-finish hidden>结束演练</button>
             </div>
           </div>
-          <p class="mock-exam-note">模拟考试不会调用摄像头或生成正式考试记录，结束后可保存视频或重新录制。</p>
+          <p class="mock-exam-note">本页仅为流程演练：不调用摄像头、不生成或保存视频文件、不上传、不计入正式录制次数，也不会产生真实考试记录。</p>
         </section>
         <div class="confirm-overlay" data-mock-record-finish-dialog hidden>
           <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="mock-record-finish-title">
-            <h3 id="mock-record-finish-title">结束录制</h3>
-            <p>请选择本次模拟录制的处理方式，保存视频将进入视频生成页面；重新录制本次未保存视频不会计入录制次数。</p>
+            <h3 id="mock-record-finish-title">结束演练</h3>
+            <p>请选择本次演练的处理方式。结束后仅进入流程回顾，不会生成、保存或上传任何视频文件。</p>
             <div class="action-row">
-              <button class="ghost-action" type="button" data-mock-record-finish-retry>重新录制</button>
-              <button class="primary-action" type="button" data-mock-record-finish-save>保存视频</button>
+              <button class="ghost-action" type="button" data-mock-record-finish-retry>重新演练</button>
+              <button class="primary-action" type="button" data-mock-record-finish-save>结束演练</button>
             </div>
           </div>
         </div>
       </main>
 
-      <!-- 模拟考试-完成 -->
-      <main class="content screen-view" id="mock-record-submit-view" data-view="mock-record-submit" hidden>
+      <!-- 模拟考试-流程回顾（不生成任何文件） -->
+      <main class="content screen-view" id="mock-record-submit-view" data-view="mock-record-submit" data-mock-layer="L1" hidden>
         <section class="section">
           <div class="card record-generation-card mock-record-generation-card">
             <div class="record-generation-icon" aria-hidden="true">…</div>
-            <h2 data-mock-record-generation-status>模拟视频生成中，请勿退出</h2>
-            <p data-mock-record-generation-note>模拟录制已结束，系统正在生成演示视频。</p>
-            <div class="record-generation-progress" aria-label="模拟视频生成进度">
+            <h2 data-mock-record-generation-status>演练收尾中，请稍候</h2>
+            <p data-mock-record-generation-note>正在整理本次操作演练，不生成或保存任何文件。</p>
+            <div class="record-generation-progress" aria-label="操作演练整理进度">
               <span data-mock-record-generation-progress></span>
             </div>
-            <a class="primary-action is-disabled" href="#mock-done" data-mock-record-generation-next aria-disabled="true">视频生成中</a>
+            <a class="primary-action is-disabled" href="#mock-done" data-mock-record-generation-next aria-disabled="true">整理中</a>
           </div>
         </section>
       </main>
 
       <!-- 模拟考试-完成 -->
-      <main class="content screen-view" id="mock-done-view" data-view="mock-done" hidden>
+      <main class="content screen-view" id="mock-done-view" data-view="mock-done" data-mock-layer="L1" hidden>
         <section class="section">
           <div class="card completion-card">
             <div class="success-icon" aria-hidden="true">✓</div>
             <h2>模拟考试完成</h2>
-            <p>您已完成模拟考试，熟悉了操作流程。本次不会生成视频或真实考试记录。</p>
+            <p>您已完成模拟考试，熟悉了操作流程。本次不生成视频文件、不产生成绩与等级，也不产生真实考试记录。</p>
           </div>
         </section>
         <section class="section">
-          <div class="card form-card">
+          <div class="card form-card mx-done-actions">
+            <a class="mx-link-row" href="#mock-rubric" data-mock-layer="L1">
+              <span><strong>评分维度对照</strong><small>理解评分标准，获取关注维度的练习提示</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
+            <a class="mx-link-row" href="#learning" data-mock-layer="L1">
+              <span><strong>去学习页 · 我的提升计划</strong><small>结合薄弱环节查看考级视频课程</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
+            <a class="mx-link-row mx-demo-only" href="#mock-proctor-demo" data-demo-only data-mock-layer="L2" hidden>
+              <span><strong>查看能力预览（功能演示）</strong><small>仅演示包可见</small></span>
+              <span class="mx-arrow" aria-hidden="true">&rsaquo;</span>
+            </a>
             <a class="primary-action" href="#home" style="width:100%;">返回首页</a>
           </div>
+        </section>
+      </main>
+
+      <!-- 模拟考试-评分维度对照（L1 真功能，随版本上线） -->
+      <main class="content screen-view" id="mock-rubric-view" data-view="mock-rubric" data-mock-layer="L1" hidden>
+        <section class="section">
+          <div class="card mx-block">
+            <h2 class="mx-title">评分维度对照</h2>
+            <p class="mx-desc">当前选择：<strong data-mock-rubric-subject>钢琴</strong> · <strong data-mock-rubric-level>1级</strong></p>
+            <p class="mx-note">本页仅帮助理解评分标准，不构成成绩评价或结果预测；不显示分数、等级结论、通过率与排名。</p>
+          </div>
+          <div class="card mx-block">
+            <h2 class="mx-title">整体评级档位</h2>
+            <p class="mx-desc">正式考级由考官按评分模板提交整体评级，档位以批次发布时的模板快照为准；此处按现有档位顺序展示，不写死档数。</p>
+            <div class="mx-grade-list" data-mock-rubric-grades></div>
+          </div>
+          <div class="card mx-block">
+            <h2 class="mx-title">评分维度与关注点</h2>
+            <p class="mx-desc">勾选本次练习想重点关注的维度（最多 3 项）。维度名称与说明取自原型静态演示数据。</p>
+            <div class="mx-dim-list" data-mock-rubric-dimensions></div>
+          </div>
+          <div class="card mx-block">
+            <h2 class="mx-title">练习提示</h2>
+            <ul class="mx-advice-list" data-mock-rubric-advice><li class="mx-empty">勾选关注维度后展示对应练习提示（最多 3 条）</li></ul>
+          </div>
+          <div class="mx-footer-note">仅帮助理解评分标准，不构成成绩评价或结果预测；成绩以官方发布为准。</div>
+          <div class="action-row"><a class="primary-action" href="#mock-select" style="width:100%;">返回模拟考试</a></div>
+        </section>
+      </main>
+
+      <!-- 模拟考试-AI 监考模拟示意（L2 演示态，仅演示包） -->
+      <main class="content screen-view" id="mock-proctor-demo-view" data-view="mock-proctor-demo" data-mock-layer="L2" hidden>
+        <div class="mx-demo-watermark" aria-hidden="true">功 能 演 示</div>
+        <section class="section">
+          <div class="card mx-block">
+            <div class="mx-demo-banner">功能演示 · 非真实监考能力</div>
+            <h2 class="mx-title">AI 监考模拟（示意）</h2>
+            <p class="mx-desc">下图为静态示意，用于展示正式考试可能启用的秩序提示形态；不调用摄像头、不采集影像、不产生任何记录。</p>
+            <div class="mx-static-frame" aria-label="监考示意画面（静态）">
+              <span class="mx-frame-label">静态示意画面</span>
+              <span class="mx-frame-figure" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="card mx-block">
+            <h2 class="mx-title">秩序提示样例</h2>
+            <ul class="mx-sample-list">
+              <li><span class="mx-tag">示意</span><span>未检测到完整入镜，请调整机位</span></li>
+              <li><span class="mx-tag">示意</span><span>检测到切出小程序，正式考试将中断计时</span></li>
+              <li><span class="mx-tag">示意</span><span>光线偏暗，建议补光后继续</span></li>
+            </ul>
+            <p class="mx-note">以上为固定样例文案，不代表系统已具备识别能力，也不作为违规或作弊判定，不出现「已记录」等表述。</p>
+          </div>
+          <div class="mx-footer-note">功能演示，不含 AI 推理与影像采集能力，不代表考级结果；成绩以官方发布为准。本页不提供保存图片、分享与下载。</div>
+          <div class="action-row">
+            <a class="ghost-action mx-demo-only" href="#mock-score-preview-demo" data-demo-only hidden>查看评分预演示意</a>
+            <a class="primary-action" href="#mock-select">返回模拟考试</a>
+          </div>
+        </section>
+      </main>
+
+      <!-- 模拟考试-智能评分预演示意（L2 演示态，仅演示包） -->
+      <main class="content screen-view" id="mock-score-preview-demo-view" data-view="mock-score-preview-demo" data-mock-layer="L2" hidden>
+        <div class="mx-demo-watermark" aria-hidden="true">功 能 演 示</div>
+        <section class="section">
+          <div class="card mx-block">
+            <div class="mx-demo-banner">功能演示 · 非真实成绩评价</div>
+            <h2 class="mx-title">智能评分预演（示意）</h2>
+            <p class="mx-desc">固定样例：演示考生 · 钢琴 3 级。以下为「关注维度」示意，不是得分，也不是等级结论。</p>
+            <ul class="mx-sample-list">
+              <li><span class="mx-tag">示意</span><span><strong>节奏稳定性</strong>：建议分段慢练，先固定速度再连贯演奏</span></li>
+              <li><span class="mx-tag">示意</span><span><strong>动作 / 演奏规范</strong>：对照教材要求逐句核对指法与基本动作</span></li>
+              <li><span class="mx-tag">示意</span><span><strong>表现力与完整性</strong>：先确认力度与乐句划分，再完整走一遍</span></li>
+            </ul>
+          </div>
+          <div class="mx-footer-note">功能演示，非真实成绩评价，不代表考级结果；本页不展示分数、等级、通过率、名次，也不与真实考生成绩对比。成绩以官方发布为准。</div>
+          <div class="action-row"><a class="primary-action" href="#mock-select">返回模拟考试</a></div>
         </section>
       </main>
       <!-- 模拟考试模块 结束 -->
@@ -10438,33 +10924,71 @@
       <!-- 考级报名 · 批次列表 -->
       <main class="content screen-view" id="subjects-view" data-view="subjects" hidden style="padding-top:0;">
         <section class="section" aria-label="可报批次" style="margin-top:10px;">
-          <div class="home-activity-list">
-            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-wuhan" data-batch-card data-batch-mode="offline" data-select-batch="2026h2-wuhan">
+          <div class="activity-toolbar">
+            <label class="course-search activity-search">
+              <span class="course-search-icon" aria-hidden="true"></span>
+              <input type="search" data-activity-search maxlength="40" placeholder="搜索活动、专业或考点" aria-label="搜索考级活动、专业或考点">
+              <button type="button" class="course-search-clear" data-activity-search-clear aria-label="清空搜索" hidden>×</button>
+            </label>
+            <button type="button" class="activity-locate-btn" data-activity-locate aria-label="定位或手动选择城市">
+              <span class="course-filter-icon" aria-hidden="true"></span><span data-activity-locate-label>定位</span>
+            </button>
+          </div>
+          <div class="activity-sort" role="group" aria-label="排序方式">
+            <button type="button" data-activity-sort="deadline" aria-pressed="true">报名截止时间</button>
+            <button type="button" data-activity-sort="distance" aria-pressed="false">离我最近</button>
+            <span class="activity-count" data-activity-count></span>
+          </div>
+          <div class="activity-locate-bar" data-activity-locate-bar hidden>
+            <span data-activity-locate-text></span>
+            <button type="button" data-activity-locate-action>去开启</button>
+          </div>
+          <div class="home-activity-list" data-activity-list>
+            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-wuhan" data-batch-card data-batch-mode="offline" data-select-batch="2026h2-wuhan" data-activity-card data-activity-key="2026h2-wuhan">
               <span class="batch-cover" data-cover="武汉"><span class="batch-mode-tag">线下考试</span></span>
               <span class="batch-cover-main">
                 <span class="subject-name">2026下半年武汉线下考试批次</span>
                 <span class="batch-deadline">线下考试 · <span data-batch-deadline>报名截止：动态日期</span></span>
+                <span class="batch-loc" data-activity-loc></span>
               </span>
               <span class="status-pill" data-batch-status>报名中</span>
             </a>
-            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-online" data-batch-card data-batch-mode="online" data-select-batch="2026h2-online">
+            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-online" data-batch-card data-batch-mode="online" data-select-batch="2026h2-online" data-activity-card data-activity-key="2026h2-online">
               <span class="batch-cover online" data-cover="线上"><span class="batch-mode-tag">线上考试</span></span>
               <span class="batch-cover-main">
                 <span class="subject-name">2026下半年线上考试录制专项批次</span>
                 <span class="batch-deadline">线上考试 · <span data-batch-deadline>报名截止：动态日期</span></span>
+                <span class="batch-loc" data-activity-loc></span>
               </span>
               <span class="status-pill" data-batch-status>报名中</span>
             </a>
-            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-art" data-batch-card data-batch-mode="offline" data-select-batch="2026h2-art">
+            <a class="card batch-card batch-cover-card" href="#scan-result?batch=2026h2-art" data-batch-card data-batch-mode="offline" data-select-batch="2026h2-art" data-activity-card data-activity-key="2026h2-art">
               <span class="batch-cover art" data-cover="美术"><span class="batch-mode-tag">线下考试</span></span>
               <span class="batch-cover-main">
                 <span class="subject-name">2026下半年美术书法补充批次</span>
-                <span class="batch-deadline">线下考试 · 报名截止：2026.09.18</span>
+                <span class="batch-deadline">报名截止：2026.09.18</span>
+                <span class="batch-loc" data-activity-loc></span>
               </span>
-              <span class="status-pill muted" data-batch-status>未开始</span>
+              <span class="status-pill" data-batch-status>报名中</span>
             </a>
           </div>
+          <div class="empty-state" data-activity-empty hidden>没有找到相关考级活动，换个关键词或清空搜索再试</div>
         </section>
+
+        <div class="course-filter-modal" data-activity-modal hidden role="dialog" aria-modal="true" aria-labelledby="activity-locate-title">
+          <div class="course-filter-sheet">
+            <div class="course-filter-head">
+              <h3 id="activity-locate-title">按位置查找考级活动</h3>
+              <button type="button" class="course-filter-close" data-activity-modal-close aria-label="关闭">×</button>
+            </div>
+            <p class="activity-modal-note">开启定位后按城市为你排序（城市级定位，仅本页使用、不保存位置）。未开启也可以直接选择城市；线上考级批次不参与距离排序。</p>
+            <button type="button" class="activity-locate-primary" data-activity-request-locate>开启定位，优先展示附近活动</button>
+            <button type="button" class="activity-locate-secondary" data-activity-modal-close>暂不开启</button>
+            <div class="activity-city-title">手动选择城市</div>
+            <div class="activity-city-grid" data-activity-city-grid></div>
+          </div>
+        </div>
+
       </main>
 
       <!-- 批次详情 · 专业范围 -->
@@ -10805,7 +11329,7 @@
           <article class="card detail-section">
             <div class="detail-requirement-list">
               <div class="detail-requirement-item"><span>考级大纲</span><strong data-detail-syllabus>依据当前专业考级大纲组织考试，请按所选级别准备规定内容。</strong></div>
-              <div class="detail-requirement-item"><span>评分标准</span><strong data-detail-score>按评分模板评价：演奏表现、技术水平、音乐表现；四档等级由考官直接提交</strong></div>
+              <div class="detail-requirement-item"><span>评分标准</span><strong data-detail-score>按评分模板评价：演奏表现、技术水平、音乐表现；整体评级使用优+、优秀、优-、良好、合格、不合格六档，由考官直接提交</strong></div>
               <div class="detail-requirement-item"><span>考级曲目</span><strong data-detail-repertoire>音阶与琶音；练习曲1首；中外乐曲1首</strong></div>
             </div>
           </article>
@@ -11223,7 +11747,7 @@
                     <span class="exam-card-status" data-card-status>未开始</span>
                   </span>
                   <span class="exam-card-secondary"><span data-card-subject>中国舞</span><em data-card-level>04级</em></span>
-                  <span class="exam-card-meta"><span data-card-time>2026-07-30 14:00至16:00</span><i aria-hidden="true">·</i><span data-card-place>湖北职业艺术学院光谷校区</span></span>
+                  <span class="exam-card-meta"><span data-card-time>2026-07-30 14:00至16:00</span><i aria-hidden="true">·</i><span data-card-place>湖北艺术职业学院光谷校区</span></span>
                   <span class="exam-card-submeta"><span data-card-room>A201</span><i aria-hidden="true">·</i><span data-card-order>18</span></span>
                 </span>
               </a>
@@ -11235,7 +11759,7 @@
                     <span class="exam-card-status" data-card-status>已结束</span>
                   </span>
                   <span class="exam-card-secondary"><span data-card-subject>素描</span><em data-card-level>04级</em></span>
-                  <span class="exam-card-meta"><span data-card-time>2026-07-30 14:00至16:00</span><i aria-hidden="true">·</i><span data-card-place>湖北职业艺术学院光谷校区</span></span>
+                  <span class="exam-card-meta"><span data-card-time>2026-07-30 14:00至16:00</span><i aria-hidden="true">·</i><span data-card-place>湖北艺术职业学院光谷校区</span></span>
                   <span class="exam-card-submeta"><span data-card-room>B301</span><i aria-hidden="true">·</i><span data-card-order>18</span></span>
                 </span>
               </a>
@@ -11247,7 +11771,7 @@
                     <span class="exam-card-status" data-card-status>已结束</span>
                   </span>
                   <span class="exam-card-secondary"><span data-card-subject>钢琴</span><em data-card-level>05级</em></span>
-                  <span class="exam-card-meta"><span data-card-time>2026-06-18 10:00至10:20</span><i aria-hidden="true">·</i><span data-card-place>湖北职业艺术学院光谷校区</span></span>
+                  <span class="exam-card-meta"><span data-card-time>2026-06-18 10:00至10:20</span><i aria-hidden="true">·</i><span data-card-place>湖北艺术职业学院光谷校区</span></span>
                   <span class="exam-card-submeta"><span data-card-room>A302</span><i aria-hidden="true">·</i><span data-card-order>06</span></span>
                 </span>
               </a>
@@ -11259,7 +11783,7 @@
                     <span class="exam-card-status" data-card-status>已结束</span>
                   </span>
                   <span class="exam-card-secondary"><span data-card-subject>古筝</span><em data-card-level>02级</em></span>
-                  <span class="exam-card-meta"><span data-card-time>2026-03-16 09:30至09:50</span><i aria-hidden="true">·</i><span data-card-place>湖北职业艺术学院光谷校区</span></span>
+                  <span class="exam-card-meta"><span data-card-time>2026-03-16 09:30至09:50</span><i aria-hidden="true">·</i><span data-card-place>湖北艺术职业学院光谷校区</span></span>
                   <span class="exam-card-submeta"><span data-card-room>A201</span><i aria-hidden="true">·</i><span data-card-order>12</span></span>
                 </span>
               </a>
@@ -11916,7 +12440,7 @@
                   <div class="ticket-sheet-row"><span>出生日期：</span><div class="ticket-sheet-line" data-ticket-birth>2018-05-12</div></div>
                   <div class="ticket-sheet-row"><span>国籍/地区：</span><div class="ticket-sheet-line" data-ticket-country>中国</div></div>
                   <div class="ticket-sheet-row"><span>准考证号：</span><div class="ticket-sheet-line" data-ticket-no>HB-YZ-20260820-0418</div></div>
-                  <div class="ticket-sheet-row"><span>身份证号：</span><div class="ticket-sheet-line" data-ticket-id-doc>420111201805120018</div></div>
+                  <div class="ticket-sheet-row"><span>身份证号：</span><div class="ticket-sheet-line" data-ticket-id-doc>420111201805120020</div></div>
                   <div class="ticket-sheet-row"><span data-ticket-organizer-label>报名机构：</span><div class="ticket-sheet-line" data-ticket-organizer>光谷少儿艺术中心</div></div>
                   <div class="ticket-sheet-row"><span>承办单位：</span><div class="ticket-sheet-line">湖北艺术职业学院</div></div>
                   <div class="ticket-sheet-row"><span>报名编号：</span><div class="ticket-sheet-line" data-ticket-enrollment>EX202607250018</div></div>
@@ -11981,7 +12505,7 @@
                   <span class="personal-record-meta"><span>准考证：111111111111111113</span><span>光谷少儿艺术中心</span></span>
                 </span>
               </span>
-              <span class="personal-record-badge">合格</span>
+              <span class="personal-record-badge is-fail">不合格</span>
             </a>
       </main>
 
@@ -12010,17 +12534,36 @@
           </div>
           <div class="card score-detail-section">
             <h2 class="score-detail-section-title">成绩评价</h2>
-            <div class="score-rating-list">
-              <div data-score-dimensions></div>
+            <div class="score-rating-row score-verdict-row">
+              <span>是否通过</span>
+              <strong class="score-verdict" data-score-passed data-passed="pass">通过</strong>
+            </div>
+            <div class="score-overall-result score-summary-row">
+              <span>整体评分</span>
+              <strong class="score-detail-result" data-score-summary>优秀</strong>
             </div>
             <div class="score-overall-comment">
               <span>整体评语</span>
               <p data-score-comment>动作完成规范，节奏稳定，具备当前级别的表现力。</p>
             </div>
-            <div class="score-overall-result">
-              <span>整体评级</span>
-              <strong class="score-detail-result" data-score-summary>优秀</strong>
+          </div>
+          <div class="card score-detail-section score-analysis-section">
+            <h2 class="score-detail-section-title">成绩分析与建议</h2>
+            <div class="score-radar-well">
+              <div class="score-radar" data-score-radar aria-label="各维度评级雷达图"></div>
+              <p class="score-radar-legend">雷达图由内向外依次为：不合格、合格、良好、优-、优秀、优+</p>
             </div>
+            <h3 class="score-analysis-subtitle">各维度评级</h3>
+            <div class="score-rating-list">
+              <div data-score-dimensions></div>
+            </div>
+            <h3 class="score-analysis-subtitle">提升建议</h3>
+            <ul class="score-advice-list" data-score-advice></ul>
+          </div>
+          <div class="card score-detail-section score-detail-plan-card">
+            <h2 class="score-detail-section-title">继续提升</h2>
+            <p class="score-detail-plan-note">根据成绩中的薄弱环节，到学习页查看推荐的考级视频课程与练习资源。</p>
+            <a class="primary-action" href="#learning" data-score-plan-entry>我的提升计划</a>
           </div>
         </section>
       </main>
@@ -12248,6 +12791,10 @@
             </button>
           </div>
           <div class="course-active-filter" data-course-active-filter hidden></div>
+          <div class="plan-strip" data-learning-plan hidden aria-label="我的提升计划">
+            <span class="plan-strip-label">我的提升计划-薄弱环节推荐：</span>
+            <div class="plan-strip-chips" data-learning-plan-chips></div>
+          </div>
           <div class="course-list" data-course-list data-pagination-mode="cursor" data-page-size="20" data-dedup-key="courseId" data-sort="publishDate DESC,publishTime DESC,courseId DESC"></div>
           <div class="empty-state" data-course-empty hidden>暂无符合条件的考级视频课程</div>
         <div class="course-filter-modal" data-course-filter-modal hidden role="dialog" aria-modal="true" aria-labelledby="course-filter-title">
@@ -12988,7 +13535,7 @@
                 <div class="candidate-photo-placeholder" aria-hidden="true"></div>
                 <button class="candidate-photo-upload" type="button" data-candidate-photo>上传照片</button>
               </div>
-              <p class="candidate-photo-notice">上传考生近期正面免冠照片。照片将用于准考证和证书，请保持清晰、无遮挡、光线均匀。</p>
+              <p class="candidate-photo-notice">请拍照或上传考生近期2寸照，建议 JPG/JPEG/PNG、单文件 10K-2MB 以内、纯色背景、免冠正面，像素不低于 413×626（该照片用于校验考生身份和证书制作之用）。</p>
             </div>
             <div class="candidate-field-list">
               <section class="candidate-field-group" aria-labelledby="profile-candidate-group-title">
@@ -12997,7 +13544,7 @@
               <label class="candidate-field"><span class="candidate-field-label required">拼音姓名<span class="required-star">*</span></span><select data-candidate-edit-pinyin aria-label="选择拼音姓名"><option value="">请先输入姓名</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">国家/地区<span class="required-star">*</span></span><select data-candidate-edit-country required><option value="">请选择</option><option>中国</option><option>中国香港</option><option>中国澳门</option><option>中国台湾</option><option>其他国家/地区</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">证件类型<span class="required-star">*</span></span><select data-candidate-edit-id-type><option>身份证</option><option>护照</option><option>港澳台居民居住证</option></select></label>
-              <label class="candidate-field"><span class="candidate-field-label required">证件号<span class="required-star">*</span></span><input type="text" data-candidate-edit-id placeholder="请输入"></label>
+              <label class="candidate-field"><span class="candidate-field-label required">证件号<span class="required-star">*</span></span><span class="candidate-id-input"><input type="text" data-candidate-edit-id placeholder="请输入证件号" maxlength="18" autocomplete="off"><button class="candidate-id-scan" type="button" data-id-scan="edit" aria-label="扫一扫识别证件号" title="扫一扫识别"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 8.5v-2a2 2 0 0 1 2-2h2M15.5 4.5h2a2 2 0 0 1 2 2v2M19.5 15.5v2a2 2 0 0 1-2 2h-2M8.5 19.5h-2a2 2 0 0 1-2-2v-2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 12h16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></span></label>
               <label class="candidate-field"><span class="candidate-field-label required">考生性别<span class="required-star">*</span></span><select data-candidate-edit-gender><option value="">请选择</option><option>男</option><option>女</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">出生日期<span class="required-star">*</span></span><input type="date" data-candidate-edit-birth></label>
               <label class="candidate-field"><span class="candidate-field-label required">民族<span class="required-star">*</span></span><select data-candidate-edit-nation required><option value="">请选择</option><option value="汉">汉族</option><option value="蒙古">蒙古族</option><option value="回">回族</option><option value="藏">藏族</option><option value="维吾尔">维吾尔族</option><option value="苗">苗族</option><option value="彝">彝族</option><option value="壮">壮族</option><option value="满">满族</option><option value="其他">其他</option></select></label>
@@ -13085,7 +13632,6 @@
         </section>
       </main>
 
-
       <!-- 考级大纲 -->
       <main class="content screen-view" id="syllabus-view" data-view="syllabus" hidden>
         <section class="section">
@@ -13097,7 +13643,7 @@
         <section class="section">
           <div class="card form-card">
             <div class="weui-cell"><span class="weui-cell__bd form-label">考试内容</span><div class="weui-cell__ft form-field">规定曲目 1-2 首、音阶琶音、视奏片段（按级别递增难度）。</div></div>
-            <div class="weui-cell"><span class="weui-cell__bd form-label">评分规则摘要</span><div class="weui-cell__ft form-field">考官按当前评分模板逐维度评价，并提交优秀、良好、合格或不合格四档整体评级。</div></div>
+            <div class="weui-cell"><span class="weui-cell__bd form-label">评分规则摘要</span><div class="weui-cell__ft form-field">考官按当前评分模板逐维度评价，并提交优+、优秀、优-、良好、合格或不合格六档整体评级。</div></div>
             <div class="weui-cell"><span class="weui-cell__bd form-label">教材 / 曲目范围</span><div class="weui-cell__ft form-field">以平台发布现行大纲曲目库为准；跨级报考需满足前置证书。</div></div>
             <button class="primary-action" type="button" style="width:100%;" data-prototype-action="syllabus-download">下载完整大纲 PDF</button>
             <a class="ghost-action" href="#subject-detail" style="width:100%;">返回专业详情</a>
@@ -13114,7 +13660,7 @@
                 <div class="candidate-photo-placeholder" aria-hidden="true"></div>
                 <button class="candidate-photo-upload" type="button" data-bind-photo>上传照片</button>
               </div>
-              <p class="candidate-photo-notice">上传考生近期正面免冠照片。照片用于准考证和证书，请勿使用合成、翻拍或模糊照片。</p>
+              <p class="candidate-photo-notice">请拍照或上传考生近期2寸照，建议 JPG/JPEG/PNG、单文件 10K-2MB 以内、纯色背景、免冠正面，像素不低于 413×626（该照片用于校验考生身份和证书制作之用）。</p>
             </div>
             <div class="candidate-field-list">
               <section class="candidate-field-group" aria-labelledby="bind-candidate-group-title">
@@ -13123,7 +13669,7 @@
               <label class="candidate-field"><span class="candidate-field-label required">拼音姓名<span class="required-star">*</span></span><select data-bind-pinyin aria-label="选择拼音姓名"><option value="">请先输入姓名</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">国家/地区<span class="required-star">*</span></span><select data-bind-country required><option value="">请选择</option><option selected>中国</option><option>中国香港</option><option>中国澳门</option><option>中国台湾</option><option>其他国家/地区</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">证件类型<span class="required-star">*</span></span><select data-bind-id-type><option>身份证</option><option>护照</option><option>港澳台居民居住证</option></select></label>
-              <label class="candidate-field"><span class="candidate-field-label required">证件号<span class="required-star">*</span></span><input type="text" placeholder="请输入" data-bind-id></label>
+              <label class="candidate-field"><span class="candidate-field-label required">证件号<span class="required-star">*</span></span><span class="candidate-id-input"><input type="text" placeholder="请输入证件号" data-bind-id maxlength="18" autocomplete="off"><button class="candidate-id-scan" type="button" data-id-scan="bind" aria-label="扫一扫识别证件号" title="扫一扫识别"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 8.5v-2a2 2 0 0 1 2-2h2M15.5 4.5h2a2 2 0 0 1 2 2v2M19.5 15.5v2a2 2 0 0 1-2 2h-2M8.5 19.5h-2a2 2 0 0 1-2-2v-2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 12h16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></span></label>
               <label class="candidate-field"><span class="candidate-field-label required">考生性别<span class="required-star">*</span></span><select data-bind-gender><option value="">请选择</option><option>男</option><option>女</option></select></label>
               <label class="candidate-field"><span class="candidate-field-label required">出生日期<span class="required-star">*</span></span><input type="date" data-bind-birth></label>
               <label class="candidate-field"><span class="candidate-field-label required">民族<span class="required-star">*</span></span><select data-bind-nation required><option value="">请选择</option><option value="汉">汉族</option><option value="蒙古">蒙古族</option><option value="回">回族</option><option value="藏">藏族</option><option value="维吾尔">维吾尔族</option><option value="苗">苗族</option><option value="彝">彝族</option><option value="壮">壮族</option><option value="满">满族</option><option value="其他">其他</option></select></label>
@@ -13494,7 +14040,6 @@
 
             </div>
 
-
     <div class="confirm-overlay" id="unbind-confirm" hidden>
       <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="unbind-title">
         <h3 id="unbind-title">确认解绑子女？</h3>
@@ -13583,6 +14128,26 @@
       </div>
     </div>
 
+    <!-- 模拟考试·录制环境自检：点击「已就位」时弹出，勾选结果不留存 -->
+    <div class="confirm-overlay" data-mock-env-dialog hidden>
+      <div class="confirm-card mock-env-dialog-card" role="dialog" aria-modal="true" aria-labelledby="mock-env-dialog-title">
+        <h3 id="mock-env-dialog-title">录制环境自检</h3>
+        <p>请逐项确认后开始流程演练。以下为静态检查项：不调用摄像头、不读取相册、不上传任何数据，勾选结果不留存。</p>
+        <div class="mx-check-list" data-mock-env-checklist>
+          <label class="mx-check-item"><input type="checkbox" data-mock-env-check value="frame"><span>考生完整入镜，取景框内无遮挡</span></label>
+          <label class="mx-check-item"><input type="checkbox" data-mock-env-check value="light"><span>光线充足，面部与演奏/动作区域可辨</span></label>
+          <label class="mx-check-item"><input type="checkbox" data-mock-env-check value="network"><span>网络稳定，避免正式考试时中断</span></label>
+          <label class="mx-check-item"><input type="checkbox" data-mock-env-check value="battery"><span>设备电量充足，建议接入电源</span></label>
+          <label class="mx-check-item"><input type="checkbox" data-mock-env-check value="position"><span>机位稳定，设备不会晃动或滑落</span></label>
+        </div>
+        <p class="mx-note" data-mock-env-check-hint>请逐项检查并勾选后，再点击「确认就位」</p>
+        <div class="action-row">
+          <button class="ghost-action" type="button" data-mock-env-dialog-close>取消</button>
+          <button class="primary-action" type="button" data-mock-env-confirm>确认就位</button>
+        </div>
+      </div>
+    </div>
+
     <nav class="tabbar" aria-label="底部导航">
       <a class="tab active" href="#home" data-tab="home" aria-current="page">
         <span class="tab-icon" data-icon="home" aria-hidden="true"></span><span>首页</span>
@@ -13602,15 +14167,58 @@
     </nav>
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
     <span class="side-handle" aria-hidden="true"></span>
+
+    <!-- 考点导航 · 选择地图弹窗（考试列表卡片唤起，原型演示） -->
+    <div class="course-filter-modal" data-venue-nav-modal hidden role="dialog" aria-modal="true" aria-labelledby="venue-nav-title">
+      <div class="course-filter-sheet">
+        <div class="course-filter-head">
+          <h3 id="venue-nav-title">选择地图导航</h3>
+          <button type="button" class="course-filter-close" data-venue-nav-modal-close aria-label="关闭">×</button>
+        </div>
+        <p class="activity-modal-note" data-venue-nav-note></p>
+        <div class="nav-venue-list" data-venue-nav-venues></div>
+        <div class="nav-map-title">打开地图导航</div>
+        <div class="nav-map-grid">
+          <button type="button" data-venue-nav-map="腾讯地图">腾讯地图</button>
+          <button type="button" data-venue-nav-map="高德地图">高德地图</button>
+          <button type="button" data-venue-nav-map="百度地图">百度地图</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 证件号扫一扫 · OCR 识别弹层（添加/编辑考生页唤起，原型演示） -->
+    <div class="course-filter-modal" data-id-scan-modal hidden role="dialog" aria-modal="true" aria-labelledby="id-scan-title">
+      <div class="course-filter-sheet">
+        <div class="course-filter-head">
+          <h3 id="id-scan-title">扫一扫 · 识别身份证</h3>
+          <button type="button" class="course-filter-close" data-id-scan-close aria-label="关闭">×</button>
+        </div>
+        <div class="id-scan-stage" data-id-scan-stage>
+          <div class="id-scan-frame" aria-hidden="true"><span class="id-scan-beam"></span></div>
+          <p class="id-scan-tip" data-id-scan-tip>将身份证国徽面放入框内，正在识别…</p>
+          <p class="id-scan-result" data-id-scan-result hidden></p>
+        </div>
+        <p class="id-scan-note">识别结果仅用于自动填写证件号，并同步带出出生日期与性别，请核对无误后保存。</p>
+        <div class="id-scan-actions">
+          <button type="button" class="ghost-action" data-id-scan-manual>手动输入</button>
+          <button type="button" class="primary-action" data-id-scan-again>重新识别</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
+  <script src="../shared/hbyx-score-dimension-advice.js"></script>
   <script src="../shared/hbyx-exam-navigation.js"></script>
   <script src="../shared/hbyx-exam-entry-groups.js"></script>
   <script>
     (function () {
       var shell = document.querySelector(".phone-shell");
       var views = document.querySelectorAll(".screen-view");
+      /* 演示包标记：对外构建固定为 false 并剔除 L2 视图与入口；原型用 ?demo=1 模拟评审/演示包。
+         这不是「模拟考试入口开关」——首页快捷入口在任何构建中都常驻。 */
+      var HBYX_DEMO_BUILD = /(?:^|[?&])demo=1(?:&|$)/.test(window.location.search || "");
+      var MOCK_L2_VIEWS = { "mock-proctor-demo": true, "mock-score-preview-demo": true };
       var tabs = document.querySelectorAll(".tabbar .tab[data-tab]");
       var secondaryTitle = document.querySelector("[data-secondary-title]");
       var secondaryBack = document.querySelector("[data-secondary-back]");
@@ -13621,6 +14229,7 @@
       var onlineExamLeaveDialog = document.querySelector("[data-online-exam-leave-dialog]");
       var recordFinishDialog = document.querySelector("[data-record-finish-dialog]");
       var mockRecordFinishDialog = document.querySelector("[data-mock-record-finish-dialog]");
+      var mockEnvDialog = document.querySelector("[data-mock-env-dialog]");
       var toastTimer = null;
       var onlineExamPendingTarget = "#posture-adjust";
       var onlineExamPromptOpen = false;
@@ -13782,7 +14391,7 @@
           pinyinName: "xiaobao",
           country: "中国",
           idType: "身份证",
-          idDocNo: "420111201805120018",
+          idDocNo: "420111201805120020",
           gender: "女",
           birth: "2018-05-12",
           nation: "汉",
@@ -13809,7 +14418,7 @@
           pinyinName: "doudou",
           country: "中国",
           idType: "身份证",
-          idDocNo: "420111202003080026",
+          idDocNo: "420111202003080025",
           gender: "女",
           birth: "2020-03-08",
           nation: "汉",
@@ -15078,12 +15687,7 @@
         "apply-payment": true,
         "apply-success": true,
         "application-detail": true,
-        "mock-select": true,
-        "mock-read": true,
-        "mock-posture-adjust": true,
-        "mock-exam": true,
-        "mock-record-submit": true,
-        "mock-done": true,
+        /* 模拟考试全链路（L1/L2）为常驻入口，不要求登录、不采集身份信息 */
         "exam-task": true,
         "exam-prep": true,
         "posture-adjust": true,
@@ -15118,10 +15722,13 @@
         "certificate-query-result": { title: "证书查询结果", back: "#certificate-query" },
         "mock-select": { title: "选择模拟考试", back: "#home" },
         "mock-read": { title: "模拟考前必读", back: "#mock-select" },
-        "mock-posture-adjust": { title: "录制准备", back: "#mock-read" },
-        "mock-exam": { title: "完整录制（模拟）", back: "#mock-posture-adjust" },
-        "mock-record-submit": { title: "视频生成（模拟）", back: "#mock-exam" },
+        "mock-posture-adjust": { title: "演练准备", back: "#mock-read" },
+        "mock-exam": { title: "流程演练（模拟）", back: "#mock-posture-adjust" },
+        "mock-record-submit": { title: "演练收尾（模拟）", back: "#mock-exam" },
         "mock-done": { title: "模拟考试完成", back: "#home" },
+        "mock-rubric": { title: "评分维度对照", back: "#mock-select" },
+        "mock-proctor-demo": { title: "AI 监考模拟（示意）", back: "#mock-select" },
+        "mock-score-preview-demo": { title: "智能评分预演（示意）", back: "#mock-select" },
         subjects: { title: "考级活动列表", back: "#home" },
         "major-select": { title: "选择专业级别", back: "#exam-apply?stage=select" },
         "apply-notice": { title: "报名须知", back: "#scan-result" },
@@ -16414,15 +17021,39 @@
         mockPostureAdjustTimer = null;
       }
 
+      function closeMockEnvDialog() {
+        if (mockEnvDialog) mockEnvDialog.hidden = true;
+      }
+
+      function openMockEnvDialog() {
+        if (!mockEnvDialog) return;
+        document.querySelectorAll("[data-mock-env-check]").forEach(function (item) {
+          item.checked = false;
+          var label = item.closest("label");
+          if (label) label.classList.remove("is-missing");
+        });
+        var checkHint = document.querySelector("[data-mock-env-check-hint]");
+        if (checkHint) checkHint.textContent = "请逐项检查并勾选后，再点击「确认就位」";
+        mockEnvDialog.hidden = false;
+      }
+
       function resetMockPostureAdjustUI() {
         stopMockPostureAdjustCountdown();
+        closeMockEnvDialog();
+        document.querySelectorAll("[data-mock-env-check]").forEach(function (item) {
+          item.checked = false;
+          var label = item.closest("label");
+          if (label) label.classList.remove("is-missing");
+        });
+        var checkHint = document.querySelector("[data-mock-env-check-hint]");
+        if (checkHint) checkHint.textContent = "请逐项检查并勾选后，再点击「确认就位」";
         mockPostureAdjustSeconds = 10;
         mockPostureAdjustMode = 0;
         var hint = document.querySelector("[data-mock-posture-countdown]");
         var cameraHint = document.querySelector("[data-mock-posture-hint]");
         var frame = document.querySelector("[data-mock-posture-frame]");
         var subjectKey = mockPostureSubjectKey();
-        if (hint) hint.textContent = "调整角度并确认就位后开始模拟录制";
+        if (hint) hint.textContent = "点击「已就位」完成环境自检后开始流程演练";
         if (cameraHint) cameraHint.textContent = mockPostureSubjectHint(subjectKey);
         if (frame) {
           frame.className = "posture-guide-frame is-" + subjectKey;
@@ -16463,23 +17094,23 @@
         setTextAll("[data-mock-level-title]", formatMockLevelLabel(selected.level));
         setTextAll("[data-mock-textbook]", mockSelectionState.textbook || "未填写");
         setTextAll("[data-mock-repertoire]", mockSelectionState.repertoire || "未填写");
-        if (status) status.textContent = mockExamRecordingStarted ? "正在完整录制" : (mockExamCountdownActive ? "准备开始" : "等待开始");
+        if (status) status.textContent = mockExamRecordingStarted ? "演练进行中" : (mockExamCountdownActive ? "准备开始" : "等待开始");
         if (countdown) countdown.textContent = mockExamRecordingStarted
-          ? "正在完整录制"
-          : (mockExamCountdownActive ? "录制将在 " + String(mockExamCountdown).padStart(2, "0") + " 秒后开始" : "点击开始录制后倒计时");
+          ? "演练进行中"
+          : (mockExamCountdownActive ? "演练将在 " + String(mockExamCountdown).padStart(2, "0") + " 秒后开始" : "点击开始演练后倒计时");
         if (start) {
           start.hidden = mockExamRecordingStarted;
           start.disabled = !isWaiting;
           start.setAttribute("aria-disabled", isWaiting ? "false" : "true");
           start.setAttribute("aria-hidden", mockExamRecordingStarted ? "true" : "false");
-          start.textContent = mockExamCountdownActive ? "准备开始" : "开始录制";
+          start.textContent = mockExamCountdownActive ? "准备开始" : "开始演练";
         }
         if (finish) {
           finish.hidden = !mockExamRecordingStarted;
           finish.disabled = !mockExamRecordingStarted;
           finish.setAttribute("aria-disabled", mockExamRecordingStarted ? "false" : "true");
           finish.setAttribute("aria-hidden", mockExamRecordingStarted ? "false" : "true");
-          finish.textContent = "结束录制";
+          finish.textContent = "结束演练";
         }
       }
 
@@ -16511,7 +17142,7 @@
               mockExamCountdown = 0;
               mockExamCountdownActive = false;
               mockExamRecordingStarted = true;
-              showToast("模拟录制开始");
+              showToast("流程演练开始");
             }
             updateMockExamUI();
             return;
@@ -16520,7 +17151,7 @@
           updateMockExamUI();
           if (mockExamSeconds <= 0) {
             stopMockExamTimer();
-            showToast("模拟考试时间已结束");
+            showToast("演练时间已结束");
             window.location.hash = "#mock-record-submit";
           }
         }, 1000);
@@ -16537,11 +17168,11 @@
         var progress = document.querySelector("[data-mock-record-generation-progress]");
         var next = document.querySelector("[data-mock-record-generation-next]");
         var ready = remaining <= 0;
-        if (status) status.textContent = ready ? "模拟视频已生成" : "模拟视频生成中，请勿退出";
-        if (note) note.textContent = ready ? "模拟录制视频已生成，可以进入模拟完成页。" : "模拟录制已结束，系统正在生成演示视频。";
+        if (status) status.textContent = ready ? "演练已收尾" : "演练收尾中，请稍候";
+        if (note) note.textContent = ready ? "本次仅熟悉操作流程，未生成、未保存、未上传任何视频文件。" : "正在整理本次操作演练，不生成或保存任何文件。";
         if (progress) progress.style.width = (ready ? 100 : Math.max(20, (3 - remaining) * 33)) + "%";
         if (next) {
-          next.textContent = ready ? "下一步" : "视频生成中";
+          next.textContent = ready ? "查看模拟结果" : "整理中";
           next.classList.toggle("is-disabled", !ready);
           next.setAttribute("aria-disabled", ready ? "false" : "true");
         }
@@ -16640,7 +17271,7 @@
         setTextAll("[data-ticket-gender]", profile.gender || "女");
         setTextAll("[data-ticket-birth]", profile.birth || "2018-05-12");
         setTextAll("[data-ticket-country]", profile.country || "中国");
-        setTextAll("[data-ticket-id-doc]", profile.idDocNo || "420111201805120018");
+        setTextAll("[data-ticket-id-doc]", profile.idDocNo || "420111201805120020");
         syncExamModeUI();
       }
 
@@ -16665,24 +17296,154 @@
         ];
       }
 
+      function demoPublishedScore(definition) {
+        if (!definition || String(definition.status || "").indexOf("已发布") !== 0) return null;
+        return {
+          scoreId: definition.scoreId,
+          gradeStatusCode: "PUBLISHED",
+          examResultCode: definition.examResultCode || "TAKEN",
+          overallGrade: definition.overallGrade || "",
+          resultCode: definition.resultCode || "",
+          overallComment: definition.comment || "",
+          passedFlag: definition.passedFlag || (definition.passed ? "Y" : "N"),
+          certificateId: "",
+          rubricDimensions: definition.rubricDimensions || [],
+          dimensionRatings: definition.dimensionRatings || {}
+        };
+      }
+
       function publishedScoreForKey(key) {
         var definition = scoreData[key];
+        if (!definition) return null;
         var contract = window.HBYXExamApi ? window.HBYXExamApi.readContract() : null;
-        if (!definition || !contract) return null;
-        return (contract.scores || []).find(function (item) { return item.scoreId === definition.scoreId && item.gradeStatusCode === "PUBLISHED"; }) || null;
+        var records = (contract && contract.scores) || [];
+        var published = records.find(function (item) { return item.scoreId === definition.scoreId && item.gradeStatusCode === "PUBLISHED"; });
+        if (published) return published;
+        var exists = records.some(function (item) { return item.scoreId === definition.scoreId; });
+        if (exists) return null;
+        /* 考生端本地演示：接口契约无该成绩记录时，按演示数据的「已发布」状态放行，避免成绩列表无法进入详情 */
+        return demoPublishedScore(definition);
       }
 
       function scoreIsPublished(key) {
         return Boolean(publishedScoreForKey(key));
       }
 
+      /* 成绩分析与建议：等级换算、雷达图与提升建议文案 */
+      var SCORE_GRADE_ORDER = ["EXCELLENT_PLUS", "EXCELLENT", "EXCELLENT_MINUS", "GOOD", "PASS", "FAIL"];
+      var SCORE_DIMENSION_ADVICE = [
+        { match: /动作|身体|基本功|形体|姿态/, text: "按教材把动作拆成小节逐段练习，重点校正发力顺序与到位幅度，每次训练录像回看并对照示范逐项纠错。" },
+        { match: /节奏|音乐|演奏|技术|曲目|音准|音色/, text: "先用节拍器慢速稳定节奏与指法，再逐步提速，重点打磨乐句衔接、音准和力度层次。" },
+        { match: /表现|造型|画面|构图|语言|表演|朗诵|情感/, text: "加强对作品的理解与情感投入，练习眼神、肢体与语气的层次变化，多做完整片段演练并请指导教师点评。" }
+      ];
+
+      function scoreEscape(text) {
+        return String(text == null ? "" : text).replace(/[&<>"']/g, function (ch) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
+      }
+
+      function scoreAdviceFor(item) {
+        var label = item && item.label ? item.label : String(item == null ? "" : item);
+        var code = item && item.code ? item.code : "";
+        /* 优先使用后台「门类 - 评分维度配置」维护的提升建议文案 */
+        var adviceApi = window.HBYXScoreDimensionAdvice;
+        if (adviceApi && typeof adviceApi.adviceFor === "function") {
+          var configured = adviceApi.adviceFor(code, label);
+          if (configured) return configured;
+        }
+        for (var i = 0; i < SCORE_DIMENSION_ADVICE.length; i++) {
+          if (SCORE_DIMENSION_ADVICE[i].match.test(label)) return SCORE_DIMENSION_ADVICE[i].text;
+        }
+        return "结合教材要求逐项对照练习，并请指导教师在下次课上做针对性点评。";
+      }
+
+      function renderScoreRadar(container, items, published) {
+        if (!container) return;
+        if (!published) { container.innerHTML = '<div class="score-analysis-empty">成绩发布后展示雷达图</div>'; return; }
+        if (!items.length) { container.innerHTML = '<div class="score-analysis-empty">暂无维度评分数据，暂无法生成雷达图</div>'; return; }
+        var cx = 150;
+        var cy = 122;
+        var radius = 78;
+        var count = items.length;
+        var step = Math.PI * 2 / count;
+        var start = -Math.PI / 2;
+        function pointAt(index, r) {
+          var angle = start + step * index;
+          return [cx + Math.cos(angle) * r, cy + Math.sin(angle) * r];
+        }
+        function round(value) { return Math.round(value * 10) / 10; }
+        function polygonAt(scale) {
+          var points = [];
+          for (var i = 0; i < count; i++) {
+            var p = pointAt(i, radius * scale);
+            points.push(round(p[0]) + "," + round(p[1]));
+          }
+          return points.join(" ");
+        }
+        var svg = '<svg viewBox="0 0 300 268" role="img" aria-label="各维度评级雷达图">';
+        [0.25, 0.5, 0.75, 1].forEach(function (scale) {
+          svg += '<polygon class="score-radar-ring" points="' + polygonAt(scale) + '"></polygon>';
+        });
+        for (var i = 0; i < count; i++) {
+          var edge = pointAt(i, radius);
+          svg += '<line class="score-radar-axis" x1="' + cx + '" y1="' + cy + '" x2="' + round(edge[0]) + '" y2="' + round(edge[1]) + '"></line>';
+        }
+        var vertices = items.map(function (item, index) {
+          var ratio = item.gradeIndex > -1 ? (6 - item.gradeIndex) / 6 : 0.08;
+          return pointAt(index, radius * Math.max(ratio, 0.08));
+        });
+        svg += '<polygon class="score-radar-area" points="' + vertices.map(function (p) { return round(p[0]) + "," + round(p[1]); }).join(" ") + '"></polygon>';
+        vertices.forEach(function (p) {
+          svg += '<circle class="score-radar-dot" cx="' + round(p[0]) + '" cy="' + round(p[1]) + '" r="3.4"></circle>';
+        });
+        items.forEach(function (item, index) {
+          var p = pointAt(index, radius + 20);
+          var anchor = "middle";
+          if (p[0] > cx + 6) anchor = "start";
+          else if (p[0] < cx - 6) anchor = "end";
+          var y = p[1] < cy - 6 ? p[1] - 6 : p[1] + 14;
+          svg += '<text class="score-radar-label" x="' + round(p[0]) + '" y="' + round(y) + '" text-anchor="' + anchor + '">' + scoreEscape(item.label) + '</text>';
+        });
+        svg += '</svg>';
+        container.innerHTML = svg;
+      }
+
+      function renderScoreAdvice(container, items, overallKey, published) {
+        if (!container) return;
+        var list = [];
+        if (!published) {
+          list = [{ kind: "", text: "成绩发布后将根据各维度表现生成提升建议。" }];
+        } else if (!items.length) {
+          list = [{ kind: "", text: "暂无维度评分数据，暂无法生成提升建议。" }];
+        } else {
+          var focusItems = items.filter(function (item) { return item.focus; });
+          if (overallKey === "FAIL") {
+            list.push({ kind: "warn", text: "本次整体评分为不合格，建议先对照各评分维度逐项复盘，并与指导教师在下次课前确认强化训练计划。" });
+          }
+          focusItems.forEach(function (item) {
+            list.push({ kind: "", text: "「" + item.label + "」当前为" + item.gradeText + "，可重点提升：" + scoreAdviceFor(item) });
+          });
+          if (!focusItems.length) {
+            if (overallKey === "FAIL") {
+              list.push({ kind: "", text: "各维度评级均处于合格水平，建议从基本功与稳定性入手逐项夯实，再针对性准备下一次考试。" });
+            } else {
+              list.push({ kind: "good", text: "各维度评级均不低于整体评分，建议保持当前训练节奏，继续巩固优势维度并稳定发挥。" });
+            }
+          }
+        }
+        container.innerHTML = list.map(function (item) {
+          return '<li' + (item.kind ? ' class="is-' + item.kind + '"' : '') + '>' + scoreEscape(item.text) + '</li>';
+        }).join("");
+      }
+
       function syncScoreUI() {
         var data = scoreData[activeScoreKey] || scoreData.piano;
         var contract = window.HBYXExamApi ? window.HBYXExamApi.readContract() : { scores: [], certificates: [] };
-        var linkedScore = (contract.scores || []).find(function (item) { return item.scoreId === data.scoreId && item.gradeStatusCode === "PUBLISHED"; });
-        var publishedScore = linkedScore && linkedScore.gradeStatusCode === "PUBLISHED";
+        var linkedScore = publishedScoreForKey(activeScoreKey) || {};
+        var publishedScore = linkedScore.gradeStatusCode === "PUBLISHED";
         var scoreView = Object.assign({}, data, publishedScore ? linkedScore : {});
-        var gradeLabels = { EXCELLENT: "优秀", GOOD: "良好", PASS: "合格", FAIL: "不合格" };
+        var gradeLabels = { EXCELLENT_PLUS: "优+", EXCELLENT: "优秀", EXCELLENT_MINUS: "优-", GOOD: "良好", PASS: "合格", FAIL: "不合格" };
         if (publishedScore && linkedScore.overallGrade) {
           scoreView.overallGrade = linkedScore.overallGrade;
           scoreView.resultCode = linkedScore.resultCode || "";
@@ -16720,23 +17481,61 @@
           return (group.items || []).join("、");
         }).join("；") || "—");
         var dimensionContainer = document.querySelector("[data-score-dimensions]");
+        var radarContainer = document.querySelector("[data-score-radar]");
+        var adviceContainer = document.querySelector("[data-score-advice]");
+        var dimensions = publishedScore && linkedScore.examResultCode !== "NOT_TAKEN" && Array.isArray(linkedScore.rubricDimensions) ? linkedScore.rubricDimensions : [];
+        var dimensionRatings = publishedScore ? (linkedScore.dimensionRatings || {}) : {};
+        var overallGradeKey = publishedScore ? (scoreView.overallGrade || "") : "";
+        var overallGradeIndex = SCORE_GRADE_ORDER.indexOf(overallGradeKey);
+        var analysisItems = dimensions.map(function (dimension) {
+          var gradeKey = dimensionRatings[dimension.code] || "";
+          var gradeIndex = SCORE_GRADE_ORDER.indexOf(gradeKey);
+          var label = dimension.name || dimension.label || dimension.code || "评分维度";
+          /* 低于整体评级 ≥1 档，或处于最低档（不合格）的维度标记为可重点提升 */
+          var focus = gradeIndex > -1 && (gradeIndex === SCORE_GRADE_ORDER.length - 1 || (overallGradeIndex > -1 && gradeIndex - overallGradeIndex >= 1));
+          return {
+            code: dimension.code,
+            label: label,
+            gradeKey: gradeKey,
+            gradeIndex: gradeIndex,
+            gradeText: gradeLabels[gradeKey] || "—",
+            focus: focus
+          };
+        });
         if (dimensionContainer) {
           dimensionContainer.innerHTML = "";
-          var dimensions = publishedScore && linkedScore.examResultCode !== "NOT_TAKEN" && Array.isArray(linkedScore.rubricDimensions) ? linkedScore.rubricDimensions : [];
-          var dimensionRatings = publishedScore ? (linkedScore.dimensionRatings || {}) : {};
-          dimensions.forEach(function (dimension) {
+          analysisItems.forEach(function (item) {
             var row = document.createElement("div");
             row.className = "score-rating-row";
             var label = document.createElement("span");
-            label.textContent = dimension.name || dimension.label || dimension.code || "评分维度";
+            label.className = "score-rating-label";
+            label.textContent = item.label;
+            if (item.focus) {
+              var flag = document.createElement("em");
+              flag.className = "score-dim-flag";
+              flag.textContent = "可重点提升";
+              label.appendChild(flag);
+            }
             var rating = document.createElement("strong");
             rating.className = "score-detail-result";
-            rating.textContent = gradeLabels[dimensionRatings[dimension.code]] || "—";
+            rating.textContent = item.gradeText;
+            rating.setAttribute("data-result", item.gradeText === "—" ? "" : item.gradeText);
             row.appendChild(label);
             row.appendChild(rating);
             dimensionContainer.appendChild(row);
           });
+          if (!analysisItems.length) {
+            dimensionContainer.innerHTML = '<div class="score-analysis-empty">' + (publishedScore ? "暂无维度评分数据" : "成绩发布后展示") + '</div>';
+          }
         }
+        renderScoreRadar(radarContainer, analysisItems, publishedScore);
+        renderScoreAdvice(adviceContainer, analysisItems, overallGradeKey, publishedScore);
+        var passedText = !publishedScore ? "—" : (linkedScore.examResultCode === "NOT_TAKEN" ? "未考试" : (scoreView.passed ? "通过" : "未通过"));
+        var passedState = !publishedScore || linkedScore.examResultCode === "NOT_TAKEN" ? "none" : (scoreView.passed ? "pass" : "fail");
+        document.querySelectorAll("[data-score-passed]").forEach(function (el) {
+          el.textContent = passedText;
+          el.setAttribute("data-passed", passedState);
+        });
         setTextAll("[data-score-comment]", publishedScore ? scoreView.comment : "成绩发布后展示");
         document.querySelectorAll("[data-score-summary]").forEach(function (result) {
           result.setAttribute("data-result", publishedScore ? scoreView.summary || "" : "");
@@ -18530,6 +19329,20 @@
         card.appendChild(topLine);
         card.appendChild(main);
         card.setAttribute("data-exam-layout-ready", "true");
+
+        /* 考点导航入口：仅线下考试且已排定考点时展示；点击不触发卡片跳转 */
+        if (!oldContent.querySelector("[data-exam-nav]")) {
+          var navRow = document.createElement("span");
+          navRow.className = "exam-nav-row";
+          var navBtn = document.createElement("span");
+          navBtn.className = "exam-nav-btn";
+          navBtn.setAttribute("role", "button");
+          navBtn.setAttribute("tabindex", "0");
+          navBtn.setAttribute("data-exam-nav", "");
+          navBtn.textContent = "考点导航";
+          navRow.appendChild(navBtn);
+          oldContent.appendChild(navRow);
+        }
       }
 
       function applicationFeeText(record) {
@@ -19143,7 +19956,7 @@
         var ticket = ticketData[applicationTicketKey(activeApplicationKey, record)] || ticketData.online || {};
         var parts = applicationTitleParts(record);
         setTextAll("[data-start-check-name]", profile.name || currentChild || "张三");
-        setTextAll("[data-start-check-org]", ticket.organizer || "湖北职业艺术学院");
+        setTextAll("[data-start-check-org]", ticket.organizer || "湖北艺术职业学院");
         setTextAll("[data-start-check-id-doc]", profile.idDocNo || DEFAULT_ID_DOC_NO);
         setTextAll("[data-start-check-subject]", record.subject || parts.subject || "考级专业");
         setTextAll("[data-start-check-level]", record.level || parts.level || "—");
@@ -19861,6 +20674,16 @@
           return;
         }
 
+        /* L2 演示态：对外包不含该能力，深链直接回模拟考试首页（无开关可放行） */
+        if (MOCK_L2_VIEWS[view] && !HBYX_DEMO_BUILD) {
+          showToast("该功能为演示内容，未随当前版本开放");
+          window.location.hash = "#mock-select";
+          return;
+        }
+        document.querySelectorAll("[data-demo-only]").forEach(function (el) {
+          el.hidden = !HBYX_DEMO_BUILD;
+        });
+
         if ((view === "course-learning" || view === "course-video") && !redirectLegacyCourseLearningRoute()) {
           return;
         }
@@ -19910,6 +20733,7 @@
         else stopCourseVideoTimer();
         if (view === "course-pay-success") syncCoursePaySuccess();
         if (view === "course-orders") renderCourseOrders();
+        if (view === "learning") syncCourseListUI();
         if (view === "course-order-detail") syncCourseOrderDetail();
         if (view === "training" || view === "training-activity-list") syncTrainingActivityCards();
         if (view === "training-activity-detail") syncTrainingActivityDetail();
@@ -19924,6 +20748,7 @@
         if (view === "batch-detail") syncBatchDetail();
         if (view === "scan-result") syncScanResultTimeUI();
         if (view === "mock-select") syncMockSelectUI();
+        if (view === "mock-rubric") renderMockRubricView();
         if (view === "mock-read") mockPosturePrereqCompleted = false;
         if (view === "mock-read") startMockReadCountdown();
         else stopMockReadCountdown();
@@ -20988,9 +21813,63 @@
         });
       });
 
+      document.querySelectorAll("[data-mock-env-check]").forEach(function (item) {
+        item.addEventListener("change", function () {
+          var label = item.closest("label");
+          if (item.checked && label) label.classList.remove("is-missing");
+          var checkHint = document.querySelector("[data-mock-env-check-hint]");
+          if (!checkHint) return;
+          var left = 0;
+          document.querySelectorAll("[data-mock-env-check]").forEach(function (box) { if (!box.checked) left += 1; });
+          checkHint.textContent = left
+            ? "还有 " + left + " 项未确认，请逐项检查后再点击「确认就位」"
+            : "已全部确认，可点击「确认就位」继续";
+        });
+      });
+
+      /* 点击「已就位」只负责唤起自检弹窗，不在此处校验；校验移到弹窗的「确认就位」。 */
       document.querySelectorAll("[data-mock-posture-ready]").forEach(function (button) {
         button.addEventListener("click", function () {
           if (button.disabled || currentView() !== "mock-posture-adjust") return;
+          openMockEnvDialog();
+        });
+      });
+
+      document.querySelectorAll("[data-mock-env-dialog-close]").forEach(function (button) {
+        button.addEventListener("click", closeMockEnvDialog);
+      });
+      if (mockEnvDialog) {
+        mockEnvDialog.addEventListener("click", function (event) {
+          if (event.target === mockEnvDialog) closeMockEnvDialog();
+        });
+      }
+
+      document.querySelectorAll("[data-mock-env-confirm]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var items = document.querySelectorAll("[data-mock-env-check]");
+          var pending = 0;
+          var firstMissing = null;
+          items.forEach(function (item) {
+            if (!item.checked) {
+              pending += 1;
+              if (!firstMissing) firstMissing = item;
+            }
+          });
+          var checkHint = document.querySelector("[data-mock-env-check-hint]");
+          if (items.length && pending) {
+            items.forEach(function (item) {
+              var label = item.closest("label");
+              if (label) label.classList.toggle("is-missing", !item.checked);
+            });
+            if (firstMissing && firstMissing.scrollIntoView) {
+              firstMissing.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            }
+            if (checkHint) checkHint.textContent = "还有 " + pending + " 项未确认，已标红，请逐项勾选后再点击「确认就位」";
+            showToast("请先完成录制环境自检（" + pending + " 项未确认）");
+            return;
+          }
+          if (checkHint) checkHint.textContent = "已全部确认，可进入下一步";
+          closeMockEnvDialog();
           startMockPostureAdjustCountdown();
         });
       });
@@ -21027,8 +21906,116 @@
         link.addEventListener("click", function (event) {
           if (link.getAttribute("aria-disabled") === "true") {
             event.preventDefault();
-            showToast("模拟视频生成中，请勿退出");
+            showToast("演练收尾中，请稍候");
           }
+        });
+      });
+
+      /* ===== 模拟考试 · 评分维度对照（L1 真功能，纯前端静态数据） =====
+         正式实现取 FR-B-009-01 评分模板快照并按维度 code 校验；此处沿用原型静态演示数据，
+         档位按 SCORE_GRADE_ORDER 顺序渲染，不写死四档，兼容 CR-11 扩档。 */
+      var MOCK_RUBRIC_DIMENSIONS = [
+        { code: "DIM-MOCK-01", name: "动作 / 演奏规范", hint: "对照教材要求逐句核对基本动作与指法，先慢后快分段练习" },
+        { code: "DIM-MOCK-02", name: "节奏与稳定性", hint: "用节拍器固定速度后再连贯完成，重点听节拍是否均匀" },
+        { code: "DIM-MOCK-03", name: "表现力与完整性", hint: "先确认力度与乐句划分，再完整走一遍并回看自检" }
+      ];
+      var MOCK_GRADE_LABELS = {
+        EXCELLENT_PLUS: "优+", EXCELLENT: "优秀", EXCELLENT_MINUS: "优-",
+        GOOD: "良好", PASS: "合格", FAIL: "不合格"
+      };
+      var MOCK_GRADE_HINTS = {
+        EXCELLENT_PLUS: "整体完成度高且细节稳定",
+        EXCELLENT: "整体完成规范",
+        EXCELLENT_MINUS: "整体较好、个别细节待稳",
+        GOOD: "基本要求已达成",
+        PASS: "达到本级基本要求",
+        FAIL: "未达到本级基本要求"
+      };
+
+      function renderMockRubricGrades() {
+        var box = document.querySelector("[data-mock-rubric-grades]");
+        if (!box) return;
+        var order = (typeof SCORE_GRADE_ORDER !== "undefined" && SCORE_GRADE_ORDER.length)
+          ? SCORE_GRADE_ORDER
+          : ["EXCELLENT", "GOOD", "PASS", "FAIL"];
+        box.innerHTML = "";
+        order.forEach(function (code) {
+          var chip = document.createElement("span");
+          chip.className = "mx-grade-chip";
+          var strong = document.createElement("strong");
+          strong.textContent = MOCK_GRADE_LABELS[code] || code;
+          chip.appendChild(strong);
+          chip.appendChild(document.createTextNode(" · " + (MOCK_GRADE_HINTS[code] || "以模板快照为准")));
+          box.appendChild(chip);
+        });
+      }
+
+      function renderMockRubricDimensions() {
+        var box = document.querySelector("[data-mock-rubric-dimensions]");
+        if (!box || box.children.length) return;
+        MOCK_RUBRIC_DIMENSIONS.forEach(function (dim) {
+          var label = document.createElement("label");
+          label.className = "mx-dim-item";
+          var input = document.createElement("input");
+          input.type = "checkbox";
+          input.value = dim.code;
+          input.setAttribute("data-mock-rubric-dim", dim.code);
+          var body = document.createElement("span");
+          var name = document.createElement("strong");
+          name.textContent = dim.name;
+          var hint = document.createElement("small");
+          hint.textContent = "关注点：" + dim.hint;
+          body.appendChild(name);
+          body.appendChild(hint);
+          label.appendChild(input);
+          label.appendChild(body);
+          box.appendChild(label);
+        });
+      }
+
+      function renderMockRubricAdvice() {
+        var list = document.querySelector("[data-mock-rubric-advice]");
+        if (!list) return;
+        var checked = [];
+        document.querySelectorAll("[data-mock-rubric-dim]:checked").forEach(function (input) {
+          if (checked.length < 3) checked.push(input.value);
+        });
+        list.innerHTML = "";
+        if (!checked.length) {
+          var empty = document.createElement("li");
+          empty.className = "mx-empty";
+          empty.textContent = "勾选关注维度后展示对应练习提示（最多 3 条）";
+          list.appendChild(empty);
+          return;
+        }
+        checked.forEach(function (code) {
+          MOCK_RUBRIC_DIMENSIONS.forEach(function (dim) {
+            if (dim.code !== code) return;
+            var li = document.createElement("li");
+            li.textContent = dim.name + "：" + dim.hint;
+            list.appendChild(li);
+          });
+        });
+      }
+
+      function renderMockRubricView() {
+        var selection = getMockSelectionData();
+        setTextAll("[data-mock-rubric-subject]", selection.subjectData.label);
+        setTextAll("[data-mock-rubric-level]", formatMockLevelLabel(selection.level));
+        renderMockRubricGrades();
+        renderMockRubricDimensions();
+        renderMockRubricAdvice();
+      }
+
+      document.querySelectorAll("[data-mock-rubric-dimensions]").forEach(function (box) {
+        box.addEventListener("change", function (event) {
+          if (!event.target.matches || !event.target.matches("[data-mock-rubric-dim]")) return;
+          if (document.querySelectorAll("[data-mock-rubric-dim]:checked").length > 3) {
+            event.target.checked = false;
+            showToast("最多选择 3 个关注维度");
+            return;
+          }
+          renderMockRubricAdvice();
         });
       });
 
@@ -21626,7 +22613,6 @@
         }
       });
 
-
       var RECENT_SUBJECT_BATCH = "2026h2-wuhan";
       var activeBatchKey = RECENT_SUBJECT_BATCH;
       var trainingActivityData = {
@@ -21901,7 +22887,7 @@
         minLevel: 1,
         maxLevel: 10,
         fee: "1-5级 ¥180/级，6-10级 ¥360/级",
-          score: "按评分模板评价：演奏表现、技术水平、音乐表现，四档等级由考官直接提交",
+          score: "按评分模板评价：演奏表现、技术水平、音乐表现，整体评级使用优+、优秀、优-、良好、合格、不合格六档，由考官直接提交",
         repertoire: "音阶与琶音；练习曲1首；中外乐曲1首"
       };
       function chipValueMatches(value, selected) {
@@ -22340,7 +23326,6 @@
         };
       }
 
-
       function currentBatchData() {
         return batchData[activeBatchKey] || batchData[RECENT_SUBJECT_BATCH];
       }
@@ -22672,7 +23657,7 @@
           minLevel: Number(link.getAttribute("data-level-min") || 1),
           maxLevel: Number(link.getAttribute("data-level-max") || 10),
           fee: link.getAttribute("data-fee") || "1-5级 ¥180/级，6-10级 ¥360/级",
-          score: link.getAttribute("data-score") || "按评分模板评价，结果使用优秀、良好、合格、不合格四档等级",
+          score: link.getAttribute("data-score") || "按评分模板评价，结果使用优+、优秀、优-、良好、合格、不合格六档等级",
           repertoire: link.getAttribute("data-repertoire") || "规定曲目与自选曲目各1首"
         };
         var defaultLevel = 3;
@@ -22954,6 +23939,157 @@
       document.querySelectorAll("[data-candidate-photo], [data-bind-photo]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           showToast("考生照片已上传（原型）");
+        });
+      });
+
+      /* ==== 证件号扫一扫 · OCR 识别 + 出生日期/性别自动带出（添加考生、编辑考生） ==== */
+      var ID_SCAN_DEMO_NO = "420111201805120020";
+      var idScanModal = document.querySelector("[data-id-scan-modal]");
+      var idScanStage = document.querySelector("[data-id-scan-stage]");
+      var idScanTip = document.querySelector("[data-id-scan-tip]");
+      var idScanResult = document.querySelector("[data-id-scan-result]");
+      var idScanScope = "bind";
+      var idScanTimer = null;
+      var idScanCloseTimer = null;
+
+      function idScanRefs(scope) {
+        return scope === "edit"
+          ? { input: "[data-candidate-edit-id]", birth: "[data-candidate-edit-birth]", gender: "[data-candidate-edit-gender]", type: "[data-candidate-edit-id-type]" }
+          : { input: "[data-bind-id]", birth: "[data-bind-birth]", gender: "[data-bind-gender]", type: "[data-bind-id-type]" };
+      }
+
+      function normalizeIdDocNo(value) {
+        return String(value || "").replace(/[^0-9xX]/g, "").toUpperCase().slice(0, 18);
+      }
+
+      function parseIdCard(value) {
+        var id = normalizeIdDocNo(value);
+        if (!/^\d{17}[\dX]$/.test(id)) return null;
+        var year = Number(id.slice(6, 10));
+        var month = Number(id.slice(10, 12));
+        var day = Number(id.slice(12, 14));
+        var date = new Date(year, month - 1, day);
+        if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+        return {
+          idDocNo: id,
+          birth: year + "-" + String(month).padStart(2, "0") + "-" + String(day).padStart(2, "0"),
+          gender: Number(id.charAt(16)) % 2 === 1 ? "男" : "女"
+        };
+      }
+
+      function idScanIsIdType(scope) {
+        var typeEl = document.querySelector(idScanRefs(scope).type);
+        return !typeEl || String(typeEl.value || "").indexOf("身份证") > -1;
+      }
+
+      function syncIdCardDerived(scope) {
+        if (!idScanIsIdType(scope)) return null;
+        var refs = idScanRefs(scope);
+        var input = document.querySelector(refs.input);
+        var parsed = parseIdCard(input ? input.value : "");
+        if (!parsed) return null;
+        var birth = document.querySelector(refs.birth);
+        var gender = document.querySelector(refs.gender);
+        if (birth && birth.value !== parsed.birth) birth.value = parsed.birth;
+        if (gender && gender.value !== parsed.gender) {
+          gender.value = parsed.gender;
+          gender.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        return parsed;
+      }
+
+      function syncIdScanEntry(scope) {
+        var btn = document.querySelector('[data-id-scan="' + scope + '"]');
+        if (btn) btn.hidden = !idScanIsIdType(scope);
+      }
+
+      function applyIdScanResult() {
+        var refs = idScanRefs(idScanScope);
+        var input = document.querySelector(refs.input);
+        if (input) {
+          input.value = ID_SCAN_DEMO_NO;
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        var parsed = syncIdCardDerived(idScanScope);
+        showToast(parsed ? "已识别证件号，并自动填写出生日期与性别" : "已识别证件号，请核对后补充出生日期与性别");
+      }
+
+      function closeIdScan() {
+        if (!idScanModal) return;
+        clearTimeout(idScanTimer);
+        clearTimeout(idScanCloseTimer);
+        idScanModal.hidden = true;
+      }
+
+      function openIdScan(scope) {
+        if (!idScanModal) return;
+        idScanScope = scope === "edit" ? "edit" : "bind";
+        clearTimeout(idScanTimer);
+        clearTimeout(idScanCloseTimer);
+        idScanModal.hidden = false;
+        if (idScanStage) idScanStage.classList.remove("is-done");
+        if (idScanResult) {
+          idScanResult.hidden = true;
+          idScanResult.textContent = "";
+        }
+        if (idScanTip) idScanTip.textContent = "将身份证国徽面放入框内，正在识别…";
+        idScanTimer = setTimeout(function () {
+          if (idScanStage) idScanStage.classList.add("is-done");
+          if (idScanTip) idScanTip.textContent = "识别成功";
+          if (idScanResult) {
+            idScanResult.textContent = ID_SCAN_DEMO_NO.slice(0, 4) + "**********" + ID_SCAN_DEMO_NO.slice(-4);
+            idScanResult.hidden = false;
+          }
+          applyIdScanResult();
+          idScanCloseTimer = setTimeout(closeIdScan, 900);
+        }, 1300);
+      }
+
+      document.querySelectorAll("[data-id-scan]").forEach(function (btn) {
+        btn.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openIdScan(btn.getAttribute("data-id-scan"));
+        });
+      });
+
+      if (idScanModal) {
+        idScanModal.addEventListener("click", function (event) {
+          if (event.target === idScanModal || event.target.closest("[data-id-scan-close]") || event.target.closest("[data-id-scan-manual]")) {
+            closeIdScan();
+          } else if (event.target.closest("[data-id-scan-again]")) {
+            openIdScan(idScanScope);
+          }
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && idScanModal && !idScanModal.hidden) closeIdScan();
+      });
+
+      ["bind", "edit"].forEach(function (scope) {
+        var refs = idScanRefs(scope);
+        var input = document.querySelector(refs.input);
+        syncIdScanEntry(scope);
+        var typeEl = document.querySelector(refs.type);
+        if (typeEl) {
+          typeEl.addEventListener("change", function () {
+            syncIdScanEntry(scope);
+            syncIdCardDerived(scope);
+          });
+        }
+        if (!input) return;
+        input.addEventListener("input", function () {
+          var normalized = normalizeIdDocNo(input.value);
+          if (normalized !== input.value) {
+            var caret = input.selectionStart;
+            input.value = normalized;
+            try { input.setSelectionRange(Math.max(0, caret - 1), Math.max(0, caret - 1)); } catch (error) { /* 忽略不支持选择区的环境 */ }
+          }
+          if (normalized.length === 18) syncIdCardDerived(scope);
+        });
+        input.addEventListener("blur", function () {
+          syncIdCardDerived(scope);
         });
       });
 
@@ -23247,7 +24383,7 @@
           title: "成绩发布与证书领取指南",
           category: "考级指南",
           publish: "2026.08.05",
-          detail: "成绩发布后可在成绩查询入口查看四档整体评级、维度评价、评语和后台确认的通过状态；通过且制证完成的记录可在证书查询入口查看电子证书，并支持证书验真。\n\n证书未生成完成前，将在个人中心展示制证进度而非下载入口。",
+          detail: "成绩发布后可在成绩查询入口查看六档整体评级、维度评价、评语和后台确认的通过状态；通过且制证完成的记录可在证书查询入口查看电子证书，并支持证书验真。\n\n证书未生成完成前，将在个人中心展示制证进度而非下载入口。",
           cta: "证书查询",
           href: "#certificates",
           navTitle: "指南详情"
@@ -23319,7 +24455,7 @@
           title: "成绩查询与证书服务安排",
           category: "通知公告",
           publish: "2026.07.22",
-          detail: "成绩发布后，考生可在成绩查询入口查看四档整体评级、维度评价和评语；通过且制证完成后，可在证书查询入口查看电子证书。\n\n具体发布时间和证书领取方式以当前批次后续通知为准。",
+          detail: "成绩发布后，考生可在成绩查询入口查看六档整体评级、维度评价和评语；通过且制证完成后，可在证书查询入口查看电子证书。\n\n具体发布时间和证书领取方式以当前批次后续通知为准。",
           cta: "查询成绩",
           href: "#score-list",
           navTitle: "信息发布详情"
@@ -23391,20 +24527,48 @@
       var courseCatalog = [
         {
           id: "KC202608001", title: "钢琴考级 6 级专项提升", categoryCode: "MUSIC", gate: "音乐类", category: "专项提升课", subject: "钢琴", level: "6级", teacher: "王老师", teacherIntro: "从事艺术考级教学，擅长将考级要求拆解为循序渐进的训练方法。", lessonCount: 4, price: 399, cover: "钢琴", theme: "blue", status: "已上架", version: 1,
+          dimensionCodes: ["DIM-MUSIC-01", "DIM-MUSIC-03", "DIM-MUSIC-05"],
           detail: ["围绕钢琴考级6级曲目与常见难点进行专项训练，提供分阶段练习建议。"],
           lessons: [makeCourseLesson("KC202608001", 1, "基础姿势与坐姿调整", 18, "建立正确坐姿、手型与触键习惯。"), makeCourseLesson("KC202608001", 2, "核心音阶与指法训练", 22, "讲解常用音阶、指法连接和练习节奏。"), makeCourseLesson("KC202608001", 3, "考级曲目分段练习", 26, "按乐句拆解重点段落，示范慢练与提速方法。"), makeCourseLesson("KC202608001", 4, "完整演奏与自测", 20, "完成整曲演奏，使用自测清单检查常见问题。")]
         },
         {
           id: "KC202608002", title: "中国舞考级基本功训练", categoryCode: "DANCE", gate: "舞蹈类", category: "考级基础课", subject: "中国舞", level: "1-3级", teacher: "王老师", teacherIntro: "中国舞专业教师，长期负责少儿考级训练与舞台表现指导。", lessonCount: 4, price: 269, cover: "中国舞", theme: "blue", status: "已上架", version: 1,
+          dimensionCodes: ["DIM-DANCE-01", "DIM-DANCE-02"],
           detail: ["系统讲解中国舞基本功、体态和规定组合的动作要领，建立规范而安全的练习节奏。"],
           lessons: [makeCourseLesson("KC202608002", 1, "考前热身与体态准备", 18, "完成热身和体态准备。"), makeCourseLesson("KC202608002", 2, "柔韧与力量基础", 22, "建立柔韧和核心力量。"), makeCourseLesson("KC202608002", 3, "基本舞步与节奏", 24, "掌握基本舞步与节奏变化。"), makeCourseLesson("KC202608002", 4, "规定组合完整演示", 28, "完成规定组合的连贯练习。")]
         },
         {
+          id: "KC202608004", title: "中国舞考级表现力提升训练", categoryCode: "DANCE", gate: "舞蹈类", category: "专项提升课", subject: "中国舞", level: "1-3级", teacher: "刘老师", teacherIntro: "舞蹈表演方向教师，擅长眼神、表情与作品情绪的舞台呈现训练。", lessonCount: 4, price: 258, cover: "中国舞", theme: "gold", status: "已上架", version: 1,
+          dimensionCodes: ["DIM-DANCE-03"],
+          detail: ["围绕考级组合的情绪表达与舞台呈现做专项训练，提升眼神、表情与动作质感。"],
+          lessons: [makeCourseLesson("KC202608004", 1, "情绪与作品理解", 16, "读懂作品情绪与段落结构。"), makeCourseLesson("KC202608004", 2, "眼神与表情训练", 20, "练习眼神走向与表情层次。"), makeCourseLesson("KC202608004", 3, "动作质感与呼吸", 22, "用呼吸带动动作的轻重缓急。"), makeCourseLesson("KC202608004", 4, "完整片段呈现", 24, "完成完整片段并录像复盘。")]
+        },
+        {
+          id: "KC202608005", title: "中国舞考级节奏专项强化", categoryCode: "DANCE", gate: "舞蹈类", category: "专项提升课", subject: "中国舞", level: "2-4级", teacher: "陈老师", teacherIntro: "舞蹈节奏与音乐素养教师，专注动作与音乐的配合训练。", lessonCount: 4, price: 228, cover: "中国舞", theme: "blue", status: "已上架", version: 1,
+          dimensionCodes: ["DIM-DANCE-02", "DIM-DANCE-05"],
+          detail: ["从数拍、听辨到合乐，系统解决动作与音乐不同步、节奏不稳的问题。"],
+          lessons: [makeCourseLesson("KC202608005", 1, "数拍与基本节奏型", 18, "建立稳定拍感与常见节奏型。"), makeCourseLesson("KC202608005", 2, "动作与重拍对齐", 20, "把动作落点对齐音乐重拍。"), makeCourseLesson("KC202608005", 3, "合乐慢练", 22, "用慢速音乐完成整段合乐。"), makeCourseLesson("KC202608005", 4, "提速与稳定性", 20, "逐步恢复原速并保持稳定。")]
+        },
+        {
           id: "KC202608003", title: "美术素描考前辅导", categoryCode: "FINE_ARTS", gate: "美术类", category: "考前辅导课", subject: "素描", level: "7-9级", teacher: "赵老师", teacherIntro: "美术教师与考级指导老师，关注观察方法、构图逻辑和造型准确度。", lessonCount: 4, price: 198, cover: "素描", theme: "gold", status: "已下架", version: 1,
+          dimensionCodes: ["DIM-VISUAL-01", "DIM-VISUAL-02"],
           detail: ["通过示范作品和步骤拆解，帮助考生理解起稿、塑造和调整的完整流程。"],
           lessons: [makeCourseLesson("KC202608003", 1, "观察与构图分析", 18, "建立观察和构图方法。"), makeCourseLesson("KC202608003", 2, "几何体结构概括", 20, "练习形体结构概括。"), makeCourseLesson("KC202608003", 3, "明暗关系建立", 24, "完成明暗关系塑造。"), makeCourseLesson("KC202608003", 4, "完整作品示范", 28, "复盘完整作品绘制流程。")]
+        },
+        {
+          id: "KC202608006", title: "考级状态保持与临场发挥", categoryCode: "DANCE", gate: "舞蹈类", category: "考前辅导课", subject: "综合", level: "1-10级", teacher: "周老师", teacherIntro: "艺术考级教研教师，负责考前状态管理与舞台心理辅导。", lessonCount: 3, price: 0, cover: "通用", theme: "blue", status: "已上架", version: 1,
+          dimensionCodes: [],
+          keepAlive: true,
+          detail: ["各维度表现均衡时的保持类课程：稳定日常训练节奏、管理考前状态与临场发挥。"],
+          lessons: [makeCourseLesson("KC202608006", 1, "日常训练节奏设计", 16, "规划每周训练与休息节奏。"), makeCourseLesson("KC202608006", 2, "考前状态管理", 18, "掌握热身、呼吸与紧张调节方法。"), makeCourseLesson("KC202608006", 3, "临场发挥与复盘", 20, "建立考试当天流程与复盘清单。")]
         }
       ];
+
+      /* 演示课程基准快照：后台共享目录只做覆盖，不删除演示数据 */
+      var COURSE_DEMO_CATALOG = JSON.parse(JSON.stringify(courseCatalog));
+      function courseCatalogDemoSnapshot() {
+        return JSON.parse(JSON.stringify(COURSE_DEMO_CATALOG));
+      }
 
       function courseLessons(item) {
         if (!item) return [];
@@ -23416,12 +24580,37 @@
       }
       function normalizeSharedCourse(item) {
         var lessons = courseLessons(item);
-        return Object.assign({}, item, { categoryCode: item.categoryCode || "", lessonCount: lessons.length, lessons: lessons, outline: lessons.map(function (lesson) { return lesson.title; }), levelCodes: Array.isArray(item.levelCodes) ? item.levelCodes : studentLevelCodesFromText(item.level) });
+        var price = Number(item.price);
+        return Object.assign({}, item, {
+          title: item.title || item.name || "未命名课程",
+          teacher: item.teacher || item.teacherName || "主讲教师",
+          cover: item.cover || item.subject || "课程",
+          categoryCode: item.categoryCode || "",
+          category: item.category || "考级课程",
+          subject: item.subject || "综合",
+          level: item.level || "1-10级",
+          price: Number.isFinite(price) ? price : 0,
+          lessonCount: lessons.length,
+          dimensionCodes: Array.isArray(item.dimensionCodes) ? item.dimensionCodes : [],
+          lessons: lessons,
+          outline: lessons.map(function (lesson) { return lesson.title; }),
+          levelCodes: Array.isArray(item.levelCodes) ? item.levelCodes : studentLevelCodesFromText(item.level)
+        });
       }
+      /* 共享目录按 id 覆盖演示数据：演示课程始终保留，后台新增课程追加在后面 */
       function refreshCourseCatalogFromShared() {
+        var demoCatalog = courseCatalogDemoSnapshot();
         try {
           var shared = JSON.parse(window.localStorage.getItem(COURSE_CATALOG_STORAGE_KEY) || "null");
-          if (Array.isArray(shared) && shared.length) courseCatalog = shared.filter(Boolean).map(normalizeSharedCourse);
+          if (Array.isArray(shared) && shared.length) {
+            var sharedById = {};
+            shared.filter(Boolean).forEach(function (item) { if (item && item.id) sharedById[item.id] = normalizeSharedCourse(item); });
+            var merged = demoCatalog.map(function (item) { return sharedById[item.id] || item; });
+            shared.filter(Boolean).forEach(function (item) {
+              if (item && item.id && !demoCatalog.some(function (demo) { return demo.id === item.id; })) merged.push(normalizeSharedCourse(item));
+            });
+            courseCatalog = merged;
+          }
         } catch (error) { /* fallback catalog remains available */ }
       }
       var courseDetailTab = "detail";
@@ -23429,6 +24618,10 @@
       var courseLearningTab = "detail";
       var courseFilterState = { gate: "", category: "", subject: "", level: "" };
       var courseFilterDraft = Object.assign({}, courseFilterState);
+      /* 提升计划：薄弱维度标签（默认全选）与课程列表联动 */
+      var planWeakDimensions = [];
+      var planSelectedCodes = [];
+      var planSignature = "";
       var courseLevelFilterOptions = ["1级", "2级", "3级", "4级", "5级", "6级", "7级", "8级", "9级", "10级", "表演文凭级"];
 
       function uniqueCourseValues(items, key) {
@@ -23494,6 +24687,32 @@
         var levelItems = courseFilteredBy(state, "level");
         if (!levelItems.length) state.level = "";
         setCourseSelectOptions(levelSelect, "全部级别", courseLevelFilterOptions, state.level);
+      }
+
+      /* 课程标签：评分维度编码 → 展示名称（优先与考生端成绩维度一致，其次取后台维度配置） */
+      var COURSE_DIMENSION_LABELS = {
+        "DIM-DANCE-01": "动作规范",
+        "DIM-DANCE-02": "节奏协调",
+        "DIM-DANCE-03": "表现力"
+      };
+      var courseDimensionLabelCache = {};
+
+      function courseDimensionLabel(code) {
+        if (!code) return "";
+        if (courseDimensionLabelCache[code]) return courseDimensionLabelCache[code];
+        var label = COURSE_DIMENSION_LABELS[code] || "";
+        if (!label) {
+          var api = window.HBYXScoreDimensionAdvice;
+          var categories = ["MUSIC", "DANCE", "FINE_ARTS", "RECITATION"];
+          for (var i = 0; i < categories.length && !label; i += 1) {
+            var list = api && typeof api.dimensionsOf === "function" ? api.dimensionsOf(categories[i]) : [];
+            for (var j = 0; j < list.length; j += 1) {
+              if (list[j] && list[j].code === code) { label = list[j].name; break; }
+            }
+          }
+        }
+        courseDimensionLabelCache[code] = label || code;
+        return courseDimensionLabelCache[code];
       }
 
       function courseKeyFromHash() {
@@ -24255,6 +25474,18 @@
             (!courseFilterState.level || courseSupportsLevel(item.level, courseFilterState.level));
           return matchesKeyword && matchesFilter;
         });
+        /* 提升计划只做“推荐优先”排序，不隐藏其他课程，保证课程列表数据完整 */
+        var planMatchedIds = {};
+        if (planSelectedCodes.length) {
+          results = results.slice().sort(function (a, b) {
+            var aHit = (a.dimensionCodes || []).some(function (code) { return planSelectedCodes.indexOf(code) > -1; }) ? 1 : 0;
+            var bHit = (b.dimensionCodes || []).some(function (code) { return planSelectedCodes.indexOf(code) > -1; }) ? 1 : 0;
+            return bHit - aHit;
+          });
+          results.forEach(function (item) {
+            if ((item.dimensionCodes || []).some(function (code) { return planSelectedCodes.indexOf(code) > -1; })) planMatchedIds[item.id] = true;
+          });
+        }
         list.textContent = "";
         results.forEach(function (item) {
           var card = document.createElement("a");
@@ -24291,6 +25522,12 @@
           bottom.appendChild(lessons);
           bottom.appendChild(price);
           body.appendChild(title);
+          if (planMatchedIds[item.id]) {
+            var planBadge = document.createElement("em");
+            planBadge.className = "course-plan-badge";
+            planBadge.textContent = "薄弱环节推荐";
+            body.appendChild(planBadge);
+          }
           body.appendChild(meta);
           body.appendChild(teacher);
           body.appendChild(bottom);
@@ -24312,9 +25549,112 @@
 
       function syncCourseListUI() {
         refreshCourseCatalogFromShared();
+        renderLearningPlan();
         renderCourseList();
         syncCourseFilterOptions();
       }
+
+      /* ===== 我的提升计划 =====
+       * 薄弱维度口径：分项等级低于整体评级 ≥1 档，或处于最低等级档（不合格）；
+       * 汇总全部已发布成绩去重，按档位从低到高、同档按模板维度顺序取前 3 项；
+       * 每项维度最多推荐 2 个课程资源；全优时不出薄弱项，改推通用保持类资源。 */
+      /* 成绩等级展示文案（六档），提升计划等模块共用 */
+      var PLAN_GRADE_LABELS = { EXCELLENT_PLUS: "优+", EXCELLENT: "优秀", EXCELLENT_MINUS: "优-", GOOD: "良好", PASS: "合格", FAIL: "不合格" };
+
+      function publishedScoreEntries() {
+        var entries = [];
+        Object.keys(scoreData).forEach(function (key) {
+          var view = scoreData[key];
+          var linked = null;
+          try { linked = publishedScoreForKey(key); } catch (error) { linked = null; }
+          if (!linked) return;
+          if (linked.examResultCode && linked.examResultCode !== "TAKEN") return;
+          entries.push({ key: key, view: view, linked: linked });
+        });
+        return entries;
+      }
+
+      function weakDimensionsFromScores(entries) {
+        var collected = {};
+        var order = [];
+        entries.forEach(function (entry) {
+          var view = entry.view || {};
+          var linked = entry.linked || {};
+          var overallKey = view.overallGrade || linked.overallGrade || "";
+          var overallIndex = SCORE_GRADE_ORDER.indexOf(overallKey);
+          var template = Array.isArray(linked.rubricDimensions) && linked.rubricDimensions.length
+            ? linked.rubricDimensions
+            : (Array.isArray(view.rubricDimensions) ? view.rubricDimensions : []);
+          var ratings = linked.dimensionRatings || view.dimensionRatings || {};
+          template.forEach(function (dimension, dimensionIndex) {
+            var code = dimension && (dimension.code || dimension.name);
+            if (!code) return;
+            var gradeKey = ratings[code] || "";
+            var gradeIndex = SCORE_GRADE_ORDER.indexOf(gradeKey);
+            if (gradeIndex < 0) return;
+            var atLowest = gradeIndex === SCORE_GRADE_ORDER.length - 1;
+            var belowOverall = overallIndex > -1 && gradeIndex - overallIndex >= 1;
+            if (!atLowest && !belowOverall) return;
+            var existing = collected[code];
+            if (!existing) {
+              collected[code] = {
+                code: code,
+                label: dimension.name || dimension.label || code,
+                gradeKey: gradeKey,
+                gradeIndex: gradeIndex,
+                dimensionIndex: dimensionIndex,
+                subject: view.subject || "",
+                level: view.level || ""
+              };
+              order.push(code);
+            } else if (gradeIndex > existing.gradeIndex) {
+              /* 同一维度在多份成绩中取最低档 */
+              existing.gradeKey = gradeKey;
+              existing.gradeIndex = gradeIndex;
+            }
+          });
+        });
+        return order.map(function (code) { return collected[code]; }).sort(function (a, b) {
+          if (a.gradeIndex !== b.gradeIndex) return b.gradeIndex - a.gradeIndex; /* 档位从低到高 */
+          return a.dimensionIndex - b.dimensionIndex; /* 同档按模板维度顺序 */
+        }).slice(0, 3);
+      }
+
+      /* 提升计划筛选行：默认选中全部薄弱维度，点击标签可切换筛选 */
+      function renderLearningPlan() {
+        var strip = document.querySelector("[data-learning-plan]");
+        var chips = document.querySelector("[data-learning-plan-chips]");
+        if (!strip || !chips) return;
+        var weak = weakDimensionsFromScores(publishedScoreEntries());
+        var signature = weak.map(function (item) { return item.code; }).join(",");
+        if (signature !== planSignature) {
+          planSignature = signature;
+          planSelectedCodes = weak.map(function (item) { return item.code; });
+        }
+        planWeakDimensions = weak;
+        strip.hidden = weak.length === 0;
+        if (!weak.length) { chips.innerHTML = ""; return; }
+        chips.innerHTML = weak.map(function (item) {
+          var pressed = planSelectedCodes.indexOf(item.code) > -1;
+          return '<button type="button" class="plan-chip" data-plan-dimension="' + scoreEscape(item.code) + '" aria-pressed="' + (pressed ? "true" : "false") + '">' + scoreEscape(item.label) + '</button>';
+        }).join("");
+      }
+
+      function togglePlanDimension(code) {
+        if (!code) return;
+        var index = planSelectedCodes.indexOf(code);
+        if (index > -1) planSelectedCodes.splice(index, 1);
+        else if (planWeakDimensions.some(function (item) { return item.code === code; })) planSelectedCodes.push(code);
+        renderLearningPlan();
+        renderCourseList();
+      }
+
+      document.addEventListener("click", function (event) {
+        var chip = event.target.closest ? event.target.closest("[data-plan-dimension]") : null;
+        if (!chip) return;
+        event.preventDefault();
+        togglePlanDimension(chip.getAttribute("data-plan-dimension"));
+      });
 
       var NEWS_MORE_DATA = {
         briefing: [
@@ -24479,7 +25819,6 @@
       bindNoticeDetailImagePreview();
 
       setupNewsInfiniteLoad();
-
 
       window.addEventListener("hashchange", handleOnlineExamHashChange);
       window.addEventListener("storage", function (event) {
@@ -24886,5 +26225,427 @@
       if (!window.location.hash) window.location.hash = "#home";
     })();
   </script>
+
+    <script>
+      /* ==== CR-20261102-01 考级活动：关键字搜索 + 城市级距离排序 ==== */
+      (function () {
+        "use strict";
+        var CITY_LIST = [
+          ["wuhan", "武汉市", 30.5928, 114.3055],
+          ["yichang", "宜昌市", 30.6919, 111.2865],
+          ["xiangyang", "襄阳市", 32.0090, 112.1224],
+          ["jingzhou", "荆州市", 30.3354, 112.2410],
+          ["huangshi", "黄石市", 30.2000, 115.0389],
+          ["shiyan", "十堰市", 32.6294, 110.7981],
+          ["xiaogan", "孝感市", 30.9242, 113.9167],
+          ["jingmen", "荆门市", 31.0354, 112.1993],
+          ["huanggang", "黄冈市", 30.4537, 114.8724],
+          ["xianning", "咸宁市", 29.8413, 114.3225],
+          ["suizhou", "随州市", 31.6903, 113.3827],
+          ["ezhou", "鄂州市", 30.3915, 114.8949],
+          ["enshi", "恩施州", 30.2720, 109.4880],
+          ["other", "省外", 26.0, 110.0]
+        ];
+        var BATCH_META = {
+          "2026h2-wuhan": {
+            city: "武汉市", district: "洪山区", mode: "offline",
+            subjects: ["音乐", "舞蹈", "语言表演", "钢琴", "古筝", "声乐", "乐理"],
+            venues: [
+              { name: "湖北艺术职业学院光谷校区", lat: 30.5051, lng: 114.4085 },
+              { name: "洪山区青少年宫考点", lat: 30.5012, lng: 114.3612 }
+            ]
+          },
+          "2026h2-online": {
+            city: "", district: "", mode: "online",
+            subjects: ["音乐", "线上录制", "声乐", "钢琴"], venues: []
+          },
+          "2026h2-art": {
+            city: "武汉市", district: "江夏区", mode: "offline",
+            subjects: ["美术", "书法", "绘画", "素描"],
+            venues: [{ name: "湖北艺术职业学院藏龙岛校区", lat: 30.4032, lng: 114.3316 }]
+          }
+        };
+        window.HBYX_BATCH_META = BATCH_META;
+        var state = { keyword: "", sort: "deadline", pendingSort: "", located: false, city: "", lat: 0, lng: 0, source: "" };
+
+        function norm(v) { return String(v == null ? "" : v).toLowerCase().replace(/\s+/g, " ").trim(); }
+        function deadlineKey(card) {
+          var el = card.querySelector("[data-batch-deadline]") || card.querySelector(".batch-deadline");
+          var text = el ? el.textContent : "";
+          var m = text.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);
+          if (m) return Number(m[1]) * 10000 + Number(m[2]) * 100 + Number(m[3]);
+          m = text.match(/(\d{1,2})[.\-\/](\d{1,2})/);
+          if (m) return 20260000 + Number(m[1]) * 100 + Number(m[2]);
+          return 99999999;
+        }
+        function haversine(lat1, lng1, lat2, lng2) {
+          var R = 6371;
+          var dLat = (lat2 - lat1) * Math.PI / 180;
+          var dLng = (lng2 - lng1) * Math.PI / 180;
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+          return Math.round(2 * R * Math.asin(Math.sqrt(a)));
+        }
+        function batchDistance(key) {
+          if (!state.located) return null;
+          var meta = BATCH_META[key];
+          if (!meta || !meta.venues || !meta.venues.length) return null;
+          var best = null;
+          for (var i = 0; i < meta.venues.length; i++) {
+            var d = haversine(state.lat, state.lng, meta.venues[i].lat, meta.venues[i].lng);
+            if (best === null || d < best) best = d;
+          }
+          return best;
+        }
+        function allCards() { return Array.prototype.slice.call(document.querySelectorAll("[data-activity-card]")); }
+
+        function paintLoc() {
+          allCards().forEach(function (card) {
+            var key = card.getAttribute("data-activity-key") || "";
+            var meta = BATCH_META[key];
+            var slot = card.querySelector("[data-activity-loc]");
+            if (!slot || !meta) return;
+            var parts = [];
+            if (meta.city) parts.push(meta.city + (meta.district ? " · " + meta.district : ""));
+            else parts.push("线上考试");
+            if (meta.venues.length) parts.push(meta.venues.length + " 个考点");
+            var d = batchDistance(key);
+            var tag = (state.sort === "distance" && d !== null && d <= 50) ? '<span class="loc-tag">同城</span>' : "";
+            slot.innerHTML = tag + '<span class="loc-text">' + parts.join(" · ") + "</span>";
+          });
+        }
+
+        function render() {
+          var list = document.querySelector("[data-activity-list]");
+          if (!list) return;
+          var kw = norm(state.keyword);
+          var shown = [];
+          allCards().forEach(function (card) {
+            var key = card.getAttribute("data-activity-key") || "";
+            var meta = BATCH_META[key] || { subjects: [], venues: [], city: "", district: "" };
+            var hay = [
+              card.querySelector(".subject-name") ? card.querySelector(".subject-name").textContent : "",
+              meta.city, meta.district, meta.subjects.join(" "),
+              meta.venues.map(function (v) { return v.name; }).join(" "),
+              card.getAttribute("data-batch-mode") === "online" ? "线上 线上考试 录制" : "线下 现场"
+            ].join(" ");
+            var hit = !kw || norm(hay).indexOf(kw) >= 0;
+            card.hidden = !hit;
+            if (hit) shown.push(card);
+          });
+          shown.sort(function (a, b) {
+            if (state.sort === "distance") {
+              var da = batchDistance(a.getAttribute("data-activity-key") || "");
+              var db = batchDistance(b.getAttribute("data-activity-key") || "");
+              if (da === null && db !== null) return 1;
+              if (db === null && da !== null) return -1;
+              if (da !== null && db !== null && da !== db) return da - db;
+            }
+            return deadlineKey(a) - deadlineKey(b);
+          });
+          shown.forEach(function (card) { list.appendChild(card); });
+
+          var count = document.querySelector("[data-activity-count]");
+          if (count) count.textContent = shown.length + " 项";
+          var empty = document.querySelector("[data-activity-empty]");
+          if (empty) empty.hidden = shown.length > 0;
+          var clr = document.querySelector("[data-activity-search-clear]");
+          if (clr) clr.hidden = !state.keyword;
+          paintLoc();
+          syncSortUI();
+        }
+
+        function syncSortUI() {
+          document.querySelectorAll("[data-activity-sort]").forEach(function (b) {
+            b.setAttribute("aria-pressed", b.getAttribute("data-activity-sort") === state.sort ? "true" : "false");
+          });
+          var label = document.querySelector("[data-activity-locate-label]");
+          if (label) label.textContent = state.located ? state.city : "定位";
+          var bar = document.querySelector("[data-activity-locate-bar]");
+          var text = document.querySelector("[data-activity-locate-text]");
+          if (bar && text) {
+            bar.hidden = state.located;
+            text.textContent = "未获取定位，当前按报名截止时间排序";
+          }
+        }
+
+        function openModal() {
+          var m = document.querySelector("[data-activity-modal]");
+          if (!m) return;
+          buildCityGrid();
+          m.hidden = false;
+        }
+        function closeModal() {
+          var m = document.querySelector("[data-activity-modal]");
+          if (m) m.hidden = true;
+          state.pendingSort = "";
+        }
+        function buildCityGrid() {
+          var grid = document.querySelector("[data-activity-city-grid]");
+          if (!grid || grid.childNodes.length) return;
+          CITY_LIST.forEach(function (c) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.textContent = c[1];
+            b.setAttribute("data-activity-city", c[0]);
+            if (state.located && state.city === c[1]) b.setAttribute("aria-pressed", "true");
+            grid.appendChild(b);
+          });
+        }
+        function toast(msg) {
+          if (typeof window.showToast === "function") { window.showToast(msg); return; }
+          var el = document.createElement("div");
+          el.className = "toast is-visible";
+          el.textContent = msg;
+          document.body.appendChild(el);
+          setTimeout(function () { el.remove(); }, 1800);
+        }
+        function applyLocation(city, lat, lng, source) {
+          state.located = true;
+          state.city = city;
+          state.lat = lat;
+          state.lng = lng;
+          state.source = source;
+          if (state.pendingSort) { state.sort = state.pendingSort; state.pendingSort = ""; }
+          var m = document.querySelector("[data-activity-modal]");
+          if (m) m.hidden = true;
+          render();
+          toast(source === "manual" ? "已切换城市：" + city : "已定位到 " + city + "（城市级）");
+        }
+
+        document.addEventListener("input", function (e) {
+          var input = e.target.closest ? e.target.closest("[data-activity-search]") : null;
+          if (!input) return;
+          var v = input.value;
+          clearTimeout(input.__activityTimer);
+          input.__activityTimer = setTimeout(function () { state.keyword = v; render(); }, 300);
+        });
+
+        document.addEventListener("click", function (e) {
+          var t = e.target;
+          if (!t.closest) return;
+
+          if (t.closest("[data-activity-search-clear]")) {
+            var input = document.querySelector("[data-activity-search]");
+            if (input) { input.value = ""; input.focus(); }
+            state.keyword = "";
+            render();
+            return;
+          }
+          var sortBtn = t.closest("[data-activity-sort]");
+          if (sortBtn) {
+            var mode = sortBtn.getAttribute("data-activity-sort");
+            if (mode === "distance" && !state.located) {
+              state.pendingSort = "distance";
+              openModal();
+              return;
+            }
+            state.sort = mode;
+            state.pendingSort = "";
+            render();
+            return;
+          }
+          if (t.closest("[data-activity-locate]") || t.closest("[data-activity-locate-action]")) { openModal(); return; }
+          if (t.closest("[data-activity-modal-close]")) { closeModal(); return; }
+          if (t.closest("[data-activity-request-locate]")) {
+            applyLocation("武汉市", 30.5051, 114.4085, "granted");
+            return;
+          }
+          var cityBtn = t.closest("[data-activity-city]");
+          if (cityBtn) {
+            var id = cityBtn.getAttribute("data-activity-city");
+            CITY_LIST.forEach(function (c) {
+              if (c[0] === id) applyLocation(c[1], c[2], c[3], "manual");
+            });
+            return;
+          }
+          var modal = document.querySelector("[data-activity-modal]");
+          if (modal && !modal.hidden && t === modal) closeModal();
+        });
+
+        function applyHashKeyword() {
+          var h = window.location.hash || "";
+          var i = h.indexOf("?");
+          if (i < 0) return;
+          h.slice(i + 1).split("&").forEach(function (kv) {
+            var p = kv.split("=");
+            if (p[0] === "kw" && p[1]) {
+              var v = decodeURIComponent(p[1]);
+              var input = document.querySelector("[data-activity-search]");
+              if (input) input.value = v;
+              state.keyword = v;
+            }
+          });
+        }
+
+        function boot() {
+          applyHashKeyword();
+          render();
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", boot);
+        } else {
+          boot();
+        }
+        window.addEventListener("hashchange", function () {
+          setTimeout(function () {
+            applyHashKeyword();
+            render();
+          }, 80);
+        });
+        window.__activityRender = render;
+      })();
+    </script>
+<script>
+      /* ==== 考试列表 · 考点导航（选择地图弹窗，原型演示） ==== */
+      (function () {
+        "use strict";
+
+        /* 考点档案：名称 → 地址与坐标（原型演示数据，取自现有考点库） */
+        var VENUE_META = {
+          "湖北艺术职业学院光谷校区": { address: "武汉市东湖高新区光谷大道 11 号", lat: 30.5051, lng: 114.4085 },
+          /* 历史文案写法容错（旧数据曾误写为「湖北职业艺术学院」） */
+          "湖北职业艺术学院光谷校区": { address: "武汉市东湖高新区光谷大道 11 号", lat: 30.5051, lng: 114.4085 },
+          "湖北艺术职业学院藏龙岛校区": { address: "武汉市江夏区藏龙岛科技园", lat: 30.4032, lng: 114.3316 },
+          "湖北艺术职业学院完美校区": { address: "武汉市洪山区珞喻路 88 号", lat: 30.5210, lng: 114.3620 },
+          "洪山区青少年宫考点": { address: "武汉市洪山区", lat: 30.5012, lng: 114.3612 },
+          "武汉市青少年宫艺术培训中心": { address: "武汉市江岸区解放大道 1435 号", lat: 30.6045, lng: 114.2840 }
+        };
+
+        var modal = document.querySelector("[data-venue-nav-modal]");
+        if (!modal) return;
+        var noteEl = modal.querySelector("[data-venue-nav-note]");
+        var venueBox = modal.querySelector("[data-venue-nav-venues]");
+        var cur = { name: "", info: null };
+        var toastEl = null;
+        var toastTimer = 0;
+
+        function esc(v) {
+          return String(v == null ? "" : v).replace(/[&<>"]/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+          });
+        }
+
+        function venueInfo(name) {
+          var key = String(name || "").replace(/\s+/g, "");
+          if (VENUE_META[key]) return VENUE_META[key];
+          for (var k in VENUE_META) {
+            if (key && (key.indexOf(k) >= 0 || k.indexOf(key) >= 0)) return VENUE_META[k];
+          }
+          return null;
+        }
+
+        function toast(msg) {
+          if (!toastEl) {
+            toastEl = document.createElement("div");
+            toastEl.className = "activity-nav-toast";
+            document.body.appendChild(toastEl);
+          }
+          toastEl.textContent = msg;
+          toastEl.classList.add("show");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 2200);
+        }
+
+        function closeModal() { modal.hidden = true; }
+
+        function openModal(name) {
+          var info = venueInfo(name);
+          cur.name = name;
+          cur.info = info;
+          venueBox.innerHTML = "";
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "nav-venue-item";
+          b.setAttribute("aria-pressed", "true");
+          if (info) {
+            noteEl.textContent = "目的地考点 · " + name;
+            b.innerHTML = '<span class="nav-venue-name">' + esc(name) + "</span>" +
+              '<span class="nav-venue-coord">' + esc(info.address) + "</span>" +
+              '<span class="nav-venue-coord">坐标 ' + info.lat.toFixed(4) + ", " + info.lng.toFixed(4) + "</span>";
+          } else {
+            noteEl.textContent = "目的地考点 · " + name + "（该考点暂未接入坐标，演示仅展示入口）";
+            b.innerHTML = '<span class="nav-venue-name">' + esc(name) + "</span>" +
+              '<span class="nav-venue-coord">坐标待补充</span>';
+          }
+          venueBox.appendChild(b);
+          modal.hidden = false;
+        }
+
+        /* capture 阶段拦截：导航按钮位于 <a> 卡片内，需阻止卡片跳转 */
+        document.addEventListener("click", function (e) {
+          var t = e.target;
+          if (!t.closest) return;
+          var nav = t.closest("[data-exam-nav]");
+          if (nav) {
+            e.preventDefault();
+            e.stopPropagation();
+            var card = nav.closest("[data-application-card]");
+            var placeEl = card && card.querySelector("[data-card-place]");
+            var name = placeEl ? placeEl.textContent.trim() : "";
+            if (name) openModal(name);
+            return;
+          }
+          if (t.closest("[data-venue-nav-modal-close]")) { closeModal(); return; }
+          if (t === modal) { closeModal(); return; }
+          var map = t.closest("[data-venue-nav-map]");
+          if (map) {
+            if (cur.name) {
+              toast("演示：已唤起" + map.getAttribute("data-venue-nav-map") + "，导航至「" + cur.name + "」");
+              closeModal();
+            }
+          }
+        }, true);
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !modal.hidden) { closeModal(); return; }
+          var t = e.target;
+          if ((e.key === "Enter" || e.key === " ") && t && t.closest && t.closest("[data-exam-nav]")) {
+            e.preventDefault();
+            t.click();
+          }
+        });
+      })();
+    </script>
+    <script>
+      /*
+       * 滚动兜底层（彻底修复成绩详情页"无法滚动"）：
+       * 部分 WebView / 预览面板的原生内部滚动（overflow 容器）不可靠，
+       * 这里在捕获阶段接管成绩详情页的滚轮事件，手动驱动 .app 的 scrollTop，
+       * 不依赖浏览器原生内滚行为。其他页面保持原生滚动不受影响。
+       */
+      (function () {
+        var app = document.querySelector(".app");
+        if (!app) return;
+
+        function isScoreViewActive() {
+          var view = document.getElementById("score-view");
+          return Boolean(view && !view.hidden);
+        }
+
+        function normalizeDelta(value, mode) {
+          if (mode === 1) return value * 16; /* line → px */
+          if (mode === 2) return value * app.clientHeight; /* page → px */
+          return value;
+        }
+
+        document.addEventListener(
+          "wheel",
+          function (event) {
+            if (!isScoreViewActive()) return;
+            if (event.ctrlKey) return; /* 触控板捏合缩放不接管 */
+            if (!event || typeof event.deltaY !== "number" || !event.deltaY) return;
+            if (event.defaultPrevented) return;
+            var deltaY = normalizeDelta(event.deltaY, event.deltaMode);
+            var maxTop = app.scrollHeight - app.clientHeight;
+            if (maxTop <= 0 || !deltaY) return;
+            /* 成绩详情页可见时接管页面所有滚轮：无论事件落在壳内还是壳外
+               （部分 WebView 会把滚轮派发到 body/html），都驱动 .app 滚动。 */
+            event.preventDefault();
+            app.scrollTop = Math.min(Math.max(app.scrollTop + deltaY, 0), maxTop);
+          },
+          { passive: false, capture: true }
+        );
+      })();
+    </script>
 </body>
 </html>

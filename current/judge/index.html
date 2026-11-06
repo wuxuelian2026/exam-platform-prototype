@@ -80,7 +80,8 @@
       position: relative;
       width: 375px;
       height: min(752px, calc(100vh - 32px));
-      min-height: 680px;
+      /* 不设最小高度：窗口较矮时壳必须完整落在视口内，避免底部内容滚不出来。 */
+      min-height: 0;
       border: 4px solid #111827;
       border-radius: 28px;
       overflow: hidden;
@@ -375,6 +376,110 @@
       font-size: 15px; font-weight: 400; line-height: 1.5; outline: none;
     }
     .form-textarea { min-height: 88px; resize: vertical; }
+    .comment-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .comment-foot-actions { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .comment-lib-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 30px; padding: 0 12px 0 9px; border-radius: var(--radius-full);
+      border: 1px solid var(--border-color); background: #fff;
+      color: var(--text-secondary); font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .comment-lib-btn svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .comment-lib-btn:active { background: var(--surface-muted, #F7F8FA); }
+    .comment-lib-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .comment-lib-btn[hidden] { display: none; }
+    .comment-lib-panel { gap: 12px; }
+    .comment-lib-sub { margin: 0; font-size: 12px; color: var(--text-light); line-height: 1.5; }
+    .comment-lib-search {
+      width: 100%; height: 38px; padding: 0 12px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color); background: var(--bg-body, #F5F6F8);
+      font-size: 14px; color: var(--text-primary); outline: none;
+    }
+    .comment-lib-search:focus { border-color: var(--brand-primary); background: #fff; }
+    .comment-lib-list { display: grid; gap: 10px; max-height: 320px; overflow: auto; padding: 2px; }
+    .comment-lib-group-title { margin: 2px 0 0; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+    .comment-lib-item {
+      width: 100%; text-align: left; border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+      background: #fff; padding: 10px 12px; display: grid; gap: 6px; cursor: pointer;
+    }
+    .comment-lib-item:active { border-color: var(--brand-primary); background: rgba(200, 16, 46, .04); }
+    .comment-lib-item-text { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text-primary); }
+    .comment-lib-item-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .comment-lib-chip {
+      display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: var(--radius-full);
+      font-size: 11px; font-weight: 600; background: rgba(200, 16, 46, .06); color: var(--brand-primary);
+    }
+    .comment-lib-chip.is-group { background: rgba(43, 107, 176, .08); color: var(--color-info); }
+    .comment-lib-chip.is-category { background: var(--bg-body, #F5F6F8); color: var(--text-secondary); }
+    .comment-lib-item-meta small { font-size: 11px; color: var(--text-light); }
+    .comment-lib-empty { margin: 0; padding: 18px 0; text-align: center; font-size: 13px; color: var(--text-light); }
+    .comment-lib-empty[hidden] { display: none; }
+    .comment-voice-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 30px; padding: 0 12px 0 9px; border-radius: var(--radius-full);
+      border: 1px solid rgba(200, 16, 46, .18); background: rgba(200, 16, 46, .06);
+      color: var(--brand-primary); font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background .18s ease, color .18s ease, border-color .18s ease;
+    }
+    .comment-voice-btn svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .comment-voice-btn:active { background: rgba(200, 16, 46, .12); }
+    .comment-voice-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .comment-voice-btn[hidden] { display: none; }
+
+    .voice-panel { gap: 14px; }
+    .voice-close {
+      width: 28px; height: 28px; border: 0; border-radius: 50%; background: var(--bg-body);
+      color: var(--text-secondary); font-size: 17px; line-height: 1; cursor: pointer;
+    }
+    .voice-stage { display: grid; justify-items: center; gap: 10px; padding: 4px 0 2px; }
+    .voice-mic {
+      width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--gradient-brand); color: #fff; box-shadow: 0 8px 20px rgba(200, 16, 46, .24);
+      position: relative;
+    }
+    .voice-mic::after {
+      content: ""; position: absolute; inset: -6px; border-radius: 50%;
+      border: 1px solid rgba(200, 16, 46, .28); animation: voice-pulse 1.8s ease-out infinite;
+    }
+    .voice-mic svg { width: 26px; height: 26px; }
+    .voice-panel[data-voice-stage="done"] .voice-mic { background: var(--color-success); box-shadow: 0 8px 20px rgba(26, 138, 74, .22); }
+    .voice-panel[data-voice-stage="done"] .voice-mic::after { display: none; }
+    @keyframes voice-pulse {
+      0% { transform: scale(.94); opacity: .9; }
+      100% { transform: scale(1.22); opacity: 0; }
+    }
+    .voice-wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 26px; }
+    .voice-wave span {
+      width: 4px; border-radius: 2px; background: var(--brand-primary); opacity: .8;
+      animation: voice-wave 1s ease-in-out infinite;
+    }
+    .voice-wave span:nth-child(1) { height: 10px; animation-delay: 0s; }
+    .voice-wave span:nth-child(2) { height: 20px; animation-delay: .12s; }
+    .voice-wave span:nth-child(3) { height: 14px; animation-delay: .24s; }
+    .voice-wave span:nth-child(4) { height: 24px; animation-delay: .36s; }
+    .voice-wave span:nth-child(5) { height: 12px; animation-delay: .48s; }
+    @keyframes voice-wave {
+      0%, 100% { transform: scaleY(.5); }
+      50% { transform: scaleY(1); }
+    }
+    .voice-panel[data-voice-stage="done"] .voice-wave { display: none; }
+    .voice-status { margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary); text-align: center; }
+    .voice-hint { margin: 0; font-size: 12px; color: var(--text-light); text-align: center; line-height: 1.5; }
+    .voice-transcript {
+      margin: 0; padding: 12px 14px; border-radius: var(--radius-sm);
+      background: var(--bg-body); border: 1px solid var(--border-color);
+      font-size: 14px; line-height: 1.6; color: var(--text-primary);
+      max-height: 132px; overflow: auto; min-height: 60px;
+    }
+    .voice-transcript[hidden] { display: none; }
+    .voice-transcript .voice-caret {
+      display: inline-block; width: 2px; height: 14px; margin-left: 1px;
+      background: var(--brand-primary); vertical-align: -2px; animation: voice-caret 1s step-start infinite;
+    }
+    @keyframes voice-caret { 50% { opacity: 0; } }
+    .voice-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .voice-actions button { width: 100%; border: 0; cursor: pointer; }
+    .voice-actions .ghost-action { border: 1px solid var(--border-color); }
     .form-input:focus, .form-textarea:focus {
       border-color: var(--brand-primary);
       box-shadow: 0 0 0 3px rgba(200, 16, 46, .08);
@@ -2050,6 +2155,8 @@
     .overall-rating-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .overall-rating-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--text-primary); }
     .overall-rating-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    /* 整体评级六档：3 列 × 2 行 */
+    .overall-rating-options.overall-grade-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .overall-rating-option { min-height: 38px; border: 1px solid var(--border-neutral); border-radius: var(--radius-sm); background: #fff; color: var(--text-secondary); font-size: 13px; }
     .overall-rating-option.is-selected { border-color: var(--brand-primary); background: var(--brand-primary); color: #fff; font-weight: 700; }
     .overall-score-readonly { opacity: .72; pointer-events: none; }
@@ -2389,8 +2496,20 @@
             </div>
             <div class="form-row">
               <span class="form-label">整体评语（必填）</span>
-              <textarea class="form-textarea" data-overall-comment maxlength="200" required aria-required="true" placeholder="请填写对该考生的整体评语"></textarea>
-              <div data-overall-comment-counter style="font-size:12px;color:var(--text-light);text-align:right;">0 / 200</div>
+              <textarea class="form-textarea" data-overall-comment maxlength="200" required aria-required="true" placeholder="请填写对该考生的整体评语，可从评语库选择后修改，也可点击「语音输入」口述"></textarea>
+              <div class="comment-foot">
+                <div class="comment-foot-actions">
+                  <button class="comment-lib-btn" type="button" data-comment-library aria-label="从评语库选择评语">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5a2.5 2.5 0 0 1-2.5 2.5H6.5A2.5 2.5 0 0 1 4 18.5z"></path><path d="M4 17.5h13.5a2.5 2.5 0 0 1 2.5 2.5"></path><path d="M8.5 8h7M8.5 11.5h4.5"></path></svg>
+                    <span>评语库</span>
+                  </button>
+                  <button class="comment-voice-btn" type="button" data-comment-voice aria-label="语音输入整体评语">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.5" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"></path></svg>
+                    <span>语音输入</span>
+                  </button>
+                </div>
+                <div data-overall-comment-counter style="font-size:12px;color:var(--text-light);text-align:right;">0 / 200</div>
+              </div>
             </div>
           </div>
         </section>
@@ -3089,11 +3208,48 @@
         <span class="tab-icon-custom icon-profile" aria-hidden="true"></span><span>我的</span>
       </a>
     </nav>
+    <div class="sheet-mask" id="comment-voice-sheet" data-comment-voice-sheet hidden>
+      <div class="sheet-panel voice-panel" role="dialog" aria-modal="true" aria-labelledby="comment-voice-title" data-voice-stage="listening">
+        <div class="sheet-head">
+          <h3 id="comment-voice-title">语音输入评语</h3>
+          <button class="voice-close" type="button" data-comment-voice-cancel aria-label="关闭语音输入">×</button>
+        </div>
+        <div class="voice-stage">
+          <div class="voice-mic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"></path></svg>
+          </div>
+          <div class="voice-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+          <p class="voice-status" data-comment-voice-status aria-live="polite">正在聆听，请说出评语…</p>
+          <p class="voice-hint" data-comment-voice-hint>支持普通话，说完点「完成」将文字填入整体评语</p>
+        </div>
+        <p class="voice-transcript" data-comment-voice-transcript hidden></p>
+        <div class="voice-actions">
+          <button class="ghost-action" type="button" data-comment-voice-cancel>取消</button>
+          <button class="primary-action" type="button" data-comment-voice-insert>完成</button>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-mask" id="comment-library-sheet" data-comment-library-sheet hidden>
+      <div class="sheet-panel comment-lib-panel" role="dialog" aria-modal="true" aria-labelledby="comment-library-title">
+        <div class="sheet-head">
+          <h3 id="comment-library-title">从评语库选择</h3>
+          <button class="voice-close" type="button" data-comment-library-close aria-label="关闭评语库">×</button>
+        </div>
+        <p class="comment-lib-sub" data-comment-library-sub>优先展示当前考生报考专业的评语</p>
+        <input class="comment-lib-search" type="search" data-comment-library-search placeholder="搜索评语关键词">
+        <div class="comment-lib-list" data-comment-library-list></div>
+        <p class="comment-lib-empty" data-comment-library-empty hidden>评语库中暂无匹配该考生专业的评语，可联系平台在后台评语库中维护</p>
+        <div class="voice-actions">
+          <button class="ghost-action" type="button" data-comment-library-close>取消</button>
+        </div>
+      </div>
+    </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <span class="side-handle" aria-hidden="true"></span>
   </div>
 
   <script src="../shared/hbyx-exam-api-client.js"></script>
+  <script src="../shared/hbyx-comment-library.js"></script>
   <script src="../shared/hbyx-exam-entry-groups.js"></script>
   <script>
     (function () {
@@ -5207,7 +5363,15 @@
         { key: "PASS", label: "合格" },
         { key: "FAIL", label: "不合格" }
       ];
-      var OVERALL_GRADE_OPTIONS = OVERALL_RATING_OPTIONS;
+      /* 整体评级（评分等级）：六档选项 */
+      var OVERALL_GRADE_OPTIONS = [
+        { key: "EXCELLENT_PLUS", label: "优+" },
+        { key: "EXCELLENT", label: "优秀" },
+        { key: "EXCELLENT_MINUS", label: "优-" },
+        { key: "GOOD", label: "良好" },
+        { key: "PASS", label: "合格" },
+        { key: "FAIL", label: "不合格" }
+      ];
       var OVERALL_DRAFT_PREFIX = "judge_overall_draft_";
       var OVERALL_CURRENT_CANDIDATE_KEY = "judge_overall_current_candidate";
       var overallDraftPromptId = "";
@@ -5276,8 +5440,19 @@
       }
 
       function ratingDimensionsForTask(task) {
-        return task && Array.isArray(task.rubricDimensions) ? task.rubricDimensions : [];
+        if (!task) return [];
+        if (Array.isArray(task.rubricDimensions) && task.rubricDimensions.length) return task.rubricDimensions;
+        /* 兜底：任务维度为空（历史草稿或初始化顺序问题）时回落到专业类别的演示评分模板 */
+        var template = DEMO_RUBRIC_TEMPLATES[categoryCodeForTask(task)] || DEMO_RUBRIC_TEMPLATES.MUSIC;
+        return template ? template.rubricDimensions : [];
       }
+
+      /* 补齐离线任务的评分维度：上方初始化循环早于 DEMO_RUBRIC_TEMPLATES 定义，此处再执行一次 */
+      Object.keys(SCORE_TASKS).forEach(function (taskId) {
+        if (!Array.isArray(SCORE_TASKS[taskId].rubricDimensions) || !SCORE_TASKS[taskId].rubricDimensions.length) {
+          applyDemoRubric(SCORE_TASKS[taskId]);
+        }
+      });
 
       function demoDateInfo(date) {
         var key = localDateKey(date);
@@ -6004,6 +6179,10 @@
           comment.value = score.overallComment || "";
           comment.readOnly = isLocked;
           comment.disabled = isLocked;
+          var commentVoiceBtn = document.querySelector("[data-comment-voice]");
+          if (commentVoiceBtn) commentVoiceBtn.disabled = isLocked;
+          var commentLibBtn = document.querySelector("[data-comment-library]");
+          if (commentLibBtn) commentLibBtn.disabled = isLocked;
         }
         if (counter) counter.textContent = String((score.overallComment || "").length) + " / 200";
         if (saveButton) {
@@ -6221,6 +6400,254 @@
       }
       var saveOverallButton = document.querySelector("[data-save-overall-draft]");
       if (saveOverallButton) saveOverallButton.addEventListener("click", function () { saveOverallDraft(true); });
+
+      /* 整体评语语音输入：原型模拟实时转写，正式实现接入微信同声传译 / 讯飞听写 */
+      var commentVoiceButton = document.querySelector("[data-comment-voice]");
+      var voiceSheet = document.querySelector("[data-comment-voice-sheet]");
+      var voicePanel = voiceSheet ? voiceSheet.querySelector(".voice-panel") : null;
+      var voiceStatusEl = document.querySelector("[data-comment-voice-status]");
+      var voiceHintEl = document.querySelector("[data-comment-voice-hint]");
+      var voiceTranscriptEl = document.querySelector("[data-comment-voice-transcript]");
+      var voiceInsertButton = document.querySelector("[data-comment-voice-insert]");
+      var VOICE_DEMO_CHUNKS = [
+        "演奏完整流畅，基本功扎实，",
+        "节奏把握准确，音准稳定，",
+        "音乐表现力较好，强弱对比与乐句处理得当。",
+        "中段快速乐句速度略有不稳，建议加强慢速练习。"
+      ];
+      var voiceTimer = null;
+      var voiceText = "";
+
+      function voiceSheetOpen() { return Boolean(voiceSheet && !voiceSheet.hidden); }
+
+      function renderVoiceTranscript() {
+        if (!voiceTranscriptEl) return;
+        voiceTranscriptEl.textContent = voiceText;
+        if (voiceText && voicePanel && voicePanel.getAttribute("data-voice-stage") === "listening") {
+          var caret = document.createElement("span");
+          caret.className = "voice-caret";
+          voiceTranscriptEl.appendChild(caret);
+        }
+        voiceTranscriptEl.hidden = !voiceText;
+      }
+
+      function stopVoiceTimers() {
+        if (voiceTimer) { clearTimeout(voiceTimer); voiceTimer = null; }
+      }
+
+      function setVoiceStage(stage) {
+        if (voicePanel) voicePanel.setAttribute("data-voice-stage", stage);
+        if (voiceStatusEl) {
+          voiceStatusEl.textContent = stage === "done" ? "识别完成，可点「完成」填入评语" : "正在聆听，请说出评语…";
+        }
+        if (voiceHintEl) {
+          voiceHintEl.textContent = stage === "done"
+            ? "共转写 " + voiceText.length + " 字，点「完成」追加到整体评语"
+            : "支持普通话，说完点「完成」将文字填入整体评语";
+        }
+        if (voiceInsertButton) voiceInsertButton.textContent = "完成";
+      }
+
+      function startVoiceDemo() {
+        stopVoiceTimers();
+        voiceText = "";
+        if (voiceTranscriptEl) { voiceTranscriptEl.textContent = ""; voiceTranscriptEl.hidden = true; }
+        setVoiceStage("listening");
+        var index = 0;
+        function tick() {
+          if (!voiceSheetOpen()) return;
+          if (index >= VOICE_DEMO_CHUNKS.length) { setVoiceStage("done"); return; }
+          voiceText += VOICE_DEMO_CHUNKS[index];
+          index += 1;
+          renderVoiceTranscript();
+          if (index >= VOICE_DEMO_CHUNKS.length) { setVoiceStage("done"); return; }
+          voiceTimer = setTimeout(tick, 620 + Math.round(Math.random() * 220));
+        }
+        voiceTimer = setTimeout(tick, 420);
+      }
+
+      function openVoiceSheet() {
+        if (!voiceSheet) return;
+        if (isScoreEntryLocked(currentScoreId)) { showToast(scoreEntryLockedMessage(currentScoreId)); return; }
+        if (overallComment && overallComment.disabled) { showToast("当前评分已提交，评语不可修改"); return; }
+        voiceSheet.hidden = false;
+        startVoiceDemo();
+      }
+
+      function closeVoiceSheet() {
+        stopVoiceTimers();
+        voiceText = "";
+        if (voiceSheet) voiceSheet.hidden = true;
+        if (voicePanel) voicePanel.setAttribute("data-voice-stage", "listening");
+        if (voiceTranscriptEl) { voiceTranscriptEl.textContent = ""; voiceTranscriptEl.hidden = true; }
+      }
+
+      function appendCommentText(text) {
+        if (!overallComment) return false;
+        var snippet = String(text || "").trim();
+        if (!snippet) return false;
+        var value = overallComment.value || "";
+        var start = overallComment.selectionStart == null ? value.length : overallComment.selectionStart;
+        var end = overallComment.selectionEnd == null ? start : overallComment.selectionEnd;
+        start = Math.max(0, Math.min(start, value.length));
+        end = Math.max(start, Math.min(end, value.length));
+        var head = value.slice(0, start);
+        var tail = value.slice(end);
+        if (head && !/[，。；、,.;：:\s]$/.test(head)) head += "，";
+        if (tail && !/^[，。；、,.;：:\s]/.test(tail)) tail = "，" + tail;
+        var next = head + snippet + tail;
+        var truncated = next.length > 200;
+        overallComment.value = next.slice(0, 200);
+        try { overallComment.focus({ preventScroll: true }); } catch (err) { /* ignore */ }
+        var caret = Math.min(overallComment.value.length, head.length + snippet.length);
+        try { overallComment.setSelectionRange(caret, caret); } catch (err2) { /* ignore */ }
+        overallComment.dispatchEvent(new Event("input", { bubbles: true }));
+        if (truncated) { showToast("评语已达 200 字上限，超出部分未录入"); return true; }
+        return false;
+      }
+
+      if (commentVoiceButton) {
+        commentVoiceButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openVoiceSheet();
+        });
+      }
+      if (voiceSheet) {
+        voiceSheet.addEventListener("click", function (event) {
+          if (event.target === voiceSheet) closeVoiceSheet();
+        });
+        Array.prototype.forEach.call(voiceSheet.querySelectorAll("[data-comment-voice-cancel]"), function (btn) {
+          btn.addEventListener("click", closeVoiceSheet);
+        });
+      }
+      if (voiceInsertButton) {
+        voiceInsertButton.addEventListener("click", function () {
+          if (!voiceText.trim()) { showToast("还没有识别到评语内容，请再说一次"); startVoiceDemo(); return; }
+          var text = voiceText;
+          var truncated = appendCommentText(text);
+          closeVoiceSheet();
+          if (!truncated) showToast("语音评语已填入");
+        });
+      }
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && voiceSheetOpen()) closeVoiceSheet();
+      });
+
+      /* 整体评语 · 评语库引用（数据由后台「业务配置 → 评语库」维护） */
+      var commentLibButton = document.querySelector("[data-comment-library]");
+      var commentLibSheet = document.querySelector("[data-comment-library-sheet]");
+      var commentLibSub = document.querySelector("[data-comment-library-sub]");
+      var commentLibSearch = document.querySelector("[data-comment-library-search]");
+      var commentLibList = document.querySelector("[data-comment-library-list]");
+      var commentLibEmpty = document.querySelector("[data-comment-library-empty]");
+      var commentLibKeyword = "";
+
+      function commentLibraryApi() { return window.HBYXCommentLibrary || null; }
+
+      function currentScoreTask() {
+        return SCORE_TASKS[currentScoreId] || SCORE_TASKS.lin || {};
+      }
+
+      function commentLibChipClass(rank) {
+        return rank === 1 ? " is-group" : rank === 2 ? " is-category" : "";
+      }
+
+      function renderCommentLibrary() {
+        var api = commentLibraryApi();
+        if (!api || !commentLibList) return;
+        var task = currentScoreTask();
+        var matched = api.matchForCandidate({ subject: task.subject, categoryCode: task.categoryCode, categoryName: task.category });
+        var context = matched.context;
+        if (commentLibSub) {
+          commentLibSub.textContent = context.subjectName
+            ? "当前考生：" + (task.name || "考生") + " · " + context.subjectName + "（" + [context.categoryName, context.groupName, context.subjectName].filter(Boolean).join(" / ") + "），按本专业 → 本分类 → 本门类排序"
+            : "未识别到考生报考专业，仅展示门类评语";
+        }
+        var keyword = commentLibKeyword.trim().toLowerCase();
+        var rows = matched.rows.filter(function (row) {
+          return !keyword || (row.content + " " + row.scopeLabel).toLowerCase().indexOf(keyword) > -1;
+        });
+        var groupTitles = ["本专业评语", "本分类评语", "本门类评语"];
+        var groupNames = [context.subjectName, context.groupName, context.categoryName];
+        commentLibList.textContent = "";
+        var lastRank = -1;
+        rows.forEach(function (row) {
+          if (row.scopeRank !== lastRank) {
+            lastRank = row.scopeRank;
+            var title = document.createElement("p");
+            title.className = "comment-lib-group-title";
+            title.textContent = groupTitles[lastRank] + (groupNames[lastRank] ? " · " + groupNames[lastRank] : "");
+            commentLibList.appendChild(title);
+          }
+          var item = document.createElement("button");
+          item.type = "button";
+          item.className = "comment-lib-item";
+          item.setAttribute("data-comment-library-pick", row.id);
+          var text = document.createElement("p");
+          text.className = "comment-lib-item-text";
+          text.textContent = row.content;
+          var meta = document.createElement("span");
+          meta.className = "comment-lib-item-meta";
+          var chip = document.createElement("span");
+          chip.className = "comment-lib-chip" + commentLibChipClass(row.scopeRank);
+          chip.textContent = row.scopeLabel;
+          var size = document.createElement("small");
+          size.textContent = row.content.length + " 字";
+          meta.appendChild(chip);
+          meta.appendChild(size);
+          item.appendChild(text);
+          item.appendChild(meta);
+          commentLibList.appendChild(item);
+        });
+        if (commentLibEmpty) commentLibEmpty.hidden = rows.length > 0;
+      }
+
+      function commentLibSheetOpen() { return Boolean(commentLibSheet && !commentLibSheet.hidden); }
+
+      function openCommentLibrary() {
+        if (!commentLibSheet) return;
+        if (isScoreEntryLocked(currentScoreId)) { showToast(scoreEntryLockedMessage(currentScoreId)); return; }
+        if (overallComment && overallComment.disabled) { showToast("当前评分已提交，评语不可修改"); return; }
+        commentLibKeyword = "";
+        if (commentLibSearch) commentLibSearch.value = "";
+        commentLibSheet.hidden = false;
+        renderCommentLibrary();
+      }
+
+      function closeCommentLibrary() {
+        if (commentLibSheet) commentLibSheet.hidden = true;
+      }
+
+      if (commentLibButton) {
+        commentLibButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openCommentLibrary();
+        });
+      }
+      if (commentLibSheet) {
+        commentLibSheet.addEventListener("click", function (event) {
+          if (event.target === commentLibSheet) { closeCommentLibrary(); return; }
+          var pick = event.target.closest("[data-comment-library-pick]");
+          if (!pick) return;
+          var api = commentLibraryApi();
+          var entry = api ? api.find(pick.getAttribute("data-comment-library-pick")) : null;
+          if (!entry) { showToast("该评语已被删除，请刷新后重试"); renderCommentLibrary(); return; }
+          var truncated = appendCommentText(entry.content);
+          closeCommentLibrary();
+          if (!truncated) showToast("已引用评语库评语，可继续修改");
+        });
+      }
+      if (commentLibSearch) {
+        commentLibSearch.addEventListener("input", function () {
+          commentLibKeyword = commentLibSearch.value;
+          renderCommentLibrary();
+        });
+      }
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && commentLibSheetOpen()) closeCommentLibrary();
+      });
 
       document.querySelectorAll("[data-notify-key]").forEach(function (btn) {
         btn.addEventListener("click", function () {

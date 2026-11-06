@@ -24,3 +24,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# 原型本地备份文件（发布不需要）
+*.bak
+*.bak-*
