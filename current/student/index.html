@@ -10171,6 +10171,58 @@
     .mx-notice-links { margin-top: 12px; border-top: 1px solid var(--border-color); }
     /* 作者样式的 display 会覆盖 UA 的 [hidden]，显式兜底保证演示入口在对外包不可见 */
     [data-demo-only][hidden] { display: none !important; }
+
+    /* ===== 考务发号员端（现场编组） ===== */
+    .phone-shell.issuer-mode .tabbar { display: none; }
+    .phone-shell.issuer-mode .role-context-bar { display: none !important; }
+    .phone-shell.issuer-mode .app { padding-bottom: 24px; }
+    .issuer-page .issuer-brand { padding: 14px 2px 12px; }
+    .issuer-page .issuer-brand-title { margin: 0; color: #1f2329; font-size: 20px; font-weight: 600; }
+    .issuer-page .issuer-brand-sub { margin: 4px 0 0; color: #86909c; font-size: 12px; }
+    .issuer-page .issuer-login-card { padding: 16px; }
+    .issuer-page .login-field-row { min-height: 48px; gap: 8px; border-bottom: 1px solid #f0f1f3; color: #1f2329; font-size: 13px; }
+    .issuer-page .login-field-label { flex-basis: 58px; color: #4e5969; font-size: 13px; font-weight: 600; }
+    .issuer-page .login-field-row input { color: #1f2329; font-size: 13px; }
+    .issuer-page .login-code-btn { font-size: 12px; font-weight: 500; }
+    .issuer-page .login-code-btn:disabled { color: #a9aeb8; }
+    .issuer-page .issuer-agree { display: flex; align-items: center; gap: 6px; margin: 12px 0; color: #86909c; font-size: 11px; }
+    .issuer-page .issuer-session-tip { margin-top: 12px; padding: 10px 12px; border: 1px solid #e5e6eb; border-radius: 8px; color: #4e5969; font-size: 11px; line-height: 1.7; }
+    .issuer-page .issuer-session-tip strong { color: #1f2329; font-weight: 600; }
+    .issuer-page .issuer-session-tip[hidden] { display: none; }
+    .issuer-page .issuer-link { display: block; margin-top: 12px; color: #1677ff; font-size: 12px; text-align: center; text-decoration: none; }
+    .issuer-page .issuer-head-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; color: #86909c; font-size: 11px; line-height: 1.6; }
+    .issuer-page .issuer-head-meta span { flex: 1; min-width: 0; }
+    .issuer-page .issuer-head-meta button { flex: none; border: 0; background: none; color: #1677ff; font-size: 11px; }
+    .issuer-page .issuer-next-card { padding: 16px 18px; border: 1px solid #e5e6eb; border-radius: 10px; background: #fff; }
+    .issuer-page .issuer-next-card > span { color: #86909c; font-size: 12px; }
+    .issuer-page .issuer-next-no { display: block; margin: 6px 0 4px; color: #1f2329; font-size: 28px; font-weight: 700; }
+    .issuer-page .issuer-next-card p { margin: 0; color: #86909c; font-size: 11px; line-height: 1.6; }
+    .issuer-page .issuer-search-row { display: flex; gap: 8px; margin: 10px 0; }
+    .issuer-page .issuer-search-row input { flex: 1; min-width: 0; height: 36px; padding: 0 10px; border: 1px solid #e5e6eb; border-radius: 8px; font-size: 12px; outline: none; }
+    .issuer-page .issuer-search-row button { flex: none; width: 74px; height: 36px; line-height: 34px; }
+    .issuer-page .issuer-candidate-list { max-height: 190px; overflow: auto; border: 1px solid #e5e6eb; border-radius: 8px; }
+    .issuer-page .issuer-candidate-list[hidden] { display: none; }
+    .issuer-page .issuer-candidate-item { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-bottom: 1px solid #f2f3f5; font-size: 12px; cursor: pointer; }
+    .issuer-page .issuer-candidate-item:last-child { border-bottom: 0; }
+    .issuer-page .issuer-candidate-item.is-active { background: #f2f7ff; }
+    .issuer-page .issuer-candidate-item strong { color: #1f2329; }
+    .issuer-page .issuer-candidate-item small { color: #86909c; }
+    .issuer-page .issuer-candidate-item em { margin-left: auto; flex: none; color: #1677ff; font-size: 11px; font-style: normal; }
+    .issuer-page .issuer-empty { padding: 18px 10px; color: #86909c; font-size: 12px; text-align: center; }
+    .issuer-page .issuer-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .issuer-page .issuer-stat { padding: 8px 2px; border-radius: 8px; background: #f7f8fa; text-align: center; }
+    .issuer-page .issuer-stat b { display: block; font-size: 18px; color: #1f2329; }
+    .issuer-page .issuer-stat span { color: #86909c; font-size: 10px; }
+    .issuer-page .issuer-flow-item { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f2f3f5; font-size: 12px; }
+    .issuer-page .issuer-flow-item:last-child { border-bottom: 0; }
+    .issuer-page .issuer-flow-item strong { color: #1677ff; }
+    .issuer-page .issuer-flow-item small { display: block; color: #86909c; font-size: 10px; }
+    .issuer-page .issuer-flow-item .issuer-revoke { margin-left: auto; flex: none; border: 0; background: none; color: #d4380d; font-size: 11px; }
+    .issuer-page .issuer-flow-item.is-revoked strong, .issuer-page .issuer-flow-item.is-revoked span { color: #a9aeb8; text-decoration: line-through; }
+    .issuer-page .issuer-rule { color: #86909c; font-size: 11px; line-height: 1.8; }
+    .issuer-page .primary-action:disabled { opacity: .45; cursor: not-allowed; }
+    .issuer-ticket-tip { margin-bottom: 10px; padding: 10px 12px; border: 1px solid #e5e6eb; border-radius: 8px; background: #f7f8fa; color: #4e5969; font-size: 12px; line-height: 1.7; }
+    .issuer-ticket-tip strong { color: #1f2329; font-size: 13px; }
   </style>
 </head>
 <body class="is-guest">
@@ -12427,6 +12479,7 @@
       <main class="content screen-view" id="ticket-view" data-view="ticket" hidden>
         <section class="section">
           <div class="info-banner" data-ticket-invalidated hidden>原准考证已因场次局部调整失效，请查看最新考试安排。当前展示：<strong data-ticket-latest-version>最新准考证 v2</strong>。</div>
+          <div class="issuer-ticket-tip" data-issuer-ticket-tip hidden></div>
           <div class="ticket-preview-wrap">
             <div class="ticket-preview-sheet">
               <div class="ticket-sheet-main">
@@ -13932,8 +13985,83 @@
               </div>
             </div>
             <a class="login-skip-link" href="#home" data-login-skip>暂不登录，先逛逛</a>
-            <a class="login-judge-link" href="../考官端小程序/exam-judge-v1.1.html#login" target="_blank" rel="noopener noreferrer">考官登录</a>
+            <a class="login-judge-link" href="#issuer-login" data-issuer-login-entry>考务发号员登录</a>
+            <a class="login-judge-link" href="../judge/#login" target="_blank" rel="noopener noreferrer">考官登录</a>
           </div>
+        </section>
+      </main>
+
+      <!-- 考务发号员登录 -->
+      <main class="content screen-view issuer-page" id="issuer-login-view" data-view="issuer-login" hidden>
+        <section class="section">
+          <div class="issuer-brand">
+            <p class="issuer-brand-title">考务发号</p>
+            <p class="issuer-brand-sub">现场编组 · 发号员</p>
+          </div>
+          <div class="card form-card issuer-login-card">
+            <p class="detail-copy">请使用后台授权的手机号登录。</p>
+            <div class="login-field-row">
+              <span class="login-field-label">手机号</span>
+              <input type="tel" inputmode="numeric" autocomplete="tel" maxlength="11" aria-label="手机号" placeholder="请输入手机号" value="" data-issuer-phone>
+            </div>
+            <div class="login-field-row">
+              <span class="login-field-label">验证码</span>
+              <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="验证码" placeholder="请输入验证码" value="" data-issuer-code>
+              <button class="login-code-btn" type="button" data-issuer-code-send>获取验证码</button>
+            </div>
+            <label class="issuer-agree"><input type="checkbox" data-issuer-agree checked><span>同意《考务发号规范》</span></label>
+            <button class="primary-action" type="button" style="width:100%;" data-issuer-login-submit>登录</button>
+            <div class="issuer-session-tip" data-issuer-session-tip hidden></div>
+            <a class="issuer-link" href="#login" data-issuer-login-back>返回考生登录</a>
+          </div>
+        </section>
+      </main>
+
+      <!-- 现场发号工作台 -->
+      <main class="content screen-view issuer-page" id="issuer-desk-view" data-view="issuer-desk" hidden>
+        <section class="section">
+          <div class="card page-summary">
+            <div class="section-head" style="margin:0;">
+              <h2 class="section-title">场次信息</h2>
+              <span class="status-pill info">发号员</span>
+            </div>
+            <p data-issuer-session-label></p>
+            <div class="issuer-head-meta"><span data-issuer-head-meta></span><button type="button" data-issuer-logout>退出登录</button></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="issuer-next-card">
+            <span>下一位应发号码</span>
+            <strong class="issuer-next-no" data-issuer-next-no>—</strong>
+            <p data-issuer-next-hint>扫描准考证后显示</p>
+          </div>
+        </section>
+        <section class="section">
+          <div class="card form-card">
+            <h3 class="section-title">扫码到场</h3>
+            <p class="detail-copy">扫描准考证二维码，或输入报名编号定位到场考生；识别后方可发号。</p>
+            <div class="issuer-search-row">
+              <input type="text" placeholder="报名编号 / 考生姓名" data-issuer-search aria-label="搜索到场考生">
+              <button class="ghost-action" type="button" data-issuer-scan>扫码</button>
+            </div>
+            <div class="issuer-candidate-list" data-issuer-candidates hidden></div>
+            <button class="primary-action" type="button" style="width:100%;margin-top:12px;" data-issuer-confirm disabled>确认发号</button>
+          </div>
+        </section>
+        <section class="section">
+          <div class="card form-card">
+            <h3 class="section-title">发号统计</h3>
+            <div class="issuer-stats" data-issuer-stats></div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="card form-card">
+            <div class="section-head"><h3 class="section-title" style="margin:0;">发号流水</h3><small class="muted">号码不重排</small></div>
+            <div data-issuer-flow></div>
+          </div>
+        </section>
+        <section class="section">
+          <p class="issuer-rule">号码一经发出不重排，撤回后作废不复用。</p>
         </section>
       </main>
 
@@ -14211,6 +14339,7 @@
   <script src="../shared/hbyx-score-dimension-advice.js"></script>
   <script src="../shared/hbyx-exam-navigation.js"></script>
   <script src="../shared/hbyx-exam-entry-groups.js"></script>
+  <script src="../shared/hbyx-entry-live-grouping.js"></script>
   <script>
     (function () {
       var shell = document.querySelector(".phone-shell");
@@ -15716,6 +15845,8 @@
       };
 
       var secondaryPages = {
+        "issuer-login": { title: "考务发号员登录", back: "#login" },
+        "issuer-desk": { title: "现场发号", back: "#home" },
         "public-score-query": { title: "成绩查询", back: "#home" },
         "public-score-result": { title: "成绩查询结果", back: "#public-score-query" },
         "certificate-query": { title: "证书查询", back: "#home" },
@@ -20715,7 +20846,9 @@
           "legal-agreement": true,
           "legal-privacy": true,
           "child-privacy": true,
-          "version-update": true
+          "version-update": true,
+          "issuer-login": true,
+          "issuer-desk": true
         };
         if (roleContextBar) {
           roleContextBar.classList.toggle("is-page-hidden", Boolean(contextFreeViews[view]));
@@ -20821,6 +20954,7 @@
           el.hidden = el.getAttribute("data-view") !== view;
         });
         if (shell) shell.classList.toggle("secondary-view", Boolean(secondary));
+        if (shell) shell.classList.toggle("issuer-mode", view === "issuer-login" || view === "issuer-desk");
         if (secondary && secondaryTitle) {
           secondaryTitle.textContent = secondary.title;
           if (secondaryBack) {
@@ -26647,5 +26781,366 @@
         );
       })();
     </script>
+<script>
+  /* ===== 考务发号员端：登录 + 现场发号工作台 ===== */
+  (function () {
+    "use strict";
+    var API = window.HBYXEntryLiveGrouping;
+    if (!API) return;
+    var SESSION_KEY = "hbyx_issuer_session_v1";
+    var VERIFY_CODE = "123456";
+    var selectedCandidateId = "";
+    var scannedCandidateId = "";
+    var toastTimer = null;
+    var codeState = { phone: "", code: "", expiresAt: 0, cooldownUntil: 0 };
+    var codeTimer = null;
+
+    function $(selector) { return document.querySelector(selector); }
+    function esc(value) {
+      return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+      });
+    }
+    function toast(message) {
+      var el = document.getElementById("toast");
+      if (!el) return;
+      el.textContent = message;
+      el.classList.add("show");
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(function () { el.classList.remove("show"); }, 2200);
+    }
+    function view() {
+      return (window.location.hash || "#home").replace(/^#/, "").split("?")[0] || "home";
+    }
+    function session() {
+      try { return JSON.parse(window.sessionStorage.getItem(SESSION_KEY) || "null"); } catch (error) { return null; }
+    }
+    function setSession(value) {
+      try {
+        if (value) window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(value));
+        else window.sessionStorage.removeItem(SESSION_KEY);
+      } catch (error) { /* ignore */ }
+    }
+    function normalizePhone(value) { return String(value == null ? "" : value).replace(/[\s-]/g, ""); }
+    function maskPhone(phone) { return String(phone || "").replace(/^(\d{3})\d{4}(\d{4})$/, "$1****$2"); }
+    function firstAuthorized() {
+      var found = null;
+      API.plans().forEach(function (plan) {
+        if (found) return;
+        (plan.issuers || []).forEach(function (issuer) {
+          if (!found && issuer.status === "已授权") found = { plan: plan, issuer: issuer };
+        });
+      });
+      return found;
+    }
+    /* 无任何场次方案时补齐默认场次，保证发号端可独立打开 */
+    function ensureDefaultPlan() {
+      if (API.plans().length) return;
+      var candidates = [];
+      candidates.push({ id: "demo-g01", code: "EX202607250018", name: "张三", org: "光谷少儿艺术中心", major: "中国舞", level: "4级" });
+      for (var j = 1; j <= 30; j += 1) {
+        var serial = String(j).padStart(3, "0");
+        candidates.push({ id: "demo-hk-" + serial, code: "HKDANCE" + serial, name: "汉口舞蹈考生" + serial, org: "汉口美育培训学校", major: "中国舞", level: j <= 10 ? "2级" : "3级" });
+      }
+      API.savePlan({
+        batchId: "batch-demo-05", sessionId: "S-05-02", batchName: "2026年下半年考级（武汉）",
+        sessionLabel: "2026.08.21 09:00-12:00 · 湖北艺术职业学院光谷校区 · 第1考场",
+        perOrgN: { "光谷少儿艺术中心": 10, "汉口美育培训学校": 10 },
+        issuers: [{ id: "issuer-1", name: "张老师", phone: "138****6621", loginPhone: "13800006621", owner: "武汉承办中心 · 考点考务", status: "已授权" }],
+        candidates: candidates
+      });
+    }
+    function updateCodeButton() {
+      var button = $("[data-issuer-code-send]");
+      if (!button) return;
+      var remaining = Math.max(0, Math.ceil((codeState.cooldownUntil - Date.now()) / 1000));
+      button.disabled = remaining > 0;
+      button.textContent = remaining > 0 ? remaining + "秒后重发" : "获取验证码";
+      if (!remaining && codeTimer) { window.clearInterval(codeTimer); codeTimer = null; }
+    }
+    function sendCode() {
+      var input = $("[data-issuer-phone]");
+      var phone = normalizePhone(input && input.value);
+      if (!/^1\d{10}$/.test(phone)) { toast("请输入正确的11位手机号"); if (input) input.focus(); return; }
+      if (!API.authenticate(phone)) { toast("该手机号未获本场次发号授权"); return; }
+      codeState = { phone: phone, code: VERIFY_CODE, expiresAt: Date.now() + 5 * 60 * 1000, cooldownUntil: Date.now() + 60 * 1000 };
+      if (codeTimer) window.clearInterval(codeTimer);
+      updateCodeButton();
+      codeTimer = window.setInterval(updateCodeButton, 1000);
+      toast("验证码已发送至 " + maskPhone(phone) + "：" + VERIFY_CODE);
+    }
+    function validateCode(phone, code) {
+      if (!codeState.code || codeState.phone !== phone) { toast("请先获取验证码"); return false; }
+      if (codeState.expiresAt <= Date.now()) { toast("验证码已失效，请重新获取"); return false; }
+      if (code !== codeState.code) { toast("验证码不正确"); return false; }
+      return true;
+    }
+    function renderLogin() {
+      ensureDefaultPlan();
+      /* 未登录不展示场次信息；已登录只展示本次登录账号所属场次 */
+      var tip = $("[data-issuer-session-tip]");
+      var current = session();
+      var loggedPlan = current ? API.planOf(current.batchId, current.sessionId) : null;
+      if (tip) {
+        if (!current || !loggedPlan) {
+          tip.hidden = true;
+          tip.textContent = "";
+        } else {
+          tip.hidden = false;
+          tip.innerHTML = "当前场次：<strong>" + esc(loggedPlan.sessionId) + "</strong><br>" +
+            esc([loggedPlan.batchName, loggedPlan.sessionLabel].filter(Boolean).join(" · "));
+        }
+      }
+      var auth = firstAuthorized();
+      var phoneInput = $("[data-issuer-phone]");
+      if (auth && phoneInput && !phoneInput.value) phoneInput.value = auth.issuer.loginPhone || "";
+    }
+    function currentPlan() {
+      var current = session();
+      return current ? API.planOf(current.batchId, current.sessionId) : null;
+    }
+    function activeIssuer(plan) {
+      var current = session();
+      if (!plan || !current) return null;
+      return (plan.issuers || []).find(function (issuer) {
+        return issuer.loginPhone === current.loginPhone && issuer.status === "已授权";
+      }) || null;
+    }
+    function unissued(plan) {
+      var active = API.activeIssued(plan);
+      return (plan.candidates || []).filter(function (candidate) {
+        return !active.some(function (entry) { return entry.candidateId === candidate.id; });
+      });
+    }
+    function renderDesk() {
+      var plan = currentPlan();
+      var label = $("[data-issuer-session-label]");
+      var meta = $("[data-issuer-head-meta]");
+      var nextNo = $("[data-issuer-next-no]");
+      var nextHint = $("[data-issuer-next-hint]");
+      var list = $("[data-issuer-candidates]");
+      var stats = $("[data-issuer-stats]");
+      var flow = $("[data-issuer-flow]");
+      if (!plan) {
+        if (label) label.textContent = "未找到场次编组方案，请联系考点考务。";
+        return;
+      }
+      var issuer = activeIssuer(plan);
+      if (!issuer) {
+        toast("发号员授权已失效，请重新登录");
+        setSession(null);
+        window.location.hash = "#issuer-login";
+        return;
+      }
+      if (label) label.textContent = (plan.batchName ? plan.batchName + " · " : "") + plan.sessionId + " · " + (plan.sessionLabel || "");
+      if (meta) meta.textContent = "发号员 " + issuer.name + " · " + issuer.loginPhone;
+      var pool = plan.candidates || [];
+      var active = API.activeIssued(plan);
+      var revoked = (plan.issued || []).filter(function (entry) { return entry.status === "已撤回"; });
+      var remaining = unissued(plan);
+      var keyword = (($("[data-issuer-search]") || {}).value || "").trim();
+      /* 考生列表按需出现：仅扫码识别结果或关键词匹配时展开，不默认铺出名单 */
+      var shown = [];
+      if (scannedCandidateId) {
+        shown = remaining.filter(function (candidate) { return candidate.id === scannedCandidateId; });
+        selectedCandidateId = shown.length ? shown[0].id : "";
+      } else if (keyword) {
+        shown = remaining.filter(function (candidate) {
+          return (candidate.name || "").indexOf(keyword) > -1 || String(candidate.code || "").indexOf(keyword) > -1;
+        }).slice(0, 8);
+        /* 输入完整报名编号视同扫码识别，绑定到唯一考生；其余结果须显式点选 */
+        var exactCode = remaining.filter(function (candidate) { return String(candidate.code || "") === keyword; });
+        if (exactCode.length === 1) {
+          selectedCandidateId = exactCode[0].id;
+          scannedCandidateId = exactCode[0].id;
+          shown = exactCode;
+        } else if (!shown.some(function (candidate) { return candidate.id === selectedCandidateId; })) {
+          selectedCandidateId = "";
+        }
+      }
+      if (!remaining.some(function (candidate) { return candidate.id === selectedCandidateId; })) selectedCandidateId = "";
+      /* 列表只用于「多名候选中点选一人」；识别绑定到具体考生后收起，由号码卡统一确认 */
+      var needPick = !scannedCandidateId && Boolean(keyword) && shown.length > 0;
+      var noMatch = !scannedCandidateId && Boolean(keyword) && shown.length === 0;
+      if (list) {
+        list.hidden = !(needPick || noMatch);
+        if (!needPick && !noMatch) {
+          list.innerHTML = "";
+        } else {
+          list.innerHTML = shown.length ? shown.map(function (candidate) {
+            return '<div class="issuer-candidate-item" data-issuer-pick="' + esc(candidate.id) + '">' +
+              '<strong>' + esc(candidate.name) + '</strong><small>' + esc(candidate.code) + ' · ' + esc(candidate.org) + ' · ' + esc(candidate.major || "") + ' ' + esc(candidate.level || "") + '</small>' +
+              '<em>选择</em></div>';
+          }).join("") : '<div class="issuer-empty">' + (remaining.length ? "没有匹配的考生" : "本场次考生已全部发号") + '</div>';
+        }
+      }
+      var selected = remaining.find(function (candidate) { return candidate.id === selectedCandidateId; });
+      if (nextNo && nextHint) {
+        if (selected) {
+          var slot = API.nextSlot(plan, selected);
+          nextNo.textContent = slot ? API.codeText(slot) : "—";
+          nextHint.textContent = selected.name + " · " + (selected.code || selected.id) + " · " + selected.org + (slot && slot.stackIndex ? " · 号牌套第 " + slot.stackIndex + " 张" : "");
+        } else if (remaining.length) {
+          nextNo.textContent = "—";
+          nextHint.textContent = "扫描准考证后显示";
+        } else {
+          nextNo.textContent = "已发完";
+          nextHint.textContent = "本场次考生已全部发号。";
+        }
+      }
+      var confirmButton = $("[data-issuer-confirm]");
+      if (confirmButton) confirmButton.disabled = !selected;
+      if (stats) {
+        stats.innerHTML = [["应到", pool.length], ["已发号", active.length], ["作废", revoked.length], ["未到场", pool.length - active.length]].map(function (item) {
+          return '<div class="issuer-stat"><b>' + item[1] + '</b><span>' + item[0] + '</span></div>';
+        }).join("");
+      }
+      if (flow) {
+        var rows = (plan.issued || []).slice().reverse();
+        flow.innerHTML = rows.length ? rows.map(function (entry) {
+          var isRevoked = entry.status === "已撤回";
+          return '<div class="issuer-flow-item' + (isRevoked ? ' is-revoked' : '') + '"><div><strong>' + esc(API.codeText(entry)) + '</strong><span> · ' + esc(entry.name) + ' · ' + esc(entry.org) + '</span><small>' + esc(entry.at || "") + ' · ' + esc(entry.by || "") + (isRevoked ? " · 已撤回" : "") + '</small></div>' +
+            (isRevoked ? '<span class="muted">已作废</span>' : '<button class="issuer-revoke" type="button" data-issuer-revoke="' + esc(entry.candidateId) + '">撤回</button>') + '</div>';
+        }).join("") : '<div class="issuer-empty">暂无发号记录。</div>';
+      }
+    }
+    function renderTicketTip() {
+      var tip = $("[data-issuer-ticket-tip]");
+      if (!tip) return;
+      var plans = API.plans();
+      if (!plans.length) { tip.hidden = true; return; }
+      var name = ($("[data-ticket-candidate]") || {}).textContent || "";
+      var code = ($("[data-ticket-enrollment]") || {}).textContent || "";
+      var keys = [name.trim(), code.trim()].filter(Boolean);
+      var hit = null;
+      plans.forEach(function (plan) {
+        keys.forEach(function (key) {
+          var found = API.ticketOf(plan, key);
+          if (found && !hit) hit = found;
+        });
+      });
+      tip.hidden = false;
+      if (hit) {
+        tip.innerHTML = "考试号牌 <strong>" + esc(API.codeText(hit)) + "</strong><br>" +
+          (hit.at ? "发放时间 " + esc(hit.at) + " · " : "") + "请佩戴号牌按组入场。";
+      } else {
+        tip.innerHTML = "到场后凭准考证领取号牌，号码以现场发放为准。";
+      }
+    }
+    function sync() {
+      var current = view();
+      if (current === "issuer-desk" && !session()) {
+        window.location.hash = "#issuer-login";
+        return;
+      }
+      if (current === "issuer-login") renderLogin();
+      if (current === "issuer-desk") renderDesk();
+      renderTicketTip();
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target;
+      if (target.closest("[data-issuer-code-send]")) { sendCode(); return; }
+      if (target.closest("[data-issuer-login-submit]")) {
+        var phone = normalizePhone(($("[data-issuer-phone]") || {}).value);
+        var code = String(($("[data-issuer-code]") || {}).value || "").trim();
+        if (!/^1\d{10}$/.test(phone)) { toast("请输入正确的11位手机号"); return; }
+        if (!$("[data-issuer-agree]").checked) { toast("请先阅读并同意考务发号规范"); return; }
+        if (!/^\d{6}$/.test(code)) { toast("请输入6位验证码"); return; }
+        if (!validateCode(phone, code)) return;
+        var result = API.authenticate(phone);
+        if (!result) { toast("手机号未获本场次发号授权"); return; }
+        setSession({ batchId: result.plan.batchId, sessionId: result.plan.sessionId, loginPhone: result.issuer.loginPhone, issuerName: result.issuer.name });
+        resetIssuerBinding();
+        var codeInput = $("[data-issuer-code]");
+        if (codeInput) codeInput.value = "";
+        window.location.hash = "#issuer-desk";
+        toast("登录成功");
+        return;
+      }
+      if (target.closest("[data-issuer-logout]")) {
+        setSession(null);
+        resetIssuerBinding();
+        codeState = { phone: "", code: "", expiresAt: 0, cooldownUntil: 0 };
+        if (codeTimer) { window.clearInterval(codeTimer); codeTimer = null; }
+        var logoutCodeInput = $("[data-issuer-code]");
+        if (logoutCodeInput) logoutCodeInput.value = "";
+        var logoutSendButton = $("[data-issuer-code-send]");
+        if (logoutSendButton) { logoutSendButton.disabled = false; logoutSendButton.textContent = "获取验证码"; }
+        window.location.hash = "#issuer-login";
+        toast("已退出登录");
+        return;
+      }
+      var pick = target.closest("[data-issuer-pick]");
+      if (pick) {
+        selectedCandidateId = pick.getAttribute("data-issuer-pick");
+        scannedCandidateId = selectedCandidateId;
+        renderDesk();
+        return;
+      }
+      if (target.closest("[data-issuer-scan]")) {
+        var scanPlan = currentPlan();
+        if (!scanPlan) { toast("未找到场次编组方案"); return; }
+        var keyword = (($("[data-issuer-search]") || {}).value || "").trim();
+        if (!keyword) { toast("请先扫描准考证，或输入报名编号"); return; }
+        var scanList = unissued(scanPlan).filter(function (candidate) {
+          return (candidate.name || "").indexOf(keyword) > -1 || String(candidate.code || "").indexOf(keyword) > -1;
+        });
+        if (!scanList.length) { toast("未识别到该考生的到场记录，请核对报名编号"); return; }
+        if (scanList.length > 1) { toast("识别到多名考生，请输入完整报名编号"); renderDesk(); return; }
+        selectedCandidateId = scanList[0].id;
+        scannedCandidateId = scanList[0].id;
+        renderDesk();
+        toast("已识别准考证：" + scanList[0].name + "（" + scanList[0].code + "）");
+        return;
+      }
+      if (target.closest("[data-issuer-confirm]")) {
+        if (!selectedCandidateId) { toast("请先扫码或选择到场考生"); return; }
+        issueNow(selectedCandidateId);
+        return;
+      }
+      var revokeButton = target.closest("[data-issuer-revoke]");
+      if (revokeButton) {
+        var current = session();
+        var revoked = API.revoke(current.batchId, current.sessionId, revokeButton.getAttribute("data-issuer-revoke"));
+        if (revoked.error) { toast(revoked.error); return; }
+        resetIssuerBinding();
+        toast("已撤回该号");
+        renderDesk();
+      }
+    });
+    /* 绑定一旦被消费（发号/撤回）或会话切换，清空识别态与搜索词，回到等待下一次扫码 */
+    function resetIssuerBinding() {
+      selectedCandidateId = "";
+      scannedCandidateId = "";
+      var searchInput = $("[data-issuer-search]");
+      if (searchInput) searchInput.value = "";
+    }
+    function issueNow(candidateId) {
+      var current = session();
+      var plan = currentPlan();
+      var issuer = activeIssuer(plan);
+      var result = API.issue(current.batchId, current.sessionId, issuer, candidateId);
+      if (result.error) { toast(result.error); return; }
+      resetIssuerBinding();
+      toast("已发号 " + API.codeText(result.entry));
+      renderDesk();
+    }
+    document.addEventListener("input", function (event) {
+      if (event.target.matches("[data-issuer-search]") && view() === "issuer-desk") {
+        selectedCandidateId = "";
+        scannedCandidateId = "";
+        renderDesk();
+      }
+    });
+    API.subscribe(function () {
+      if (view() === "issuer-desk") renderDesk();
+      if (view() === "issuer-login") renderLogin();
+      renderTicketTip();
+    });
+    window.addEventListener("hashchange", sync);
+    sync();
+  })();
+</script>
 </body>
 </html>

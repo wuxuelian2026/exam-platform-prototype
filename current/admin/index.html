@@ -545,6 +545,57 @@
     .schedule-entry-workbench .table-wrap table { min-width: 0 !important; width: 100%; table-layout: fixed; }
     .schedule-entry-workbench th, .schedule-entry-workbench td { position: static !important; min-width: 0 !important; width: auto !important; padding: 8px 10px; white-space: normal; overflow-wrap: anywhere; }
     .schedule-entry-workbench td:last-child { white-space: nowrap; }
+    /* 编组方式决策卡：单选 + 适用说明 + 本场次状态，替代原页签切换 */
+    .mode-decision { margin: 0 0 14px; }
+    .mode-decision-head { margin-bottom: 10px; }
+    .mode-decision-head h3 { font-size: 14px; margin: 0 0 4px; }
+    .mode-decision-head p { margin: 0; color: var(--sub); font-size: 12px; line-height: 1.6; }
+    .mode-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .mode-choice-card { display: block; width: 100%; text-align: left; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--white); color: var(--text); cursor: pointer; }
+    .mode-choice-card:hover { border-color: var(--primary); }
+    .mode-choice-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .mode-choice-card.is-active { border-color: var(--primary); background: var(--primary-weak); box-shadow: inset 0 0 0 1px var(--primary); }
+    .mode-choice-top { display: flex; align-items: center; gap: 8px; }
+    .mode-choice-radio { position: relative; width: 16px; height: 16px; flex: 0 0 16px; border: 1px solid #b8c2cf; border-radius: 50%; background: var(--white); }
+    .mode-choice-card.is-active .mode-choice-radio { border-color: var(--primary); }
+    .mode-choice-card.is-active .mode-choice-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--primary); }
+    .mode-choice-name { font-size: 14px; font-weight: 600; }
+    .mode-choice-card .tag { margin-left: auto; }
+    .mode-choice-desc { display: block; margin-top: 8px; color: var(--sub); font-size: 12px; line-height: 1.65; }
+    .mode-choice-status { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); color: var(--muted); font-size: 12px; }
+    .mode-choice-card.is-active .mode-choice-status { color: #175cd3; }
+    .mode-decision-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+    .mode-undecided { padding: 22px 16px; border: 1px dashed var(--border); border-radius: 8px; background: #fbfcfe; text-align: center; }
+    .mode-undecided strong { display: block; font-size: 14px; color: var(--text); }
+    .mode-undecided span { display: block; margin-top: 6px; color: var(--sub); font-size: 12px; }
+    @media (max-width: 860px) { .mode-choice-grid { grid-template-columns: 1fr; } }
+    .schedule-entry-mode-panel .drawer-section { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 12px 0; margin: 0; background: transparent; }
+    .schedule-entry-mode-panel h3 { font-size: 14px; margin: 8px 0; }
+    .schedule-entry-mode-panel .table-tools { padding: 8px 0; flex-wrap: wrap; gap: 8px; }
+    .schedule-entry-mode-panel .table-wrap table { min-width: 0 !important; width: 100%; }
+    .schedule-entry-mode-panel th, .schedule-entry-mode-panel td { position: static !important; white-space: normal; padding: 8px 10px; overflow-wrap: anywhere; }
+    .schedule-entry-mode-panel td:last-child { white-space: nowrap; }
+    .live-meta-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .live-meta-grid > div { padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: #f8fafc; }
+    .live-meta-grid span { display: block; color: var(--sub); font-size: 12px; }
+    .live-meta-grid strong { display: block; margin-top: 2px; font-size: 13px; }
+    .live-stack-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px; }
+    .live-stack-item div { display: grid; gap: 2px; min-width: 0; }
+    .live-stack-item span { color: var(--sub); font-size: 12px; }
+    .live-issue-stats { display: flex; flex-wrap: wrap; gap: 6px; }
+    .schedule-entry-mode-panel .live-section-nav { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+    .live-section-nav button { border: 0; background: none; color: var(--sub); font-size: 12px; padding: 4px 10px; cursor: pointer; border-radius: 4px; }
+    .live-section-nav button:hover { color: #1677ff; background: #f2f7ff; }
+    .live-mode-switch-warn { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 10px; padding: 10px 12px; border: 1px solid #f59e0b; border-left: 3px solid #f59e0b; border-radius: 6px; background: #fffbeb; color: #78350f; font-size: 12px; }
+    .live-issuer-form .field { margin: 0 0 14px; }
+    .live-issuer-form .field > label { display: block; margin-bottom: 6px; color: #1f2329; font-size: 13px; font-weight: 600; }
+    .live-issuer-form .input, .live-issuer-form .select { width: 100%; }
+    .live-issuer-form .muted { display: block; margin-top: 4px; font-size: 12px; }
+    .live-issuer-readonly { padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: #f8fafc; color: #4e5969; font-size: 13px; }
+    .live-issuer-error { margin-top: 4px; padding: 8px 10px; border-radius: 6px; background: #fff1f0; color: #cf1322; font-size: 12px; }
+    .live-pending { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 10px 0; padding: 10px 12px; border: 1px solid #f59e0b; border-left: 3px solid #f59e0b; border-radius: 6px; background: #fffbeb; }
+    .live-pending strong { display: block; color: #92400e; font-size: 14px; }
+    .live-pending span { color: #78350f; font-size: 12px; }
     .schedule-published-tools { justify-content: flex-start; border-bottom: 0; padding-bottom: 8px; }
     .schedule-published-table { min-width: 1460px; table-layout: fixed; }
     .schedule-published-table th, .schedule-published-table td { white-space: normal; vertical-align: middle; }
@@ -4229,6 +4280,7 @@
   <script src="../shared/hbyx-comment-library.js"></script>
   <script src="../shared/hbyx-score-dimension-advice.js"></script>
   <script src="../shared/hbyx-exam-navigation.js"></script>
+  <script src="../shared/hbyx-entry-live-grouping.js"></script>
   <script>
     // Keep every route page inside the scrollable main content region. This also
     // repairs browser HTML parsing differences caused by the large prototype DOM.
@@ -9169,7 +9221,7 @@
       if (!panel) return;
       var selectors = {
         enroll: '[data-drawer="enroll-create"], [data-drawer="enroll-import"], [data-drawer="payment-confirm"], [data-drawer="payment-batch-confirm"], [data-drawer="enroll-cancel"], [data-enroll-confirm-paid], [data-enroll-cancel], [data-enroll-batch-paid], [data-enroll-refund-request], [data-enroll-refund-confirm]',
-        schedule: '[data-drawer="schedule-assign"], [data-drawer="schedule-candidate-assign"], [data-drawer="schedule-group"], [data-drawer="schedule-publish"], [data-drawer="schedule-exception"], [data-schedule-step-create], [data-schedule-step-edit], [data-schedule-candidate-assign], [data-schedule-entry-groups], [data-entry-action], [data-schedule-step-delete], [data-schedule-step2-bulk], [data-schedule-step2-clear], [data-schedule-submit], [data-schedule-review-publish], [data-schedule-org-arrange], [data-schedule-org-preview]',
+        schedule: '[data-drawer="schedule-assign"], [data-drawer="schedule-candidate-assign"], [data-drawer="schedule-group"], [data-drawer="schedule-publish"], [data-drawer="schedule-exception"], [data-schedule-step-create], [data-schedule-step-edit], [data-schedule-candidate-assign], [data-schedule-entry-groups], [data-entry-action], [data-live-action], [data-live-revoke], [data-live-issuer], [data-schedule-step-delete], [data-schedule-step2-bulk], [data-schedule-step2-clear], [data-schedule-submit], [data-schedule-review-publish], [data-schedule-org-arrange], [data-schedule-org-preview]',
         grades: '[data-result-action], [data-drawer="result-entry"], [data-drawer="result-batch-entry"], [data-drawer="result-adjust"], [data-drawer="result-return"], [data-drawer="result-publish"]',
         certificates: '[data-drawer="cert-batch-generate"], [data-drawer="cert-clear-numbers"], [data-drawer="cert-submit"], [data-drawer="cert-void"], [data-drawer="cert-void-confirm"]',
         tickets: '[data-ticket-async-generate], [data-ticket-generate], [data-ticket-publish]'
@@ -14572,7 +14624,7 @@
         drawerBody.innerHTML = ticketPreviewBodyHtml(window.__activeTicket, ticketBatch);
         drawerFoot.innerHTML = '<button class="btn" data-close-drawer>关闭</button>' + (window.__activeTicket.status === "已生成" ? '<button class="btn primary" data-toast="当前准考证 PDF 已下载">下载 PDF</button>' : '');
       }
-      if (drawerBatch && ["schedule-assign", "schedule-candidate-assign", "schedule-entry-groups"].indexOf(key) > -1) {
+      if (drawerBatch && ["schedule-assign", "schedule-candidate-assign"].indexOf(key) > -1) {
         drawerBody.insertAdjacentHTML("afterbegin", '<div class="batch-context-banner"><strong>' + escapeHtml(drawerBatch.name) + '</strong><span>批次 ID：' + escapeHtml(drawerBatch.id) + ' · 场次及考生分配范围已锁定</span></div>');
       }
       if (drawerBatch && key === "schedule-publish") {
@@ -14858,6 +14910,10 @@
       dispatchRuleModal.setAttribute("aria-hidden", "true");
     }
     function closeDrawer() {
+      if (window.__liveIssuerFormOpen && typeof window.__backToScheduleEntryGroups === "function") {
+        window.__backToScheduleEntryGroups();
+        return;
+      }
       releaseTrainingMedia(drawerBody);
       window.__editingTrainingActivity = null;
       drawer.classList.remove("open", "is-wide", "is-full");
@@ -20151,6 +20207,84 @@
       }
       var entryGroupsButton = event.target.closest("[data-schedule-entry-groups]");
       if (entryGroupsButton) { openScheduleEntryGroups(entryGroupsButton.getAttribute("data-schedule-entry-groups")); return; }
+      var entryModeButton = event.target.closest("[data-entry-mode]");
+      if (entryModeButton) {
+        var modeDraft = window.__scheduleEntryGroupDraft;
+        if (modeDraft) {
+          var nextMode = entryModeButton.getAttribute("data-entry-mode") === "live" ? "live" : "pre";
+          var modeBatch = currentBatchContext();
+          var modeSession = scheduleEntrySession(modeBatch, modeDraft.sessionId);
+          if (nextMode !== modeDraft.mode) {
+            var modeLiveIssued = modeSession ? scheduleLiveIssuedCount(modeBatch, modeSession) : 0;
+            var modeRisky = (nextMode === "live" && modeDraft.groups.length) || (nextMode === "pre" && modeLiveIssued > 0);
+            if (modeRisky) {
+              window.__entryModePending = nextMode;
+              drawerBody.innerHTML = scheduleEntryGroupsHtml();
+              toast(nextMode === "live"
+                ? "切换为现场编组并保存后，现有 " + modeDraft.groups.length + " 个提前分组将被清空，请确认"
+                : "本场次已发号 " + modeLiveIssued + " 人，切换为提前编组请确认");
+              return;
+            }
+          }
+          if (nextMode === "live" && !modeDraft.live && modeSession) modeDraft.live = scheduleLiveDefault(modeBatch, modeSession);
+          window.__entryModePending = "";
+          modeDraft.mode = nextMode;
+          drawerBody.innerHTML = scheduleEntryGroupsHtml();
+          drawerBody.scrollTop = 0;
+          scheduleEntryFootSync(modeDraft);
+        }
+        return;
+      }
+      var modeConfirmButton = event.target.closest("[data-entry-mode-confirm]");
+      if (modeConfirmButton) {
+        var confirmDraft = window.__scheduleEntryGroupDraft;
+        if (confirmDraft) {
+          if (window.__entryModePending === "live" && !confirmDraft.live) {
+            var confirmBatch = currentBatchContext(), confirmSession = scheduleEntrySession(confirmBatch, confirmDraft.sessionId);
+            if (confirmSession) confirmDraft.live = scheduleLiveDefault(confirmBatch, confirmSession);
+          }
+          confirmDraft.mode = window.__entryModePending || "pre";
+          window.__entryModePending = "";
+          drawerBody.innerHTML = scheduleEntryGroupsHtml();
+          drawerBody.scrollTop = 0;
+          scheduleEntryFootSync(confirmDraft);
+        }
+        return;
+      }
+      var modeCancelButton = event.target.closest("[data-entry-mode-cancel]");
+      if (modeCancelButton) { window.__entryModePending = ""; drawerBody.innerHTML = scheduleEntryGroupsHtml(); return; }
+      var issuerSaveButton = event.target.closest("[data-live-issuer-save]");
+      if (issuerSaveButton) { handleScheduleLiveIssuerSave(); return; }
+      var issuerBackButton = event.target.closest("[data-live-issuer-back]");
+      if (issuerBackButton) { if (typeof window.__backToScheduleEntryGroups === "function") window.__backToScheduleEntryGroups(); return; }
+      var liveJumpButton = event.target.closest("[data-live-jump]");
+      if (liveJumpButton) {
+        var jumpTarget = document.getElementById(liveJumpButton.getAttribute("data-live-jump"));
+        if (jumpTarget && drawerBody.contains(jumpTarget)) drawerBody.scrollTop = jumpTarget.offsetTop - 12;
+        return;
+      }
+      var liveActionButton = event.target.closest("[data-live-action]");
+      if (liveActionButton) { handleScheduleLiveAction(liveActionButton); return; }
+      var liveIssuerButton = event.target.closest("[data-live-issuer]");
+      if (liveIssuerButton) {
+        var issuerDraft = window.__scheduleEntryGroupDraft;
+        var issuerIndex = Number(liveIssuerButton.getAttribute("data-live-issuer"));
+        if (issuerDraft && issuerDraft.live && issuerDraft.live.issuers[issuerIndex]) {
+          if (window.__liveIssuerRevokePending !== issuerIndex) {
+            window.__liveIssuerRevokePending = issuerIndex;
+            var revokeBatch = currentBatchContext(), revokeSession = scheduleEntrySession(revokeBatch, issuerDraft.sessionId);
+            if (revokeSession) scheduleLiveRefresh(revokeBatch, revokeSession, issuerDraft);
+            toast("再次点击「确认撤回」后生效");
+            return;
+          }
+          window.__liveIssuerRevokePending = -1;
+          issuerDraft.live.issuers[issuerIndex].status = "已撤回";
+          var issuerBatch = currentBatchContext(), issuerSession = scheduleEntrySession(issuerBatch, issuerDraft.sessionId);
+          if (issuerSession) scheduleLiveRefresh(issuerBatch, issuerSession, issuerDraft);
+          toast("已撤回该发号员本场次授权");
+        }
+        return;
+      }
       var entryActionButton = event.target.closest("[data-entry-action]");
       if (entryActionButton) { handleScheduleEntryAction(entryActionButton); return; }
       var scheduleStepEdit = event.target.closest("[data-schedule-step-edit]");
@@ -21351,6 +21485,7 @@
       if (drawerBody.querySelector("[data-cert-wizard]")) certWizardSyncPropertyPanel();
     });
     document.body.addEventListener("change", function (event) {
+      if (event.target.matches("[data-live-n]")) { handleScheduleLiveNChange(event.target); return; }
       if (event.target.matches("[data-entry-filter-major], [data-entry-filter-level]")) { scheduleEntryFilterChanged(); return; }
       if (event.target.matches("[data-entry-candidate], [data-entry-select-page]")) {
         if (event.target.matches("[data-entry-select-page]")) {
@@ -24245,6 +24380,7 @@
           danceSession.major = danceSession.majors.join("、");
           danceSession.assigned = danceSession.candidateIds.length;
           danceSession.capacity = 40;
+          danceSession.groupingMode = danceSession.groupingMode || "live";
         }
       }
       return rows;
@@ -24320,6 +24456,7 @@
     }
     function scheduleEntryBatchErrors(batch) {
       return scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).reduce(function (errors, session) {
+        if (session && session.groupingMode === "live") return errors; /* 现场编组按到场顺序出号，不做提前分组完整性校验 */
         return errors.concat(scheduleEntryValidation(batch, session, session.entryGroups, true).errors.map(function (message) { return session.id + "：" + message; }));
       }, []);
     }
@@ -24374,8 +24511,16 @@
       if (!scheduleEntryWritable(batch)) return;
       var session = scheduleEntrySession(batch, id);
       if (!session || !scheduleEntryDanceCandidates(batch, session).length) { toast("请先分配舞蹈类考生"); return; }
-      window.__scheduleEntryGroupDraft = { batchId: batch.id, sessionId: id, original: JSON.stringify(session), groups: JSON.parse(JSON.stringify(session.entryGroups || [])) };
+      /* 场次若从未保存过编组方式，则停留在「待选择」，由决策卡显式选定后再展开配置 */
+      var savedMode = session.groupingMode === "live" ? "live" : (session.groupingMode === "pre" || (session.entryGroups || []).length ? "pre" : "");
+      window.__scheduleEntryGroupDraft = { batchId: batch.id, sessionId: id, original: JSON.stringify(session), groups: JSON.parse(JSON.stringify(session.entryGroups || [])), mode: savedMode, live: JSON.parse(JSON.stringify(session.liveGrouping || scheduleLiveDefault(batch, session))) };
+      window.__liveIssuerFormOpen = false;
+      window.__entryModePending = "";
+      window.__liveIssuerRevokePending = -1;
+      var entryHeadClose = drawer.querySelector(".drawer-head [data-close-drawer]");
+      if (entryHeadClose) entryHeadClose.textContent = "关闭";
       openDrawer("schedule-entry-groups");
+      scheduleEntryFootSync(window.__scheduleEntryGroupDraft);
     }
     function scheduleEntryGroupsHtml() {
       var batch = currentBatchContext(), draft = window.__scheduleEntryGroupDraft;
@@ -24400,8 +24545,296 @@
         }).join("");
         return '<section class="drawer-section"><div class="table-tools"><h3>第' + (groupIndex + 1) + '组 · ' + escapeHtml(pool.find(function (candidate) { return candidate.id === group.candidateIds[0]; })?.major || "") + ' · ' + group.candidateIds.length + '人</h3><div class="page-actions"><button class="btn" title="上移分组" aria-label="上移第' + (groupIndex + 1) + '组" data-entry-action="group-up" data-entry-group="' + groupIndex + '"' + (groupIndex ? '' : ' disabled') + '>↑</button><button class="btn" title="下移分组" aria-label="下移第' + (groupIndex + 1) + '组" data-entry-action="group-down" data-entry-group="' + groupIndex + '"' + (groupIndex < draft.groups.length - 1 ? '' : ' disabled') + '>↓</button><button class="btn" data-entry-action="dissolve" data-entry-group="' + groupIndex + '">解散分组</button></div></div><div class="table-wrap"><table><thead><tr><th>顺序</th><th>考生</th><th>专业</th><th>级别</th><th>操作</th></tr></thead><tbody>' + members + '</tbody></table></div></section>';
       }).join("");
-      return '<div class="schedule-entry-workbench"><div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>舞蹈考生 ' + validation.total + ' 人 · 已分组 ' + (validation.total - validation.ungrouped.length) + ' 人 · 未分组 ' + validation.ungrouped.length + ' 人 · 共 ' + draft.groups.length + ' 组</span></div><section class="drawer-section"><h3>未分组考生</h3>' + filtersHtml + '<div class="page-actions"><button class="btn primary" data-entry-action="create">勾选成组</button><select class="select" data-entry-target aria-label="目标分组"><option value="">选择已有分组</option>' + draft.groups.map(function (group, index) { return '<option value="' + index + '">第' + (index + 1) + '组</option>'; }).join("") + '</select><button class="btn" data-entry-action="add">加入所选组</button></div><div class="table-wrap"><table data-entry-pool><thead><tr><th><input type="checkbox" data-entry-select-page aria-label="全选当前页" title="全选当前页"></th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th></tr></thead><tbody>' + ungroupedRows + '</tbody></table></div></section>' + groupsHtml + '</div>';
+      var preHtml = '<div class="schedule-entry-workbench"><section class="drawer-section"><h3>未分组考生</h3><p class="muted" style="margin:0 0 8px;font-size:12px">已分组 ' + (validation.total - validation.ungrouped.length) + ' 人 · 未分组 ' + validation.ungrouped.length + ' 人 · 共 ' + draft.groups.length + ' 组</p>' + filtersHtml + '<div class="page-actions"><button class="btn primary" data-entry-action="create">勾选成组</button><select class="select" data-entry-target aria-label="目标分组"><option value="">选择已有分组</option>' + draft.groups.map(function (group, index) { return '<option value="' + index + '">第' + (index + 1) + '组</option>'; }).join("") + '</select><button class="btn" data-entry-action="add">加入所选组</button></div><div class="table-wrap"><table data-entry-pool><thead><tr><th><input type="checkbox" data-entry-select-page aria-label="全选当前页" title="全选当前页"></th><th>报名编号</th><th>考生</th><th>专业</th><th>级别</th></tr></thead><tbody>' + ungroupedRows + '</tbody></table></div></section>' + groupsHtml + '</div>';
+      var modeBody = draft.mode === "live" ? scheduleEntryLiveHtml(batch, session, draft)
+        : draft.mode === "pre" ? preHtml
+        : '<div class="mode-undecided"><strong>尚未选择编组方式</strong><span>选择「提前编组」或「现场编组」后，在此维护对应方案。</span></div>';
+      return scheduleEntryContextHtml(batch, session, validation, draft) + scheduleEntryModeDecisionHtml(batch, session, draft) + modeBody;
     }
+    /* ===== 考试编组：提前编组 / 现场编组双模式（抽屉内单选决策卡） ===== */
+    function scheduleEntryModeLabel(row) {
+      if (row.groupingMode === "live") return "现场";
+      if (row.groupingMode === "pre" || (row.entryGroups || []).length) return "提前 " + (row.entryGroups || []).length + "组";
+      return "待选择";
+    }
+    function scheduleLiveIssuedCount(batch, session) {
+      var shared = window.HBYXEntryLiveGrouping ? window.HBYXEntryLiveGrouping.planOf(batch.id, session.id) : null;
+      var rows = shared && Array.isArray(shared.issued) ? shared.issued : ((session.liveGrouping || {}).issued || []);
+      return rows.filter(function (entry) { return entry.status !== "已撤回"; }).length;
+    }
+    function scheduleEntryContextHtml(batch, session, validation, draft) {
+      var mixed = scheduleLiveOrganizations(batch, session).length > 1;
+      var issued = scheduleLiveIssuedCount(batch, session);
+      var stateText = draft.mode === "live" ? (issued ? '已发号 ' + issued + ' 人' : '尚未发号')
+        : draft.mode === "pre" ? '共 ' + draft.groups.length + ' 组' : '编组方式待选择';
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>舞蹈考生 ' + validation.total + ' 人 · ' + (mixed ? '混编场次' : '单机构场次') + ' · ' + escapeHtml(stateText) + '</span></div>';
+    }
+    function scheduleEntryModeDecisionHtml(batch, session, draft) {
+      var mode = draft.mode || "";
+      var groupCount = draft.groups.length;
+      var issuedCount = scheduleLiveIssuedCount(batch, session);
+      var orgCount = scheduleLiveOrganizations(batch, session).length;
+      function card(key, name, desc, status, active) {
+        return '<button type="button" class="mode-choice-card' + (active ? ' is-active' : '') + '" role="radio" aria-checked="' + (active ? 'true' : 'false') + '" data-entry-mode="' + key + '">' +
+          '<span class="mode-choice-top"><span class="mode-choice-radio" aria-hidden="true"></span><span class="mode-choice-name">' + name + '</span>' +
+          (active ? '<span class="tag blue">当前方案</span>' : '<span class="tag">未启用</span>') + '</span>' +
+          '<span class="mode-choice-desc">' + desc + '</span>' +
+          '<span class="mode-choice-status">本场次：' + escapeHtml(status) + '</span></button>';
+      }
+      var cards = '<div class="mode-choice-grid" role="radiogroup" aria-label="编组方式">' +
+        card("pre", "提前编组", "考前按专业、级别把考生排入固定小组，生成入场分组表；考生按既定组号入场。",
+          groupCount ? '已维护 ' + groupCount + ' 个分组' + (mode === "live" ? ' · 保存后清空' : '') : '尚未维护分组', mode === "pre") +
+        card("live", "现场编组", "号牌预印组号-编号、不印姓名；现场按到场顺序扫码发号，累计满 N 人自动开新组。",
+          '已按 ' + orgCount + ' 个机构设置每组人数 · ' + (issuedCount ? '已发号 ' + issuedCount + ' 人' : '尚未发号'), mode === "live") +
+        '</div>';
+      var pending = window.__entryModePending;
+      var warn = "";
+      if (pending) {
+        var consequence = pending === "live"
+          ? '现有 ' + groupCount + ' 个提前分组将被清空'
+          : (issuedCount ? '已产生的 ' + issuedCount + ' 条发号记录不再作为本场次编组依据' : '现场编组参数不再作为本场次编组依据');
+        warn = '<div class="live-mode-switch-warn"><span>切换为「' + (pending === "live" ? "现场编组" : "提前编组") + '」并保存后，' + consequence + '。</span><div class="page-actions"><button class="btn" data-entry-mode-cancel>继续编辑</button><button class="btn primary" data-entry-mode-confirm>确认切换</button></div></div>';
+      }
+      return '<div class="mode-decision"><div class="mode-decision-head"><h3>选择编组方式</h3><p>本场次只能采用一种编组方式；选择后展开对应配置，保存生效。</p></div>' +
+        cards + warn + (mode ? '' : '<p class="mode-decision-note">选择一种编组方式后，下方展开对应配置。</p>') + '</div>';
+    }
+    function scheduleEntryFootSync(draft) {
+      if (!drawerFoot) return;
+      if (!draft || !draft.mode) {
+        drawerFoot.innerHTML = '<button class="btn" data-close-drawer>取消</button><span class="muted" style="font-size:12px">请先选择编组方式</span>';
+        return;
+      }
+      drawerFoot.innerHTML = '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-entry-action="save">' + (draft.mode === "live" ? "保存现场编组方案" : "保存分组") + '</button>';
+    }
+    function scheduleLiveOrganizations(batch, session) {
+      var orgs = [];
+      scheduleEntryDanceCandidates(batch, session).forEach(function (candidate) {
+        var org = candidate.organization || "未标注机构";
+        if (orgs.indexOf(org) < 0) orgs.push(org);
+      });
+      return orgs;
+    }
+    function scheduleLiveDefault(batch, session) {
+      var perOrgN = {};
+      scheduleLiveOrganizations(batch, session).forEach(function (org) { perOrgN[org] = 10; });
+      return { perOrgN: perOrgN, issued: [], pending: null, issuers: scheduleLiveDefaultIssuers(batch, session) };
+    }
+    function scheduleLiveDefaultIssuers(batch, session) {
+      var mixed = scheduleLiveOrganizations(batch, session).length > 1;
+      if (mixed) return [{ id: "issuer-1", name: "张老师", phone: "138****6621", loginPhone: "13800006621", owner: "武汉承办中心 · 考点考务", status: "已授权" }];
+      var org = scheduleLiveOrganizations(batch, session)[0] || "";
+      return [{ id: "issuer-1", name: "王老师", phone: "139****2280", loginPhone: "13900002280", owner: org + " · 机构带队老师", status: "已授权" }];
+    }
+    function scheduleLiveN(live, org) {
+      var value = Number((live.perOrgN || {})[org] || 10);
+      if (!isFinite(value)) value = 10;
+      return Math.max(1, Math.min(30, Math.round(value)));
+    }
+    function scheduleLiveSegments(batch, session, live) {
+      var pool = scheduleEntryDanceCandidates(batch, session);
+      var cursor = 1, stackCursor = 0, segments = [];
+      scheduleLiveOrganizations(batch, session).forEach(function (org) {
+        var total = pool.filter(function (candidate) { return (candidate.organization || "未标注机构") === org; }).length;
+        var n = scheduleLiveN(live, org);
+        var groupCount = n <= 1 ? total : Math.ceil(total / n);
+        var cards = n <= 1 ? 0 : total;
+        segments.push({ org: org, n: n, total: total, groupCount: groupCount, fromGroup: cursor, toGroup: cursor + Math.max(groupCount, 1) - 1, stackFrom: stackCursor + 1, stackTo: stackCursor + cards });
+        cursor += Math.max(groupCount, 1);
+        stackCursor += cards;
+      });
+      return segments;
+    }
+    function scheduleLiveIssuedOf(live, org) {
+      return (live.issued || []).filter(function (entry) { return entry.org === org; });
+    }
+    function scheduleLiveCandidateSlot(batch, session, live, candidate) {
+      var org = candidate.organization || "未标注机构";
+      var segment = scheduleLiveSegments(batch, session, live).find(function (item) { return item.org === org; });
+      if (!segment) return null;
+      var used = scheduleLiveIssuedOf(live, org).length;
+      if (segment.n <= 1) return { single: true, org: org, group: Math.min(segment.toGroup, segment.fromGroup + used), no: 1, stackIndex: 0 };
+      var offset = used;
+      var group = Math.min(segment.toGroup, segment.fromGroup + Math.floor(offset / segment.n));
+      return { single: false, org: org, group: group, no: offset % segment.n + 1, stackIndex: segment.stackFrom + offset };
+    }
+    function scheduleLiveCodeText(entry) {
+      if (!entry) return "-";
+      return entry.single ? "第" + entry.group + "组 · 单人" : "第" + entry.group + "组-" + entry.no + "号";
+    }
+    function scheduleLiveStackSummary(segment) {
+      if (segment.n <= 1) return "不生成号牌，按单人入场";
+      var parts = [];
+      for (var index = 0; index < segment.groupCount && index < 3; index += 1) {
+        var size = index === segment.groupCount - 1 ? segment.total - index * segment.n : segment.n;
+        parts.push("第" + (segment.fromGroup + index) + "组 1-" + size + "号");
+      }
+      if (segment.groupCount > 3) parts.push("…共" + segment.groupCount + "组");
+      return parts.join(" / ");
+    }
+    function scheduleEntryLiveHtml(batch, session, draft) {
+      var live = draft.live || (draft.live = scheduleLiveDefault(batch, session));
+      if (!Array.isArray(live.issued)) live.issued = [];
+      if (!Array.isArray(live.issuers)) live.issuers = scheduleLiveDefaultIssuers(batch, session);
+      /* 发号动作在小程序「考务发号员」端完成，后台只读回显共享流水 */
+      var sharedPlan = window.HBYXEntryLiveGrouping ? window.HBYXEntryLiveGrouping.planOf(batch.id, session.id) : null;
+      if (sharedPlan && Array.isArray(sharedPlan.issued)) live.issued = sharedPlan.issued;
+      var pool = scheduleEntryDanceCandidates(batch, session);
+      var segments = scheduleLiveSegments(batch, session, live);
+      var mixed = segments.length > 1;
+      var issued = live.issued.filter(function (entry) { return entry.status !== "已撤回"; });
+      var revoked = live.issued.filter(function (entry) { return entry.status === "已撤回"; });
+      var issuedLocked = live.issued.length > 0;
+      var pendingRevoke = window.__liveIssuerRevokePending;
+      var paramsRows = segments.map(function (segment) {
+        return '<tr><td>' + escapeHtml(segment.org) + '</td><td>' + segment.total + ' 人</td>' +
+          '<td><input class="input" type="number" min="1" max="30" step="1" value="' + segment.n + '" data-live-n="' + escapeHtml(segment.org) + '" aria-label="' + escapeHtml(segment.org) + '每组人数" style="width:88px"' + (issuedLocked ? ' disabled title="已产生发号记录，N 不可再调整"' : '') + '></td>' +
+          '<td>' + segment.groupCount + ' 组</td><td>第' + segment.fromGroup + '组 ～ 第' + segment.toGroup + '组</td>' +
+          '<td>' + (segment.n <= 1 ? "不生成" : segment.stackFrom + " ～ " + segment.stackTo + " 张") + '</td></tr>';
+      }).join("");
+      var stackHtml = segments.map(function (segment) {
+        return '<div class="live-stack-item"><div><strong>' + escapeHtml(segment.org) + ' · 号牌套</strong><span>' + escapeHtml(scheduleLiveStackSummary(segment)) + '</span></div><span class="tag blue">' + (segment.n <= 1 ? "0 张" : segment.total + " 张") + '</span></div>';
+      }).join("");
+      var flowRows = live.issued.map(function (entry) {
+        var revokedRow = entry.status === "已撤回";
+        return '<tr><td>' + (revokedRow ? '<span class="muted">' + scheduleLiveCodeText(entry) + '</span>' : '<strong>' + scheduleLiveCodeText(entry) + '</strong>') + '</td><td>' + escapeHtml(entry.name) + '</td><td>' + escapeHtml(entry.org) + '</td><td>' + escapeHtml(entry.at || "-") + '</td><td>' + escapeHtml(entry.by || "-") + '</td><td>' + (revokedRow ? batchTagHtml("orange", "已撤回 · 号码作废") : batchTagHtml("green", "已发号")) + '</td></tr>';
+      }).join("");
+      var issuerRows = live.issuers.map(function (issuer, index) {
+        var confirming = pendingRevoke === index;
+        return '<tr><td>' + escapeHtml(issuer.name) + '</td><td>' + escapeHtml(issuer.loginPhone || issuer.phone) + '</td><td>' + escapeHtml(issuer.owner) + '</td><td>短信验证码</td><td>本场次 · 发号与撤回</td><td>' + batchTagHtml(issuer.status === "已授权" ? "green" : "", issuer.status) + '</td><td>' + (issuer.status === "已授权" ? '<button class="btn link' + (confirming ? ' danger-text' : '') + '" data-live-issuer="' + index + '">' + (confirming ? "确认撤回" : "撤回授权") + '</button>' : "-") + '</td></tr>';
+      }).join("");
+      var nav = '<div class="live-section-nav" aria-label="页面分区"><button type="button" data-live-jump="live-sec-plan">编组方案</button><button type="button" data-live-jump="live-sec-stack">号牌套</button><button type="button" data-live-jump="live-sec-progress">发号进度</button><button type="button" data-live-jump="live-sec-issuer">发号员授权</button></div>';
+      return '<div class="schedule-entry-mode-panel">' + nav +
+        '<section class="drawer-section" id="live-sec-plan"><h3>编组方案</h3><div class="info-banner">号牌按「组号-编号」预印，不印姓名；现场按到场顺序发号，号码发出后不重排。</div>' +
+        '<div class="live-meta-grid"><div><span>编组模式</span><strong>按到场顺序发号</strong></div><div><span>发号归属</span><strong>' + escapeHtml(mixed ? "承办单位 / 考点" : "报名机构带队老师") + '</strong></div><div><span>应到 / 已发号</span><strong>' + pool.length + ' 人 / ' + issued.length + ' 人</strong></div><div><span>未到场</span><strong>' + (pool.length - issued.length) + ' 人</strong></div></div>' +
+        '<div class="table-wrap" style="margin-top:10px"><table><thead><tr><th>报名机构</th><th>应到人数</th><th>每组人数 N</th><th>预计组数</th><th>组号段</th><th>号牌套</th></tr></thead><tbody>' + paramsRows + '</tbody></table></div>' +
+        '<p class="muted">每组人数按「机构 × 场次」设置，取值 1～30；累计满 N 人自动开新组，N=1 不生成号牌。</p></section>' +
+        '<section class="drawer-section" id="live-sec-stack"><div class="table-tools"><h3>号牌套</h3><div class="page-actions"><button class="btn" data-live-action="export-stack">导出号牌套</button></div></div><p class="muted">号牌按顺序叠放，发号员依次撕下递出。</p>' + stackHtml + '</section>' +
+        '<section class="drawer-section" id="live-sec-progress" data-live-readonly><div class="table-tools"><h3>现场发号进度</h3><span class="muted">实时同步 · 仅查看</span></div>' +
+        '<div class="live-issue-stats"><span class="tag">应到 ' + pool.length + '</span><span class="tag green">已发号 ' + issued.length + '</span><span class="tag orange">撤回作废 ' + revoked.length + '</span><span class="tag">未到场 ' + (pool.length - issued.length) + '</span></div>' +
+        (flowRows ? '<div class="table-wrap"><table><thead><tr><th>号码</th><th>考生</th><th>报名机构</th><th>发号时间</th><th>发号员</th><th>状态</th></tr></thead><tbody>' + flowRows + '</tbody></table></div>' : '<div class="empty-state">暂无发号记录。</div>') + '</section>' +
+        '<section class="drawer-section" id="live-sec-issuer"><div class="table-tools"><h3>场次发号员授权</h3><div class="page-actions"><button class="btn" data-live-action="add-issuer">新增发号员</button></div></div><div class="info-banner">发号员账号绑定手机号，仅本场次有效，权限为扫码出号与撤回。' + (mixed ? '混编场次由承办单位或考点统一发号。' : '本场次由机构带队老师发号。') + '</div>' +
+        '<div class="table-wrap"><table><thead><tr><th>发号员</th><th>登录手机号</th><th>归属</th><th>登录方式</th><th>授权范围</th><th>状态</th><th>操作</th></tr></thead><tbody>' + issuerRows + '</tbody></table></div>' +
+        '<p class="muted">发号员使用授权手机号获取短信验证码登录；授权撤回或场次结束后账号自动失效。</p></section>' +
+        '</div>';
+    }
+    function scheduleLiveRefresh(batch, session, draft) {
+      if (window.__liveIssuerFormOpen) return;
+      drawerBody.innerHTML = scheduleEntryGroupsHtml();
+      scheduleEntryFootSync(draft);
+    }
+    /* ===== 新增发号员：抽屉内二级页（保留父页草稿） ===== */
+    function scheduleLiveIssuerFormHtml(batch, session, draft) {
+      var orgs = scheduleLiveOrganizations(batch, session);
+      var mixed = orgs.length > 1;
+      var owners = ["承办单位 / 考点考务"].concat(orgs.map(function (org) { return org + " · 机构带队老师"; }));
+      var defaultOwner = mixed ? owners[0] : (owners[1] || owners[0]);
+      return '<div class="live-issuer-form">' +
+        '<div class="batch-context-banner"><strong>' + escapeHtml(session.id + " · " + session.date + " " + session.time) + '</strong><span>新增发号员 · ' + (mixed ? "混编场次统一发号" : "单机构场次") + '</span></div>' +
+        '<div class="info-banner">发号员账号绑定手机号，仅本场次有效，权限为扫码出号与撤回；使用授权手机号获取短信验证码登录。</div>' +
+        '<div class="field"><label>发号员姓名 *</label><input class="input" data-issuer-field="name" maxlength="20" placeholder="请输入姓名"></div>' +
+        '<div class="field"><label>登录手机号 *</label><input class="input" data-issuer-field="phone" type="tel" inputmode="numeric" maxlength="11" placeholder="请输入 11 位手机号"><span class="muted">用于接收短信验证码，须为本人可用号码</span></div>' +
+        '<div class="field"><label>归属 *</label><select class="select" data-issuer-field="owner">' + owners.map(function (owner) { return '<option value="' + escapeHtml(owner) + '"' + (owner === defaultOwner ? ' selected' : '') + '>' + escapeHtml(owner) + '</option>'; }).join("") + '</select></div>' +
+        '<div class="field"><label>登录方式</label><div class="live-issuer-readonly">短信验证码 · 当场次有效</div></div>' +
+        '<div class="field"><label>授权范围</label><div class="live-issuer-readonly">本场次 · 发号与撤回</div></div>' +
+        '<div class="live-issuer-error" data-live-issuer-error hidden></div>' +
+        '</div>';
+    }
+    function openScheduleLiveIssuerForm() {
+      var draft = window.__scheduleEntryGroupDraft;
+      if (!draft || !draft.live) return;
+      var batch = currentBatchContext(), session = scheduleEntrySession(batch, draft.sessionId);
+      if (!session) return;
+      window.__liveIssuerFormOpen = true;
+      window.__liveIssuerRevokePending = -1;
+      drawerTitle.textContent = "新增发号员";
+      drawerBody.innerHTML = scheduleLiveIssuerFormHtml(batch, session, draft);
+      drawerFoot.innerHTML = '<button class="btn" data-live-issuer-back>返回编组方案</button><button class="btn primary" data-live-issuer-save>保存并授权</button>';
+      drawerBody.scrollTop = 0;
+      var headClose = drawer.querySelector(".drawer-head [data-close-drawer]");
+      if (headClose) headClose.textContent = "返回";
+    }
+    window.__backToScheduleEntryGroups = function () {
+      var draft = window.__scheduleEntryGroupDraft;
+      window.__liveIssuerFormOpen = false;
+      window.__liveIssuerRevokePending = -1;
+      var headClose = drawer.querySelector(".drawer-head [data-close-drawer]");
+      if (headClose) headClose.textContent = "关闭";
+      if (!draft) return;
+      drawerTitle.textContent = (DRAWER["schedule-entry-groups"] || {}).title || "考试编组（舞蹈）";
+      drawerBody.innerHTML = scheduleEntryGroupsHtml();
+      scheduleEntryFootSync(draft);
+      drawerBody.scrollTop = 0;
+    };
+    function handleScheduleLiveIssuerSave() {
+      var draft = window.__scheduleEntryGroupDraft;
+      if (!draft || !draft.live) return;
+      function field(name) { var el = drawerBody.querySelector('[data-issuer-field="' + name + '"]'); return el ? String(el.value || "").trim() : ""; }
+      var errorEl = drawerBody.querySelector("[data-live-issuer-error]");
+      if (errorEl) { errorEl.hidden = true; errorEl.textContent = ""; }
+      function fail(message) { if (errorEl) { errorEl.hidden = false; errorEl.textContent = message; } toast(message); }
+      var name = field("name"), phone = field("phone"), owner = field("owner");
+      if (!name) return fail("请填写发号员姓名");
+      if (!/^1\d{10}$/.test(phone)) return fail("请输入正确的 11 位手机号");
+      if ((draft.live.issuers || []).some(function (issuer) { return issuer.loginPhone === phone && issuer.status !== "已撤回"; })) return fail("该手机号已在本场次授权名单中");
+      if (!owner) return fail("请选择归属");
+      draft.live.issuers = draft.live.issuers || [];
+      draft.live.issuers.push({ id: "issuer-" + Date.now(), name: name, phone: phone.replace(/^(\d{3})\d{4}(\d{4})$/, "$1****$2"), loginPhone: phone, owner: owner, status: "已授权" });
+      window.__backToScheduleEntryGroups();
+      toast("已新增发号员 " + name + "，保存方案后授权生效");
+    }
+    function handleScheduleLiveAction(button) {
+      var draft = window.__scheduleEntryGroupDraft;
+      if (!draft || !draft.live) return;
+      var batch = currentBatchContext();
+      var session = scheduleEntrySession(batch, draft.sessionId);
+      if (!session) return;
+      var action = button.getAttribute("data-live-action");
+      if (action === "export-stack") {
+        var segments = scheduleLiveSegments(batch, session, draft.live);
+        var rows = [["报名机构", "组号", "编号"]];
+        segments.forEach(function (segment) {
+          if (segment.n <= 1) return;
+          for (var offset = 0; offset < segment.total; offset += 1) rows.push([segment.org, String(segment.fromGroup + Math.floor(offset / segment.n)), String(offset % segment.n + 1)]);
+        });
+        if (rows.length === 1) { toast("当前 N=1，不生成号牌"); return; }
+        var csv = rows.map(function (row) { return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
+        var url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
+        var link = document.createElement("a"); link.href = url; link.download = "号牌套_" + session.id + ".csv"; link.click();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        toast("号牌套已导出，共 " + (rows.length - 1) + " 张");
+        return;
+      }
+      if (action === "add-issuer") { openScheduleLiveIssuerForm(); return; }
+    }
+    function handleScheduleLiveNChange(input) {
+      var draft = window.__scheduleEntryGroupDraft;
+      if (!draft || !draft.live) return;
+      var org = input.getAttribute("data-live-n");
+      var issuedCount = (draft.live.issued || []).length;
+      var sharedPlan = window.HBYXEntryLiveGrouping ? window.HBYXEntryLiveGrouping.planOf(draft.batchId, draft.sessionId) : null;
+      if (sharedPlan && Array.isArray(sharedPlan.issued)) issuedCount = Math.max(issuedCount, sharedPlan.issued.length);
+      if (issuedCount) { toast("已有发号记录，号码不重排，N 不可再调整"); input.value = scheduleLiveN(draft.live, org); return; }
+      var value = Number(input.value);
+      if (!isFinite(value)) value = 10;
+      value = Math.max(1, Math.min(30, Math.round(value)));
+      input.value = value;
+      draft.live.perOrgN[org] = value;
+      var batch = currentBatchContext(), session = scheduleEntrySession(batch, draft.sessionId);
+      if (session) scheduleLiveRefresh(batch, session, draft);
+    }
+    /* 小程序端发号后，后台抽屉只读进度实时刷新 */
+    if (window.HBYXEntryLiveGrouping) {
+      window.HBYXEntryLiveGrouping.subscribe(function () {
+        var liveDraft = window.__scheduleEntryGroupDraft;
+        if (!liveDraft || liveDraft.mode !== "live" || !drawerBody || !drawerBody.querySelector("[data-live-readonly]")) return;
+        try {
+          var liveBatch = currentBatchContext();
+          var liveSession = scheduleEntrySession(liveBatch, liveDraft.sessionId);
+          if (liveSession) scheduleLiveRefresh(liveBatch, liveSession, liveDraft);
+        } catch (error) { /* 未进入批次上下文时忽略 */ }
+      });
+    }
+
     function scheduleEntryFilterCandidates(candidates, filters) {
       return candidates.filter(function (candidate) {
         return (!filters.major || candidate.major === filters.major) && (!filters.levels.length || filters.levels.indexOf(candidate.level) > -1);
@@ -24467,9 +24900,31 @@
       if (!session || JSON.stringify(session) !== draft.original) { toast("场次已变更，请关闭后重新打开分组"); return; }
       var action = button.getAttribute("data-entry-action");
       if (action === "save") {
+        if (!draft.mode) { toast("请先选择编组方式"); return; }
+        if (draft.mode === "live") {
+          batch.scheduleSessionRecords = scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).map(function (record) {
+            return record.id === session.id ? Object.assign({}, record, { groupingMode: "live", liveGrouping: JSON.parse(JSON.stringify(draft.live)), entryGroups: [] }) : record;
+          });
+          batch.scheduleSessionRecordsInitialized = true;
+          if (window.HBYXEntryLiveGrouping) {
+            var liveCandidates = scheduleEntryDanceCandidates(batch, session).map(function (candidate) {
+              return { id: candidate.id, code: candidate.code || candidate.id, name: candidate.name, org: candidate.organization || "未标注机构", major: candidate.major, level: candidate.level };
+            });
+            window.HBYXEntryLiveGrouping.savePlan({
+              batchId: batch.id, sessionId: session.id, batchName: batch.name,
+              sessionLabel: [session.date, session.time, session.site, session.room].filter(Boolean).join(" · "),
+              perOrgN: JSON.parse(JSON.stringify(draft.live.perOrgN || {})),
+              issuers: JSON.parse(JSON.stringify(draft.live.issuers || [])),
+              candidates: liveCandidates
+            });
+          }
+          syncBatchDemo(batch);
+          appendBatchChangeRecord("场次局部调整", batch, { objectType: "考试编组", objectLabel: session.id, before: session.groupingMode === "live" ? "现场编组" : "提前编组", after: "现场编组", reason: "切换为现场按到场顺序发号编组", impact: "现场不发号即未到场，无需登记缺考；不改变逐人评分。", snapshots: { before: [JSON.stringify(session.liveGrouping || {})], after: [JSON.stringify(draft.live)] } });
+          closeDrawer(); window.__scheduleEntryGroupDraft = null; refreshBatchChangeView(); toast("现场编组方案已保存"); return;
+        }
         var errors = scheduleEntryValidation(batch, session, draft.groups, false).errors;
         if (errors.length) { toast(errors[0]); return; }
-        batch.scheduleSessionRecords = scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).map(function (record) { return record.id === session.id ? Object.assign({}, record, { entryGroups: JSON.parse(JSON.stringify(draft.groups)) }) : record; });
+        batch.scheduleSessionRecords = scheduleArrangeSessionRows(batch, scheduleWizardEntryMode()).map(function (record) { return record.id === session.id ? Object.assign({}, record, { entryGroups: JSON.parse(JSON.stringify(draft.groups)), groupingMode: "pre" }) : record; });
         batch.scheduleSessionRecordsInitialized = true;
         syncBatchDemo(batch);
         appendBatchChangeRecord("场次局部调整", batch, { objectType: "入场分组", objectLabel: session.id, before: "共" + (session.entryGroups || []).length + "组", after: "共" + draft.groups.length + "组", reason: "人工维护舞蹈考生入场分组", impact: "不改变逐人评分及其他场次。", snapshots: { before: [JSON.stringify(session.entryGroups || [])], after: [JSON.stringify(draft.groups)] } });
@@ -25007,7 +25462,7 @@
       var rowHtml = rows.map(function (row) {
         var key = scheduleRoomKey(row.site, row.room);
         var hidden = key === selectedKey ? "" : " hidden";
-        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(scheduleSessionMajors(row).join("、")) + '" data-schedule-session-majors="' + escapeHtml(JSON.stringify(scheduleSessionMajors(row))) + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(scheduleSessionMajors(row).join("、") || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button>' + (scheduleEntryDanceCandidates(batch, row).length && scheduleRoleCanWrite(role, state.phase) ? '<button type="button" class="btn link" data-schedule-entry-groups="' + escapeHtml(row.id) + '">入场分组（' + (row.entryGroups || []).length + '组）</button>' : '') + '<button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
+        return '<tr data-schedule-room-linked data-schedule-room-session data-schedule-room-key="' + escapeHtml(key) + '" data-schedule-session-id="' + escapeHtml(row.id) + '" data-schedule-session-site="' + escapeHtml(row.site) + '" data-schedule-session-room="' + escapeHtml(scheduleRoomName(row.room)) + '" data-schedule-session-major="' + escapeHtml(scheduleSessionMajors(row).join("、")) + '" data-schedule-session-majors="' + escapeHtml(JSON.stringify(scheduleSessionMajors(row))) + '" data-schedule-session-date="' + escapeHtml(row.date) + '" data-schedule-session-time="' + escapeHtml(row.time) + '" data-schedule-session-assigned="' + escapeHtml(String(row.assigned || 0)) + '" data-schedule-session-capacity="' + escapeHtml(String(row.capacity || 0)) + '" data-schedule-session-candidate-ids="' + escapeHtml((row.candidateIds || []).join("|")) + '" data-schedule-session-note="' + escapeHtml(row.note || "") + '"' + hidden + '><td>' + escapeHtml(row.id) + '</td><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.time) + '</td><td>' + escapeHtml(scheduleSessionMajors(row).join("、") || "-") + '</td><td>' + escapeHtml(String(row.assigned) + "/" + String(row.capacity)) + '</td><td>' + batchTagHtml(row.result === "无冲突" ? "green" : "orange", row.result) + '</td><td>' + batchTagHtml("blue", row.status) + '</td><td><div class="page-actions"><button type="button" class="btn link" data-schedule-step-edit aria-label="编辑场次 ' + escapeHtml(row.id) + '">编辑</button><button type="button" class="btn link" data-schedule-candidate-assign aria-label="为场次 ' + escapeHtml(row.id) + ' 分配考生">分配考生</button>' + (scheduleEntryDanceCandidates(batch, row).length && scheduleRoleCanWrite(role, state.phase) ? '<button type="button" class="btn link" data-schedule-entry-groups="' + escapeHtml(row.id) + '">考试编组 · ' + scheduleEntryModeLabel(row) + '</button>' : '') + '<button type="button" class="btn link danger-text" data-schedule-step-delete aria-label="删除场次 ' + escapeHtml(row.id) + '">删除</button></div></td></tr>';
       }).join("");
       var initialCount = roomCounts[selectedKey] || 0;
       var selectedLabel = selectedSite && selectedRoom ? selectedSite + " / " + selectedRoom : "未选择考场";
@@ -25320,7 +25775,7 @@
       foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-schedule-save-candidates data-save-and-group>保存并分组</button><button class="btn primary" data-schedule-save-candidates>保存分配</button>'
     };
     DRAWER["schedule-entry-groups"] = {
-      title: "舞蹈考生入场分组", wide: true, body: scheduleEntryGroupsHtml,
+      title: "考试编组（舞蹈）", wide: true, body: scheduleEntryGroupsHtml,
       foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-entry-action="save">保存分组</button>'
     };
     DRAWER["schedule-publish"] = {
