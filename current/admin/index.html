@@ -24282,7 +24282,14 @@
     }, true);
 
     function scheduleRoleCanWrite(role, phase) {
-      return phase === "编排中" && role === "training";
+      /* 维护入场分组 / 排期写操作总闸：
+         培训机构：仅「编排中」可维护（提交排期后只读）；
+         平台 / 承办单位：可在「编排中」「待复核」代下级机构操作（已发布只读）；
+         「已发布」「线上考试」与未明确阶段一律只读。 */
+      if (phase === "已发布" || phase === "线上考试") return false;
+      if (role === "training") return phase === "编排中";
+      if (role === "platform" || role === "organizer") return phase === "编排中" || phase === "待复核";
+      return false;
     }
     function schedulePhaseOf(batch) {
       if (!batch || isOnlineBatch(batch)) return "线上考试";
