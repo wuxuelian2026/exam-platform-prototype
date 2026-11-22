@@ -30,6 +30,10 @@ jobs:
         with:
           path: current
 
+      # 上传后立即部署偶发 “Found 0 artifact(s)” 的接口延迟，等待元数据可见再部署
+      - name: Wait for Pages artifact propagation
+        run: sleep 15
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
