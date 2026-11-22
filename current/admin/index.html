@@ -2159,6 +2159,10 @@
     .cert-table.is-sticky-table th:last-child,
     .cert-table.is-sticky-table td:last-child { min-width: 190px; }
     .cert-table.is-sticky-table .operation { display: flex; flex-wrap: wrap; gap: 6px; min-width: 174px; }
+    .cert-workbench .cert-table.is-sticky-table .operation { gap: 4px; }
+    .cert-workbench .cert-table .operation .btn.link { padding: 0 2px; }
+    /* 「无效 + 原因」比一列宽，允许换行，不要压到生成时间 */
+    .cert-workbench .cert-table td[data-cert-status-cell] { white-space: normal; }
     .cert-table.is-sticky-table .operation .btn { flex: 0 0 auto; }
     .cert-library-workbench .certificate-print-table th:nth-child(2),
     .cert-library-workbench .certificate-print-table td:nth-child(2) { min-width: 160px; }
@@ -4353,7 +4357,7 @@
                     <strong>2026下半年 · 武汉</strong>
                     <select class="select cert-batch-select" aria-label="切换批次"><option>2026下半年 · 武汉</option><option>2026宜昌加场</option></select>
                   </div>
-                  <span>成绩发布状态：已发布 ｜ 证书状态：已生成 ｜ 最后生成：2026-08-30 10:28</span>
+                  <span>成绩发布状态：已发布 ｜ 证书发布：待发布 ｜ 最后生成：2026-08-30 10:28</span>
                 </div>
                 <div class="mini-stat"><span>承办单位</span><strong>武汉承办中心</strong></div>
                 <div class="mini-stat"><span>发证日期</span><strong>2026-08-30</strong></div>
@@ -4361,15 +4365,16 @@
               </div>
               <div class="cert-summary-grid">
                 <div class="card cert-stat"><span>总合格人数</span><strong>135</strong></div>
-                <div class="card cert-stat"><span>已生成</span><strong>132</strong></div>
                 <div class="card cert-stat"><span>待生成</span><strong>3</strong></div>
-                <div class="card cert-stat"><span>已提交</span><strong>0</strong></div>
+                <div class="card cert-stat"><span>待发布</span><strong>132</strong></div>
+                <div class="card cert-stat"><span>已发布</span><strong>0</strong></div>
                 <div class="card cert-stat"><span>号码段</span><button class="btn link" data-drawer="cert-number-segment">查看</button></div>
               </div>
               <div class="filter-card">
                 <div class="field"><label>专业</label><select class="select" data-cert-batch-major-filter><option>全部专业</option><option>钢琴</option><option>中国舞</option><option>小提琴</option></select></div>
                 <div class="field"><label>级别</label><select class="select" data-cert-batch-level-filter><option>全部级别</option><option>1级</option><option>3级</option><option>5级</option><option>8级</option></select></div>
-                <div class="field"><label>证书状态</label><select class="select" data-cert-batch-status-filter><option>全部状态</option><option>待生成</option><option>待生效</option><option>有效</option><option>无效</option></select></div>
+                <div class="field"><label>发布状态</label><select class="select" data-cert-batch-status-filter><option>全部状态</option><option>未生成</option><option>待发布</option><option>已发布</option></select></div>
+                <div class="field"><label>有效状态</label><select class="select" data-cert-batch-valid-filter><option>全部状态</option><option>有效</option><option>无效</option></select></div>
                 <div class="field"><label>考生信息</label><input class="input" data-cert-batch-keyword-filter placeholder="姓名/证件号/证书编号"></div>
                 <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-cert-batch-search>查询</button><button class="btn" data-cert-batch-reset>重置</button></div></div>
               </div>
@@ -4380,8 +4385,8 @@
                 </div>
                 <div class="table-wrap">
                   <table class="cert-table is-sticky-table has-sticky-action">
-                    <colgroup><col style="width:48px"><col style="width:145px"><col style="width:165px"><col style="width:125px"><col style="width:80px"><col style="width:70px"><col style="width:90px"><col style="width:180px"><col style="width:170px"><col style="width:148px"><col style="width:210px"></colgroup>
-                    <thead><tr><th class="sticky-left-cell" style="width:56px">选择</th><th class="sticky-left-cell">考生</th><th>证件号码</th><th>报名机构</th><th>专业</th><th>级别</th><th>成绩等级</th><th>证书编号</th><th>证书状态</th><th>生成时间</th><th>操作</th></tr></thead>
+                    <colgroup><col style="width:48px"><col style="width:126px"><col style="width:148px"><col style="width:128px"><col style="width:66px"><col style="width:58px"><col style="width:74px"><col style="width:150px"><col style="width:92px"><col style="width:136px"><col style="width:140px"><col style="width:268px"></colgroup>
+                    <thead><tr><th class="sticky-left-cell" style="width:56px">选择</th><th class="sticky-left-cell">考生</th><th>证件号码</th><th>报名机构</th><th>专业</th><th>级别</th><th>成绩等级</th><th>证书编号</th><th>发布状态</th><th>有效状态</th><th>生成时间</th><th>操作</th></tr></thead>
                     <tbody data-cert-batch-table-body>
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">张三<br><span>REG20260001</span></td><td>420111198511131234</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050012<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
                       <tr><td><input type="checkbox" checked></td><td class="cert-candidate-cell">李四<br><span>REG20260002</span></td><td>420106200311055678</td><td>光谷少儿艺术中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td class="cert-no-cell">WH20260102050013<br><span>武汉 / 2026 / 钢琴 / 5级</span></td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:28</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>
@@ -11565,23 +11570,33 @@
       if (!root) return;
       var major = root.querySelector('[data-cert-batch-major-filter]');
       var level = root.querySelector('[data-cert-batch-level-filter]');
-      var status = root.querySelector('[data-cert-batch-status-filter]');
+      var publish = root.querySelector('[data-cert-batch-status-filter]');
+      var valid = root.querySelector('[data-cert-batch-valid-filter]');
       var keyword = root.querySelector('[data-cert-batch-keyword-filter]');
       if (reset) {
         if (major) major.value = "全部专业";
         if (level) level.value = "全部级别";
-        if (status) status.value = "全部状态";
+        if (publish) publish.value = "全部状态";
+        if (valid) valid.value = "全部状态";
         if (keyword) keyword.value = "";
       }
       var majorValue = major && major.value !== "全部专业" ? major.value : "";
       var levelValue = level && level.value !== "全部级别" ? level.value : "";
-      var statusValue = status && status.value !== "全部状态" ? status.value : "";
+      var publishValue = publish && publish.value !== "全部状态" ? publish.value : "";
+      var validValue = valid && valid.value !== "全部状态" ? valid.value : "";
       var keywordValue = keyword ? keyword.value.trim().toLowerCase() : "";
       var rows = Array.from(root.querySelectorAll("[data-cert-batch-table-body] > tr")).filter(function (row) { return !row.hasAttribute("data-cert-batch-empty"); });
       var visible = 0;
       rows.forEach(function (row) {
         var text = (row.textContent || "").toLowerCase();
-        var matches = (!majorValue || text.indexOf(majorValue.toLowerCase()) > -1) && (!levelValue || text.indexOf(levelValue.toLowerCase()) > -1) && (!statusValue || text.indexOf(statusValue.toLowerCase()) > -1) && (!keywordValue || text.indexOf(keywordValue) > -1);
+        var publishCell = row.querySelector("[data-cert-publish-cell]");
+        var validCell = certStatusCellOf(row);
+        var publishText = publishCell ? (publishCell.textContent || "").replace(/\s+/g, "") : "";
+        var validText = validCell ? (validCell.textContent || "").replace(/\s+/g, "") : "";
+        // 「有效」是「无效」的前缀，必须从开头比，否则筛有效会把无效也带出来
+        var matchPublish = !publishValue || publishText.indexOf(publishValue) > -1;
+        var matchValid = !validValue || (validValue === "有效" ? validText.indexOf("有效") === 0 : validText.indexOf("无效") === 0);
+        var matches = (!majorValue || text.indexOf(majorValue.toLowerCase()) > -1) && (!levelValue || text.indexOf(levelValue.toLowerCase()) > -1) && matchPublish && matchValid && (!keywordValue || text.indexOf(keywordValue) > -1);
         row.hidden = !matches;
         if (matches) visible += 1;
       });
@@ -11614,16 +11629,20 @@
         var batchTitle = batchCard && batchCard.querySelector(".cert-batch-main strong");
         if (batchTitle) batchTitle.textContent = batch.name;
         var batchMeta = batchCard && batchCard.querySelector(".cert-batch-main > span");
-        if (batchMeta) batchMeta.textContent = "批次 ID：" + batch.id + " ｜ 成绩发布状态：" + (batch.scorePublished ? "已发布" : "待发布") + " ｜ 证书状态：" + (batch.certSubmitted ? "已发布" : batch.certGenerated ? "已生成" : "待生成");
+        if (batchMeta) batchMeta.textContent = "批次 ID：" + batch.id + " ｜ 成绩发布状态：" + (batch.scorePublished ? "已发布" : "待发布") + " ｜ 证书发布：" + (batch.certSubmitted ? "已发布" : batch.certGenerated ? "待发布" : "未生成");
         var batchSelect = batchCard && batchCard.querySelector(".cert-batch-select");
         if (batchSelect) {
           batchSelect.innerHTML = BATCH_DEMO_LIST.filter(isPublishedBatch).map(function (item) { return '<option value="' + escapeHtml(item.id) + '">' + escapeHtml(item.name) + '</option>'; }).join("");
           batchSelect.value = batch.id;
         }
-        var statValues = [batch.passed, batch.certGenerated, batch.certPending, batch.certSubmitted];
+        // 待发布 = 已生成 - 已发布：发布一批后这里要归零，不能用累计生成数
+        var certPendingPublish = Math.max(0, (Number(batch.certGenerated) || 0) - (Number(batch.certSubmitted) || 0));
+        var statValues = [batch.passed, batch.certPending, certPendingPublish, batch.certSubmitted];
         workbench.querySelectorAll(".cert-summary-grid .cert-stat strong").forEach(function (node, index) { if (statValues[index] != null) node.textContent = formatDemoNumber(statValues[index]); });
         var statusFilter = workbench.querySelector('[data-cert-batch-status-filter]');
-        if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>待生成</option><option>待生效</option><option>有效</option><option>无效</option>';
+        if (statusFilter) statusFilter.innerHTML = '<option>全部状态</option><option>未生成</option><option>待发布</option><option>已发布</option>';
+        var validFilter = workbench.querySelector('[data-cert-batch-valid-filter]');
+        if (validFilter) validFilter.value = '全部状态';
         if (isOnlineBatch(batch)) {
           var onlineCertificateBody = workbench.querySelector('.cert-table:not(.certificate-print-table) tbody');
           if (onlineCertificateBody) onlineCertificateBody.innerHTML = '<tr><td><input type="checkbox"></td><td class="cert-candidate-cell">李同学<br><span>REG-ONLINE-001</span></td><td>420105199406141201</td><td>宜昌承办中心</td><td>钢琴</td><td>5级</td><td>优秀</td><td>-</td><td><span class="tag orange">待生成</span></td><td>-</td><td><button class="btn link" data-auth-roles="platform" data-drawer="cert-batch-generate">生成</button></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">王同学<br><span>REG-ONLINE-002</span></td><td>420506199903112302</td><td>宜昌承办中心</td><td>钢琴</td><td>6级</td><td>良好</td><td class="cert-no-cell">YC20260102060002</td><td><span class="tag blue">已生成</span></td><td>2026-08-30 10:32</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr><tr><td><input type="checkbox"></td><td class="cert-candidate-cell">赵同学<br><span>REG-ONLINE-003</span></td><td>420504199606243403</td><td>宜昌承办中心</td><td>中国舞</td><td>4级</td><td>合格</td><td class="cert-no-cell">YC20260203040003</td><td><span class="tag green">已提交</span></td><td>2026-08-29 16:20</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">详情</button><button class="btn link" data-drawer="cert-batch-preview">预览</button><button class="btn link" data-toast="电子证书下载中">下载</button></div></td></tr>';
@@ -22656,6 +22675,15 @@
         window.__certificateAudit.push({ batchId: submitBatch.id, action: "发布", operator: "当前用户", time: formatDateTime(new Date()), reason: "证书文件、编号和防伪二维码校验通过" });
         submitBatch.certSubmitted = submitBatch.certGenerated;
         submitBatch.certLibrary = submitBatch.certSubmitted;
+        // 发布只推进阶段：待发布 → 已发布；有效/无效不受影响
+        var publishWorkbench = document.querySelector('.batch-workbench[data-subview="certificates"] .cert-workbench, [data-page="certificates"].active .cert-workbench');
+        if (publishWorkbench) {
+          Array.prototype.forEach.call(publishWorkbench.querySelectorAll("table.cert-table tbody tr"), function (row) {
+            if (!row.cells || row.hasAttribute("data-cert-batch-empty") || !certStatusCellOf(row)) return;
+            if (certRowIsInvalid(row) || certDisplayOfRow(row).stage === "待生成") return;
+            setCertificateRowState(row, "已提交", true, "");
+          });
+        }
         closeDrawer();
         syncBatchDemo(submitBatch);
         toast("证书已提交，证书号已锁定并进入证书库");
@@ -24389,12 +24417,12 @@
     }
     function certClearNumbersBodyHtml() {
       var batch = currentBatchContext();
-      return '<div class="info-banner"><strong>只有“已生成”的证书能清号：</strong>已提交或已作废的不能清号、不能改号。</div><dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>清除范围</dt><dd>已勾选 ' + formatDemoNumber(Math.max(batch.certGenerated - batch.certSubmitted, 0)) + ' 本已生成证书</dd><dt>当前状态</dt><dd><span class="tag blue">已生成</span></dd><dt>清除后状态</dt><dd><span class="tag orange">待生成</span></dd></dl><div class="field" style="margin-top:14px"><label>清除原因 *</label><textarea class="textarea" data-cert-clear-reason>编号规则选择有误，需要重新生成。</textarea></div>';
+      return '<div class="info-banner"><strong>只有“待发布”的证书能清号：</strong>已发布或已作废的不能清号、不能改号。</div><dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>清除范围</dt><dd>已勾选 ' + formatDemoNumber(Math.max(batch.certGenerated - batch.certSubmitted, 0)) + ' 本已生成证书</dd><dt>当前状态</dt><dd><span class="tag blue">待发布</span></dd><dt>清除后状态</dt><dd><span class="tag orange">待生成</span></dd></dl><div class="field" style="margin-top:14px"><label>清除原因 *</label><textarea class="textarea" data-cert-clear-reason>编号规则选择有误，需要重新生成。</textarea></div>';
     }
     function certSubmitBodyHtml() {
       var batch = currentBatchContext();
       return [
-        '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>发布证书数量</dt><dd>' + formatDemoNumber(batch.certGenerated - batch.certSubmitted) + '本</dd><dt>证书编号段</dt><dd>当前批次号段快照</dd><dt>发布后状态</dt><dd><span class="tag green">已提交</span></dd><dt>开放范围</dt><dd>平台、承办单位、培训机构、学生/家长按权限查看、下载、打印。</dd></dl>',
+        '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>发布证书数量</dt><dd>' + formatDemoNumber(batch.certGenerated - batch.certSubmitted) + '本</dd><dt>证书编号段</dt><dd>当前批次号段快照</dd><dt>发布后状态</dt><dd><span class="tag green">已发布</span> <span class="muted">有效 / 无效状态不变</span></dd><dt>开放范围</dt><dd>平台、承办单位、培训机构、学生/家长按权限查看、下载、打印。</dd></dl>',
         '<div class="table-card" style="margin-top:14px"><div class="table-tools"><h2 class="table-title">发布前检查</h2><span class="tag green">可发布</span></div><div class="table-wrap"><table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody><tr><td>证书编号唯一</td><td><span class="tag green">通过</span></td></tr><tr><td>证书文件生成</td><td><span class="tag green">132本已生成</span></td></tr><tr><td>防伪二维码</td><td><span class="tag green">已生成</span></td></tr><tr><td>待生成证书</td><td><span class="tag orange">3本，可本次排除</span></td></tr></tbody></table></div></div>'
       ].join("");
     }
@@ -24424,7 +24452,8 @@
       if (!row) return "";
       if (row.dataset && row.dataset.certNumber) return row.dataset.certNumber;
       var cell = row.querySelector(".cert-no-cell");
-      var text = cell ? (cell.textContent || "").replace(/\s+/g, " ").trim().split(" ")[0] : "";
+      var text = cell ? (cell.textContent || "").replace(/\s+/g, "").match(/[A-Za-z]*\d{6,}/) : null;
+      text = text ? text[0] : "";
       return text && text !== "-" ? text : "";
     }
     function restoreCertificateExtraRows(table) {
@@ -24465,7 +24494,10 @@
         return text || flat(node).split(" ")[0] || "";
       };
       var noCell = pick(/证书编号/) || (row ? row.querySelector(".cert-no-cell") : null);
-      var noText = flat(noCell).split(" ")[0] || "";
+      // 编号格里有「武汉 / 2026 / 钢琴 / 5级」的副行（<br> 分隔），不能整段当编号
+      var noLine = firstLine(noCell) || flat(noCell);
+      var noMatch = String(noLine).replace(/\s+/g, "").match(/[A-Za-z]*\d{6,}/);
+      var noText = noMatch ? noMatch[0] : "";
       snap.certNo = noText && noText !== "-" ? noText : "-";
       snap.name = firstLine(pick(/考生|姓名/)) || "考生";
       snap.idNo = flat(pick(/证件/)) || "-";
@@ -24488,12 +24520,32 @@
       else if (stage === "待生效") display = "待生效";
       return { stage: stage, valid: valid, note: note, display: display };
     }
+    // 工作台把两件事分开看：发布到哪一步（阶段）、这张证还能不能用（有效位）
+    function certPublishMetaOfStage(stage) {
+      if (stage === "待生成") return ["orange", "未生成"];
+      if (stage === "待生效") return ["blue", "待发布"];
+      return ["green", "已发布"];
+    }
+    function certValidCellHtml(info) {
+      if (info.stage === "待生成") return '<span class="muted">—</span>';
+      if (info.valid) return batchTagHtml("green", "有效");
+      // 原因整体不拆行：宽度不够时整段落到第二行，避免「已被新 / 证替代」这种断词
+      return batchTagHtml("red", "无效") + (info.note ? ' <span class="muted" style="white-space:nowrap">' + escapeHtml(info.note) + '</span>' : "");
+    }
     function applyCertificateRowStatusCell(row) {
       if (!row) return;
       var info = certDisplayOfRow(row);
       row.dataset.certStatus = info.display;   // 派生快照：筛选、打印、下载判断继续用它
-      var note = info.note || (info.display === "待生效" ? "待提交" : "");
+      var publishCell = row.querySelector("[data-cert-publish-cell]");
       var cell = certStatusCellOf(row);
+      if (publishCell) {
+        var publish = certPublishMetaOfStage(info.stage);
+        publishCell.innerHTML = batchTagHtml(publish[0], publish[1]);
+        if (cell) cell.innerHTML = certValidCellHtml(info);
+        return;
+      }
+      // 证书库只有一列：直接给「能不能用」
+      var note = info.note || (info.display === "待生效" ? "待提交" : "");
       if (cell) cell.innerHTML = certificateStateTagHtml(info.display, note);
     }
     // 老数据只有一段状态文字，第一次渲染时补出两个字段
@@ -24507,7 +24559,8 @@
       var hasNo = !!(noCell && /\d{4,}/.test(noCell.textContent || ""));
       var stage = "已提交", valid = "1", note = "";
       if (!hasNo || /待生成/.test(src)) { stage = "待生成"; valid = "0"; }
-      else if (/待生效|已生成|已发布/.test(src)) { stage = "待生效"; valid = "1"; }
+      else if (/已发布|已提交/.test(src)) { stage = "已提交"; valid = "1"; }
+      else if (/待生效|已生成/.test(src)) { stage = "待生效"; valid = "1"; }
       else if (/已作废/.test(src)) { stage = "已提交"; valid = "0"; note = "已作废"; }
       else if (/已替代/.test(src)) { stage = "已提交"; valid = "0"; note = "已被新证替代"; }
       else if (/无效/.test(src)) { stage = "已提交"; valid = "0"; }
@@ -24532,14 +24585,42 @@
       var key = certKeyOfRow(row);
       if (key) CERT_STATE_OVERRIDES[key] = { stage: stage, valid: valid ? "1" : "0", note: note || "" };
     }
-    function tagCertificateStatusCells(root) {
+    function prepareCertificateStatusColumns(root) {
       Array.prototype.forEach.call((root || document).querySelectorAll("table.cert-table"), function (table) {
         var ths = Array.prototype.slice.call(table.querySelectorAll("thead th"));
-        var index = -1;
-        ths.forEach(function (th, i) { if (index < 0 && /证书状态/.test(th.textContent)) index = i; });
-        if (index < 0) return;
-        Array.prototype.forEach.call(table.querySelectorAll("tbody tr"), function (row) {
-          if (row.cells && row.cells[index]) row.cells[index].setAttribute("data-cert-status-cell", "");
+        var publishIndex = -1, validIndex = -1, singleIndex = -1;
+        ths.forEach(function (th, i) {
+          var text = (th.textContent || "").replace(/\s+/g, "");
+          if (publishIndex < 0 && /发布状态/.test(text)) publishIndex = i;
+          if (validIndex < 0 && /有效状态/.test(text)) validIndex = i;
+          if (singleIndex < 0 && /证书状态/.test(text)) singleIndex = i;
+        });
+        var rows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
+        if (publishIndex < 0 || validIndex < 0) {
+          // 证书库这类单列：一列就是「能不能用」
+          if (singleIndex < 0) return;
+          rows.forEach(function (row) {
+            if (row.cells && row.cells[singleIndex]) row.cells[singleIndex].setAttribute("data-cert-status-cell", "");
+          });
+          return;
+        }
+        // 拆列前，行里这一格是原来唯一的状态列；首次渲染时补出「发布状态」格
+        var splitAt = Math.max(validIndex - 1, 0);
+        rows.forEach(function (row) {
+          if (!row.cells || !row.cells.length) return;
+          if (row.hasAttribute("data-cert-batch-empty")) {
+            if (row.cells[0]) row.cells[0].colSpan = ths.length;
+            return;
+          }
+          if (row.querySelector("[data-cert-publish-cell]")) return;
+          var target = row.cells[splitAt];
+          if (!target) return;
+          var validCell = document.createElement("td");
+          validCell.setAttribute("data-cert-status-cell", "");
+          // 原内容先留在有效状态格里：老数据要按这段文字归一，清空会把「已生成」误判成「已提交」
+          validCell.innerHTML = target.innerHTML;
+          target.setAttribute("data-cert-publish-cell", "");
+          target.parentNode.insertBefore(validCell, target.nextSibling);
         });
       });
     }
@@ -24554,7 +24635,7 @@
     }
     function enhanceCertificateRowActions(root) {
       Array.prototype.forEach.call((root || document).querySelectorAll("table.cert-table"), restoreCertificateExtraRows);
-      tagCertificateStatusCells(root);
+      prepareCertificateStatusColumns(root);
       Array.prototype.forEach.call((root || document).querySelectorAll("table.cert-table tbody tr"), function (row) {
         if (!row.cells || row.cells.length < 8 || row.hasAttribute("data-cert-batch-empty")) return;
         var cell = certStatusCellOf(row);
@@ -24665,6 +24746,17 @@
         var snapshot = certRowSnapshot(row);
         var nextNo = certificateNextNumber(snapshot.certNo);
         if (!nextNo) { toast("该考生还没有证书编号，请先「生成」证书"); return; }
+        // 编号不能和表里已有证书撞号，撞了往后顺延
+        var usedNumbers = {};
+        var table = row.closest("table");
+        if (table) {
+          Array.prototype.forEach.call(table.querySelectorAll("tbody tr"), function (item) {
+            var key = certKeyOfRow(item);
+            if (key) usedNumbers[key] = true;
+          });
+        }
+        var guard = 0;
+        while (nextNo && usedNumbers[nextNo] && guard < 999) { nextNo = certificateNextNumber(nextNo); guard += 1; }
         var prevStatus = certRowStatusText(row) || "有效";
         // 证书库只有“有效/无效”，重新生成即得到一张可直接用的新证；批次工作台要等提交，所以是“待生效”
         var inLibrary = !!(row.closest && row.closest(".certificate-print-table"));
@@ -24681,6 +24773,10 @@
           var subText = subline ? subline.textContent : "";
           noCell.innerHTML = escapeHtml(nextNo) + (subText ? '<br><span>' + escapeHtml(subText) + '</span>' : '');
         }
+        // 新证的生成时间一律刷新（证书库原来用固定列号，工作台列号不同，统一按表头定位）
+        var cloneHeaders = Array.prototype.map.call((table || row.closest("table")).querySelectorAll("thead th"), function (th) { return (th.textContent || "").replace(/\s+/g, ""); });
+        var generatedIndex = cloneHeaders.indexOf("生成时间");
+        if (generatedIndex > -1 && clone.cells[generatedIndex]) clone.cells[generatedIndex].textContent = formatDateTime(new Date()).slice(0, 16);
         if (clone.dataset) {
           clone.dataset.certNumber = nextNo;
           if (inLibrary) {
@@ -24698,7 +24794,7 @@
           box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">作废</button><button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
         }
         row.parentNode.insertBefore(clone, row.nextSibling);
-        tagCertificateStatusCells(row.parentNode);
+        prepareCertificateStatusColumns(row.parentNode);
         setCertificateRowState(clone, newStage, true, newReason);
         if (inLibrary) {
           var opBox = clone.cells[clone.cells.length - 1] ? clone.cells[clone.cells.length - 1].querySelector(".operation") : null;
