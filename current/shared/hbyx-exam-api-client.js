@@ -256,11 +256,18 @@
     view.id = row.examinerCertificateId;
     view.number = row.certificateNumber;
     view.name = row.certificateName;
+    view.titleCategory = row.certificateTitleCategory || "";
+    view.titleName = row.certificateTitleName || "";
+    view.issuer = row.certificateIssuer || "";
+    view.issueDate = row.certificateIssueDate ? isoDate(row.certificateIssueDate) : "";
+    view.scanFile = row.certificateScanFile || "";
     view.major = row.certificateMajor || "";
+    view.createdRole = row.createdRole || "examiner";
     view.startDate = isoDate(row.validFromDate);
     view.endDate = isoDate(row.validUntilDate);
     view.expireDate = isoDate(row.validUntilDate);
     view.reviewStatus = row.certificateReviewStatusCode;
+    view.rejectReason = row.reviewReason || "";
     view.validityStatus = examinerCertificateValidityStatus(row, clock.serverDate);
     view.status = EXAMINER_CERTIFICATE_VALIDITY_LABEL[view.validityStatus] || "未生效";
     view.addedAt = isoDate(row.createdDate);
@@ -517,6 +524,11 @@
       if (hasPendingChange) {
         return fail(examinerCertificateError("CHANGE_REQUEST_EXISTS", "该证书已有待审核的变更或注销申请", 409, requestId, { currentStatus: target.certificateReviewStatusCode }));
       }
+      var nextTitleCategory = changeType === "DELETE" ? (target.certificateTitleCategory || "") : String(body.certificateTitleCategory || target.certificateTitleCategory || "").trim();
+      var nextTitleName = changeType === "DELETE" ? (target.certificateTitleName || "") : String(body.certificateTitleName || target.certificateTitleName || "").trim();
+      var nextIssuer = changeType === "DELETE" ? (target.certificateIssuer || "") : String(body.certificateIssuer || target.certificateIssuer || "").trim();
+      var nextIssueDate = changeType === "DELETE" ? compactDate(target.certificateIssueDate) : compactDate(body.certificateIssueDate || target.certificateIssueDate);
+      var nextScanFile = changeType === "DELETE" ? (target.certificateScanFile || "") : String(body.certificateScanFile || target.certificateScanFile || "").trim();
       var nextNumber = changeType === "DELETE" ? target.certificateNumber : String(body.certificateNumber || target.certificateNumber).trim();
       var nextName = changeType === "DELETE" ? target.certificateName : String(body.certificateName || target.certificateName).trim();
       var nextMajor = changeType === "DELETE" ? (target.certificateMajor || "") : String(body.certificateMajor || body.major || target.certificateMajor || "").trim();
@@ -538,6 +550,11 @@
         examinerId: target.examinerId,
         certificateNumber: nextNumber,
         certificateName: nextName,
+        certificateTitleCategory: nextTitleCategory,
+        certificateTitleName: nextTitleName,
+        certificateIssuer: nextIssuer,
+        certificateIssueDate: nextIssueDate,
+        certificateScanFile: nextScanFile,
         certificateMajor: nextMajor,
         validFromDate: nextFrom,
         validUntilDate: nextUntil,
@@ -668,12 +685,18 @@
       examinerId: createExaminerId,
       certificateNumber: createNumber,
       certificateName: createName,
+      certificateTitleCategory: String(body.certificateTitleCategory || "").trim(),
+      certificateTitleName: String(body.certificateTitleName || "").trim(),
+      certificateIssuer: String(body.certificateIssuer || "").trim(),
+      certificateIssueDate: compactDate(body.certificateIssueDate),
+      certificateScanFile: String(body.certificateScanFile || "").trim(),
       certificateMajor: createMajor,
       validFromDate: createFrom,
       validUntilDate: createUntil,
       certificateReviewStatusCode: "PENDING_REVIEW",
       certificateValidityStatusCode: "NOT_EFFECTIVE",
       changeType: "CREATE",
+      createdRole: createActor.role,
       objectVersion: 1,
       requestId: requestId,
       replacedCertificateId: "",

@@ -696,23 +696,80 @@
     .profile-name { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.35; }
     .profile-meta { margin: 8px 0 0; color: var(--text-secondary); font-size: 13px; font-weight: 400; line-height: 1.5; }
 
-    .profile-page-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      margin-bottom: 16px;
+    /* ── 我的资料与证书 ── */
+    .profile-hero {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px; border-radius: var(--radius);
+      background: var(--bg-card);
+      border: 1px solid var(--border-neutral);
     }
-    .profile-page-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.35; }
-    .profile-actions { display: flex; gap: 8px; flex: 0 0 auto; }
-    .profile-actions button { min-height: 36px; padding: 0 14px; font-size: 13px; }
-    .profile-group { display: grid; gap: 12px; }
-    .profile-group + .profile-group {
-      margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);
+    .profile-hero-avatar-wrap { position: relative; flex: 0 0 auto; }
+    .profile-hero-avatar {
+      width: 56px; height: 56px; display: grid; place-items: center; overflow: hidden;
+      border-radius: var(--radius-full); background: var(--brand-primary); color: #fff;
+      font-size: 22px; font-weight: 700;
     }
-    .profile-group-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--text-primary); }
-    .profile-field { display: grid; gap: 8px; }
-    .profile-field-label {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    .profile-hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar-edit {
+      position: absolute; right: -8px; bottom: -4px;
+      height: 24px; padding: 0 9px; border-radius: var(--radius-full);
+      border: 1px solid var(--border-color); background: #fff;
+      color: var(--brand-primary); font-size: 11px; font-weight: 700;
     }
+    .profile-avatar-edit[hidden] { display: none; }
+    .profile-hero-main { min-width: 0; flex: 1 1 auto; display: grid; gap: 3px; }
+    .profile-hero-name-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .profile-hero-name { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; }
+    .profile-hero-badge {
+      flex: 0 0 auto; padding: 2px 7px; border-radius: 4px;
+      background: rgba(26,138,74,.1); color: var(--color-success);
+      font-size: 11px; font-weight: 700;
+    }
+    .profile-hero-badge.is-pending { background: rgba(232,168,56,.16); color: #8A5A00; }
+    .profile-hero-meta,
+    .profile-hero-id {
+      margin: 0; color: var(--text-secondary); font-size: 12px; line-height: 1.45;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .profile-hero-meta .dot { margin: 0 5px; color: var(--text-light); }
+    .profile-hero-id { color: var(--text-light); font-variant-numeric: tabular-nums; }
+    .profile-hero-edit { flex: 0 0 auto; min-height: 32px; padding: 0 10px; font-size: 13px; }
+    .profile-hero-edit[hidden] { display: none; }
+    .profile-photo-hint { margin: 0; color: var(--text-light); font-size: 11px; line-height: 1.45; }
+    .profile-photo-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    .profile-block { display: grid; gap: 10px; }
+    .profile-block + .profile-block {
+      margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-neutral);
+    }
+    .profile-block-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .profile-block-title { margin: 0; font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .profile-block-note { flex: 0 0 auto; color: var(--text-light); font-size: 11px; font-weight: 400; }
+    .profile-block-desc { margin: -2px 0 0; color: var(--text-light); font-size: 12px; line-height: 1.5; }
+    .profile-block-action {
+      flex: 0 0 auto; height: 28px; padding: 0 10px; border-radius: var(--radius-full);
+      border: 1px solid rgba(200,16,46,.28); background: rgba(200,16,46,.04);
+      color: var(--brand-primary); font-size: 12px; font-weight: 700;
+    }
+
+    .profile-rows {
+      border: 1px solid var(--border-neutral); border-radius: var(--radius-sm);
+      background: var(--bg-card); overflow: hidden;
+    }
+    .profile-row {
+      display: flex; align-items: center; gap: 10px;
+      min-height: 46px; padding: 11px 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .profile-row:last-child { border-bottom: 0; }
+    .profile-row-label { flex: 0 0 auto; color: var(--text-secondary); font-size: 13px; }
+    .profile-row-value {
+      flex: 1 1 auto; min-width: 0; text-align: right;
+      color: var(--text-primary); font-size: 14px; line-height: 1.45;
+      word-break: break-word;
+    }
+    .profile-row.is-locked .profile-row-value { color: #4B5563; }
+    .profile-row-lock { flex: 0 0 auto; }
     .field-lock {
       position: relative; width: 12px; height: 11px; display: inline-block; flex: 0 0 12px;
       border: 1.5px solid var(--text-light); border-radius: 2px;
@@ -721,49 +778,129 @@
       content: ""; position: absolute; left: 2px; top: -7px; width: 5px; height: 7px;
       border: 1.5px solid var(--text-light); border-bottom: 0; border-radius: 5px 5px 0 0;
     }
-    .profile-field-view {
-      min-height: 48px; padding: 12px 14px; border-radius: var(--radius-sm);
-      background: var(--surface-muted); border: 1px solid transparent;
-      color: var(--text-primary); font-size: 15px; line-height: 1.5;
+    .profile-row-arrow { flex: 0 0 auto; color: var(--text-light); font-size: 17px; line-height: 1; }
+    .profile-row.is-editable { cursor: pointer; }
+    .profile-row.is-editable:active { background: var(--surface-muted); }
+    .profile-row.is-editing {
+      display: grid; grid-template-columns: 1fr; gap: 7px;
+      padding: 12px; cursor: default; background: var(--surface-muted);
     }
-    .field-locked .profile-field-view { cursor: default; }
-    .field-disabled .profile-field-view { opacity: .6; cursor: not-allowed; }
-    .field-editable .profile-field-view {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      cursor: pointer; background: #fff; border-color: var(--border-neutral);
+    .profile-row.is-editing .profile-row-label { font-size: 12px; }
+    .profile-row.is-editing .profile-row-arrow { display: none; }
+    .profile-row-edit { display: grid; }
+    .profile-row-edit[hidden] { display: none; }
+    .profile-row .profile-edit-input { width: 100%; min-height: 40px; font-size: 14px; }
+    .profile-row .profile-field-pending[hidden] { display: none; }
+    .profile-field-pending { margin: 0; color: #8A5A00; font-size: 11px; line-height: 1.45; }
+
+    .profile-levels {
+      display: grid; gap: 6px; padding: 11px 12px;
+      border: 1px solid var(--border-neutral); border-radius: var(--radius-sm);
+      background: var(--surface-muted);
     }
-    .field-arrow { color: var(--text-secondary); font-size: 20px; line-height: 1; }
-    .profile-field-edit { display: grid; }
-    .profile-field-edit[hidden],
-    .profile-field-view[hidden] { display: none; }
-    .profile-edit-input { width: 100%; }
-    .profile-edit-hint { margin-left: 6px; color: var(--color-warning); font-size: 11px; font-weight: 400; }
-    .profile-field-pending { margin: -2px 0 0; color: var(--color-warning); font-size: 12px; line-height: 1.4; }
-    .profile-review-banner { margin: -4px 0 16px; padding: 10px 12px; border-left: 3px solid var(--color-warning); border-radius: var(--radius-sm); background: rgba(217, 119, 6, .08); color: #92400E; font-size: 12px; line-height: 1.5; }
+    .profile-levels-label { color: var(--text-secondary); font-size: 12px; }
+    .profile-level-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .profile-level-chip {
+      padding: 3px 9px; border-radius: var(--radius-full);
+      background: #fff; border: 1px solid var(--border-neutral);
+      color: var(--text-primary); font-size: 12px; font-weight: 600;
+    }
+
+    .profile-review-banner {
+      margin: 0; padding: 9px 11px; border-left: 3px solid var(--color-warning);
+      border-radius: var(--radius-sm); background: rgba(232, 168, 56, .1);
+      color: #8A5A00; font-size: 12px; line-height: 1.5;
+    }
     .profile-review-banner[hidden] { display: none; }
-    .profile-photo-row { display: flex; align-items: center; gap: 12px; }
-    .profile-photo-preview { width: 64px; height: 64px; display: grid; place-items: center; overflow: hidden; border-radius: var(--radius-full); background: var(--brand-primary); color: #fff; font-size: 24px; font-weight: 700; }
-    .profile-photo-preview img,
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
-    .profile-photo-upload { display: grid; gap: 4px; }
-    .profile-photo-upload input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-    .certificate-list { display: grid; gap: 10px; }
-    .certificate-card { padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-body); }
-    .certificate-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .certificate-card-title { margin: 0; color: var(--text-primary); font-size: 15px; font-weight: 700; }
-    .certificate-card-no { margin: 4px 0 0; color: var(--text-secondary); font-size: 12px; }
-    .certificate-card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; color: var(--text-secondary); font-size: 12px; }
-    .certificate-card-meta strong { display: block; margin-top: 3px; color: var(--text-primary); font-size: 13px; font-weight: 600; }
-    .certificate-card-actions { display: flex; gap: 6px; flex: 0 0 auto; }
-    .certificate-card-actions button { min-height: 30px; padding: 0 9px; font-size: 12px; }
-    .certificate-empty { padding: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 13px; text-align: center; }
-    .certificate-editor { display: grid; gap: 10px; padding: 12px; border: 1px solid rgba(200,16,46,.2); border-radius: var(--radius-sm); background: rgba(200,16,46,.03); }
+
+    .profile-save-bar {
+      position: sticky; bottom: 0; z-index: 30;
+      display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px;
+      margin: 4px -16px -16px; padding: 10px 16px calc(10px + var(--safe-bottom));
+      background: rgba(255,255,255,.97); border-top: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
+    }
+    .profile-save-bar[hidden] { display: none; }
+    .profile-save-bar .primary-action,
+    .profile-save-bar .ghost-action { min-height: 42px; padding: 0 12px; font-size: 15px; }
+
+    .cert-list { display: grid; gap: 10px; }
+    .cert-card {
+      display: grid; gap: 8px; padding: 12px;
+      border: 1px solid var(--border-neutral); border-radius: var(--radius-sm);
+      background: var(--bg-card);
+    }
+    .cert-card[data-certificate-open] { cursor: pointer; transition: box-shadow .15s ease; }
+    .cert-card[data-certificate-open]:active { box-shadow: var(--shadow-hover); }
+    .cert-card.is-pending-card { border-color: rgba(232,168,56,.45); background: rgba(232,168,56,.04); }
+    .cert-card.is-rejected-card { border-color: rgba(212,83,83,.32); background: rgba(212,83,83,.03); }
+    .cert-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .cert-card-title { margin: 0; flex: 1 1 auto; color: var(--text-primary); font-size: 14px; font-weight: 700; line-height: 1.4; }
+    .cert-state { flex: 0 0 auto; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .cert-state.is-active { background: rgba(26,138,74,.1); color: var(--color-success); }
+    .cert-state.is-pending { background: rgba(232,168,56,.16); color: #8A5A00; }
+    .cert-state.is-rejected { background: rgba(212,83,83,.12); color: var(--color-danger); }
+    .cert-state.is-muted { background: rgba(140,149,163,.14); color: var(--text-secondary); }
+    .cert-card-sub { margin: 0; color: var(--text-light); font-size: 12px; line-height: 1.45; font-variant-numeric: tabular-nums; }
+    .cert-origin-tag { margin-left: 6px; padding: 1px 5px; border-radius: 3px; background: rgba(140,149,163,.14); color: var(--text-secondary); font-size: 10px; font-weight: 600; }
+    .cert-card-meta { display: grid; gap: 5px; }
+    .cert-card-meta > div { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+    .cert-card-meta span { flex: 0 0 52px; color: var(--text-light); font-size: 11px; }
+    .cert-card-meta strong { flex: 1 1 auto; min-width: 0; color: var(--text-primary); font-size: 12px; font-weight: 600; line-height: 1.45; }
+    .cert-card-note { margin: 0; padding: 6px 8px; border-radius: 6px; font-size: 11px; line-height: 1.45; }
+    .cert-card-note.is-pending { background: rgba(232,168,56,.1); color: #8A5A00; }
+    .cert-card-note.is-rejected { background: rgba(212,83,83,.08); color: var(--color-danger); }
+    .cert-card-note.is-muted { background: rgba(140,149,163,.1); color: var(--text-secondary); }
+    .cert-card-foot { display: flex; gap: 6px; padding-top: 2px; }
+    .cert-card-foot button {
+      flex: 1 1 0; min-height: 32px; padding: 0 8px; border-radius: 6px;
+      border: 1px solid var(--border-color); background: #fff;
+      color: var(--text-primary); font-size: 12px; font-weight: 600;
+    }
+    .cert-card-foot button.is-danger { color: var(--color-danger); border-color: rgba(212,83,83,.28); background: rgba(212,83,83,.04); }
+    .cert-card-foot button:only-child { flex: 0 0 auto; min-width: 96px; }
+    .cert-empty {
+      display: grid; gap: 4px; padding: 18px 12px; text-align: center;
+      border: 1px dashed var(--border-neutral); border-radius: var(--radius-sm);
+      color: var(--text-light); font-size: 13px; line-height: 1.5;
+    }
+    .cert-empty strong { color: var(--text-secondary); font-size: 13px; font-weight: 600; }
+    .cert-empty button {
+      justify-self: center; margin-top: 6px; height: 32px; padding: 0 14px;
+      border-radius: var(--radius-full); border: 1px solid rgba(200,16,46,.28);
+      background: #fff; color: var(--brand-primary); font-size: 12px; font-weight: 700;
+    }
+
+    .certificate-editor { display: grid; gap: 12px; }
     .certificate-editor[hidden] { display: none; }
     .certificate-editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .certificate-editor-field { display: grid; gap: 5px; }
+    .certificate-editor-field { display: grid; gap: 5px; min-width: 0; }
     .certificate-editor-field.full { grid-column: 1 / -1; }
-    .certificate-editor-label { color: var(--text-secondary); font-size: 12px; }
-    .certificate-add-button { width: 100%; }
+    .certificate-editor-label { color: var(--text-secondary); font-size: 12px; font-weight: 600; }
+    .certificate-editor-label i { margin-left: 2px; color: var(--color-danger); font-style: normal; }
+    .certificate-editor .form-input { min-height: 42px; font-size: 14px; }
+    .certificate-editor .form-hint { font-size: 11px; }
+    .scan-preview {
+      display: grid; place-items: center; min-height: 140px; padding: 16px;
+      border: 1px dashed var(--border-neutral); border-radius: var(--radius-sm);
+      background: var(--surface-muted); color: var(--text-light); font-size: 12px; text-align: center;
+    }
+    .scan-preview strong { display: block; margin-bottom: 4px; color: var(--text-secondary); font-size: 13px; font-weight: 600; word-break: break-all; }
+    .cert-detail { display: grid; gap: 12px; }
+    .cert-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .cert-detail-name { margin: 0; flex: 1 1 auto; font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--text-primary); }
+    .cert-detail-rows { display: grid; gap: 7px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-muted); }
+    .cert-detail-row { display: flex; align-items: baseline; gap: 10px; }
+    .cert-detail-row span { flex: 0 0 64px; color: var(--text-light); font-size: 12px; }
+    .cert-detail-row strong { flex: 1 1 auto; min-width: 0; color: var(--text-primary); font-size: 13px; font-weight: 600; line-height: 1.45; }
+    .cert-detail-section { display: grid; gap: 6px; }
+    .cert-detail-section-title { color: var(--text-light); font-size: 12px; }
+    .cert-detail-actions { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; }
+    .cert-detail-actions:empty { display: none; }
+    .cert-detail-hint { margin: 0; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--surface-muted); color: var(--text-secondary); font-size: 12px; line-height: 1.5; text-align: center; }
+    .cert-detail-actions .primary-action,
+    .cert-detail-actions .ghost-action,
+    .cert-detail-actions .danger-action { min-height: 42px; padding: 0 10px; font-size: 14px; }
 
     .my-data-grid {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;
@@ -787,14 +924,7 @@
       box-shadow: none;
       border-color: var(--border-neutral);
     }
-    #profile-view .profile-group + .profile-group {
-      border-top-color: var(--border-neutral);
-    }
-    #profile-view .profile-group-title { font-size: 14px; }
-    #profile-view .profile-field-label { font-size: 12px; }
-    #profile-view .field-locked .profile-field-view { color: #4B5563; }
-    #my-certificates-view .form-card { box-shadow: none; border-color: var(--border-neutral); }
-    #my-certificates-view .certificate-card { border-color: var(--border-neutral); background: var(--surface-muted); }
+    #profile-view .form-card { gap: 12px; }
     .my-menu-link {
       width: 100%; display: flex; align-items: center; justify-content: space-between;
       min-height: 48px; padding: 0 16px; text-decoration: none; color: var(--text-primary);
@@ -2574,7 +2704,7 @@
             <div class="message-meta"><span>资质提醒</span><span data-message-detail-time-role="yesterday"></span></div>
             <h2 class="section-title">资质即将过期提醒</h2>
             <p class="detail-copy">您的考官资质即将到期，请及时关注资质续期安排；如有疑问请联系平台。</p>
-            <a class="primary-action" href="#my-certificates">查看我的证书</a>
+            <a class="primary-action" href="#profile">查看我的证书</a>
           </article>
           <article class="card form-card" data-msg-panel="task" hidden>
             <div class="message-meta"><span>评分通知</span><span data-message-detail-time-role="yesterday-score"></span></div>
@@ -2615,8 +2745,7 @@
         </section>
         <section class="section" data-logged-in-only>
           <div class="card my-menu">
-            <a class="my-menu-link" href="#profile"><span class="my-menu-label"><span class="my-menu-icon menu-icon-profile" aria-hidden="true"></span><span>我的资料</span></span><span class="my-menu-arrow" aria-hidden="true">›</span></a>
-            <a class="my-menu-link" href="#my-certificates"><span class="my-menu-label"><span class="my-menu-icon menu-icon-certificate" aria-hidden="true"></span><span>我的证书</span></span><span class="my-menu-arrow" aria-hidden="true">›</span></a>
+            <a class="my-menu-link" href="#profile"><span class="my-menu-label"><span class="my-menu-icon menu-icon-profile" aria-hidden="true"></span><span>我的资料与证书</span></span><span class="my-menu-arrow" aria-hidden="true">›</span></a>
             <a class="my-menu-link" href="#settings"><span class="my-menu-label"><span class="my-menu-icon menu-icon-settings" aria-hidden="true"></span><span>设置</span></span><span class="my-menu-arrow" aria-hidden="true">›</span></a>
           </div>
         </section>
@@ -2633,159 +2762,161 @@
       <!-- 我的资料 -->
       <main class="content screen-view" id="profile-view" data-view="profile" hidden>
         <section class="section">
-          <div class="card form-card">
-            <div class="profile-page-head">
-              <h2 class="profile-page-title">我的资料</h2>
-              <div class="profile-actions">
-                <button class="ghost-action" type="button" data-profile-edit-button>编辑</button>
-                <button class="ghost-action" type="button" data-profile-cancel-button hidden>取消</button>
-                <button class="primary-action" type="button" data-profile-save-button hidden>保存</button>
+          <div class="card form-card" data-profile-card>
+
+            <div class="profile-hero">
+              <div class="profile-hero-avatar-wrap">
+                <div class="profile-hero-avatar" data-judge-avatar data-profile-photo-preview>杨</div>
+                <button class="profile-avatar-edit" type="button" data-profile-photo-trigger hidden>更换</button>
+              </div>
+              <div class="profile-hero-main">
+                <div class="profile-hero-name-row">
+                  <h2 class="profile-hero-name" data-judge-name>杨婷婷</h2>
+                  <span class="profile-hero-badge" data-profile-hero-badge>考官在册</span>
+                </div>
+                <p class="profile-hero-meta"><span data-profile-value="orgName">湖北艺术职业学院</span></p>
+                <p class="profile-hero-id">证件号 <span data-profile-value="idNumber">420106********2216</span></p>
+              </div>
+              <button class="ghost-action profile-hero-edit" type="button" data-profile-edit-button>编辑</button>
+            </div>
+            <p class="profile-photo-hint" data-profile-edit hidden>支持 JPG / PNG，不超过 2MB，保存后提交审核</p>
+            <input type="file" class="profile-photo-input" data-profile-photo-input accept="image/jpeg,image/png">
+            <div class="profile-review-banner" data-profile-review-status hidden>考官基础资料审核中，审核通过后更新正式资料</div>
+
+            <div class="profile-block">
+              <div class="profile-block-head">
+                <h3 class="profile-block-title">基础档案</h3>
+                <span class="profile-block-note">平台维护</span>
+              </div>
+              <div class="profile-rows">
+                <div class="profile-row is-locked" data-profile-locked>
+                  <span class="profile-row-label">姓名</span>
+                  <span class="profile-row-value" data-profile-value="name">杨婷婷</span>
+                  <span class="profile-row-lock field-lock" aria-hidden="true"></span>
+                </div>
+                <div class="profile-row is-locked" data-profile-locked>
+                  <span class="profile-row-label">证件类型</span>
+                  <span class="profile-row-value" data-profile-value="idType">居民身份证</span>
+                  <span class="profile-row-lock field-lock" aria-hidden="true"></span>
+                </div>
+                <div class="profile-row is-locked" data-profile-locked>
+                  <span class="profile-row-label">所属考级机构</span>
+                  <span class="profile-row-value" data-profile-value="orgName">湖北艺术职业学院</span>
+                  <span class="profile-row-lock field-lock" aria-hidden="true"></span>
+                </div>
+                <div class="profile-row is-locked" data-profile-locked>
+                  <span class="profile-row-label">证件号</span>
+                  <span class="profile-row-value" data-profile-value="idNumber">420106********2216</span>
+                  <span class="profile-row-lock field-lock" aria-hidden="true"></span>
+                </div>
               </div>
             </div>
-            <p class="profile-review-banner" data-profile-review-status hidden>考官基础资料审核中，审核通过后更新正式资料</p>
-            <div class="profile-group">
-              <h3 class="profile-group-title">基础档案</h3>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">姓名 <span class="field-lock" aria-hidden="true"></span></span>
-                <div class="profile-field-view" data-profile-value="name">杨婷婷</div>
+
+            <div class="profile-block">
+              <div class="profile-block-head">
+                <h3 class="profile-block-title">执考资质</h3>
+                <span class="profile-block-note">变更需审核</span>
               </div>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">所属考级机构 <span class="field-lock" aria-hidden="true"></span></span>
-                <div class="profile-field-view" data-profile-value="orgName">湖北艺术职业学院</div>
+              <div class="profile-levels">
+                <span class="profile-levels-label">执考专业及可执考级别</span>
+                <div class="profile-level-chips" data-profile-level-chips></div>
               </div>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">证件类型 <span class="field-lock" aria-hidden="true"></span></span>
-                <div class="profile-field-view" data-profile-value="idType">居民身份证</div>
+              <div class="profile-rows">
+                <div class="profile-row is-editable" data-profile-qualification="education">
+                  <span class="profile-row-label">学历</span>
+                  <span class="profile-row-value" data-profile-view data-profile-value="education">本科</span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <select class="form-input profile-edit-input" data-profile-input="education" aria-label="学历">
+                      <option value="大专">大专</option>
+                      <option value="本科" selected>本科</option>
+                      <option value="硕士研究生">硕士研究生</option>
+                      <option value="博士研究生">博士研究生</option>
+                    </select>
+                  </div>
+                  <p class="profile-field-pending" data-profile-pending-for="education" hidden></p>
+                </div>
+                <div class="profile-row is-editable" data-profile-qualification="titleCategory">
+                  <span class="profile-row-label">职称分类</span>
+                  <span class="profile-row-value" data-profile-view data-profile-value="titleCategory">专业技术人员</span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <select class="form-input profile-edit-input" data-profile-input="titleCategory" aria-label="职称分类">
+                      <option value="无职称">无职称</option>
+                      <option value="专业技术人员" selected>专业技术人员</option>
+                      <option value="技能人员">技能人员</option>
+                      <option value="其他">其他</option>
+                    </select>
+                  </div>
+                  <p class="profile-field-pending" data-profile-pending-for="titleCategory" hidden></p>
+                </div>
+                <div class="profile-row is-editable" data-profile-qualification="titleName">
+                  <span class="profile-row-label">职称名称</span>
+                  <span class="profile-row-value" data-profile-view data-profile-value="titleName">讲师</span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <select class="form-input profile-edit-input" data-profile-input="titleName" aria-label="职称名称">
+                      <option value="无职称">无职称</option>
+                      <option value="助教">助教</option>
+                      <option value="讲师" selected>讲师</option>
+                      <option value="副教授">副教授</option>
+                      <option value="教授">教授</option>
+                    </select>
+                  </div>
+                  <p class="profile-field-pending" data-profile-pending-for="titleName" hidden></p>
+                </div>
+                <div class="profile-row is-locked">
+                  <span class="profile-row-label">账号状态</span>
+                  <span class="profile-row-value" data-profile-value="accountStatus">有效</span>
+                  <span class="profile-row-lock field-lock" aria-hidden="true"></span>
+                </div>
               </div>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">证件号 <span class="field-lock" aria-hidden="true"></span></span>
-                <div class="profile-field-view" data-profile-value="idNumber">420106********2216</div>
+            </div>
+
+            <div class="profile-block">
+              <div class="profile-block-head">
+                <h3 class="profile-block-title">联系信息</h3>
               </div>
-              <div class="profile-field field-editable" data-profile-photo-field>
-                <span class="profile-field-label">照片<span class="profile-edit-hint">资料变更后统一审核</span></span>
-                <div class="profile-field-view">
-                  <div class="profile-photo-row">
-                    <div class="profile-photo-preview" data-profile-photo-preview>杨</div>
-                    <div class="profile-photo-upload">
-                      <button class="ghost-action" type="button" data-profile-photo-trigger hidden>上传或更换照片</button>
-                      <input type="file" data-profile-photo-input accept="image/jpeg,image/png">
-                      <span class="form-hint">支持 JPG、PNG，大小不超过2MB</span>
-                    </div>
+              <div class="profile-rows">
+                <div class="profile-row is-editable" data-profile-contact="workUnit">
+                  <span class="profile-row-label">工作单位</span>
+                  <span class="profile-row-value" data-profile-view><span data-profile-value="workUnit">湖北艺术职业学院社会艺术教育中心</span></span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <input class="form-input profile-edit-input" type="text" data-profile-input="workUnit" value="湖北艺术职业学院社会艺术教育中心" maxlength="80">
+                  </div>
+                </div>
+                <div class="profile-row is-editable" data-profile-contact="regionPath">
+                  <span class="profile-row-label">所属地区</span>
+                  <span class="profile-row-value" data-profile-view><span data-profile-value="regionPath">湖北省武汉市</span></span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <input class="form-input profile-edit-input" type="text" data-profile-input="regionPath" value="湖北省武汉市" maxlength="40">
+                  </div>
+                </div>
+                <div class="profile-row is-editable" data-profile-contact="contactPhone">
+                  <span class="profile-row-label">联系方式</span>
+                  <span class="profile-row-value" data-profile-view><span data-profile-value="contactPhone">13247185696</span></span>
+                  <span class="profile-row-arrow" aria-hidden="true">›</span>
+                  <div class="profile-row-edit" data-profile-edit hidden>
+                    <input class="form-input profile-edit-input" type="tel" inputmode="numeric" data-profile-input="contactPhone" value="13247185696" maxlength="11" pattern="1[0-9]{10}">
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="profile-group">
-              <h3 class="profile-group-title">执考资质</h3>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">执考专业及可执考级别 <span class="field-lock" aria-hidden="true"></span></span>
-                <div class="profile-field-view" data-profile-value="majorLevels">钢琴 / 小提琴 · 钢琴 1-10 级 · 小提琴 1-8 级</div>
+            <div class="profile-block">
+              <div class="profile-block-head">
+                <h3 class="profile-block-title">我的证书</h3>
+                <button class="profile-block-action" type="button" data-certificate-add>＋ 新增</button>
               </div>
-              <div class="profile-field field-editable" data-profile-qualification="education">
-                <span class="profile-field-label">学历<span class="profile-edit-hint">资料变更后统一审核</span></span>
-                <div class="profile-field-view" data-profile-view data-profile-value="education">本科</div>
-                <div class="profile-field-edit" data-profile-edit hidden>
-                  <select class="form-input profile-edit-input" data-profile-input="education" aria-label="学历">
-                    <option value="大专">大专</option>
-                    <option value="本科" selected>本科</option>
-                    <option value="硕士研究生">硕士研究生</option>
-                    <option value="博士研究生">博士研究生</option>
-                  </select>
-                </div>
-                <p class="profile-field-pending" data-profile-pending-for="education" hidden></p>
-              </div>
-              <div class="profile-field field-editable" data-profile-qualification="titleCategory">
-                <span class="profile-field-label">职称分类<span class="profile-edit-hint">资料变更后统一审核</span></span>
-                <div class="profile-field-view" data-profile-view data-profile-value="titleCategory">专业技术人员</div>
-                <div class="profile-field-edit" data-profile-edit hidden>
-                  <select class="form-input profile-edit-input" data-profile-input="titleCategory" aria-label="职称分类">
-                    <option value="无职称">无职称</option>
-                    <option value="专业技术人员" selected>专业技术人员</option>
-                    <option value="技能人员">技能人员</option>
-                    <option value="其他">其他</option>
-                  </select>
-                </div>
-                <p class="profile-field-pending" data-profile-pending-for="titleCategory" hidden></p>
-              </div>
-              <div class="profile-field field-editable" data-profile-qualification="titleName">
-                <span class="profile-field-label">职称名称<span class="profile-edit-hint">资料变更后统一审核</span></span>
-                <div class="profile-field-view" data-profile-view data-profile-value="titleName">讲师</div>
-                <div class="profile-field-edit" data-profile-edit hidden>
-                  <select class="form-input profile-edit-input" data-profile-input="titleName" aria-label="职称名称">
-                    <option value="无职称">无职称</option>
-                    <option value="助教">助教</option>
-                    <option value="讲师" selected>讲师</option>
-                    <option value="副教授">副教授</option>
-                    <option value="教授">教授</option>
-                  </select>
-                </div>
-                <p class="profile-field-pending" data-profile-pending-for="titleName" hidden></p>
-              </div>
-              <div class="profile-field field-locked" data-profile-locked>
-                <span class="profile-field-label">账号状态 <span class="field-lock" aria-hidden="true">🔒</span></span>
-                <div class="profile-field-view" data-profile-value="accountStatus">有效</div>
-              </div>
+              <p class="profile-block-desc" data-cert-block-desc>证书为考官资质佐证材料，变更需提交审核。</p>
+              <div class="cert-list" data-certificate-list></div>
             </div>
 
-            <div class="profile-group">
-              <h3 class="profile-group-title">联系信息</h3>
-              <div class="profile-field field-editable" data-profile-contact="workUnit">
-                <span class="profile-field-label">工作单位<span data-profile-edit-hint style="font-size:11px;color:var(--text-light);margin-left:6px;">点击编辑</span></span>
-                <div class="profile-field-view" data-profile-view>
-                  <span data-profile-value="workUnit">湖北艺术职业学院社会艺术教育中心</span>
-                  <span class="field-arrow" aria-hidden="true">›</span>
-                </div>
-                <div class="profile-field-edit" data-profile-edit hidden>
-                  <input class="form-input profile-edit-input" type="text" data-profile-input="workUnit" value="湖北艺术职业学院社会艺术教育中心" maxlength="80">
-                </div>
-              </div>
-              <div class="profile-field field-editable" data-profile-contact="regionPath">
-                <span class="profile-field-label">所属地区<span data-profile-edit-hint style="font-size:11px;color:var(--text-light);margin-left:6px;">点击编辑</span></span>
-                <div class="profile-field-view" data-profile-view>
-                  <span data-profile-value="regionPath">湖北省武汉市</span>
-                  <span class="field-arrow" aria-hidden="true">›</span>
-                </div>
-                <div class="profile-field-edit" data-profile-edit hidden><input class="form-input profile-edit-input" type="text" data-profile-input="regionPath" value="湖北省武汉市" maxlength="40"></div>
-              </div>
-              <div class="profile-field field-editable" data-profile-contact="contactPhone">
-                <span class="profile-field-label">联系方式<span data-profile-edit-hint style="font-size:11px;color:var(--text-light);margin-left:6px;">点击编辑</span></span>
-                <div class="profile-field-view" data-profile-view>
-                  <span data-profile-value="contactPhone">13247185696</span>
-                  <span class="field-arrow" aria-hidden="true">›</span>
-                </div>
-                <div class="profile-field-edit" data-profile-edit hidden>
-                  <input class="form-input profile-edit-input" type="tel" inputmode="numeric" data-profile-input="contactPhone" value="13247185696" maxlength="11" pattern="1[0-9]{10}">
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-      </main>
-
-      <!-- 我的证书 -->
-      <main class="content screen-view" id="my-certificates-view" data-view="my-certificates" hidden>
-        <section class="section">
-          <div class="card form-card">
-            <h2 class="profile-page-title">我的证书</h2>
-            <div class="profile-group profile-certificate-group">
-              <div class="profile-field" data-profile-certificates>
-                <div class="certificate-list" data-certificate-list></div>
-                <div class="certificate-editor" data-certificate-editor hidden>
-                  <div class="certificate-editor-grid">
-                    <label class="certificate-editor-field full"><span class="certificate-editor-label">证书编号</span><input class="form-input" type="text" data-certificate-input="number" maxlength="60" placeholder="请输入证书编号"></label>
-                    <label class="certificate-editor-field full"><span class="certificate-editor-label">证书名称</span><input class="form-input" type="text" data-certificate-input="name" maxlength="80" placeholder="请输入证书名称"></label>
-                    <label class="certificate-editor-field"><span class="certificate-editor-label">有效期开始日期</span><input class="form-input" type="date" data-certificate-input="startDate"></label>
-                    <label class="certificate-editor-field"><span class="certificate-editor-label">有效期截止日期</span><input class="form-input" type="date" data-certificate-input="endDate"></label>
-                  </div>
-                  <div class="action-row">
-                    <button class="ghost-action" type="button" data-certificate-cancel>取消</button>
-                    <button class="primary-action" type="button" data-certificate-save>提交审核</button>
-                  </div>
-                </div>
-                <button class="ghost-action certificate-add-button" type="button" data-certificate-add>＋ 新增证书</button>
-              </div>
+            <div class="profile-save-bar" data-profile-save-bar hidden>
+              <button class="ghost-action" type="button" data-profile-cancel-button hidden>取消</button>
+              <button class="primary-action" type="button" data-profile-save-button hidden>保存修改</button>
             </div>
 
           </div>
@@ -3168,6 +3299,53 @@
       </div>
     </div>
 
+    <div class="sheet-mask" id="certificate-sheet" data-certificate-sheet hidden>
+      <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="certificate-sheet-title">
+        <div class="sheet-head">
+          <h3 id="certificate-sheet-title" data-certificate-sheet-title>新增证书</h3>
+          <button class="section-link" type="button" data-certificate-cancel>关闭</button>
+        </div>
+        <div class="certificate-editor" data-certificate-editor>
+          <div class="certificate-editor-grid">
+            <label class="certificate-editor-field full"><span class="certificate-editor-label">证书名称<i>*</i></span><input class="form-input" type="text" data-certificate-input="name" maxlength="80" placeholder="如：社会艺术水平考级考官资格证书"></label>
+            <label class="certificate-editor-field"><span class="certificate-editor-label">证书编号<i>*</i></span><input class="form-input" type="text" data-certificate-input="number" maxlength="60" placeholder="请输入证书编号"></label>
+            <label class="certificate-editor-field"><span class="certificate-editor-label">专业<i>*</i></span><select class="form-input" data-certificate-input="major"><option value="">请选择专业</option><option>钢琴</option><option>小提琴</option><option>中国舞</option><option>声乐</option><option>音乐基础</option></select></label>
+            <label class="certificate-editor-field full"><span class="certificate-editor-label">发证机构<i>*</i></span><input class="form-input" type="text" data-certificate-input="issuer" maxlength="80" placeholder="如：湖北省文化和旅游厅"></label>
+            <label class="certificate-editor-field full"><span class="certificate-editor-label">发证日期<i>*</i></span><input class="form-input" type="date" data-certificate-input="issueDate"></label>
+            <label class="certificate-editor-field"><span class="certificate-editor-label">有效期开始<i>*</i></span><input class="form-input" type="date" data-certificate-input="startDate"></label>
+            <label class="certificate-editor-field"><span class="certificate-editor-label">有效期截止<i>*</i></span><input class="form-input" type="date" data-certificate-input="endDate"></label>
+            <label class="certificate-editor-field full"><span class="certificate-editor-label">证书扫描件<i>*</i></span><input class="form-input" type="file" accept="image/jpeg,image/png,.pdf" data-certificate-scan><span class="form-hint" data-certificate-scan-hint>支持 JPG / PNG / PDF，大小不超过 5MB</span></label>
+          </div>
+          <div class="action-row">
+            <button class="ghost-action" type="button" data-certificate-cancel>取消</button>
+            <button class="primary-action" type="button" data-certificate-save>提交审核</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-mask" id="certificate-detail-sheet" data-certificate-detail-sheet hidden>
+      <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="certificate-detail-title">
+        <div class="sheet-head">
+          <h3 id="certificate-detail-title">证书详情</h3>
+          <button class="section-link" type="button" data-close-certificate-detail>关闭</button>
+        </div>
+        <div class="cert-detail" data-certificate-detail-body></div>
+        <div class="cert-detail-actions" data-certificate-detail-actions></div>
+      </div>
+    </div>
+
+    <div class="confirm-overlay" id="profile-confirm" hidden>
+      <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="profile-confirm-title">
+        <h3 id="profile-confirm-title" data-profile-confirm-title>确认操作</h3>
+        <p data-profile-confirm-message></p>
+        <div class="action-row">
+          <button class="ghost-action" type="button" data-profile-confirm-cancel>取消</button>
+          <button class="primary-action" type="button" data-profile-confirm-ok>确认</button>
+        </div>
+      </div>
+    </div>
+
     <div class="confirm-overlay" id="logout-confirm" hidden>
       <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="logout-title">
         <h3 id="logout-title">确认退出登录？</h3>
@@ -3345,6 +3523,8 @@
       var PROFILE_QUALIFICATION_KEYS = ["education", "titleCategory", "titleName"];
       var profileCertificateEditIndex = -1;
       var profilePhotoDraft = null;
+      var profileCertDraft = null;
+      var profileCertDraftTouched = false;
       var SCORE_TEXTBOOKS = {
         piano: "《社会艺术水平考级钢琴教材》2026 版",
         violin: "《社会艺术水平考级小提琴教材》2026 版"
@@ -3464,8 +3644,7 @@
         "online-batch-detail": { title: "线上考生名单", back: "#schedule" },
         "score-entry": { title: "考生评分", back: "#schedule-detail" },
         "message-detail": { title: "消息详情", back: "#message" },
-        profile: { title: "我的资料", back: "#my" },
-        "my-certificates": { title: "我的证书", back: "#my" },
+        profile: { title: "我的资料与证书", back: "#my" },
         settings: { title: "设置", back: "#my" },
         login: { title: "登录", back: "#login" },
         password: { title: "修改密码", back: "#settings" },
@@ -3485,7 +3664,6 @@
         "message-detail": "message",
         my: "my",
         profile: "my",
-        "my-certificates": "my",
         settings: "my",
         login: "my",
         password: "my",
@@ -3910,7 +4088,8 @@
         certificateStartDate.setFullYear(certificateStartDate.getFullYear() - 1);
         profile.certificates = [
           { id: "cert-001", number: "HB-JUDGE-2026-0018", name: "社会艺术水平考级考官证（钢琴）", startDate: localDateKey(certificateStartDate), endDate: "2027-12-31", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE" },
-          { id: "cert-002", number: "HB-JUDGE-2026-0021", name: "社会艺术水平考级考官证（小提琴）", startDate: localDateKey(certificateStartDate), endDate: "2027-12-31", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE" }
+          { id: "cert-002", number: "HB-JUDGE-2026-0021", name: "社会艺术水平考级考官证（小提琴）", startDate: localDateKey(certificateStartDate), endDate: "2027-12-31", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE" },
+          { id: "cert-003", number: "HB-KG-2026-0007", name: "湖北省社会艺术水平考级考官聘书", major: "钢琴 / 小提琴", issuer: "湖北省文化和旅游厅", issueDate: "2026-01-08", scanFile: "杨婷婷-考官聘书-平台录入.jpg", startDate: "2026-01-08", endDate: "2028-12-31", reviewStatus: "APPROVED", validityStatus: "EFFECTIVE", createdRole: "platform_admin" }
         ];
         try {
           var raw = window.localStorage.getItem(PROFILE_STORAGE_KEY);
@@ -4013,8 +4192,8 @@
         var seedDate = new Date();
         seedDate.setFullYear(seedDate.getFullYear() - 1);
         var seeds = [
-          { certificateNumber: "HB-JUDGE-2026-0018", certificateName: "社会艺术水平考级考官证（钢琴）", certificateMajor: "钢琴" },
-          { certificateNumber: "HB-JUDGE-2026-0021", certificateName: "社会艺术水平考级考官证（小提琴）", certificateMajor: "小提琴" }
+          { certificateNumber: "HB-JUDGE-2026-0018", certificateName: "社会艺术水平考级考官证（钢琴）", certificateMajor: "钢琴", certificateIssuer: "湖北省文化和旅游厅", certificateIssueDate: "20250110", certificateScanFile: "杨婷婷-考官证-钢琴.jpg" },
+          { certificateNumber: "HB-JUDGE-2026-0021", certificateName: "社会艺术水平考级考官证（小提琴）", certificateMajor: "小提琴", certificateIssuer: "湖北省文化和旅游厅", certificateIssueDate: "20250110", certificateScanFile: "杨婷婷-考官证-小提琴.jpg" }
         ];
         return seeds.reduce(function (chain, seed) {
           return chain.then(function () {
@@ -4038,13 +4217,48 @@
         });
       }
 
+      var PLATFORM_CERTIFICATE_SEED = {
+        certificateNumber: "HB-KG-2026-0007",
+        certificateName: "湖北省社会艺术水平考级考官聘书",
+        certificateMajor: "钢琴 / 小提琴",
+        certificateIssuer: "湖北省文化和旅游厅",
+        certificateIssueDate: "20260108",
+        validFromDate: "20260108",
+        validUntilDate: "20281231",
+        certificateScanFile: "杨婷婷-考官聘书-平台录入.jpg"
+      };
+
+      function seedPlatformCertificate(api, examinerId) {
+        return api.createExaminerCertificate(Object.assign({
+          examinerId: examinerId,
+          actorRole: "platform_admin",
+          actorId: "platform-admin"
+        }, PLATFORM_CERTIFICATE_SEED)).then(function (created) {
+          return api.reviewExaminerCertificate(created.data.examinerCertificateId, {
+            decision: "APPROVE",
+            actorRole: "platform_admin",
+            reviewerId: "platform-admin",
+            objectVersion: created.data.objectVersion
+          }, { requestId: api.createRequestId("seed-platform-review") });
+        });
+      }
+
+      function examinerHasPlatformCertificate(list) {
+        return (list || []).some(function (item) { return item && item.createdRole === "platform_admin"; });
+      }
+
       function hydrateExaminerCertificates() {
         var api = examinerCertificateApi();
         if (!api) return Promise.resolve([]);
         var examinerId = examinerCertificateAccountId();
         return api.listExaminerCertificates({ examinerId: examinerId }).then(function (list) {
-          if (list.length) return list;
-          return seedExaminerCertificates(api, examinerId);
+          if (examinerHasPlatformCertificate(list)) return list;
+          var prepared = list.length ? Promise.resolve(list) : seedExaminerCertificates(api, examinerId);
+          return prepared.then(function () {
+            return seedPlatformCertificate(api, examinerId);
+          }).then(function () {
+            return api.listExaminerCertificates({ examinerId: examinerId });
+          });
         }).then(function (list) {
           return applyExaminerCertificateViews(list);
         }).catch(function () {
@@ -4066,180 +4280,348 @@
         var scalarChanged = PROFILE_CONTACT_KEYS.concat(PROFILE_QUALIFICATION_KEYS).some(function (key) {
           return values[key] !== profileEditSnapshot[key];
         });
-        return scalarChanged || Boolean(profilePhotoDraft);
+        return scalarChanged || Boolean(profilePhotoDraft) || Boolean(profileCertDraftTouched);
       }
 
       function formatCertificateDate(value) {
         return String(value || "").replace(/-/g, ".");
       }
 
+      var CERTIFICATE_TITLE_OPTIONS = {
+        "中级": ["讲师", "中学一级教师", "小学高级教师", "馆员", "三级演员", "三级演奏员", "三级美术师", "工艺美术师"],
+        "副高级": ["副教授", "高级讲师", "一级演员", "一级演奏员", "一级美术师", "研究馆员", "编审"],
+        "正高级": ["教授", "一级演员", "一级演奏员", "一级美术师", "研究馆员", "编审", "国家级教练"]
+      };
+
+      function certificateTitleNameOptions(level, selected) {
+        var list = CERTIFICATE_TITLE_OPTIONS[level] || CERTIFICATE_TITLE_OPTIONS["中级"];
+        return list.map(function (name) {
+          return '<option' + (name === selected ? " selected" : "") + '>' + name + '</option>';
+        }).join("");
+      }
+
+      function syncCertificateTitleOptions(levelSelect, nameSelect, selected) {
+        if (!levelSelect || !nameSelect) return;
+        nameSelect.innerHTML = certificateTitleNameOptions(levelSelect.value, selected || "");
+      }
+
+      function escProfile(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+        });
+      }
+
+      function certificateStateMeta(certificate) {
+        if (certificate.draftDelete) return { label: "待注销", cls: "is-rejected" };
+        if (certificate.draftNew) return { label: "待新增", cls: "is-pending" };
+        if (certificate.draftDirty) return { label: "待修改", cls: "is-pending" };
+        if (certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT") return { label: "审核中", cls: "is-pending" };
+        if (certificate.reviewStatus === "REJECTED") return { label: "已驳回", cls: "is-rejected" };
+        if (certificate.reviewStatus === "WITHDRAWN") return { label: "已撤销", cls: "is-muted" };
+        if (certificate.validityStatus === "EXPIRED" || certificate.validityStatus === "REVOKED") return { label: "已过期", cls: "is-muted" };
+        if (certificate.validityStatus === "EFFECTIVE") return { label: "已生效", cls: "is-active" };
+        return { label: "未生效", cls: "is-muted" };
+      }
+
+      function profileCertificateSource() {
+        if (profileEditMode && profileCertDraft) return profileCertDraft;
+        var profile = loadProfileData();
+        return profile.pendingCertificateList || profile.certificates || [];
+      }
+
       function renderCertificateList() {
         var list = document.querySelector("[data-certificate-list]");
-        var add = document.querySelector("[data-certificate-add]");
         if (!list) return;
-        var profile = loadProfileData();
-        var certificates = profile.pendingCertificateList || profile.certificates || [];
-        list.textContent = "";
-        if (!certificates.length) {
-          var empty = document.createElement("div");
-          empty.className = "certificate-empty";
-          empty.textContent = "暂无证书信息";
-          list.appendChild(empty);
-        }
-        certificates.forEach(function (certificate, index) {
-          var card = document.createElement("article");
-          card.className = "certificate-card";
-          var head = document.createElement("div");
-          head.className = "certificate-card-head";
-          var copy = document.createElement("div");
-          var title = document.createElement("h3");
-          title.className = "certificate-card-title";
-          title.textContent = certificate.name;
-          var number = document.createElement("p");
-          number.className = "certificate-card-no";
-          number.textContent = "证书编号：" + certificate.number;
-          copy.appendChild(title);
-          copy.appendChild(number);
-          head.appendChild(copy);
-          if (certificate.reviewStatus === "APPROVED") {
-            var actions = document.createElement("div");
-            actions.className = "certificate-card-actions";
-            var edit = document.createElement("button");
-            edit.type = "button";
-            edit.className = "ghost-action";
-            edit.textContent = "编辑";
-            edit.setAttribute("data-certificate-edit", String(index));
-            var remove = document.createElement("button");
-            remove.type = "button";
-            remove.className = "danger-action";
-            remove.textContent = "删除";
-            remove.setAttribute("data-certificate-delete", String(index));
-            actions.appendChild(edit);
-            actions.appendChild(remove);
-            head.appendChild(actions);
-          } else if (certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT") {
-            var reviewActions = document.createElement("div");
-            reviewActions.className = "certificate-card-actions";
-            var withdraw = document.createElement("button");
-            withdraw.type = "button";
-            withdraw.className = "ghost-action";
-            withdraw.textContent = "撤回";
-            withdraw.setAttribute("data-certificate-withdraw", String(index));
-            reviewActions.appendChild(withdraw);
-            head.appendChild(reviewActions);
+        var allRows = profileCertificateSource();
+        var replacedIds = {};
+        allRows.forEach(function (item) {
+          if (item.id && item.replacedCertificateId && (item.reviewStatus === "PENDING_REVIEW" || item.reviewStatus === "DRAFT")) {
+            replacedIds[item.replacedCertificateId] = true;
           }
-          var meta = document.createElement("div");
-          meta.className = "certificate-card-meta";
-          meta.innerHTML = "<span>有效期开始<strong>" + formatCertificateDate(certificate.startDate) + "</strong></span><span>有效期截止<strong>" + formatCertificateDate(certificate.endDate) + "</strong></span>";
-          var status = document.createElement("p");
-          status.className = "certificate-card-no";
-          var reviewLabel = certificate.reviewStatus === "PENDING_REVIEW"
-            ? "待审核"
-            : certificate.reviewStatus === "REJECTED"
-              ? "已驳回"
-              : certificate.reviewStatus === "DRAFT"
-                ? "待审核"
-                : certificate.reviewStatus === "WITHDRAWN"
-                  ? "已撤销"
-                  : "已通过";
-          var validityLabel = certificate.validityStatus === "EFFECTIVE"
-            ? "有效"
-            : certificate.validityStatus === "EXPIRED" || certificate.validityStatus === "REVOKED"
-              ? "已过期"
-              : "未生效";
-          status.textContent = "证书审核状态：" + reviewLabel + " · 证书有效状态：" + validityLabel;
-          card.appendChild(head);
-          card.appendChild(meta);
-          card.appendChild(status);
-          list.appendChild(card);
         });
-        if (add) add.hidden = false;
+        var activeNumbers = {};
+        allRows.forEach(function (item) {
+          if (item.number && (item.reviewStatus === "PENDING_REVIEW" || item.reviewStatus === "APPROVED")) activeNumbers[item.number] = true;
+        });
+        var visibleRows = allRows.map(function (item, index) { return { item: item, index: index }; })
+          .filter(function (row) {
+            var item = row.item;
+            if (!item.id) return true;
+            if (replacedIds[item.id]) return false;
+            if ((item.reviewStatus === "REJECTED" || item.reviewStatus === "WITHDRAWN") && item.number && activeNumbers[item.number]) return false;
+            return true;
+          });
+        var editable = Boolean(profileEditMode);
+        if (!visibleRows.length) {
+          list.innerHTML = editable
+            ? '<div class="cert-empty"><strong>还没有上传证书</strong><span>添加后与基础信息一并保存提交审核</span><button type="button" data-certificate-add>＋ 新增证书</button></div>'
+            : '<div class="cert-empty"><strong>还没有上传证书</strong><span>平台审核通过后即可参与派遣</span></div>';
+          return;
+        }
+        list.innerHTML = visibleRows.map(function (row) {
+          var certificate = row.item;
+          var index = row.index;
+          var state = certificateStateMeta(certificate);
+          var platformOwned = certificate.createdRole === "platform_admin";
+          var pending = certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT";
+          var rejected = certificate.reviewStatus === "REJECTED";
+          var approved = certificate.reviewStatus === "APPROVED";
+          var draftRow = certificate.draftNew || certificate.draftDelete || certificate.draftDirty;
+          var cardCls = "cert-card";
+          if (certificate.draftDelete) cardCls += " is-rejected-card";
+          else if (certificate.draftNew || certificate.draftDirty || pending) cardCls += " is-pending-card";
+          else if (rejected) cardCls += " is-rejected-card";
+
+          var foot = '<button type="button" data-certificate-view="' + index + '">查看</button>';
+          if (editable) {
+            if (certificate.draftNew) {
+              foot += '<button type="button" data-certificate-edit="' + index + '">编辑</button>';
+              foot += '<button type="button" class="is-danger" data-certificate-remove-draft="' + index + '">移除</button>';
+            } else if (certificate.draftDelete) {
+              foot += '<button type="button" data-certificate-undo-delete="' + index + '">取消注销</button>';
+            } else if (pending) {
+              foot += '<button type="button" data-certificate-withdraw="' + index + '">撤销申请</button>';
+            } else if (approved) {
+              foot += '<button type="button" data-certificate-edit="' + index + '">编辑</button>';
+              foot += '<button type="button" class="is-danger" data-certificate-delete="' + index + '">注销</button>';
+            } else {
+              foot += '<button type="button" data-certificate-edit="' + index + '">重新提交</button>';
+            }
+          }
+
+          var note = "";
+          if (editable && draftRow) {
+            note = '<p class="cert-card-note is-pending">' + (certificate.draftNew
+              ? "新增的证书，保存后与资料一并提交审核"
+              : certificate.draftDelete
+                ? "已标记注销，保存后随资料一并提交审核"
+                : "已修改，保存后与资料一并提交审核") + '</p>';
+          } else if (pending) {
+            note = '<p class="cert-card-note is-pending">' + (certificate.changeType === "DELETE"
+              ? "注销申请审核中，通过后证书失效"
+              : certificate.changeType === "UPDATE"
+                ? "变更申请审核中，通过后按新信息生效"
+                : "新增申请审核中，通过后证书生效") + '</p>';
+          }
+          if (!editable && rejected && certificate.rejectReason) {
+            note = '<p class="cert-card-note is-rejected">驳回原因：' + escProfile(certificate.rejectReason) + '</p>';
+          }
+          if (!editable && certificate.reviewStatus === "WITHDRAWN") {
+            note = '<p class="cert-card-note is-muted">申请已撤销，如需办理请重新提交</p>';
+          }
+          return '<article class="' + cardCls + '" data-certificate-open="' + index + '" role="button" tabindex="0">' +
+            '<div class="cert-card-head"><h3 class="cert-card-title">' + escProfile(certificate.name || "未命名证书") + '</h3><span class="cert-state ' + state.cls + '">' + state.label + '</span></div>' +
+            '<p class="cert-card-sub">编号 ' + escProfile(certificate.number || "—") + (certificate.major ? " · " + escProfile(certificate.major) : "") + (platformOwned ? '<span class="cert-origin-tag">平台录入</span>' : "") + '</p>' +
+            '<div class="cert-card-meta">' +
+              '<div class="full"><span>发证机构</span><strong>' + escProfile(certificate.issuer || "—") + '</strong></div>' +
+              '<div><span>发证日期</span><strong>' + escProfile(formatCertificateDate(certificate.issueDate || "") || "—") + '</strong></div>' +
+              '<div><span>有效期</span><strong>' + escProfile(formatCertificateDate(certificate.startDate)) + ' 至 ' + escProfile(formatCertificateDate(certificate.endDate)) + '</strong></div>' +
+            '</div>' + note +
+            '<div class="cert-card-foot">' + foot + '</div>' +
+          '</article>';
+        }).join("");
+      }
+
+      function syncCertificateEditAffordance() {
+        var addBtn = document.querySelector(".profile-block [data-certificate-add]");
+        if (addBtn) addBtn.hidden = !profileEditMode;
+        var desc = document.querySelector("[data-cert-block-desc]");
+        if (desc) {
+          desc.textContent = profileEditMode
+            ? "可新增、修改或注销证书，保存后与基础信息一并提交审核"
+            : "证书为考官资质佐证材料，变更需提交审核。";
+        }
       }
 
       function resetCertificateEditor() {
         profileCertificateEditIndex = -1;
-        var editor = document.querySelector("[data-certificate-editor]");
-        if (editor) editor.hidden = true;
-        document.querySelectorAll("[data-certificate-input]").forEach(function (input) { input.value = ""; input.classList.remove("is-error"); });
+        var sheet = document.querySelector("[data-certificate-sheet]");
+        if (sheet) sheet.hidden = true;
+        document.querySelectorAll("[data-certificate-input]").forEach(function (input) {
+          input.value = "";
+          input.classList.remove("is-error");
+        });
+        var scanInput = document.querySelector("[data-certificate-scan]");
+        if (scanInput) { scanInput.value = ""; scanInput.classList.remove("is-error"); }
+        var scanHint = document.querySelector("[data-certificate-scan-hint]");
+        if (scanHint) scanHint.textContent = "支持 JPG / PNG / PDF，大小不超过 5MB";
       }
 
       function openCertificateEditor(index) {
-        var profile = loadProfileData();
-        var certificate = index >= 0 ? (profile.pendingCertificateList || profile.certificates || [])[index] : { number: "", name: "", startDate: "", endDate: "" };
+        var certificate = index >= 0
+          ? profileCertificateSource()[index]
+          : { name: "", number: "", major: "", issuer: "", issueDate: "", startDate: "", endDate: "", scanFile: "" };
         if (!certificate) return;
         profileCertificateEditIndex = index;
         document.querySelectorAll("[data-certificate-input]").forEach(function (input) {
           input.value = certificate[input.getAttribute("data-certificate-input")] || "";
           input.classList.remove("is-error");
         });
-        var editor = document.querySelector("[data-certificate-editor]");
-        if (editor) editor.hidden = false;
+        var scanInput = document.querySelector("[data-certificate-scan]");
+        if (scanInput) { scanInput.value = ""; scanInput.classList.remove("is-error"); }
+        var scanHint = document.querySelector("[data-certificate-scan-hint]");
+        if (scanHint) scanHint.textContent = certificate.scanFile
+          ? "当前已上传：" + certificate.scanFile + "；重新选择可替换"
+          : "支持 JPG / PNG / PDF，大小不超过 5MB";
+        var sheet = document.querySelector("[data-certificate-sheet]");
+        if (sheet) sheet.hidden = false;
+        var titleNode = document.querySelector("[data-certificate-sheet-title]");
+        if (titleNode) titleNode.textContent = index >= 0 ? "编辑证书" : "新增证书";
+        var saveBtn = document.querySelector("[data-certificate-save]");
+        if (saveBtn) saveBtn.textContent = index >= 0 ? "提交变更审核" : "提交审核";
+      }
+
+      function certificateReviewLabel(certificate) {
+        if (certificate.reviewStatus === "APPROVED") return "审核通过";
+        if (certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT") return "审核中";
+        if (certificate.reviewStatus === "REJECTED") return "已驳回";
+        if (certificate.reviewStatus === "WITHDRAWN") return "已撤销";
+        return "—";
+      }
+
+      function certificateValidityLabel(certificate) {
+        if (certificate.validityStatus === "EFFECTIVE") return "有效";
+        if (certificate.validityStatus === "EXPIRED") return "已过期";
+        if (certificate.validityStatus === "REVOKED") return "已作废";
+        return "未生效";
+      }
+
+      function openCertificateDetail(index) {
+        var certificates = profileCertificateSource();
+        var certificate = certificates[index];
+        var sheet = document.querySelector("[data-certificate-detail-sheet]");
+        var body = document.querySelector("[data-certificate-detail-body]");
+        var actions = document.querySelector("[data-certificate-detail-actions]");
+        if (!certificate || !sheet || !body) return;
+        var state = certificateStateMeta(certificate);
+        var platformOwned = certificate.createdRole === "platform_admin";
+        var rows = [
+          ["证书编号", certificate.number || "—"],
+          ["专业", certificate.major || "—"],
+          ["发证机构", certificate.issuer || "—"],
+          ["发证日期", formatCertificateDate(certificate.issueDate || "") || "—"],
+          ["有效期", formatCertificateDate(certificate.startDate) + " 至 " + formatCertificateDate(certificate.endDate)],
+          ["审核状态", certificateReviewLabel(certificate)],
+          ["证书状态", certificateValidityLabel(certificate)],
+          ["证书来源", platformOwned ? "平台录入" : "本人申请"]
+        ];
+        if (certificate.submittedAt || certificate.addedAt) rows.push(["提交时间", certificate.submittedAt || certificate.addedAt]);
+        var note = "";
+        if (certificate.reviewStatus === "REJECTED" && certificate.rejectReason) {
+          note = '<p class="cert-card-note is-rejected">驳回原因：' + escProfile(certificate.rejectReason) + '</p>';
+        } else if (certificate.reviewStatus === "WITHDRAWN") {
+          note = '<p class="cert-card-note is-muted">该申请已撤销，如需办理请重新提交证书</p>';
+        } else if (certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT") {
+          note = '<p class="cert-card-note is-pending">' + (certificate.changeType === "DELETE"
+            ? "注销申请审核中，通过后证书失效"
+            : certificate.changeType === "UPDATE"
+              ? "变更申请审核中，通过后按新信息生效"
+              : "新增申请审核中，通过后证书生效") + '</p>';
+        }
+        body.innerHTML =
+          '<div class="cert-detail-head"><h4 class="cert-detail-name">' + escProfile(certificate.name || "未命名证书") + '</h4><span class="cert-state ' + state.cls + '">' + state.label + '</span></div>' +
+          '<div class="cert-detail-rows">' + rows.map(function (row) {
+            return '<div class="cert-detail-row"><span>' + row[0] + '</span><strong>' + escProfile(row[1]) + '</strong></div>';
+          }).join("") + '</div>' + note +
+          '<div class="cert-detail-section"><span class="cert-detail-section-title">证书扫描件</span><div class="scan-preview"><div><strong>' + escProfile(certificate.scanFile || "未上传扫描件") + '</strong>原型示意，不含真实图片</div></div></div>';
+
+        var actionHtml = '';
+        var editable = Boolean(profileEditMode);
+        if (editable && certificate.draftNew) {
+          actionHtml += '<button class="ghost-action" type="button" data-cert-detail-action="edit">编辑</button>';
+          actionHtml += '<button class="danger-action" type="button" data-cert-detail-action="remove-draft">移除</button>';
+        } else if (editable && certificate.draftDelete) {
+          actionHtml += '<button class="ghost-action" type="button" data-cert-detail-action="undo-delete">取消注销</button>';
+        } else if (certificate.reviewStatus === "PENDING_REVIEW" || certificate.reviewStatus === "DRAFT") {
+          actionHtml += '<button class="ghost-action" type="button" data-cert-detail-action="withdraw">撤销申请</button>';
+        } else if (editable && certificate.reviewStatus === "APPROVED") {
+          actionHtml += '<button class="ghost-action" type="button" data-cert-detail-action="edit">编辑证书</button>';
+          actionHtml += '<button class="danger-action" type="button" data-cert-detail-action="delete">注销证书</button>';
+        } else if (editable) {
+          actionHtml += '<button class="ghost-action" type="button" data-cert-detail-action="edit">重新提交</button>';
+        }
+        if (actions) {
+          actions.innerHTML = actionHtml || '<p class="cert-detail-hint">如需修改证书，请关闭后点右上角「编辑」，与基础信息一并提交。</p>';
+        }
+
+        body.hidden = false;
+        if (actions) {
+          actions.querySelectorAll("[data-cert-detail-action]").forEach(function (button) {
+            button.addEventListener("click", function () {
+              var action = button.getAttribute("data-cert-detail-action");
+              sheet.hidden = true;
+              if (action === "edit") openCertificateEditor(index);
+              else if (action === "delete") requestDeleteCertificate(index);
+              else if (action === "withdraw") requestWithdrawCertificate(index);
+              else if (action === "undo-delete") undoDeleteCertificate(index);
+              else if (action === "remove-draft") removeDraftCertificate(index);
+            });
+          });
+        }
+        sheet.hidden = false;
       }
 
       function saveCertificateEditor() {
+        if (!profileEditMode) setProfileEditMode(true);
         var value = {};
         var invalid = false;
         document.querySelectorAll("[data-certificate-input]").forEach(function (input) {
           var key = input.getAttribute("data-certificate-input");
-          value[key] = input.value.trim();
+          value[key] = String(input.value || "").trim();
           var empty = !value[key];
           input.classList.toggle("is-error", empty);
           if (empty) invalid = true;
         });
-        if (!invalid && value.startDate > value.endDate) {
+        var scanInput = document.querySelector("[data-certificate-scan]");
+        var scanPicked = scanInput && scanInput.files && scanInput.files.length ? scanInput.files[0].name : "";
+        var list = profileCertificateSource();
+        var editingIndex = profileCertificateEditIndex;
+        var currentCert = editingIndex >= 0 ? list[editingIndex] : null;
+        var hasScan = Boolean(scanPicked) || Boolean(currentCert && currentCert.scanFile);
+        if (scanInput) scanInput.classList.toggle("is-error", !hasScan);
+        if (invalid) {
+          showToast("请完整填写证书名称、编号、专业、发证机构、发证日期与有效期");
+          return;
+        }
+        if (!hasScan) {
+          showToast("请上传证书扫描件");
+          return;
+        }
+        if (value.issueDate && value.startDate && value.issueDate > value.startDate) {
+          showToast("发证日期不能晚于有效期开始日期");
+          return;
+        }
+        if (value.startDate > value.endDate) {
           showToast("有效期开始日期不能晚于截止日期");
           return;
         }
-        if (invalid) {
-          showToast("请完整填写证书信息");
-          return;
-        }
-        var api = examinerCertificateApi();
-        var editingIndex = profileCertificateEditIndex;
-        var profile = loadProfileData();
-        var certificates = (profile.pendingCertificateList || profile.certificates || []).slice();
-        var existing = editingIndex >= 0 ? (certificates[editingIndex] || {}) : null;
-        if (api) {
-          var examinerId = examinerCertificateAccountId();
-          var payload = {
-            actorRole: "examiner",
-            actorId: examinerId,
-            examinerId: examinerId,
-            certificateNumber: value.number,
-            certificateName: value.name,
-            certificateMajor: existing && existing.major ? existing.major : "",
-            validFromDate: String(value.startDate || "").replace(/-/g, ""),
-            validUntilDate: String(value.endDate || "").replace(/-/g, "")
-          };
-          var pending;
-          if (existing && existing.id) {
-            payload.objectVersion = existing.objectVersion;
-            payload.changeType = "UPDATE";
-            pending = api.requestExaminerCertificateChange(existing.id, payload);
-          } else {
-            pending = api.createExaminerCertificate(payload);
-          }
+        value.scanFile = scanPicked || (currentCert && currentCert.scanFile) || "";
+        var keys = ["name", "number", "major", "issuer", "issueDate", "startDate", "endDate", "scanFile"];
+        var changed = !currentCert || keys.some(function (key) {
+          return String(currentCert[key] || "") !== String(value[key] || "");
+        });
+        if (!changed) {
           resetCertificateEditor();
-          pending.then(function () {
-            return refreshExaminerCertificates();
-          }).then(function () {
-            showToast("证书申请已提交，等待平台审核");
-          }).catch(function (error) {
-            showToast(examinerCertificateMessage(error));
-          });
+          showToast("证书信息未变化");
           return;
         }
-        if (editingIndex >= 0) {
-          value.id = existing.id;
-          certificates[editingIndex] = Object.assign({}, existing, value, { reviewStatus: "PENDING_REVIEW" });
+        if (!profileCertDraft) profileCertDraft = list.slice();
+        var resubmit = currentCert && (currentCert.reviewStatus === "REJECTED" || currentCert.reviewStatus === "WITHDRAWN");
+        if (editingIndex >= 0 && !resubmit) {
+          profileCertDraft[editingIndex] = Object.assign({}, profileCertDraft[editingIndex], value, { draftDirty: true, draftDelete: false });
         } else {
-          value.id = "cert-" + Date.now();
-          certificates.push(Object.assign({}, value, { reviewStatus: "PENDING_REVIEW", validityStatus: "NOT_EFFECTIVE" }));
+          profileCertDraft.push(Object.assign({}, value, {
+            id: "",
+            reviewStatus: "DRAFT",
+            validityStatus: "NOT_EFFECTIVE",
+            changeType: "CREATE",
+            draftNew: true
+          }));
         }
-        applyExaminerCertificateViews(certificates);
+        profileCertDraftTouched = true;
         resetCertificateEditor();
         renderCertificateList();
-        showToast("证书申请已提交，等待平台审核");
+        showToast("已加入修改，随资料一并提交");
       }
 
       function withdrawCertificate(index) {
@@ -4249,8 +4631,6 @@
         if (index >= certificates.length) return;
         var certificate = certificates[index];
         if (certificate.reviewStatus !== "PENDING_REVIEW" && certificate.reviewStatus !== "DRAFT") { showToast("该证书申请已处理，不可撤回"); return; }
-        var certificateName = certificate && certificate.name ? "“" + certificate.name + "”" : "该证书";
-        if (!window.confirm("确定撤回" + certificateName + "的证书申请吗？撤回后原有效证书继续有效。")) return;
         var api = examinerCertificateApi();
         if (api && certificate.id) {
           api.withdrawExaminerCertificate(certificate.id, {
@@ -4260,7 +4640,7 @@
           }).then(function () {
             return refreshExaminerCertificates();
           }).then(function () {
-            showToast(certificate.changeType === "UPDATE" || certificate.changeType === "DELETE" ? "证书申请已撤回，原证书继续有效" : "证书申请已撤回");
+            showToast(certificate.changeType === "UPDATE" || certificate.changeType === "DELETE" ? "证书申请已撤销，原证书继续有效" : "证书申请已撤销");
           }).catch(function (error) {
             showToast(examinerCertificateMessage(error));
           });
@@ -4278,7 +4658,7 @@
           window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(saved));
         } catch (err) { /* ignore */ }
         renderCertificateList();
-        showToast(restored ? "证书申请已撤回，原证书继续有效" : "证书申请已撤回");
+        showToast(restored ? "证书申请已撤销，原证书继续有效" : "证书申请已撤销");
       }
 
       function setProfileEditMode(editing) {
@@ -4288,6 +4668,9 @@
           input.classList.remove("is-error");
         });
         if (profileEditMode) {
+          var currentCertificates = profile.pendingCertificateList || profile.certificates || [];
+          profileCertDraft = currentCertificates.map(function (item) { return Object.assign({}, item); });
+          profileCertDraftTouched = false;
           PROFILE_CONTACT_KEYS.concat(PROFILE_QUALIFICATION_KEYS).forEach(function (key) {
             var input = document.querySelector('[data-profile-input="' + key + '"]');
             if (input) input.value = (PROFILE_QUALIFICATION_KEYS.indexOf(key) >= 0 && profile.pendingProfileChanges[key])
@@ -4299,6 +4682,8 @@
         } else {
           profileEditSnapshot = null;
           profilePhotoDraft = null;
+          profileCertDraft = null;
+          profileCertDraftTouched = false;
           syncAuthUI();
         }
         document.querySelectorAll("[data-profile-locked]").forEach(function (field) {
@@ -4318,10 +4703,17 @@
         var editButton = document.querySelector("[data-profile-edit-button]");
         var cancelButton = document.querySelector("[data-profile-cancel-button]");
         var saveButton = document.querySelector("[data-profile-save-button]");
+        var saveBar = document.querySelector("[data-profile-save-bar]");
         if (editButton) editButton.hidden = profileEditMode;
         if (cancelButton) cancelButton.hidden = !profileEditMode;
         if (saveButton) saveButton.hidden = !profileEditMode;
+        if (saveBar) saveBar.hidden = !profileEditMode;
+        document.querySelectorAll(".profile-row.is-editable").forEach(function (row) {
+          var editField = row.querySelector("[data-profile-edit]");
+          row.classList.toggle("is-editing", Boolean(editField && !editField.hidden));
+        });
         renderCertificateList();
+        syncCertificateEditAffordance();
       }
 
       function saveProfileEdits() {
@@ -4343,10 +4735,69 @@
           return;
         }
         var hasPhotoChanges = Boolean(profilePhotoDraft);
+        var certificateOps = takeCertificateDraftOps();
         var pending = saveProfileData(values);
         setProfileEditMode(false);
         var basicPending = Boolean(Object.keys(pending).length || hasPhotoChanges);
+        if (certificateOps.length) {
+          commitCertificateOps(certificateOps).then(function () {
+            showToast("资料与证书变更已提交审核");
+          }).catch(function (error) {
+            showToast(examinerCertificateMessage(error));
+          });
+          return;
+        }
         showToast(basicPending ? "考官基础资料已提交审核" : "资料已更新");
+      }
+
+      function takeCertificateDraftOps() {
+        var ops = [];
+        if (!profileCertDraft || !profileCertDraftTouched) return ops;
+        profileCertDraft.forEach(function (item) {
+          if (item.draftDelete && item.id) ops.push({ type: "delete", item: item });
+          else if (item.draftNew) ops.push({ type: "create", item: item });
+          else if (item.draftDirty && item.id) ops.push({ type: "update", item: item });
+        });
+        return ops;
+      }
+
+      function certificateOpPayload(item) {
+        var examinerId = examinerCertificateAccountId();
+        return {
+          actorRole: "examiner",
+          actorId: examinerId,
+          examinerId: examinerId,
+          certificateNumber: item.number,
+          certificateName: item.name,
+          certificateMajor: item.major || "",
+          certificateIssuer: item.issuer || "",
+          certificateIssueDate: String(item.issueDate || "").replace(/-/g, ""),
+          certificateScanFile: item.scanFile || "",
+          validFromDate: String(item.startDate || "").replace(/-/g, ""),
+          validUntilDate: String(item.endDate || "").replace(/-/g, "")
+        };
+      }
+
+      function commitCertificateOps(ops) {
+        var api = examinerCertificateApi();
+        if (!api) return Promise.resolve();
+        var chain = Promise.resolve();
+        ops.forEach(function (op) {
+          chain = chain.then(function () {
+            if (op.type === "create") return api.createExaminerCertificate(certificateOpPayload(op.item));
+            if (op.type === "delete") {
+              return api.requestExaminerCertificateChange(op.item.id, Object.assign(certificateOpPayload(op.item), {
+                changeType: "DELETE",
+                objectVersion: op.item.objectVersion
+              }));
+            }
+            return api.requestExaminerCertificateChange(op.item.id, Object.assign(certificateOpPayload(op.item), {
+              changeType: "UPDATE",
+              objectVersion: op.item.objectVersion
+            }));
+          });
+        });
+        return chain.then(function () { return refreshExaminerCertificates(); });
       }
 
       function syncAuthUI() {
@@ -4387,6 +4838,21 @@
           el.textContent = value ? "本次资料申请值：" + value : "";
         });
         applyProfilePhoto(document.querySelector("[data-profile-photo-preview]"), profile.photoUrl, DEMO_JUDGE.avatar);
+        var heroBadge = document.querySelector("[data-profile-hero-badge]");
+        if (heroBadge) {
+          var heroPending = profile.pendingProfileReviewStatus === "PENDING";
+          heroBadge.textContent = heroPending ? "资料审核中" : "考官在册";
+          heroBadge.className = "profile-hero-badge" + (heroPending ? " is-pending" : "");
+        }
+        var levelChips = document.querySelector("[data-profile-level-chips]");
+        if (levelChips) {
+          levelChips.innerHTML = String(PROFILE_FIXED_DATA.levels || "").split("·").map(function (part) {
+            var text = part.trim();
+            return text ? '<span class="profile-level-chip">' + text + '</span>' : "";
+          }).join("");
+        }
+        var majorNode = document.querySelector("[data-profile-major]");
+        if (majorNode) majorNode.textContent = PROFILE_FIXED_DATA.major;
         var profileReviewStatus = document.querySelector("[data-profile-review-status]");
         if (profileReviewStatus) {
           profileReviewStatus.hidden = profile.pendingProfileReviewStatus !== "PENDING";
@@ -4395,6 +4861,7 @@
             : "";
         }
         renderCertificateList();
+        syncCertificateEditAffordance();
         if (!profileEditMode) {
           document.querySelectorAll("[data-profile-input]").forEach(function (input) {
             var key = input.getAttribute("data-profile-input");
@@ -6300,7 +6767,7 @@
         var view = route.view;
         var allowed = [
           "login", "schedule", "schedule-detail", "online-batch-detail", "score-entry",
-          "message", "message-detail", "my", "profile", "my-certificates", "settings",
+          "message", "message-detail", "my", "profile", "settings",
           "password", "bind-phone", "notify-settings", "user-agreement", "privacy-policy", "about"
         ];
         var auth = loadAuth();
@@ -6335,7 +6802,7 @@
         if (document.querySelector(".app")) document.querySelector(".app").scrollTop = 0;
         applyDemoState();
         lastActivatedView = view;
-        if (view === "my-certificates") refreshExaminerCertificates().catch(function () {
+        if (view === "profile") refreshExaminerCertificates().catch(function () {
           showToast("证书列表刷新失败，请稍后重试");
         });
         if (view === "schedule-detail") renderScheduleDetail(currentScheduleId);
@@ -6809,12 +7276,48 @@
         });
       }
 
+      function openProfileConfirm(options) {
+        var opts = options || {};
+        var overlay = document.getElementById("profile-confirm");
+        if (!overlay) {
+          var fallback = window.confirm(opts.message || "确认执行该操作？");
+          return Promise.resolve(Boolean(fallback));
+        }
+        var titleNode = overlay.querySelector("[data-profile-confirm-title]");
+        var messageNode = overlay.querySelector("[data-profile-confirm-message]");
+        var okNode = overlay.querySelector("[data-profile-confirm-ok]");
+        var cancelNode = overlay.querySelector("[data-profile-confirm-cancel]");
+        if (titleNode) titleNode.textContent = opts.title || "确认操作";
+        if (messageNode) messageNode.textContent = opts.message || "";
+        if (okNode) {
+          okNode.textContent = opts.confirmText || "确认";
+          okNode.classList.toggle("danger-action", Boolean(opts.danger));
+        }
+        if (cancelNode) cancelNode.textContent = opts.cancelText || "取消";
+        overlay.hidden = false;
+        return new Promise(function (resolve) {
+          function settle(result) {
+            overlay.hidden = true;
+            if (okNode) okNode.onclick = null;
+            if (cancelNode) cancelNode.onclick = null;
+            resolve(result);
+          }
+          if (okNode) okNode.onclick = function () { settle(true); };
+          if (cancelNode) cancelNode.onclick = function () { settle(false); };
+        });
+      }
+
       var profileEditButton = document.querySelector("[data-profile-edit-button]");
       if (profileEditButton) profileEditButton.addEventListener("click", function () { setProfileEditMode(true); });
       var profileCancelButton = document.querySelector("[data-profile-cancel-button]");
       if (profileCancelButton) profileCancelButton.addEventListener("click", function () {
-        if (profileHasChanges() && !window.confirm("当前资料修改尚未保存，确定取消吗？")) return;
-        setProfileEditMode(false);
+        if (!profileHasChanges()) { setProfileEditMode(false); return; }
+        openProfileConfirm({
+          title: "放弃本次修改？",
+          message: "当前资料修改尚未保存，退出后已填写的内容不会保留。",
+          confirmText: "放弃修改",
+          danger: true
+        }).then(function (ok) { if (ok) setProfileEditMode(false); });
       });
       var profileSaveButton = document.querySelector("[data-profile-save-button]");
       if (profileSaveButton) profileSaveButton.addEventListener("click", saveProfileEdits);
@@ -6844,11 +7347,97 @@
           reader.readAsDataURL(file);
         });
       }
+      document.querySelectorAll(".profile-row.is-editable").forEach(function (row) {
+        row.addEventListener("click", function (event) {
+          if (profileEditMode) return;
+          if (event.target.closest("input, select, textarea, button, a, option")) return;
+          setProfileEditMode(true);
+          var input = row.querySelector("[data-profile-input]");
+          if (!input) return;
+          window.setTimeout(function () {
+            input.focus();
+            if (typeof input.select === "function" && input.tagName === "INPUT") input.select();
+          }, 80);
+        });
+      });
       var certificateList = document.querySelector("[data-certificate-list]");
+      function requestDeleteCertificate(index) {
+        var list = profileCertDraft || profileCertificateSource();
+        var certificate = list[index];
+        if (!certificate) return;
+        if (!profileEditMode) { setProfileEditMode(true); return; }
+        var certificateName = certificate.name ? "“" + certificate.name + "”" : "该证书";
+        openProfileConfirm({
+          title: "标记注销该证书？",
+          message: "将注销" + certificateName + "，保存后与其他变更一并提交审核，审核通过后证书失效。",
+          confirmText: "标记注销",
+          danger: true
+        }).then(function (ok) {
+          if (!ok) return;
+          profileCertDraft[index] = Object.assign({}, certificate, {
+            draftDelete: true,
+            draftPrevDirty: Boolean(certificate.draftDirty),
+            draftDirty: false
+          });
+          profileCertDraftTouched = true;
+          renderCertificateList();
+          showToast("已标记注销，保存后提交审核");
+        });
+      }
+
+      function undoDeleteCertificate(index) {
+        var list = profileCertDraft || [];
+        var certificate = list[index];
+        if (!certificate) return;
+        profileCertDraft[index] = Object.assign({}, certificate, {
+          draftDelete: false,
+          draftDirty: Boolean(certificate.draftPrevDirty),
+          draftPrevDirty: false
+        });
+        renderCertificateList();
+        showToast("已取消注销");
+      }
+
+      function removeDraftCertificate(index) {
+        if (!profileCertDraft || !profileCertDraft[index]) return;
+        profileCertDraft.splice(index, 1);
+        profileCertDraftTouched = true;
+        renderCertificateList();
+        showToast("已移除新增的证书");
+      }
+
+      function requestWithdrawCertificate(index) {
+        var profile = loadProfileData();
+        var certificates = profile.pendingCertificateList || profile.certificates || [];
+        var certificate = certificates[index];
+        if (!certificate) return;
+        var certificateName = certificate.name ? "“" + certificate.name + "”" : "该证书";
+        openProfileConfirm({
+          title: "撤销证书申请？",
+          message: "将撤销" + certificateName + "的申请，撤销后原有效证书继续有效。",
+          confirmText: "撤销申请"
+        }).then(function (ok) { if (ok) withdrawCertificate(index); });
+      }
+
       if (certificateList) certificateList.addEventListener("click", function (event) {
+        var addInline = event.target.closest("[data-certificate-add]");
+        if (addInline) {
+          event.preventDefault();
+          openCertificateEditor(-1);
+          return;
+        }
         var edit = event.target.closest("[data-certificate-edit]");
         var remove = event.target.closest("[data-certificate-delete]");
         var withdraw = event.target.closest("[data-certificate-withdraw]");
+        var removeDraft = event.target.closest("[data-certificate-remove-draft]");
+        var undoDelete = event.target.closest("[data-certificate-undo-delete]");
+        var viewButton = event.target.closest("[data-certificate-view]");
+        if (viewButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          openCertificateDetail(Number(viewButton.getAttribute("data-certificate-view")));
+          return;
+        }
         if (edit) {
           openCertificateEditor(Number(edit.getAttribute("data-certificate-edit")));
           return;
@@ -6856,53 +7445,50 @@
         if (withdraw) {
           event.preventDefault();
           event.stopPropagation();
-          withdrawCertificate(Number(withdraw.getAttribute("data-certificate-withdraw")));
+          requestWithdrawCertificate(Number(withdraw.getAttribute("data-certificate-withdraw")));
+          return;
+        }
+        if (removeDraft) {
+          event.preventDefault();
+          event.stopPropagation();
+          removeDraftCertificate(Number(removeDraft.getAttribute("data-certificate-remove-draft")));
+          return;
+        }
+        if (undoDelete) {
+          event.preventDefault();
+          event.stopPropagation();
+          undoDeleteCertificate(Number(undoDelete.getAttribute("data-certificate-undo-delete")));
           return;
         }
         if (remove) {
           event.preventDefault();
           event.stopPropagation();
-          var index = Number(remove.getAttribute("data-certificate-delete"));
-          var profile = loadProfileData();
-          var certificates = (profile.pendingCertificateList || profile.certificates || []).slice();
-          if (!Number.isInteger(index) || index < 0 || index >= certificates.length) return;
-          var certificate = certificates[index];
-          if (certificate.reviewStatus !== "APPROVED") return;
-          var certificateName = certificate && certificate.name ? "“" + certificate.name + "”" : "该证书";
-          if (!window.confirm("确定删除" + certificateName + "吗？删除后需提交审核。")) return;
-          var removeApi = examinerCertificateApi();
-          if (removeApi && certificate && certificate.id && certificate.reviewStatus === "APPROVED") {
-            removeApi.requestExaminerCertificateChange(certificate.id, {
-              changeType: "DELETE",
-              actorRole: "examiner",
-              actorId: examinerCertificateAccountId(),
-              objectVersion: certificate.objectVersion
-            }).then(function () {
-              return refreshExaminerCertificates();
-            }).then(function () {
-              showToast("注销申请已提交，审核通过前该证书不参与新派遣");
-            }).catch(function (error) {
-              showToast(examinerCertificateMessage(error));
-            });
-            return;
-          }
-          certificates[index] = Object.assign({}, certificate, {
-            changeType: "DELETE",
-            reviewStatus: "PENDING_REVIEW",
-            validityStatus: certificate.validityStatus || "EFFECTIVE"
-          });
-          applyExaminerCertificateViews(certificates);
-          resetCertificateEditor();
-          renderCertificateList();
-          showToast("注销申请已提交，等待平台审核");
+          requestDeleteCertificate(Number(remove.getAttribute("data-certificate-delete")));
+          return;
+        }
+        var card = event.target.closest("[data-certificate-open]");
+        if (card && !event.target.closest("button, a")) {
+          openCertificateDetail(Number(card.getAttribute("data-certificate-open")));
         }
       });
       var certificateAdd = document.querySelector("[data-certificate-add]");
       if (certificateAdd) certificateAdd.addEventListener("click", function () { openCertificateEditor(-1); });
       var certificateSave = document.querySelector("[data-certificate-save]");
       if (certificateSave) certificateSave.addEventListener("click", saveCertificateEditor);
-      var certificateCancel = document.querySelector("[data-certificate-cancel]");
-      if (certificateCancel) certificateCancel.addEventListener("click", resetCertificateEditor);
+      document.querySelectorAll("[data-certificate-cancel]").forEach(function (button) {
+        button.addEventListener("click", resetCertificateEditor);
+      });
+      document.querySelectorAll("[data-close-certificate-detail]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var detailSheet = document.querySelector("[data-certificate-detail-sheet]");
+          if (detailSheet) detailSheet.hidden = true;
+        });
+      });
+      document.querySelectorAll("[data-certificate-sheet], [data-certificate-detail-sheet]").forEach(function (mask) {
+        mask.addEventListener("click", function (event) {
+          if (event.target === mask) mask.hidden = true;
+        });
+      });
       hydrateExaminerCertificates();
 
       function syncRuntimeDemoDate() {
