@@ -16,17 +16,14 @@
 
 ## 在线预览
 
-部署完成后，通过 GitHub Pages 访问：
-
-```text
-https://<用户名>.github.io/<仓库名>/
-```
+通过 GitHub Pages 访问：<https://wuxuelian2026.github.io/exam-platform-prototype/>
 
 | 端 | 地址 |
 | --- | --- |
 | 后台管理端 | `/admin/` |
 | 考生端小程序 | `/student/` |
 | 考官端小程序 | `/judge/` |
+| 考务发号端 | `/student/#issuer-login` |
 
 ## 本地预览
 
