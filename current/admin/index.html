@@ -11653,7 +11653,8 @@
         var scoreTabPanel = root.querySelector("[data-score-task-tab-panel]");
         var scoreTabOpen = scoreTabPanel ? scoreTabPanel.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"], [data-score-task-row][data-score-task-status="补录中"]').length : 0;
         var flowTabs = gradeStatuses.map(function (status) { return '<button class="' + (targetStatus === status ? "active" : "") + '" type="button" data-result-status-tab="' + status + '" role="tab" aria-selected="' + (targetStatus === status ? "true" : "false") + '">' + status + '</button>'; });
-        if (scoreTabPanel) flowTabs.push('<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (scoreTabOpen ? " · " + scoreTabOpen + " 项超时" : "") + '</span></button>');
+        // 评分任务放最前（超时最需要被看到），其后才是 待发布 / 已发布
+        if (scoreTabPanel) flowTabs.unshift('<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (scoreTabOpen ? " · " + scoreTabOpen + " 项超时" : "") + '</span></button>');
         flow.innerHTML = flowTabs.join("");
       }
       var actionBar = root.querySelector(".result-action-bar .page-actions");
@@ -11692,7 +11693,7 @@
         panel.appendChild(scoreCard);
         if (!flow.querySelector('[data-result-status-tab="评分任务"]')) {
           var open = scoreCard.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"], [data-score-task-row][data-score-task-status="补录中"]').length;
-          flow.insertAdjacentHTML("beforeend", '<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (open ? " · " + open + " 项超时" : "") + '</span></button>');
+          flow.insertAdjacentHTML("afterbegin", '<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (open ? " · " + open + " 项超时" : "") + '</span></button>');
         }
         var active = flow.querySelector("[data-result-status-tab].active");
         applyResultStatus(dash, active ? active.getAttribute("data-result-status-tab") : "待发布", false);
