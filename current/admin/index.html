@@ -2172,6 +2172,10 @@
     .cert-library-workbench .certificate-print-table td:nth-child(3) { min-width: 150px; }
     .cert-library-workbench > .info-banner { margin-bottom: 12px; }
     .score-task-card { margin-bottom: 12px; }
+    .score-task-card > .pagination { display: none; }
+    .table-card [data-score-task-tab-panel] > .score-task-card { margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+    .result-action-bar[hidden], .table-wrap[hidden], [data-score-task-tab-panel][hidden] { display: none !important; }
+    .result-flow [data-result-status-tab="评分任务"] span { color: inherit; }
     .score-task-card .table-tools { align-items: flex-start; }
     .score-task-card .table-tools .muted { display: block; margin-top: 4px; font-size: 12px; }
     .score-task-alert {
@@ -2198,6 +2202,25 @@
     .score-task-table .score-task-remind { font-size: 12px; line-height: 1.45; }
     .score-task-table .score-task-remind small { display: block; color: var(--muted); }
     .score-task-rule { margin: 14px 0 0; padding: 10px 12px; border: 1px solid #cfe0f8; background: #f5f9ff; color: #475467; font-size: 12px; line-height: 1.65; }
+    .score-backfill-progress { display: flex; align-items: center; gap: 10px; margin: 12px 0 10px; font-size: 12px; color: var(--muted); }
+    .score-backfill-progress strong { flex: 0 0 auto; color: var(--text); font-weight: 600; }
+    .score-backfill-progress .bar { flex: 1 1 auto; height: 6px; border-radius: 999px; background: #e8eefb; overflow: hidden; }
+    .score-backfill-progress .bar i { display: block; height: 100%; background: var(--primary); border-radius: 999px; transition: width .25s ease; }
+    .score-backfill-progress span { flex: 0 0 auto; }
+    .score-backfill-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 14px 0 8px; }
+    .score-backfill-head .muted { font-size: 12px; }
+    .table-wrap table.score-backfill-table { min-width: 0; table-layout: fixed; }
+    .table-wrap table.score-backfill-record-table { min-width: 0; table-layout: fixed; }
+    .score-backfill-record-detail td { padding-top: 0 !important; background: #fbfdff; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .score-backfill-record-detail span { display: block; }
+    .score-backfill-record-detail span + span { margin-top: 2px; }
+    .score-backfill-table td { vertical-align: middle; }
+    .score-backfill-record-table { min-width: 1080px; table-layout: auto; }
+    .score-backfill-record-table td { line-height: 1.5; }
+    .score-backfill-table .score-task-person { white-space: nowrap; }
+    .score-backfill-table .score-task-person small,
+    .score-backfill-table .score-task-cell-sub { display: block; color: var(--muted); font-size: 12px; }
+    .score-backfill-table .operation { flex-wrap: wrap; }
     .cert-library-results[hidden] { display: none; }
     .cert-print-preview-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .cert-print-preview-head h3 { margin: 0; font-size: 16px; }
@@ -4346,7 +4369,7 @@
                 <div class="table-tools">
                   <div>
                     <h2 class="table-title">评分任务</h2>
-                    <span class="muted">评分任务统一在考试当天 24:00 截止；当晚 20:00 系统自动提醒仍未提交的考官</span>
+                    <span class="muted">评分任务统一在考试当天 24:00 截止；当晚 20:00 系统自动提醒仍未提交的考官；超时后平台按考生逐条补录</span>
                   </div>
                   <div class="page-actions">
                     <span class="tag orange" data-score-task-alert-count>1 项超时未提交</span>
@@ -4380,20 +4403,20 @@
                         <td><span class="tag blue" data-score-task-status-tag>待提交</span></td>
                         <td><div class="operation"><button class="btn link" data-score-task-remind>催办</button></div></td>
                       </tr>
-                      <tr data-score-task-row data-score-task-status="超时未提交" data-score-task-examiner="王俊">
+                      <tr data-score-task-row data-score-task-status="超时未提交" data-score-task-examiner="王俊" data-score-task-total="18" data-score-task-done="0">
                         <td class="score-task-person">王俊<small>13716744412</small></td>
                         <td>小提琴 6级</td>
                         <td>8月20日 14:00-16:00<span class="score-task-cell-sub">中央艺术考场</span></td>
-                        <td>18</td>
+                        <td>18<span class="score-task-cell-sub">未提交 18 名</span></td>
                         <td class="score-task-deadline">2026-08-20 24:00<span class="score-task-cell-sub">当天截止</span></td>
                         <td class="score-task-remind">20:00 提醒已发送<small>次日 09:00 已提醒平台管理员</small></td>
                         <td><span class="tag red" data-score-task-status-tag>超时未提交</span></td>
-                        <td><div class="operation"><button class="btn link" data-score-task-remind>催办</button><button class="btn link" data-drawer="score-backfill">后台补录</button></div></td>
+                        <td><div class="operation"><button class="btn link" data-score-task-remind>催办</button><button class="btn link" data-drawer="score-backfill">考生补录</button></div></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <div class="score-task-rule">规则：评分任务以考试当天为截止日，当晚 20:00 固定向未提交的考官发送站内消息与短信提醒；次日仍未提交的，系统把超时任务推送给平台管理员，由管理员电话沟通后在此补录，补录成绩直接进入待发布并记入变更记录与审计。</div>
+                <div class="score-task-rule">规则：评分任务以考试当天为截止日，当晚 20:00 固定向未提交的考官发送站内消息与短信提醒；次日仍未提交的，系统把超时任务推送给平台管理员，由管理员电话沟通后在此按考生逐条补录，每名考生的补录成绩直接进入待发布，并单独记入变更记录与审计。</div>
               </div>
               <div class="table-card">
                 <div class="result-flow" role="tablist" aria-label="成绩状态切换">
@@ -10709,7 +10732,7 @@
         phone: phoneNode ? phoneNode.textContent.trim() : "-",
         subject: text(1),
         session: text(2),
-        count: Number(String(text(3)).replace(/[^0-9]/g, "")) || 0,
+        count: Number((String(text(3)).match(/\d+/) || ["0"])[0]) || 0,
         deadline: text(4),
         status: row.getAttribute("data-score-task-status") || ""
       };
@@ -10719,29 +10742,267 @@
       if (/小提琴/.test(subject)) return ["音准", "技术表现", "音乐表现"];
       return ["演奏表现", "技术水平", "音乐表现"];
     }
-    function scoreBackfillBodyHtml() {
+    // 补录口径：按「单个考生」补录。任务行只汇总进度，补录动作逐人执行。
+    var SCORE_BACKFILL_STUDENTS = {
+      "王俊|小提琴 6级": [
+        { name: "陈雨桐", reg: "REG20260231", org: "光谷少儿艺术中心" },
+        { name: "周子墨", reg: "REG20260232", org: "光谷少儿艺术中心" },
+        { name: "李安琪", reg: "REG20260233", org: "汉口美育培训学校" },
+        { name: "杨梓涵", reg: "REG20260234", org: "光谷少儿艺术中心" },
+        { name: "黄一诺", reg: "REG20260235", org: "汉口美育培训学校" },
+        { name: "赵思远", reg: "REG20260236", org: "光谷少儿艺术中心" },
+        { name: "吴梦洁", reg: "REG20260237", org: "汉口美育培训学校" },
+        { name: "徐浩然", reg: "REG20260238", org: "光谷少儿艺术中心" },
+        { name: "孙悦宁", reg: "REG20260239", org: "汉口美育培训学校" },
+        { name: "马诗涵", reg: "REG20260240", org: "光谷少儿艺术中心" },
+        { name: "朱嘉懿", reg: "REG20260241", org: "汉口美育培训学校" },
+        { name: "胡若溪", reg: "REG20260242", org: "光谷少儿艺术中心" },
+        { name: "郭子轩", reg: "REG20260243", org: "汉口美育培训学校" },
+        { name: "何雨萱", reg: "REG20260244", org: "光谷少儿艺术中心" },
+        { name: "高梓豪", reg: "REG20260245", org: "汉口美育培训学校" },
+        { name: "林芷晴", reg: "REG20260246", org: "光谷少儿艺术中心" },
+        { name: "罗一鸣", reg: "REG20260247", org: "汉口美育培训学校" },
+        { name: "谢可欣", reg: "REG20260248", org: "光谷少儿艺术中心" }
+      ]
+    };
+    var SCORE_BACKFILL_POOL = ["陈雨桐", "周子墨", "李安琪", "杨梓涵", "黄一诺", "赵思远", "吴梦洁", "徐浩然", "孙悦宁", "马诗涵", "朱嘉懿", "胡若溪", "郭子轩", "何雨萱", "高梓豪", "林芷晴", "罗一鸣", "谢可欣"];
+    function scoreTaskKeyOf(row) {
+      if (!row) return "";
+      var subject = row.cells[1] ? row.cells[1].textContent.replace(/\s+/g, " ").trim() : "";
+      return (row.getAttribute("data-score-task-examiner") || "") + "|" + subject;
+    }
+    function scoreTaskStudents(row) {
+      if (!row) return [];
+      var key = scoreTaskKeyOf(row);
+      if (SCORE_BACKFILL_STUDENTS[key]) return SCORE_BACKFILL_STUDENTS[key];
+      var count = Number((String(row.cells[3] ? row.cells[3].textContent : "").match(/\d+/) || ["0"])[0]) || 0;
+      return SCORE_BACKFILL_POOL.slice(0, count).map(function (name, index) {
+        return { name: name, reg: "REG2026" + String(231 + index), org: index % 2 ? "汉口美育培训学校" : "光谷少儿艺术中心" };
+      });
+    }
+    function scoreBackfillState(row) {
+      var students = scoreTaskStudents(row);
+      var key = scoreTaskKeyOf(row);
+      var store = (window.__scoreBackfillDone && window.__scoreBackfillDone[key]) || {};
+      var records = students.map(function (student) { return { student: student, record: store[student.reg] || null }; });
+      var done = records.filter(function (item) { return !!item.record; }).length;
+      return { key: key, students: students, records: records, done: done, total: students.length, pending: students.length - done };
+    }
+    function scoreBackfillListHtml(snap, state) {
       var batch = currentBatchContext();
-      var snap = scoreTaskSnapshot(window.__scoreBackfillRow) || { examiner: "王俊", phone: "13716744412", subject: "小提琴 6级", session: "8月20日 14:00-16:00 中央艺术考场", count: 18, deadline: "2026-08-20 24:00 当天截止" };
-      var dimensions = scoreTaskDimensions(snap.subject);
-      var gradeOptions = ["优秀", "良好", "合格", "不合格"].map(function (item) { return "<option>" + item + "</option>"; }).join("");
-      return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>批次 ID：' + escapeHtml(batch.id) + ' · 后台补录只用于考官超时未提交的评分任务</span></div>'
+      var pct = state.total ? Math.round(state.done / state.total * 100) : 0;
+      var rows = state.records.map(function (item, index) {
+        var student = item.student;
+        var record = item.record;
+        return '<tr data-score-backfill-student-row="' + index + '">'
+          + '<td class="score-task-person">' + escapeHtml(student.name) + '<small>' + escapeHtml(student.reg) + '</small></td>'
+          + '<td>' + escapeHtml(student.org) + '</td>'
+          + '<td>' + (record
+            ? '<span class="tag green">已补录</span><span class="score-task-cell-sub">' + escapeHtml((record.time || "").slice(0, 16)) + ' · ' + escapeHtml(record.operator || "平台管理员") + '</span>'
+            : '<span class="tag red">未补录</span><span class="score-task-cell-sub">考官超时未提交</span>') + '</td>'
+          + '<td><div class="operation">' + (record
+            ? '<button class="btn link" data-toast="已打开 ' + escapeHtml(student.name) + ' 的补录成绩：' + escapeHtml(record.grade) + '">查看成绩</button>'
+            : '<button class="btn link" data-score-backfill-student="' + index + '">补录成绩</button>') + '</div></td>'
+          + '</tr>';
+      }).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>批次 ID：' + escapeHtml(batch.id) + ' · 后台补录按考生逐条进行</span></div>'
         + '<dl class="kv"><dt>考官</dt><dd>' + escapeHtml(snap.examiner + " / " + snap.phone) + '</dd>'
         + '<dt>考试场次</dt><dd>' + escapeHtml(snap.session) + '</dd>'
         + '<dt>专业/级别</dt><dd>' + escapeHtml(snap.subject) + '</dd>'
-        + '<dt>未提交考生</dt><dd>' + escapeHtml(String(snap.count)) + ' 名</dd>'
         + '<dt>评分截止</dt><dd>' + escapeHtml(snap.deadline) + '</dd>'
-        + '<dt>当前状态</dt><dd><span class="tag red">超时未提交</span> <span class="muted">已提醒平台管理员</span></dd></dl>'
-        + '<div class="score-task-rule" style="margin:14px 0 0"><strong>补录规则：</strong>补录前须与考官电话确认实际评分结果；补录成绩直接进入待发布，原评分任务标记「已补录（平台代录）」，补录人与时间写入变更记录与审计，不覆盖考官账号的任何操作记录。</div>'
-        + '<div class="drawer-section"><h3 class="drawer-section-title">补录评分</h3><div class="field-row-3">'
+        + '<dt>当前状态</dt><dd><span class="tag ' + (state.pending ? (state.done ? "blue" : "red") : "green") + '">' + (state.pending ? (state.done ? "补录中" : "超时未提交") : "已补录") + '</span> <span class="muted">' + (state.pending ? "已提醒平台管理员" : "全部考生已由平台补录") + '</span></dd></dl>'
+        + '<div class="score-task-rule" style="margin:14px 0 0"><strong>补录规则：</strong>补录以单个考生为单位。逐人核对考官电话确认的评分结果后录入，该考生成绩直接进入待发布；每次补录单独记入变更记录与审计；全部考生补录完成后，原评分任务标记「已补录（平台代录）」，不覆盖考官账号的任何操作记录。</div>'
+        + '<div class="score-backfill-progress"><strong>已补录 ' + state.done + ' / ' + state.total + '</strong><div class="bar"><i style="width:' + pct + '%"></i></div><span>剩余 ' + state.pending + ' 名待补录</span></div>'
+        + '<div class="table-wrap"><table class="score-backfill-table"><colgroup><col style="width:25%"><col style="width:31%"><col style="width:26%"><col style="width:18%"></colgroup><thead><tr><th>考生</th><th>报名机构</th><th>补录状态</th><th>操作</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    }
+    function scoreBackfillStudentHtml(snap, student, state) {
+      var dimensions = scoreTaskDimensions(snap.subject);
+      var gradeOptions = ["优秀", "良好", "合格", "不合格"].map(function (item) { return "<option>" + item + "</option>"; }).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(student.name) + ' · ' + escapeHtml(snap.subject) + '</strong><span>报名机构：' + escapeHtml(student.org) + ' · 报名编号：' + escapeHtml(student.reg) + '</span></div>'
+        + '<div class="score-backfill-head"><button class="btn link" type="button" data-score-backfill-back>← 返回未提交考生列表</button><span class="muted">本任务已补录 ' + state.done + ' / ' + state.total + '</span></div>'
+        + '<dl class="kv"><dt>考官</dt><dd>' + escapeHtml(snap.examiner + " / " + snap.phone) + '</dd>'
+        + '<dt>考试场次</dt><dd>' + escapeHtml(snap.session) + '</dd>'
+        + '<dt>评分截止</dt><dd>' + escapeHtml(snap.deadline) + '</dd>'
+        + '<dt>补录范围</dt><dd><span class="tag blue">单名考生</span> <span class="muted">本次只补录该考生，同任务其他考生需逐条补录</span></dd></dl>'
+        + '<div class="drawer-section"><h3 class="drawer-section-title">补录该考生评分</h3><div class="field-row-3">'
         + dimensions.map(function (label, index) {
           return '<div class="field"><label>' + escapeHtml(label) + ' *</label><select class="select" data-score-backfill-dimension="' + index + '">' + gradeOptions + '</select></div>';
         }).join("")
-        + '</div><div class="field-row-2"><div class="field"><label>整体评级 *</label><select class="select" data-score-backfill-grade>' + gradeOptions + '</select></div>'
-        + '<div class="field"><label>补录范围</label><input class="input" value="' + escapeHtml(String(snap.count)) + ' 名未提交考生（全部补录）" readonly></div></div>'
-        + '<div class="field"><label>考生整体评语</label><textarea class="textarea" data-score-backfill-comment placeholder="按考官电话确认的结果填写整体评语">经电话确认，考官已完成线下评分，结果按现场评分表录入。</textarea></div></div>'
+        + '</div><div class="field"><label>整体评级 *</label><select class="select" data-score-backfill-grade>' + gradeOptions + '</select></div>'
+        + '<div class="field"><label>该考生评语</label><textarea class="textarea" data-score-backfill-comment placeholder="按考官电话确认的结果填写该考生评语">经电话确认，该考生已完成线下评分，结果按现场评分表录入。</textarea></div></div>'
         + '<div class="drawer-section"><h3 class="drawer-section-title">补录依据</h3>'
-        + '<div class="field"><label>与考官沟通记录 *</label><textarea class="textarea" data-score-backfill-contact placeholder="如：2026-08-21 09:20 电话联系王俊老师，确认 18 名考生已完成评分，考官因出差未登录系统提交" required></textarea></div>'
-        + '<div class="field"><label>补录原因 *</label><textarea class="textarea" data-score-backfill-reason placeholder="如：考官超时未提交，经沟通确认评分结果后由平台后台补录" required></textarea></div></div>'; 
+        + '<div class="field"><label>与考官沟通记录 *</label><textarea class="textarea" data-score-backfill-contact placeholder="如：2026-08-21 09:20 电话联系王俊老师，确认 18 名考生评分结果，考官因出差未登录系统提交" required></textarea></div>'
+        + '<div class="field"><label>补录原因 *</label><textarea class="textarea" data-score-backfill-reason placeholder="如：考官超时未提交，经沟通确认该考生评分结果后由平台后台补录" required></textarea></div></div>';
+    }
+    function scoreBackfillFootHtml() {
+      if (window.__scoreBackfillStudent) {
+        return '<button class="btn" data-score-backfill-back>返回考生列表</button><button class="btn primary" data-score-backfill-confirm>确认补录该考生</button>';
+      }
+      return '<button class="btn" data-close-drawer>关闭</button>';
+    }
+    function scoreBackfillRecordBodyHtml() {
+      var row = window.__scoreBackfillRow;
+      var snap = scoreTaskSnapshot(row);
+      if (!row || !snap) return '<p class="muted">未找到评分任务，请刷新后重试。</p>';
+      var state = scoreBackfillState(row);
+      var done = state.records.filter(function (item) { return !!item.record; });
+      if (!done.length) {
+        return '<div class="batch-context-banner"><strong>' + escapeHtml(snap.examiner + " · " + snap.subject) + '</strong><span>当前还没有补录记录</span></div>'
+          + '<p class="muted" style="margin-top:12px">该评分任务下 ' + state.total + ' 名考生均未被平台补录。补录后每名考生的记录会在此逐条留存。</p>';
+      }
+      var rows = done.map(function (item) {
+        var record = item.record;
+        return '<tr data-score-backfill-record-row>'
+          + '<td class="score-task-person">' + escapeHtml(item.student.name) + '<small>' + escapeHtml(item.student.reg) + '</small></td>'
+          + '<td><span class="tag green">' + escapeHtml(record.grade) + '</span></td>'
+          + '<td>' + escapeHtml(record.dimensionText || "-") + '</td>'
+          + '<td>' + escapeHtml((record.time || "").slice(0, 16)) + '<span class="score-task-cell-sub">' + escapeHtml(record.operator || "平台管理员") + '</span></td>'
+          + '</tr>'
+          + '<tr class="score-backfill-record-detail" data-score-backfill-record-detail><td colspan="4">'
+          + '<span>沟通记录：' + escapeHtml(record.contact || "-") + '</span>'
+          + '<span>补录原因：' + escapeHtml(record.reason || "-") + '</span>'
+          + '</td></tr>';
+      }).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(snap.examiner + " · " + snap.subject + " · " + snap.session) + '</strong><span>已补录 ' + done.length + ' / ' + state.total + ' 名考生 · 每名考生单独留痕</span></div>'
+        + '<div class="table-wrap"><table class="score-backfill-table score-backfill-record-table"><colgroup><col style="width:24%"><col style="width:13%"><col style="width:35%"><col style="width:28%"></colgroup><thead><tr><th>考生</th><th>整体评级</th><th>维度评级</th><th>补录人 / 时间</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    }
+    function scoreBackfillBodyHtml() {
+      var row = window.__scoreBackfillRow;
+      var snap = scoreTaskSnapshot(row) || { examiner: "王俊", phone: "13716744412", subject: "小提琴 6级", session: "8月20日 14:00-16:00 中央艺术考场", count: 18, deadline: "2026-08-20 24:00 当天截止" };
+      var state = scoreBackfillState(row);
+      if (window.__scoreBackfillStudent) {
+        var hit = state.records.filter(function (item) { return item.student.reg === window.__scoreBackfillStudent.reg; })[0];
+        if (!hit || hit.record) window.__scoreBackfillStudent = null;
+      }
+      if (window.__scoreBackfillStudent) return scoreBackfillStudentHtml(snap, window.__scoreBackfillStudent, state);
+      return scoreBackfillListHtml(snap, state);
+    }
+    function openScoreBackfillStudent(index) {
+      var row = window.__scoreBackfillRow;
+      var state = scoreBackfillState(row);
+      var item = state.records[index];
+      if (!item) { toast("未找到该考生，请刷新后重试"); return; }
+      if (item.record) { toast(item.student.name + " 的成绩已补录，无需重复操作"); return; }
+      window.__scoreBackfillStudent = item.student;
+      openDrawer("score-backfill");
+    }
+    function openScoreBackfillList() {
+      window.__scoreBackfillStudent = null;
+      openDrawer("score-backfill");
+    }
+    function scoreTaskRowRender(row, state) {
+      var pending = state.total - state.done;
+      var status = !state.done ? "超时未提交" : pending ? "补录中" : "已补录";
+      row.setAttribute("data-score-task-status", status);
+      row.setAttribute("data-score-task-total", String(state.total));
+      row.setAttribute("data-score-task-done", String(state.done));
+      var tag = row.querySelector("[data-score-task-status-tag]");
+      if (tag) {
+        tag.className = "tag " + (status === "已补录" ? "green" : status === "补录中" ? "blue" : "red");
+        tag.textContent = status;
+      }
+      var countCell = row.cells[3];
+      if (countCell) {
+        countCell.innerHTML = escapeHtml(String(state.total)) + '<span class="score-task-cell-sub">' + (state.done ? "已补录 " + state.done + " · 待补 " + pending : "未提交 " + state.total + " 名") + '</span>';
+      }
+      var remindCell = row.cells[5];
+      if (remindCell && state.done) {
+        var progressNode = remindCell.querySelector("[data-score-task-backfill-progress]");
+        if (!progressNode) {
+          remindCell.insertAdjacentHTML("beforeend", '<small data-score-task-backfill-progress></small>');
+          progressNode = remindCell.querySelector("[data-score-task-backfill-progress]");
+        }
+        progressNode.textContent = "平台代录 " + state.done + " / " + state.total + " 名";
+      }
+      var ops = row.cells[7];
+      if (ops) {
+        ops.innerHTML = status === "已补录"
+          ? '<div class="operation"><button class="btn link" data-drawer="result-detail">查看成绩</button><button class="btn link" data-drawer="score-backfill-record">补录记录</button></div>'
+          : '<div class="operation"><button class="btn link" data-score-task-remind>催办</button><button class="btn link" data-drawer="score-backfill">' + (state.done ? "继续补录" : "考生补录") + '</button><button class="btn link" data-drawer="score-backfill-record">补录记录</button></div>';
+      }
+    }
+    function refreshScoreTaskAlert() {
+      Array.prototype.forEach.call(document.querySelectorAll("[data-score-task-card]"), function (card) {
+        var rows = Array.prototype.slice.call(card.querySelectorAll("[data-score-task-row]"));
+        var open = rows.filter(function (row) { return ["超时未提交", "补录中"].indexOf(row.getAttribute("data-score-task-status") || "") > -1; });
+        var countTag = card.querySelector("[data-score-task-alert-count]");
+        if (countTag) {
+          countTag.className = "tag " + (open.length ? "orange" : "green");
+          countTag.textContent = open.length ? open.length + " 项超时未提交" : "无超时未提交";
+        }
+        var box = card.querySelector("[data-score-task-alert]");
+        if (box) box.classList.toggle("is-clear", !open.length);
+        var text = card.querySelector("[data-score-task-alert-text]");
+        if (text) {
+          if (!text.getAttribute("data-score-task-alert-origin")) text.setAttribute("data-score-task-alert-origin", text.textContent);
+          var origin = text.getAttribute("data-score-task-alert-origin");
+          if (!open.length) {
+            text.textContent = "当前所有评分任务均已提交或已由平台补录；当晚 20:00 只对当日仍未提交的评分任务自动发送提醒。";
+          } else {
+            var partial = open.filter(function (row) { return row.getAttribute("data-score-task-status") === "补录中"; })[0];
+            if (!partial) {
+              text.textContent = origin;
+            } else {
+              var doneCount = Number(partial.getAttribute("data-score-task-done")) || 0;
+              var totalCount = Number(partial.getAttribute("data-score-task-total")) || 0;
+              text.textContent = origin.replace(/。\s*$/, "。") + " 当前已按考生补录 " + doneCount + " / " + totalCount + " 名，剩余 " + Math.max(totalCount - doneCount, 0) + " 名待补录。";
+            }
+          }
+        }
+      });
+    }
+    function refreshScoreTaskTabLabel() {
+      Array.prototype.forEach.call(document.querySelectorAll("[data-score-task-tab-panel]"), function (panel) {
+        var card = panel.closest(".table-card");
+        var slot = card ? card.querySelector("[data-score-task-tab-count]") : null;
+        if (!slot) return;
+        var open = card.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"], [data-score-task-row][data-score-task-status="补录中"]').length;
+        slot.textContent = open ? " · " + open + " 项超时" : "";
+      });
+    }
+    function syncScoreTaskRows(row) {
+      var key = scoreTaskKeyOf(row);
+      var state = scoreBackfillState(row);
+      Array.prototype.forEach.call(document.querySelectorAll("[data-score-task-row]"), function (other) {
+        if (scoreTaskKeyOf(other) === key) scoreTaskRowRender(other, state);
+      });
+      refreshScoreTaskAlert();
+      refreshScoreTaskTabLabel();
+    }
+    function appendScoreBackfillResultRow(student, snap, grade, dimensionParts, comment) {
+      // 补录成绩进入待发布：成绩管理页与批次工作台成绩阶段各有一份成绩列表，两处同步补行
+      var scopes = [];
+      var gradePage = document.querySelector('[data-page="grades"]');
+      if (gradePage) scopes.push(gradePage);
+      var gradeWorkbench = document.querySelector('.batch-workbench[data-subview="grades"]');
+      if (gradeWorkbench) scopes.push(gradeWorkbench);
+      scopes.forEach(function (scope) {
+        var body = scope.querySelector(".result-table tbody");
+        if (!body) return;
+        appendScoreBackfillResultTr(body, student, snap, grade, dimensionParts, comment);
+        var dash = scope.querySelector(".result-dashboard");
+        if (dash) {
+          var tab = dash.querySelector("[data-result-status-tab].active");
+          applyResultStatus(dash, tab ? tab.getAttribute("data-result-status-tab") : "待发布", false);
+        }
+      });
+    }
+    function appendScoreBackfillResultTr(body, student, snap, grade, dimensionParts, comment) {
+      if (body.querySelector('[data-score-backfill-result="' + student.reg + '"]')) return;
+      var tr = document.createElement("tr");
+      tr.setAttribute("data-result-row", "");
+      tr.setAttribute("data-result-status", "待发布");
+      tr.setAttribute("data-score-backfill-result", student.reg);
+      tr.innerHTML = '<td><input type="checkbox"></td>'
+        + '<td>' + escapeHtml(student.org) + '</td>'
+        + '<td class="result-student-cell">' + escapeHtml(student.name) + '<br><span>' + escapeHtml(student.reg) + '</span></td>'
+        + '<td>' + escapeHtml(student.reg) + '</td>'
+        + '<td>' + escapeHtml(snap.subject) + '</td>'
+        + '<td class="result-grade-cell">' + dimensionParts.map(function (item) { return escapeHtml(item.label + "：" + item.grade); }).join("<br>") + '</td>'
+        + '<td class="result-comment-cell">' + escapeHtml(comment || "平台代录，按考官电话确认结果录入。") + '</td>'
+        + '<td><span class="tag orange">待发布</span> <span class="muted">平台代录</span></td>'
+        + '<td><div class="operation"><button class="btn link" data-drawer="result-detail">详情</button><button class="btn link" data-toast="成绩修改日志已打开">修改日志</button></div></td>';
+      body.appendChild(tr);
     }
     function remindScoreTask(button) {
       var row = scoreTaskRowOf(button);
@@ -10767,7 +11028,9 @@
     function applyScoreBackfill() {
       var row = window.__scoreBackfillRow;
       var snap = scoreTaskSnapshot(row);
+      var student = window.__scoreBackfillStudent;
       if (!row || !snap) { toast("未找到评分任务，请刷新后重试"); return; }
+      if (!student) { toast("请先在未提交考生列表里点「补录成绩」选择要补录的考生"); return; }
       var contactInput = document.querySelector("[data-score-backfill-contact]");
       var reasonInput = document.querySelector("[data-score-backfill-reason]");
       var commentInput = document.querySelector("[data-score-backfill-comment]");
@@ -10777,50 +11040,57 @@
       if (!contact) { toast("请先填写与考官的电话沟通记录"); return; }
       if (!reason) { toast("请填写补录原因"); return; }
       var dimensions = scoreTaskDimensions(snap.subject);
-      var dimensionText = dimensions.map(function (label, index) {
+      var dimensionParts = dimensions.map(function (label, index) {
         var field = document.querySelector('[data-score-backfill-dimension="' + index + '"]');
-        return label + "：" + (field ? field.value : "良好");
-      }).join(" / ");
+        return { label: label, grade: field ? field.value : "良好" };
+      });
+      var dimensionText = dimensionParts.map(function (item) { return item.label + "：" + item.grade; }).join(" / ");
       var grade = gradeInput ? gradeInput.value : "良好";
       var comment = commentInput ? commentInput.value.trim() : "";
-      row.setAttribute("data-score-task-status", "已补录");
-      var tag = row.querySelector("[data-score-task-status-tag]");
-      if (tag) { tag.className = "tag green"; tag.textContent = "已补录"; }
-      var remindCell = row.cells[5];
-      if (remindCell) remindCell.insertAdjacentHTML("beforeend", "<small>平台代录 " + snap.count + " 名考生 · " + formatDateTime(new Date()).slice(0, 16) + "</small>");
-      var ops = row.cells[7];
-      if (ops) ops.innerHTML = '<div class="operation"><button class="btn link" data-drawer="result-detail">查看成绩</button><button class="btn link" data-toast="补录记录已打开：平台代录 ' + escapeHtml(String(snap.count)) + ' 名考生">补录记录</button></div>';
-      var card = scoreTaskCardOf(row);
-      var scope = card || document;
-      var remaining = scope.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"]').length;
-      var countTag = scope.querySelector("[data-score-task-alert-count]");
-      if (countTag) {
-        countTag.className = "tag " + (remaining ? "orange" : "green");
-        countTag.textContent = remaining ? remaining + " 项超时未提交" : "无超时未提交";
-      }
-      var alertBox = scope.querySelector("[data-score-task-alert]");
-      if (alertBox) alertBox.classList.toggle("is-clear", !remaining);
-      var alertText = scope.querySelector("[data-score-task-alert-text]");
-      if (alertText && !remaining) alertText.textContent = "当前所有评分任务均已提交或已由平台补录；当晚 20:00 只对当日仍未提交的评分任务自动发送提醒。";
+      var before = scoreBackfillState(row);
+      var store = window.__scoreBackfillDone || (window.__scoreBackfillDone = {});
+      store[before.key] = store[before.key] || {};
+      if (store[before.key][student.reg]) { toast(student.name + " 的成绩已补录，无需重复操作"); return; }
+      var now = formatDateTime(new Date());
+      store[before.key][student.reg] = {
+        grade: grade,
+        dimensionText: dimensionText,
+        comment: comment,
+        contact: contact,
+        reason: reason,
+        operator: "当前用户",
+        time: now,
+        examiner: snap.examiner,
+        subject: snap.subject
+      };
       appendBatchChangeRecord("成绩补录", currentBatchContext(), {
-        objectType: "评分任务",
-        objectLabel: snap.examiner + " · " + snap.subject + " · " + snap.session.replace(/ /g, " "),
-        objectCount: snap.count,
-        before: "考官超时未提交（截止 " + snap.deadline + "）",
-        after: "平台代录 " + snap.count + " 名考生成绩 / " + grade,
+        objectType: "考生成绩",
+        objectLabel: student.name + " · " + student.reg + " · " + snap.subject,
+        objectCount: 1,
+        before: "考官超时未提交（截止 " + snap.deadline + "，考生 " + student.name + " 未录成绩）",
+        after: "平台代录 1 名考生成绩 / " + grade,
         reason: reason,
         status: "已完成",
         snapshots: {
-          before: ["评分任务：" + snap.examiner + " · " + snap.subject, "评分截止：" + snap.deadline, "提交状态：超时未提交", "沟通记录：" + contact],
-          after: ["补录方式：平台后台代录", "补录维度：" + dimensionText, "整体评级：" + grade, "评语：" + (comment || "-"), "成绩状态：待发布", "任务标记：已补录（平台代录）"]
+          before: ["评分任务：" + snap.examiner + " · " + snap.subject + " · " + snap.session, "考生：" + student.name + "（" + student.reg + "）", "提交状态：超时未提交", "沟通记录：" + contact],
+          after: ["补录方式：平台后台代录（单个考生）", "补录维度：" + dimensionText, "整体评级：" + grade, "评语：" + (comment || "-"), "成绩状态：待发布", "任务进度：已补录 " + (before.done + 1) + " / " + before.total + " 名"]
         },
-        impact: "补录成绩直接进入待发布，原评分任务标记为「已补录（平台代录）」；补录人、时间与依据写入变更记录和审计，不改写考官端的提交记录。"
+        impact: "该考生成绩直接进入待发布；本名考生的补录人、时间与依据写入变更记录和审计，不改写考官端的提交记录。"
       });
       window.__scoreTaskAudit = window.__scoreTaskAudit || [];
-      window.__scoreTaskAudit.push({ type: "成绩补录", examiner: snap.examiner, count: snap.count, grade: grade, contact: contact, reason: reason, operator: "当前用户", time: formatDateTime(new Date()) });
+      window.__scoreTaskAudit.push({ type: "成绩补录", student: student.name, reg: student.reg, examiner: snap.examiner, grade: grade, contact: contact, reason: reason, operator: "当前用户", time: now });
       refreshBatchChangeView();
-      closeDrawer();
-      toast("成绩已补录：" + snap.count + " 名考生进入待发布，补录记录已留痕");
+      appendScoreBackfillResultRow(student, snap, grade, dimensionParts, comment);
+      var next = scoreBackfillState(row);
+      syncScoreTaskRows(row);
+      window.__scoreBackfillStudent = null;
+      if (next.pending) {
+        openDrawer("score-backfill");
+        toast("已补录 " + student.name + " 的成绩，剩余 " + next.pending + " 名考生待补录");
+      } else {
+        closeDrawer();
+        toast("已补录 " + student.name + " 的成绩；该任务 " + next.total + " 名考生全部补录完成，成绩进入待发布");
+      }
     }
     function publishBatchGrades(publishButton) {
       var batch = currentBatchContext();
@@ -11356,6 +11626,15 @@
       dashboard.appendChild(listPanel);
       [summary, distributionCard].forEach(function (node) { if (node) workbenchPanel.appendChild(node); });
       [filter, listCard].forEach(function (node) { if (node) listPanel.appendChild(node); });
+      // 评分任务并入「成绩列表」的页签：待发布 / 已发布 / 评分任务，不再单独占一张卡片
+      var scoreCard = dashboard.querySelector(".score-task-card");
+      if (scoreCard && listCard && !listCard.querySelector("[data-score-task-tab-panel]")) {
+        var scorePanel = document.createElement("div");
+        scorePanel.setAttribute("data-score-task-tab-panel", "");
+        scorePanel.hidden = true;
+        listCard.appendChild(scorePanel);
+        scorePanel.appendChild(scoreCard);
+      }
       normalizeOfflineGradesPanel(listPanel, batch);
     }
     function normalizeOfflineGradesPanel(root, batch) {
@@ -11366,7 +11645,11 @@
       var targetStatus = publishedBatch ? "已发布" : (batch && gradeStatuses.indexOf(gradeStatusLabel(batch.status)) > -1 ? gradeStatusLabel(batch.status) : "待发布");
       var flow = root.querySelector(".result-flow");
       if (flow) {
-        flow.innerHTML = gradeStatuses.map(function (status) { return '<button class="' + (targetStatus === status ? "active" : "") + '" type="button" data-result-status-tab="' + status + '" role="tab" aria-selected="' + (targetStatus === status ? "true" : "false") + '">' + status + '</button>'; }).join("");
+        var scoreTabPanel = root.querySelector("[data-score-task-tab-panel]");
+        var scoreTabOpen = scoreTabPanel ? scoreTabPanel.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"], [data-score-task-row][data-score-task-status="补录中"]').length : 0;
+        var flowTabs = gradeStatuses.map(function (status) { return '<button class="' + (targetStatus === status ? "active" : "") + '" type="button" data-result-status-tab="' + status + '" role="tab" aria-selected="' + (targetStatus === status ? "true" : "false") + '">' + status + '</button>'; });
+        if (scoreTabPanel) flowTabs.push('<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (scoreTabOpen ? " · " + scoreTabOpen + " 项超时" : "") + '</span></button>');
+        flow.innerHTML = flowTabs.join("");
       }
       var actionBar = root.querySelector(".result-action-bar .page-actions");
       if (actionBar) actionBar.innerHTML = '<button class="btn" data-result-action="grade-setting" data-auth-roles="platform organizer" data-drawer="result-grade-setting">设置考评成绩</button><button class="btn primary" data-result-action="publish" data-auth-roles="platform organizer" data-drawer="result-publish">发布</button><button class="btn" data-result-action="export" data-auth-roles="platform organizer training" data-toast="成绩清单已导出">导出成绩</button>';
@@ -15014,6 +15297,23 @@
         select.disabled = role === "training";
         select.title = role === "training" ? "培训机构仅可查看本机构已发布成绩" : "";
       }
+      var scoreTabPanel = root.querySelector("[data-score-task-tab-panel]");
+      var onScoreTab = currentStatus === "评分任务";
+      if (scoreTabPanel) {
+        scoreTabPanel.hidden = !onScoreTab;
+        // 评分任务页签下隐藏成绩列表的工具条、表格、分页等，只留页签与评分任务表
+        var scoreTabCard = scoreTabPanel.parentElement;
+        Array.prototype.forEach.call(scoreTabCard ? scoreTabCard.children : [], function (child) {
+          if (child === scoreTabPanel || child.classList.contains("result-flow")) return;
+          if (onScoreTab) {
+            if (!child.hasAttribute("data-score-tab-was-hidden")) child.setAttribute("data-score-tab-was-hidden", child.hidden ? "1" : "0");
+            child.hidden = true;
+          } else if (child.hasAttribute("data-score-tab-was-hidden")) {
+            child.hidden = child.getAttribute("data-score-tab-was-hidden") === "1";
+            child.removeAttribute("data-score-tab-was-hidden");
+          }
+        });
+      }
       root.querySelectorAll("[data-result-row]").forEach(function (row) {
         var visible = currentStatus === "全部状态" || gradeStatusLabel(row.getAttribute("data-result-status")) === currentStatus;
         if (visible && role === "training") {
@@ -16131,6 +16431,7 @@
       }
       if (key === "subject-score-dimension" || key === "score-version-history") drawerBody.setAttribute("data-score-category-code", window.__scoreCategoryCode || "MUSIC");
       drawerFoot.innerHTML = conf.foot;
+      if (key === "score-backfill") drawerFoot.innerHTML = scoreBackfillFootHtml();
       if (key === "judge-detail") {
         var detailJudgeId = window.__activeJudgeRow ? window.__activeJudgeRow.dataset.judgeId : "";
         drawerFoot.innerHTML = '<button class="btn" data-close-drawer>关闭</button><button class="btn" data-drawer="judge-create" data-judge-id="' + escapeHtml(detailJudgeId) + '">编辑</button><button class="btn primary" data-jump="dispatch/list" data-close-drawer>去派遣</button>';
@@ -16463,6 +16764,7 @@
       drawer.setAttribute("aria-hidden", "true");
       window.__configDrawerOrigin = '';
       window.__pendingBatchLifecycle = null;
+      window.__scoreBackfillStudent = null;
     }
     function applyOrgUnitRowVisibility(row) {
       row.hidden = row.dataset.unitFilterHidden === "true" || row.dataset.unitTreeHidden === "true";
@@ -23426,6 +23728,9 @@
       if (scoreTaskRemindBtn) { remindScoreTask(scoreTaskRemindBtn); return; }
       if (event.target.closest("[data-score-task-remind-all]")) { remindAllScoreTasks(event.target.closest("[data-score-task-remind-all]")); return; }
       if (event.target.closest("[data-score-backfill-confirm]")) { applyScoreBackfill(); return; }
+      if (event.target.closest("[data-score-backfill-back]")) { openScoreBackfillList(); return; }
+      var backfillStudentBtn = event.target.closest("[data-score-backfill-student]");
+      if (backfillStudentBtn) { openScoreBackfillStudent(Number(backfillStudentBtn.getAttribute("data-score-backfill-student"))); return; }
       var drawerBtn = event.target.closest("[data-drawer]");
       if (drawerBtn) {
         var drawerKey = drawerBtn.getAttribute("data-drawer");
@@ -23450,10 +23755,13 @@
         if (drawerKey === "judge-cert-form") {
           window.__activeJudgeCertId = drawerBtn.getAttribute("data-cert-id") || "";
         }
-        if (drawerKey === "score-backfill") {
+        if (drawerKey === "score-backfill" || drawerKey === "score-backfill-record") {
           var scoreTaskRow = drawerBtn.closest("[data-score-task-row]");
-          if (scoreTaskRow) window.__scoreBackfillRow = scoreTaskRow;
-          if (!window.__scoreBackfillRow) { toast("请从超时未提交的评分任务行点「后台补录」"); return; }
+          if (scoreTaskRow) {
+            window.__scoreBackfillRow = scoreTaskRow;
+            window.__scoreBackfillStudent = null;
+          }
+          if (!window.__scoreBackfillRow) { toast("请从超时未提交的评分任务行点「考生补录」"); return; }
         }
         if (drawerKey === "batch-org-fee-config") {
           window.__activeBatchFeeOrg = drawerBtn.getAttribute("data-batch-org-fee-org") || "";
@@ -25799,7 +26107,8 @@
       "result-return": { title: "退回成绩", body: resultReturnBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-toast="成绩版本已保留，评分任务进入待补正">确认退回</button>' },
       "result-publish": { title: "发布成绩", wide: true, body: resultPublishBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-result-publish-confirm>发布成绩</button>' },
       "result-detail": { title: "成绩详情", wide: true, body: resultDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
-      "score-backfill": { title: "后台补录成绩", wide: true, body: scoreBackfillBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-score-backfill-confirm>确认补录</button>' },
+      "score-backfill": { title: "后台补录成绩", wide: true, body: scoreBackfillBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
+      "score-backfill-record": { title: "补录记录", wide: true, body: scoreBackfillRecordBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-standard-detail": { title: "专业级别评分维度", wide: true, body: batchStandardDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-org-fee-config": { title: "查看平台报名费用", wide: true, body: batchOrgFeeConfigDrawerHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-create": { title: "新增考级批次", wide: true, body: '<div class="field-row-2"><div class="field"><label>关联年度规划</label><select class="select"><option>PLAN-2026-001 · 2026年度社会艺术水平考级工作规划</option><option>不关联规划（独立简章批次）</option></select></div><div class="field"><label>关联考级简章 *</label><select class="select"><option>《2026年社会艺术水平考级简章》 · 已发布</option><option>《2026宜昌戏曲戏剧考级简章》 · 草稿</option></select></div></div><div class="field-row-2"><div class="field"><label>批次名称 *</label><input class="input" value="2026下半年 · 武汉"></div><div class="field"><label>承办单位 *</label><select class="select"><option>武汉承办中心</option><option>宜昌承办中心</option></select></div></div><div class="field-row-2"><div class="field"><label>报名开始时间 *</label><input class="input" value="2026-07-01"></div><div class="field"><label>报名截止时间 *</label><input class="input" value="2026-08-15"></div></div><div class="field-row-2"><div class="field"><label>考试开始时间 *</label><input class="input" value="2026-08-18"></div><div class="field"><label>考试结束时间 *</label><input class="input" value="2026-08-24"></div></div><div class="field"><label>关联考点 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 湖北艺术职业学院光谷校区（所属单位：湖北艺术职业学院）</label><label class="level-check"><input type="checkbox"> 武汉音乐学院合作考点（所属单位：武汉承办中心）</label><label class="level-check"><input type="checkbox"> 宜昌青少年美育中心考点（待平台确认）</label></div></div><div class="field"><label>报名机构（生成二维码） *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 光谷少儿艺术中心（培训机构，默认考点：湖北艺术职业学院光谷校区）</label><label class="level-check"><input type="checkbox" checked> 汉口美育培训学校（培训机构，默认考点：湖北艺术职业学院光谷校区）</label></div><p class="form-hint">线下批次至少选择一个已启用的可报名培训机构；个人报名也必须在这些机构中选择一个。</p></div><div class="field"><label>执行专业与级别 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 钢琴 1-10级</label><label class="level-check"><input type="checkbox" checked> 中国舞 1-10级</label><label class="level-check"><input type="checkbox"> 小提琴 1-6级</label></div></div>', foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-toast="批次草稿已保存">保存草稿</button><button class="btn primary" data-toast="批次已发布，报名二维码将按批次+报名机构生成">发布批次</button>' },
