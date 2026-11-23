@@ -16355,6 +16355,25 @@
       normalizeRegistrationOrganizationUi(page || document);
       syncBaseProfessionalSelectOptions(page || document);
       syncStickyTableColumnsAsync(page || document);
+      ensureDashboardWorkbenchRendered(page, view, sub);
+    }
+    // 工作台待办面板是整块重建的：若同一路由下重建被跳过（身份/路由就绪顺序、页面还原等），
+    // 首屏会退回静态旧内容，「评分任务超时」提醒条与「审核入口」就看不到。这里做一次幂等补渲染。
+    function ensureDashboardWorkbenchRendered(page, view, sub) {
+      if (view !== "dashboard" || sub !== "workbench") return;
+      var target = page && page.getAttribute("data-page") === "dashboard" ? page : document.querySelector('[data-page="dashboard"]');
+      if (!target) return;
+      var root = target.querySelector('[data-subview="workbench"]');
+      if (!root) return;
+      var shell = root.querySelector(".dashboard-todo-shell");
+      // 平台身份必须有提醒条；缺失说明这一块是在身份就绪前渲染的，需要重画
+      var missingPlatformAlert = dashboardTodoRole() === "platform" && !root.querySelector(".score-task-alert");
+      if (shell && !missingPlatformAlert) return;
+      try {
+        renderDashboardWorkbench(target);
+      } catch (error) {
+        console.warn("dashboard workbench fallback render failed", error);
+      }
     }
     function normalizeRegistrationOrganizationUi(root) {
       root = root || document;
