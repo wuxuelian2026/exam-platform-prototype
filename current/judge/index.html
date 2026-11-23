@@ -2521,7 +2521,7 @@
             <div class="online-batch-summary">
               <div class="online-batch-summary-item"><span class="online-batch-summary-label">考试任务编号</span><strong class="online-batch-summary-value" data-online-batch-id-value>online-demo-today</strong></div>
               <div class="online-batch-summary-item"><span class="online-batch-summary-label">指派时间</span><strong class="online-batch-summary-value" data-online-batch-assigned-at>2026-08-27 10:00:00</strong></div>
-              <div class="online-batch-summary-item"><span class="online-batch-summary-label">评分截止时间</span><strong class="online-batch-summary-value" data-online-batch-deadline-at>2026-08-28 10:00:00</strong></div>
+              <div class="online-batch-summary-item"><span class="online-batch-summary-label">评分截止时间</span><strong class="online-batch-summary-value" data-online-batch-deadline-at>2026-08-28 24:00（当天截止）</strong></div>
               <div class="online-batch-summary-item"><span class="online-batch-summary-label">待评分 / 总考试名单</span><strong class="online-batch-summary-value" data-online-batch-task-count>1 / 1</strong></div>
             </div>
           </div>
@@ -2564,7 +2564,13 @@
         <section class="section online-task-context" data-online-task-context hidden>
           <div class="online-task-status" data-online-task-status>
             <span aria-hidden="true">⏱</span>
-            <span data-online-task-status-text>线上任务派遣后 24 小时内完成评分</span>
+            <span data-online-task-status-text>评分任务当天 24:00 截止</span>
+          </div>
+        </section>
+        <section class="section score-entry-rule" data-score-entry-rule>
+          <div class="online-task-status">
+            <span aria-hidden="true">⏰</span>
+            <span>系统于当晚 20:00 自动提醒未提交的考官；逾期未提交将由平台与您电话确认后补录，补录记录同步到任务详情。</span>
           </div>
         </section>
         <section class="section score-entry-access-context" data-score-entry-access-context hidden>
@@ -2675,8 +2681,8 @@
             </a>
             <a class="card message-card unread" href="#message-detail" data-filter-item data-status="score" data-msg="task" data-msg-id="score-task">
               <div class="message-meta"><span class="message-meta-left"><span class="message-category message-category-score" data-message-category="score">评分通知</span><span class="message-unread-dot" data-message-unread-dot aria-label="未读"></span></span><time class="message-time" data-message-time-role="yesterday-score"></time></div>
-              <h2>评分未提交提醒</h2>
-              <p>小提琴上午场仍有 6 名考生未完成整体评分，请及时提交。</p>
+              <h2>评分截止提醒（今晚 20:00）</h2>
+              <p>今日任务 24:00 截止，小提琴上午场仍有 6 名考生未完成整体评分，请尽快提交。</p>
               <span class="message-action" data-message-action>查看评分</span>
             </a>
             <a class="card message-card" href="#message-detail" data-filter-item data-status="other" data-msg="other" data-msg-id="other-rules">
@@ -2708,8 +2714,8 @@
           </article>
           <article class="card form-card" data-msg-panel="task" hidden>
             <div class="message-meta"><span>评分通知</span><span data-message-detail-time-role="yesterday-score"></span></div>
-            <h2 class="section-title">评分未提交提醒</h2>
-            <p class="detail-copy">当前考试仍有未提交整体评分的考生，请进入考试详情完成录入并提交。</p>
+            <h2 class="section-title">评分截止提醒（今晚 20:00）</h2>
+            <p class="detail-copy">评分任务统一在考试当天 24:00 截止。系统于当晚 20:00 提醒仍未提交的考官；逾期未提交时，平台管理员会与您电话确认，并在后台补录成绩，补录记录同步到您的任务详情。</p>
             <a class="primary-action" href="#schedule-detail">进入考试详情</a>
           </article>
           <article class="card form-card" data-msg-panel="other" hidden>
@@ -2960,7 +2966,7 @@
               <div class="wechat-notify-actions"><button class="switch" type="button" role="switch" aria-checked="true" data-notify-key="schedule"></button><button class="wechat-subscribe-button" type="button" data-wechat-subscribe="SCHEDULE">授权微信提醒</button></div>
             </div>
             <div class="switch-row wechat-subscribe-row">
-              <div class="switch-copy"><p class="switch-title">评分截止提醒</p></div>
+              <div class="switch-copy"><p class="switch-title">评分截止提醒</p><p class="switch-desc">固定当晚 20:00 发送，仅提醒当日任务中仍未提交评分的考官</p></div>
               <div class="wechat-notify-actions"><button class="switch" type="button" role="switch" aria-checked="true" data-notify-key="score-deadline"></button><button class="wechat-subscribe-button" type="button" data-wechat-subscribe="SCORE_DEADLINE">授权微信提醒</button></div>
             </div>
             <div class="switch-row wechat-subscribe-row">
@@ -6024,8 +6030,8 @@
         var onlineBatches = {};
         onlineDefinitions.forEach(function (definition, index) {
           var assigned = demoDateTime(definition.date, index === 0 ? "09:00" : "10:00");
-          var deadlineDate = demoDateOffset(index === 0 ? 0 : index === 1 ? 1 : 2);
-          var deadline = demoDateTime(deadlineDate, index === 0 ? "09:00" : "10:00");
+          // 评分任务统一当天 24:00 截止：截止日恒为考试当天，内部按 23:59 判定到期
+          var deadline = demoDateTime(definition.date, "23:59");
           var task = SCORE_TASKS[definition.taskId];
           Object.assign(task, {
             online: true,
@@ -6188,6 +6194,19 @@
         return judgeBusinessDateTimeText(parts.date, parts.time);
       }
 
+      // 评分任务截止口径：考试当天 24:00 截止，展示统一为「YYYY-MM-DD 24:00（当天截止）」
+      function judgeDeadlineDayText(date, withSuffix) {
+        var dateText = String(date || "").replace(/[.\/-]/g, "");
+        if (!/^\d{8}$/.test(dateText)) return "待确认";
+        var label = dateText.slice(0, 4) + "-" + dateText.slice(4, 6) + "-" + dateText.slice(6, 8) + " 24:00";
+        return withSuffix === false ? label : label + "（当天截止）";
+      }
+
+      function onlineBatchDeadlineText(aggregate) {
+        var deadline = onlineBatchEarliestDeadline(aggregate);
+        return deadline && deadline.date ? judgeDeadlineDayText(deadline.date) : "待确认";
+      }
+
       function onlineBatchAssignedAt(aggregate) {
         var dates = aggregate.tasks.map(function (task) { return task && judgeBusinessDateTimeToMs(task.assignedDate, task.assignedTime); }).filter(function (value) { return Number.isFinite(value); }).sort(function (a, b) { return a - b; });
         var first = aggregate.tasks.find(function (task) { return task && judgeBusinessDateTimeToMs(task.assignedDate, task.assignedTime) === dates[0]; });
@@ -6218,7 +6237,7 @@
           card.href = "#online-batch-detail";
           card.setAttribute("data-online-batch-id", id);
           card.setAttribute("data-status", aggregate.status === "done" ? "done" : "active");
-          card.innerHTML = '<span class="online-batch-status-bar" aria-hidden="true"></span><div class="online-batch-main"><h3 class="online-batch-name">任务编号：' + (batch.batchId || id) + '</h3><div class="online-batch-list-meta"><p class="online-batch-list-meta-item">' + (firstTask.subject || "线上考试") + '·' + (firstTask.level || "") + '</p><p class="online-batch-list-meta-item">指派时间' + onlineBatchDateTimeText(onlineBatchAssignedAt(aggregate)) + '</p><p class="online-batch-list-meta-item">评分截止' + onlineBatchDateTimeText(onlineBatchEarliestDeadline(aggregate)) + '</p><p class="online-batch-list-meta-item">待评分' + aggregate.pending.length + '/总名单' + aggregate.tasks.length + '</p></div></div><div class="online-batch-side"><span class="status-pill ' + meta.cls + '">' + meta.label + '</span></div>';
+          card.innerHTML = '<span class="online-batch-status-bar" aria-hidden="true"></span><div class="online-batch-main"><h3 class="online-batch-name">任务编号：' + (batch.batchId || id) + '</h3><div class="online-batch-list-meta"><p class="online-batch-list-meta-item">' + (firstTask.subject || "线上考试") + '·' + (firstTask.level || "") + '</p><p class="online-batch-list-meta-item">指派时间' + onlineBatchDateTimeText(onlineBatchAssignedAt(aggregate)) + '</p><p class="online-batch-list-meta-item">评分截止' + onlineBatchDeadlineText(aggregate) + '</p><p class="online-batch-list-meta-item">待评分' + aggregate.pending.length + '/总名单' + aggregate.tasks.length + '</p></div></div><div class="online-batch-side"><span class="status-pill ' + meta.cls + '">' + meta.label + '</span></div>';
           card.addEventListener("click", function (event) {
             event.preventDefault();
             if (!canAccessOwnTask(card)) return;
@@ -6245,7 +6264,7 @@
         setText("[data-online-batch-title]", batch.name);
         setText("[data-online-batch-id-value]", batch.batchId || currentOnlineBatchId);
         setText("[data-online-batch-assigned-at]", onlineBatchDateTimeText(onlineBatchAssignedAt(aggregate)));
-        setText("[data-online-batch-deadline-at]", onlineBatchDateTimeText(onlineBatchEarliestDeadline(aggregate)));
+        setText("[data-online-batch-deadline-at]", onlineBatchDeadlineText(aggregate));
         setText("[data-online-batch-task-count]", aggregate.pending.length + " / " + (aggregate.tasks || []).length);
         setPillState(document.querySelector("[data-online-batch-status]"), "status-pill", meta);
         var wrap = document.querySelector("[data-online-candidates]");
@@ -6529,7 +6548,7 @@
               ? "考试尚未开始，暂不可评分"
             : status === "done"
               ? "考试已结束，已提交记录仅供查看"
-              : "评分截止：" + judgeBusinessDateTimeText(task.deadlineDate, task.deadlineTime) + " · " + onlineTaskDeadlineText(task, state);
+              : "评分截止：" + judgeDeadlineDayText(task.deadlineDate) + " · " + onlineTaskDeadlineText(task, state);
         }
         var playbackUrl = controlledVideoUrl(task, "play");
         var downloadUrl = controlledVideoUrl(task, "download");

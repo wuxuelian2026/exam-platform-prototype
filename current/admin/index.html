@@ -2171,6 +2171,33 @@
     .cert-library-workbench .certificate-print-table th:nth-child(3),
     .cert-library-workbench .certificate-print-table td:nth-child(3) { min-width: 150px; }
     .cert-library-workbench > .info-banner { margin-bottom: 12px; }
+    .score-task-card { margin-bottom: 12px; }
+    .score-task-card .table-tools { align-items: flex-start; }
+    .score-task-card .table-tools .muted { display: block; margin-top: 4px; font-size: 12px; }
+    .score-task-alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 0 16px 12px;
+      padding: 10px 12px;
+      border: 1px solid #fde68a;
+      border-left: 3px solid var(--warning);
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .score-task-alert strong { flex: 0 0 auto; color: #78350f; }
+    .score-task-alert.is-clear { border-color: #bbf7d0; border-left-color: var(--success); background: #f0fdf4; color: #166534; }
+    .score-task-alert.is-clear strong { color: #14532d; }
+    .score-task-table td { vertical-align: middle; }
+    .score-task-table .score-task-person { white-space: nowrap; }
+    .score-task-table .score-task-person small,
+    .score-task-table .score-task-cell-sub { display: block; color: var(--muted); font-size: 12px; }
+    .score-task-table .score-task-deadline { white-space: nowrap; }
+    .score-task-table .score-task-remind { font-size: 12px; line-height: 1.45; }
+    .score-task-table .score-task-remind small { display: block; color: var(--muted); }
+    .score-task-rule { margin: 14px 0 0; padding: 10px 12px; border: 1px solid #cfe0f8; background: #f5f9ff; color: #475467; font-size: 12px; line-height: 1.65; }
     .cert-library-results[hidden] { display: none; }
     .cert-print-preview-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .cert-print-preview-head h3 { margin: 0; font-size: 16px; }
@@ -2622,7 +2649,7 @@
         <div class="topbar-note" data-auth-org-label>公共组织、用户、权限、通知、资源与证照基础能力沉淀到共享中台</div>
         <div class="topbar-actions" aria-label="账号工具区">
           <span class="role-chip" data-auth-role-label>平台运营方</span>
-          <div class="message-center-wrap"><button class="topbar-tool" type="button" data-message-center-trigger title="消息中心"><span class="topbar-tool-icon">信</span><span>消息中心</span><span class="topbar-badge" data-message-unread-count>3</span></button><div class="message-center-dropdown" data-message-center-dropdown><div class="message-center-head"><strong>最近未读消息</strong><span class="muted">3 条</span></div><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>2026下半年 · 武汉成绩已发布</strong><small>2026-08-21 09:20</small></span></button><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>线上考官派遣任务已生成</strong><small>2026-08-20 10:05</small></span></button><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>报名缴费截止提醒</strong><small>2026-08-19 08:00</small></span></button><button class="message-center-all" type="button" data-jump="system/my-messages" data-message-center-all>查看全部消息</button></div></div>
+          <div class="message-center-wrap"><button class="topbar-tool" type="button" data-message-center-trigger title="消息中心"><span class="topbar-tool-icon">信</span><span>消息中心</span><span class="topbar-badge" data-message-unread-count>3</span></button><div class="message-center-dropdown" data-message-center-dropdown><div class="message-center-head"><strong>最近未读消息</strong><span class="muted">4 条</span></div><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>评分任务超时未提交提醒</strong><small>2026-08-21 09:00</small></span></button><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>2026下半年 · 武汉成绩已发布</strong><small>2026-08-21 09:20</small></span></button><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>线上考官派遣任务已生成</strong><small>2026-08-20 10:05</small></span></button><button class="message-center-item" type="button" data-drawer="my-message-detail"><span class="message-center-dot"></span><span><strong>报名缴费截止提醒</strong><small>2026-08-19 08:00</small></span></button><button class="message-center-all" type="button" data-jump="system/my-messages" data-message-center-all>查看全部消息</button></div></div>
           <div class="account-menu">
             <button class="topbar-user" type="button" data-account-trigger aria-haspopup="true" aria-expanded="false" title="个人中心"><span class="topbar-avatar" data-auth-avatar>平</span><span data-auth-user-name>个人中心</span><span class="topbar-user-arrow">▾</span></button>
             <div class="account-dropdown" data-account-dropdown>
@@ -4315,6 +4342,59 @@
                 <div class="field"><label>关键词</label><input class="input" data-result-keyword data-keyword-max-length="64" data-keyword-fields="candidateName,ticketNo,applicationNo,idNumber" data-keyword-match="candidateName:contains,ticketNo:prefix,applicationNo:prefix,idNumber:exact-or-last4" data-keyword-normalize="trim,fullwidth-to-halfwidth,NFKC" data-filter-combine="AND" maxlength="64" placeholder="姓名/准考证号/报名编号/证件号"></div>
                 <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-result-search>查询</button><button class="btn" data-result-reset>重置</button></div></div>
               </div>
+              <div class="table-card score-task-card" data-score-task-card>
+                <div class="table-tools">
+                  <div>
+                    <h2 class="table-title">评分任务</h2>
+                    <span class="muted">评分任务统一在考试当天 24:00 截止；当晚 20:00 系统自动提醒仍未提交的考官</span>
+                  </div>
+                  <div class="page-actions">
+                    <span class="tag orange" data-score-task-alert-count>1 项超时未提交</span>
+                    <button class="btn" data-score-task-remind-all>批量催办</button>
+                  </div>
+                </div>
+                <div class="score-task-alert" data-score-task-alert>
+                  <strong>超时提醒：</strong><span data-score-task-alert-text>王俊（小提琴 6级 · 8月20日 14:00 场）超过当天 24:00 仍未提交评分，系统已于次日 09:00 提醒平台管理员。请先与考官电话确认，再在此后台补录。</span>
+                </div>
+                <div class="table-wrap">
+                  <table class="score-task-table">
+                    <thead><tr><th>考官</th><th>专业/级别</th><th>考试场次</th><th>考生数</th><th>评分截止</th><th>提醒记录</th><th>状态</th><th>操作</th></tr></thead>
+                    <tbody data-score-task-body>
+                      <tr data-score-task-row data-score-task-status="已提交" data-score-task-examiner="李文浩">
+                        <td class="score-task-person">李文浩<small>13885692031</small></td>
+                        <td>钢琴 8级</td>
+                        <td>8月18日 09:00-12:00<span class="score-task-cell-sub">光谷 A201</span></td>
+                        <td>20</td>
+                        <td class="score-task-deadline">2026-08-18 24:00<span class="score-task-cell-sub">当天截止</span></td>
+                        <td class="score-task-remind">20:00 提醒已发送<small>考官当天 19:42 提交</small></td>
+                        <td><span class="tag green" data-score-task-status-tag>已提交</span></td>
+                        <td><div class="operation"><button class="btn link" data-drawer="result-detail">查看成绩</button></div></td>
+                      </tr>
+                      <tr data-score-task-row data-score-task-status="待提交" data-score-task-examiner="张明">
+                        <td class="score-task-person">张明<small>13630701188</small></td>
+                        <td>钢琴 5级</td>
+                        <td>8月18日 14:00-17:00<span class="score-task-cell-sub">光谷 A201</span></td>
+                        <td>20</td>
+                        <td class="score-task-deadline">2026-08-18 24:00<span class="score-task-cell-sub">当天截止</span></td>
+                        <td class="score-task-remind">20:00 提醒已发送<small>尚未提交，仍在截止日内</small></td>
+                        <td><span class="tag blue" data-score-task-status-tag>待提交</span></td>
+                        <td><div class="operation"><button class="btn link" data-score-task-remind>催办</button></div></td>
+                      </tr>
+                      <tr data-score-task-row data-score-task-status="超时未提交" data-score-task-examiner="王俊">
+                        <td class="score-task-person">王俊<small>13716744412</small></td>
+                        <td>小提琴 6级</td>
+                        <td>8月20日 14:00-16:00<span class="score-task-cell-sub">中央艺术考场</span></td>
+                        <td>18</td>
+                        <td class="score-task-deadline">2026-08-20 24:00<span class="score-task-cell-sub">当天截止</span></td>
+                        <td class="score-task-remind">20:00 提醒已发送<small>次日 09:00 已提醒平台管理员</small></td>
+                        <td><span class="tag red" data-score-task-status-tag>超时未提交</span></td>
+                        <td><div class="operation"><button class="btn link" data-score-task-remind>催办</button><button class="btn link" data-drawer="score-backfill">后台补录</button></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="score-task-rule">规则：评分任务以考试当天为截止日，当晚 20:00 固定向未提交的考官发送站内消息与短信提醒；次日仍未提交的，系统把超时任务推送给平台管理员，由管理员电话沟通后在此补录，补录成绩直接进入待发布并记入变更记录与审计。</div>
+              </div>
               <div class="table-card">
                 <div class="result-flow" role="tablist" aria-label="成绩状态切换">
                   <button class="active" type="button" data-result-status-tab="待发布" role="tab" aria-selected="true">待发布</button>
@@ -4506,7 +4586,7 @@
             <div class="message-metrics"><div class="card metric">总消息数<strong data-my-message-total>8</strong><span class="muted">近30天收到</span></div><div class="card metric">未读消息<strong data-my-message-unread>3</strong><span class="muted">点击标题可查看并自动已读</span></div><div class="card metric">已读消息<strong data-my-message-read>5</strong><span class="muted">已完成查看</span></div></div>
             <div class="table-tools message-my-toolbar"><div><h2 class="table-title">我的消息</h2><span class="muted">仅展示当前登录账号收到的站内消息</span></div><div class="page-actions"><button class="btn" data-my-message-read-all>全部标记已读</button><button class="btn" data-my-message-delete-selected>批量删除</button></div></div>
             <div class="filter-card message-filter-card"><div class="field"><label>消息类型</label><select class="select" data-my-message-type><option>全部类型</option><option>单位审核</option><option>考点审核</option><option>考官派遣</option><option>批次审核</option><option>报名缴费</option><option>成绩证书</option><option>系统管理</option></select></div><div class="field"><label>状态</label><select class="select" data-my-message-status><option>全部状态</option><option>未读</option><option>已读</option></select></div><div class="field"><label>关键词</label><input class="input" data-my-message-keyword placeholder="按标题或内容搜索"></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-my-message-search>查询</button><button class="btn" data-my-message-reset>重置</button></div></div></div>
-            <div class="table-card"><div class="table-wrap"><table class="message-table"><thead><tr><th><input type="checkbox" data-my-message-select-all aria-label="全选我的消息"></th><th>状态</th><th>消息标题</th><th>消息类型</th><th>发送时间</th><th>操作</th></tr></thead><tbody><tr data-my-message-row data-my-message-status="未读" data-my-message-type="成绩证书" data-my-message-keyword="成绩发布通知 2026下半年武汉"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>2026下半年 · 武汉成绩已发布</button><div class="muted">成绩已发布，请进入成绩阶段查看结果。</div></td><td>成绩证书</td><td>2026-08-21 09:20</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="未读" data-my-message-type="考官派遣" data-my-message-keyword="考官派遣通知 宜昌"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>线上考官派遣任务已生成</button><div class="muted">请进入线上任务查看考生视频。</div></td><td>考官派遣</td><td>2026-08-20 10:05</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="未读" data-my-message-type="报名缴费" data-my-message-keyword="报名缴费提醒 2026秋季"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>报名缴费截止提醒</button><div class="muted">批次报名即将截止，请及时完成缴费。</div></td><td>报名缴费</td><td>2026-08-19 08:00</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="已读" data-my-message-type="单位审核" data-my-message-keyword="单位审核通过 武汉承办中心"><td><input type="checkbox" data-my-message-select></td><td><span data-my-message-label>已读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>武汉承办中心审核通过</button><div class="muted">组织资料已审核通过。</div></td><td>单位审核</td><td>2026-08-15 14:20</td><td><button class="btn link" data-my-message-read>已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr></tbody></table></div></div>
+            <div class="table-card"><div class="table-wrap"><table class="message-table"><thead><tr><th><input type="checkbox" data-my-message-select-all aria-label="全选我的消息"></th><th>状态</th><th>消息标题</th><th>消息类型</th><th>发送时间</th><th>操作</th></tr></thead><tbody><tr data-my-message-row data-my-message-status="未读" data-my-message-type="成绩证书" data-my-message-keyword="评分任务超时未提交 王俊 小提琴 后台补录"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>评分任务超时未提交提醒</button><div class="muted">王俊（小提琴 6级 · 8月20日 14:00 场）超过当天 24:00 未提交 18 名考生评分，请电话确认后后台补录。</div></td><td>成绩证书</td><td>2026-08-21 09:00</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button><button class="btn link" data-jump="batch-workbench/grades">去补录</button></td></tr><tr data-my-message-row data-my-message-status="未读" data-my-message-type="成绩证书" data-my-message-keyword="成绩发布通知 2026下半年武汉"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>2026下半年 · 武汉成绩已发布</button><div class="muted">成绩已发布，请进入成绩阶段查看结果。</div></td><td>成绩证书</td><td>2026-08-21 09:20</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="未读" data-my-message-type="考官派遣" data-my-message-keyword="考官派遣通知 宜昌"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>线上考官派遣任务已生成</button><div class="muted">请进入线上任务查看考生视频。</div></td><td>考官派遣</td><td>2026-08-20 10:05</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="未读" data-my-message-type="报名缴费" data-my-message-keyword="报名缴费提醒 2026秋季"><td><input type="checkbox" data-my-message-select></td><td><span class="message-unread-dot" data-my-message-dot></span><span data-my-message-label>未读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>报名缴费截止提醒</button><div class="muted">批次报名即将截止，请及时完成缴费。</div></td><td>报名缴费</td><td>2026-08-19 08:00</td><td><button class="btn link" data-my-message-read>标记已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr><tr data-my-message-row data-my-message-status="已读" data-my-message-type="单位审核" data-my-message-keyword="单位审核通过 武汉承办中心"><td><input type="checkbox" data-my-message-select></td><td><span data-my-message-label>已读</span></td><td><button class="btn link message-title-link" data-drawer="my-message-detail" data-my-message-open>武汉承办中心审核通过</button><div class="muted">组织资料已审核通过。</div></td><td>单位审核</td><td>2026-08-15 14:20</td><td><button class="btn link" data-my-message-read>已读</button><button class="btn link" data-my-message-delete>删除</button></td></tr></tbody></table></div></div>
           </div>
           <div class="subview" data-subview="message-settings">
             <div class="info-banner message-module-banner"><strong>消息设置</strong><span>配置短信通道、站内消息和全局发送规则；设置变更会写入操作日志。</span></div>
@@ -10607,6 +10687,141 @@
       var reason = batchStagePhase(batch, "grades") !== "current" ? "当前成绩阶段仅支持查看" : !total ? "当前批次暂无成绩" : pendingInput ? "仍有评分待提交或评级未完成" : correcting ? "仍有成绩需补正或更正处理" : !pendingPublish ? "当前批次无待发布成绩" : "";
       return { total: total, pendingInput: pendingInput, pendingPublish: pendingPublish, published: published, blocked: !!reason, reason: reason };
     }
+    // 评分任务规则：考试当天 24:00 截止；当晚 20:00 固定提醒未提交的考官；次日仍未提交则提醒平台管理员，由管理员沟通后后台补录
+    function scoreTaskCardOf(node) {
+      return node && node.closest ? node.closest("[data-score-task-card]") : null;
+    }
+    function scoreTaskRowOf(node) {
+      return node && node.closest ? node.closest("[data-score-task-row]") : null;
+    }
+    function scoreTaskSnapshot(row) {
+      if (!row) return null;
+      var cells = row.cells || [];
+      function text(index) {
+        return cells[index] ? cells[index].textContent.replace(/\s+/g, " ").trim() : "-";
+      }
+      var person = cells[0];
+      var nameNode = person && person.firstChild ? person.firstChild.textContent.trim() : "";
+      var phoneNode = person ? person.querySelector("small") : null;
+      return {
+        row: row,
+        examiner: nameNode || row.getAttribute("data-score-task-examiner") || "考官",
+        phone: phoneNode ? phoneNode.textContent.trim() : "-",
+        subject: text(1),
+        session: text(2),
+        count: Number(String(text(3)).replace(/[^0-9]/g, "")) || 0,
+        deadline: text(4),
+        status: row.getAttribute("data-score-task-status") || ""
+      };
+    }
+    function scoreTaskDimensions(subject) {
+      if (/中国舞/.test(subject)) return ["身体表现", "节奏表现", "表现力"];
+      if (/小提琴/.test(subject)) return ["音准", "技术表现", "音乐表现"];
+      return ["演奏表现", "技术水平", "音乐表现"];
+    }
+    function scoreBackfillBodyHtml() {
+      var batch = currentBatchContext();
+      var snap = scoreTaskSnapshot(window.__scoreBackfillRow) || { examiner: "王俊", phone: "13716744412", subject: "小提琴 6级", session: "8月20日 14:00-16:00 中央艺术考场", count: 18, deadline: "2026-08-20 24:00 当天截止" };
+      var dimensions = scoreTaskDimensions(snap.subject);
+      var gradeOptions = ["优秀", "良好", "合格", "不合格"].map(function (item) { return "<option>" + item + "</option>"; }).join("");
+      return '<div class="batch-context-banner"><strong>' + escapeHtml(batch.name) + '</strong><span>批次 ID：' + escapeHtml(batch.id) + ' · 后台补录只用于考官超时未提交的评分任务</span></div>'
+        + '<dl class="kv"><dt>考官</dt><dd>' + escapeHtml(snap.examiner + " / " + snap.phone) + '</dd>'
+        + '<dt>考试场次</dt><dd>' + escapeHtml(snap.session) + '</dd>'
+        + '<dt>专业/级别</dt><dd>' + escapeHtml(snap.subject) + '</dd>'
+        + '<dt>未提交考生</dt><dd>' + escapeHtml(String(snap.count)) + ' 名</dd>'
+        + '<dt>评分截止</dt><dd>' + escapeHtml(snap.deadline) + '</dd>'
+        + '<dt>当前状态</dt><dd><span class="tag red">超时未提交</span> <span class="muted">已提醒平台管理员</span></dd></dl>'
+        + '<div class="score-task-rule" style="margin:14px 0 0"><strong>补录规则：</strong>补录前须与考官电话确认实际评分结果；补录成绩直接进入待发布，原评分任务标记「已补录（平台代录）」，补录人与时间写入变更记录与审计，不覆盖考官账号的任何操作记录。</div>'
+        + '<div class="drawer-section"><h3 class="drawer-section-title">补录评分</h3><div class="field-row-3">'
+        + dimensions.map(function (label, index) {
+          return '<div class="field"><label>' + escapeHtml(label) + ' *</label><select class="select" data-score-backfill-dimension="' + index + '">' + gradeOptions + '</select></div>';
+        }).join("")
+        + '</div><div class="field-row-2"><div class="field"><label>整体评级 *</label><select class="select" data-score-backfill-grade>' + gradeOptions + '</select></div>'
+        + '<div class="field"><label>补录范围</label><input class="input" value="' + escapeHtml(String(snap.count)) + ' 名未提交考生（全部补录）" readonly></div></div>'
+        + '<div class="field"><label>考生整体评语</label><textarea class="textarea" data-score-backfill-comment placeholder="按考官电话确认的结果填写整体评语">经电话确认，考官已完成线下评分，结果按现场评分表录入。</textarea></div></div>'
+        + '<div class="drawer-section"><h3 class="drawer-section-title">补录依据</h3>'
+        + '<div class="field"><label>与考官沟通记录 *</label><textarea class="textarea" data-score-backfill-contact placeholder="如：2026-08-21 09:20 电话联系王俊老师，确认 18 名考生已完成评分，考官因出差未登录系统提交" required></textarea></div>'
+        + '<div class="field"><label>补录原因 *</label><textarea class="textarea" data-score-backfill-reason placeholder="如：考官超时未提交，经沟通确认评分结果后由平台后台补录" required></textarea></div></div>'; 
+    }
+    function remindScoreTask(button) {
+      var row = scoreTaskRowOf(button);
+      var snap = scoreTaskSnapshot(row);
+      if (!snap) return;
+      var cell = row.cells[5];
+      if (cell && !cell.querySelector("[data-score-task-reminded]")) {
+        cell.insertAdjacentHTML("beforeend", '<small data-score-task-reminded>已人工催办 ' + formatDateTime(new Date()).slice(11, 16) + '</small>');
+      }
+      toast("已向 " + snap.examiner + " 发送催办：站内消息 + 短信");
+    }
+    function remindAllScoreTasks(button) {
+      var card = scoreTaskCardOf(button);
+      var rows = card ? Array.prototype.slice.call(card.querySelectorAll("[data-score-task-row]")) : [];
+      var targets = rows.filter(function (row) { return ["待提交", "超时未提交"].indexOf(row.getAttribute("data-score-task-status") || "") > -1; });
+      if (!targets.length) { toast("当前没有待提交或超时未提交的评分任务"); return; }
+      targets.forEach(function (row) {
+        var cell = row.cells[5];
+        if (cell && !cell.querySelector("[data-score-task-reminded]")) cell.insertAdjacentHTML("beforeend", '<small data-score-task-reminded>已人工催办 ' + formatDateTime(new Date()).slice(11, 16) + '</small>');
+      });
+      toast("已向 " + targets.length + " 位考官发送催办：站内消息 + 短信");
+    }
+    function applyScoreBackfill() {
+      var row = window.__scoreBackfillRow;
+      var snap = scoreTaskSnapshot(row);
+      if (!row || !snap) { toast("未找到评分任务，请刷新后重试"); return; }
+      var contactInput = document.querySelector("[data-score-backfill-contact]");
+      var reasonInput = document.querySelector("[data-score-backfill-reason]");
+      var commentInput = document.querySelector("[data-score-backfill-comment]");
+      var gradeInput = document.querySelector("[data-score-backfill-grade]");
+      var contact = contactInput ? contactInput.value.trim() : "";
+      var reason = reasonInput ? reasonInput.value.trim() : "";
+      if (!contact) { toast("请先填写与考官的电话沟通记录"); return; }
+      if (!reason) { toast("请填写补录原因"); return; }
+      var dimensions = scoreTaskDimensions(snap.subject);
+      var dimensionText = dimensions.map(function (label, index) {
+        var field = document.querySelector('[data-score-backfill-dimension="' + index + '"]');
+        return label + "：" + (field ? field.value : "良好");
+      }).join(" / ");
+      var grade = gradeInput ? gradeInput.value : "良好";
+      var comment = commentInput ? commentInput.value.trim() : "";
+      row.setAttribute("data-score-task-status", "已补录");
+      var tag = row.querySelector("[data-score-task-status-tag]");
+      if (tag) { tag.className = "tag green"; tag.textContent = "已补录"; }
+      var remindCell = row.cells[5];
+      if (remindCell) remindCell.insertAdjacentHTML("beforeend", "<small>平台代录 " + snap.count + " 名考生 · " + formatDateTime(new Date()).slice(0, 16) + "</small>");
+      var ops = row.cells[7];
+      if (ops) ops.innerHTML = '<div class="operation"><button class="btn link" data-drawer="result-detail">查看成绩</button><button class="btn link" data-toast="补录记录已打开：平台代录 ' + escapeHtml(String(snap.count)) + ' 名考生">补录记录</button></div>';
+      var card = scoreTaskCardOf(row);
+      var scope = card || document;
+      var remaining = scope.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"]').length;
+      var countTag = scope.querySelector("[data-score-task-alert-count]");
+      if (countTag) {
+        countTag.className = "tag " + (remaining ? "orange" : "green");
+        countTag.textContent = remaining ? remaining + " 项超时未提交" : "无超时未提交";
+      }
+      var alertBox = scope.querySelector("[data-score-task-alert]");
+      if (alertBox) alertBox.classList.toggle("is-clear", !remaining);
+      var alertText = scope.querySelector("[data-score-task-alert-text]");
+      if (alertText && !remaining) alertText.textContent = "当前所有评分任务均已提交或已由平台补录；当晚 20:00 只对当日仍未提交的评分任务自动发送提醒。";
+      appendBatchChangeRecord("成绩补录", currentBatchContext(), {
+        objectType: "评分任务",
+        objectLabel: snap.examiner + " · " + snap.subject + " · " + snap.session.replace(/ /g, " "),
+        objectCount: snap.count,
+        before: "考官超时未提交（截止 " + snap.deadline + "）",
+        after: "平台代录 " + snap.count + " 名考生成绩 / " + grade,
+        reason: reason,
+        status: "已完成",
+        snapshots: {
+          before: ["评分任务：" + snap.examiner + " · " + snap.subject, "评分截止：" + snap.deadline, "提交状态：超时未提交", "沟通记录：" + contact],
+          after: ["补录方式：平台后台代录", "补录维度：" + dimensionText, "整体评级：" + grade, "评语：" + (comment || "-"), "成绩状态：待发布", "任务标记：已补录（平台代录）"]
+        },
+        impact: "补录成绩直接进入待发布，原评分任务标记为「已补录（平台代录）」；补录人、时间与依据写入变更记录和审计，不改写考官端的提交记录。"
+      });
+      window.__scoreTaskAudit = window.__scoreTaskAudit || [];
+      window.__scoreTaskAudit.push({ type: "成绩补录", examiner: snap.examiner, count: snap.count, grade: grade, contact: contact, reason: reason, operator: "当前用户", time: formatDateTime(new Date()) });
+      refreshBatchChangeView();
+      closeDrawer();
+      toast("成绩已补录：" + snap.count + " 名考生进入待发布，补录记录已留痕");
+    }
     function publishBatchGrades(publishButton) {
       var batch = currentBatchContext();
       if (!AUTH_SESSION || ["platform", "organizer"].indexOf(AUTH_SESSION.role) < 0) { toast("当前无权发布成绩"); return; }
@@ -10836,7 +11051,8 @@
       if (stage === "grades") {
         return [
           ["待评分", formatDemoNumber(batch.scorePendingInput), "影响成绩发布", "考官", '<button class="btn link" data-jump="batch-workbench/grades">去查看</button>'],
-          ["待发布", formatDemoNumber(gradePublicationState(batch).pendingPublish), "影响制证", "平台 / 承办单位", '<button class="btn link" data-jump="batch-workbench/grades">去发布</button>']
+          ["待发布", formatDemoNumber(gradePublicationState(batch).pendingPublish), "影响制证", "平台 / 承办单位", '<button class="btn link" data-jump="batch-workbench/grades">去发布</button>'],
+          ["评分任务超时未提交", "1 项", "需平台联系考官后补录", "平台管理员", '<button class="btn link" data-jump="batch-workbench/grades">去补录</button>']
         ];
       }
       if (stage === "certificates") {
@@ -11988,7 +12204,11 @@
       var offline = pending.length - online;
       var todoTotal = pending.reduce(function (sum, item) { return sum + (Number(item.meta.todoCount) || 0); }, 0);
       var roleLabel = role === "platform" ? "平台全量批次" : role === "organizer" ? "本承办单位批次" : "本机构关联批次";
-      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色显示下一步操作，已完成批次不列出。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
+      // 评分任务超时未提交：后台提醒平台管理员，联系考官确认后后台补录
+      var scoreTimeoutBanner = role === "platform"
+        ? '<div class="score-task-alert" style="margin:0 0 12px;border-radius:6px"><strong>评分任务超时：</strong><span>王俊（小提琴 6级 · 8月20日 14:00 场）超过当天 24:00 仍未提交 18 名考生评分，系统已于次日 09:00 提醒平台管理员。请先电话联系考官确认，再在成绩管理里后台补录。</span><button class="btn link" type="button" data-jump="grades/list" style="margin-left:auto;white-space:nowrap">去补录</button></div>'
+        : '';
+      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + scoreTimeoutBanner + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色显示下一步操作，已完成批次不列出。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
       renderDashboardTodoRows(root.querySelector(".dashboard-todo-shell"));
     }
     var ANALYTICS_STAT_LEVELS = LEVEL_DICTIONARY.slice();
@@ -14882,7 +15102,7 @@
       return blocked;
     }
     function batchChangeSourceForType(type) {
-      var sourceMap = { "报名补录": ["报名与缴费", "新增报名"], "异常收款核验": ["报名与缴费", "异常收款核验"], "场次局部调整": ["排期编排", "调整场次"], "考官局部调整": ["考官派遣", "调整考官"], "准考证局部重生成": ["准考证", "局部重生成"], "成绩更正": ["批次变更管理", "成绩更正"], "证书作废/重新制证": ["证书库", "作废并重新制证"], "批次冻结": ["批次变更管理", "冻结/解除冻结"] };
+      var sourceMap = { "报名补录": ["报名与缴费", "新增报名"], "异常收款核验": ["报名与缴费", "异常收款核验"], "场次局部调整": ["排期编排", "调整场次"], "考官局部调整": ["考官派遣", "调整考官"], "准考证局部重生成": ["准考证", "局部重生成"], "成绩更正": ["批次变更管理", "成绩更正"], "成绩补录": ["成绩管理", "后台补录"], "证书作废/重新制证": ["证书库", "作废并重新制证"], "批次冻结": ["批次变更管理", "冻结/解除冻结"] };
       var source = sourceMap[type] || ["批次业务", "局部变更"];
       return { page: source[0], action: source[1] };
     }
@@ -15162,7 +15382,7 @@
       }).sort(function (a, b) { return String(b.updatedAt || b.appliedAt).localeCompare(String(a.updatedAt || a.appliedAt)); });
       var frozenBatchCount = batchChangeVisibleBatches().filter(function (batch) { return batchChangeFrozen(batch.id); }).length;
       var batchOptions = batchChangeVisibleBatches().filter(function (batch) { return allRecords.some(function (record) { return record.batchId === batch.id; }); }).map(function (batch) { return '<option value="' + escapeHtml(batch.id) + '">' + escapeHtml(batch.name) + '</option>'; }).join("");
-      root.innerHTML = '<div class="rollback-shell batch-change-shell"><div class="rollback-summary batch-change-summary"><button class="metric" data-batch-change-stat=""><span>异常变更记录</span><strong>' + formatDemoNumber(rows.length) + '</strong><small>当前筛选范围 · 点击查看全部</small></button><button class="metric" data-batch-change-stat="处理中"><span>处理中</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "处理中"; }).length) + '</strong><small>点击筛选</small></button><button class="metric" data-batch-change-stat="待审核"><span>待审核</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "待审核"; }).length) + '</strong><small>平台审核</small></button><button class="metric" data-batch-change-stat="失败"><span>失败记录</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "失败"; }).length) + '</strong><small>点击筛选并重试</small></button><button class="metric" data-batch-change-stat="已冻结"><span>冻结批次</span><strong>' + formatDemoNumber(frozenBatchCount) + '</strong><small>平台应急状态 · 点击筛选</small></button></div><div class="info-banner batch-change-boundary"><strong>排期变更边界：</strong>发布前的编排、复核、线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或消息；已发布排期只能在此发起“场次局部调整”，审批通过后才生成新版本并原子更新下游对象。</div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次变更管理</h2><span class="muted">集中查看异常变更、前后快照和审计链路。</span></div><div class="page-actions">' + (rollbackRole() === "organizer" ? '<button class="btn primary" data-batch-change-create-schedule>发起场次局部调整</button><button class="btn" data-batch-change-create-score-correction>发起成绩更正</button>' : '') + '<button class="btn" data-batch-change-refresh>刷新记录</button></div></div><div class="filter-card rollback-filter batch-change-filter"><div class="field"><label>处理状态</label><select class="select" data-batch-change-filter-status><option value="">全部状态</option><option>待审核</option><option>处理中</option><option>已完成</option><option>审核驳回</option><option>失败</option><option>已取消</option><option>已冻结</option><option>已解除冻结</option></select></div><div class="field"><label>目标批次</label><select class="select" data-batch-change-filter-batch><option value="">全部批次</option>' + batchOptions + '</select></div><div class="field"><label>变更类型</label><select class="select" data-batch-change-filter-type><option value="">全部类型</option><option>报名补录</option><option>异常缴费核验</option><option>场次局部调整</option><option>考官局部调整</option><option>准考证局部重生成</option><option>成绩更正</option><option>证书设置无效</option><option>证书设置有效</option><option>证书作废/重新制证</option><option>批次冻结</option></select></div><div class="field"><label>操作对象</label><input class="input" data-batch-change-filter-keyword placeholder="编号、考生、场次、操作人"></div><div class="field"><label>操作时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-change-filter-start aria-label="操作开始日期"><input class="input" type="date" data-batch-change-filter-end aria-label="操作结束日期"></div></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-change-search>查询</button><button class="btn" data-batch-change-reset>重置</button></div></div></div><div class="table-wrap"><table class="rollback-table batch-change-table"><thead><tr><th>变更编号</th><th>批次</th><th>变更类型</th><th>操作对象/数量</th><th>变更前 → 变更后</th><th>处理状态</th><th>操作人/时间</th><th>操作</th></tr></thead><tbody>' + (rows.map(batchChangeRecordRowHtml).join("") || '<tr><td colspan="8"><div class="dashboard-todo-empty">暂无符合条件的变更记录</div></td></tr>') + '</tbody></table></div></div></div>';
+      root.innerHTML = '<div class="rollback-shell batch-change-shell"><div class="rollback-summary batch-change-summary"><button class="metric" data-batch-change-stat=""><span>异常变更记录</span><strong>' + formatDemoNumber(rows.length) + '</strong><small>当前筛选范围 · 点击查看全部</small></button><button class="metric" data-batch-change-stat="处理中"><span>处理中</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "处理中"; }).length) + '</strong><small>点击筛选</small></button><button class="metric" data-batch-change-stat="待审核"><span>待审核</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "待审核"; }).length) + '</strong><small>平台审核</small></button><button class="metric" data-batch-change-stat="失败"><span>失败记录</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "失败"; }).length) + '</strong><small>点击筛选并重试</small></button><button class="metric" data-batch-change-stat="已冻结"><span>冻结批次</span><strong>' + formatDemoNumber(frozenBatchCount) + '</strong><small>平台应急状态 · 点击筛选</small></button></div><div class="info-banner batch-change-boundary"><strong>排期变更边界：</strong>发布前的编排、复核、线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或消息；已发布排期只能在此发起“场次局部调整”，审批通过后才生成新版本并原子更新下游对象。</div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次变更管理</h2><span class="muted">集中查看异常变更、前后快照和审计链路。</span></div><div class="page-actions">' + (rollbackRole() === "organizer" ? '<button class="btn primary" data-batch-change-create-schedule>发起场次局部调整</button><button class="btn" data-batch-change-create-score-correction>发起成绩更正</button>' : '') + '<button class="btn" data-batch-change-refresh>刷新记录</button></div></div><div class="filter-card rollback-filter batch-change-filter"><div class="field"><label>处理状态</label><select class="select" data-batch-change-filter-status><option value="">全部状态</option><option>待审核</option><option>处理中</option><option>已完成</option><option>审核驳回</option><option>失败</option><option>已取消</option><option>已冻结</option><option>已解除冻结</option></select></div><div class="field"><label>目标批次</label><select class="select" data-batch-change-filter-batch><option value="">全部批次</option>' + batchOptions + '</select></div><div class="field"><label>变更类型</label><select class="select" data-batch-change-filter-type><option value="">全部类型</option><option>报名补录</option><option>异常缴费核验</option><option>场次局部调整</option><option>考官局部调整</option><option>准考证局部重生成</option><option>成绩更正</option><option>证书设置无效</option><option>证书设置有效</option><option>成绩补录</option><option>证书作废/重新制证</option><option>批次冻结</option></select></div><div class="field"><label>操作对象</label><input class="input" data-batch-change-filter-keyword placeholder="编号、考生、场次、操作人"></div><div class="field"><label>操作时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-change-filter-start aria-label="操作开始日期"><input class="input" type="date" data-batch-change-filter-end aria-label="操作结束日期"></div></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-change-search>查询</button><button class="btn" data-batch-change-reset>重置</button></div></div></div><div class="table-wrap"><table class="rollback-table batch-change-table"><thead><tr><th>变更编号</th><th>批次</th><th>变更类型</th><th>操作对象/数量</th><th>变更前 → 变更后</th><th>处理状态</th><th>操作人/时间</th><th>操作</th></tr></thead><tbody>' + (rows.map(batchChangeRecordRowHtml).join("") || '<tr><td colspan="8"><div class="dashboard-todo-empty">暂无符合条件的变更记录</div></td></tr>') + '</tbody></table></div></div></div>';
       root.querySelector("[data-batch-change-filter-status]").value = statusValue;
       root.querySelector("[data-batch-change-filter-batch]").value = batchValue;
       root.querySelector("[data-batch-change-filter-type]").value = typeValue;
@@ -20464,7 +20684,8 @@
         ["DISPATCH-CHANGE", "考官派遣变更通知", "考官派遣", "受影响考官", "【{batchName}】派遣安排已变更，请查看最新任务。"],
         ["DISPATCH-CANCEL", "考官派遣撤销通知", "考官派遣", "受影响考官", "【{batchName}】派遣已撤销，原因：{reason}。"],
         ["ONLINE-ASSIGN", "线上评分任务指派通知", "评分录入", "被指派考官", "您收到【{batchName}】评分任务，请于【{date} {time}】前完成。"],
-        ["SCORE-DEADLINE", "评分截止提醒", "评分录入", "存在未评分任务的考官", "【{batchName}】尚有【{count}】项待评分，请于【{date} {time}】前完成。"],
+        ["SCORE-DEADLINE", "评分截止提醒（当晚 20:00）", "评分录入", "当日仍未提交评分的考官", "【{batchName}】今日 24:00 截止，您仍有【{count}】名考生未提交评分，请尽快完成。"],
+        ["SCORE-TIMEOUT", "评分任务超时未提交提醒", "评分录入", "平台管理员", "【{batchName}】考官【{examiner}】超过当天 24:00 未提交【{count}】名考生评分，请电话联系确认后后台补录。"],
         ["SCORE-SUBMITTED", "评分提交完成通知", "评分录入", "成绩管理人员", "【{batchName}】评分已提交，请检查成绩发布条件。"],
         ["SCORE-CORRECTION", "成绩更正通知", "成绩证书", "受影响考生", "【{batchName}】已发布成绩发生更正，请查看最新结果。"],
         ["CERT-REISSUE", "证书补发换发通知", "成绩证书", "考生", "您的证书已补发或换发，请查看最新有效证书。"],
@@ -23201,6 +23422,10 @@
         openDrawer("unit-create");
         return;
       }
+      var scoreTaskRemindBtn = event.target.closest("[data-score-task-remind]");
+      if (scoreTaskRemindBtn) { remindScoreTask(scoreTaskRemindBtn); return; }
+      if (event.target.closest("[data-score-task-remind-all]")) { remindAllScoreTasks(event.target.closest("[data-score-task-remind-all]")); return; }
+      if (event.target.closest("[data-score-backfill-confirm]")) { applyScoreBackfill(); return; }
       var drawerBtn = event.target.closest("[data-drawer]");
       if (drawerBtn) {
         var drawerKey = drawerBtn.getAttribute("data-drawer");
@@ -23224,6 +23449,11 @@
         if (drawerKey === "banner-create") window.__activeBannerRow = drawerBtn.closest("[data-banner-row]") || null;
         if (drawerKey === "judge-cert-form") {
           window.__activeJudgeCertId = drawerBtn.getAttribute("data-cert-id") || "";
+        }
+        if (drawerKey === "score-backfill") {
+          var scoreTaskRow = drawerBtn.closest("[data-score-task-row]");
+          if (scoreTaskRow) window.__scoreBackfillRow = scoreTaskRow;
+          if (!window.__scoreBackfillRow) { toast("请从超时未提交的评分任务行点「后台补录」"); return; }
         }
         if (drawerKey === "batch-org-fee-config") {
           window.__activeBatchFeeOrg = drawerBtn.getAttribute("data-batch-org-fee-org") || "";
@@ -25569,6 +25799,7 @@
       "result-return": { title: "退回成绩", body: resultReturnBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-toast="成绩版本已保留，评分任务进入待补正">确认退回</button>' },
       "result-publish": { title: "发布成绩", wide: true, body: resultPublishBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-result-publish-confirm>发布成绩</button>' },
       "result-detail": { title: "成绩详情", wide: true, body: resultDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
+      "score-backfill": { title: "后台补录成绩", wide: true, body: scoreBackfillBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-score-backfill-confirm>确认补录</button>' },
       "batch-standard-detail": { title: "专业级别评分维度", wide: true, body: batchStandardDetailBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-org-fee-config": { title: "查看平台报名费用", wide: true, body: batchOrgFeeConfigDrawerHtml, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "batch-create": { title: "新增考级批次", wide: true, body: '<div class="field-row-2"><div class="field"><label>关联年度规划</label><select class="select"><option>PLAN-2026-001 · 2026年度社会艺术水平考级工作规划</option><option>不关联规划（独立简章批次）</option></select></div><div class="field"><label>关联考级简章 *</label><select class="select"><option>《2026年社会艺术水平考级简章》 · 已发布</option><option>《2026宜昌戏曲戏剧考级简章》 · 草稿</option></select></div></div><div class="field-row-2"><div class="field"><label>批次名称 *</label><input class="input" value="2026下半年 · 武汉"></div><div class="field"><label>承办单位 *</label><select class="select"><option>武汉承办中心</option><option>宜昌承办中心</option></select></div></div><div class="field-row-2"><div class="field"><label>报名开始时间 *</label><input class="input" value="2026-07-01"></div><div class="field"><label>报名截止时间 *</label><input class="input" value="2026-08-15"></div></div><div class="field-row-2"><div class="field"><label>考试开始时间 *</label><input class="input" value="2026-08-18"></div><div class="field"><label>考试结束时间 *</label><input class="input" value="2026-08-24"></div></div><div class="field"><label>关联考点 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 湖北艺术职业学院光谷校区（所属单位：湖北艺术职业学院）</label><label class="level-check"><input type="checkbox"> 武汉音乐学院合作考点（所属单位：武汉承办中心）</label><label class="level-check"><input type="checkbox"> 宜昌青少年美育中心考点（待平台确认）</label></div></div><div class="field"><label>报名机构（生成二维码） *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 光谷少儿艺术中心（培训机构，默认考点：湖北艺术职业学院光谷校区）</label><label class="level-check"><input type="checkbox" checked> 汉口美育培训学校（培训机构，默认考点：湖北艺术职业学院光谷校区）</label></div><p class="form-hint">线下批次至少选择一个已启用的可报名培训机构；个人报名也必须在这些机构中选择一个。</p></div><div class="field"><label>执行专业与级别 *</label><div class="level-checks level-checks-panel"><label class="level-check"><input type="checkbox" checked> 钢琴 1-10级</label><label class="level-check"><input type="checkbox" checked> 中国舞 1-10级</label><label class="level-check"><input type="checkbox"> 小提琴 1-6级</label></div></div>', foot: '<button class="btn" data-close-drawer>取消</button><button class="btn" data-toast="批次草稿已保存">保存草稿</button><button class="btn primary" data-toast="批次已发布，报名二维码将按批次+报名机构生成">发布批次</button>' },
