@@ -4381,7 +4381,7 @@
               <div class="table-card">
                 <div class="cert-action-bar">
                   <strong>批次证书列表</strong>
-                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate" data-platform-only>全部生成</button><button class="btn" data-drawer="cert-clear-numbers" data-platform-only>清除证书号</button><button class="btn success" data-drawer="cert-submit" data-platform-only>发布</button><button class="btn" data-cert-toolbar-action="void" data-platform-only>作废</button><button class="btn" data-cert-toolbar-action="regenerate" data-platform-only>重新生成</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
+                  <div class="page-actions"><button class="btn primary" data-drawer="cert-batch-generate" data-platform-only>全部生成</button><button class="btn" data-drawer="cert-clear-numbers" data-platform-only>清除证书号</button><button class="btn success" data-drawer="cert-submit" data-platform-only>发布</button><button class="btn" data-cert-toolbar-action="void" data-platform-only>设置无效</button><button class="btn" data-cert-toolbar-action="regenerate" data-platform-only>设置有效</button><button class="btn" data-toast="证书清单已导出">导出证书清单</button></div>
                 </div>
                 <div class="table-wrap">
                   <table class="cert-table is-sticky-table has-sticky-action">
@@ -4413,7 +4413,7 @@
               <div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-cert-library-search>查询</button><button class="btn" data-cert-library-reset>重置</button></div></div>
             </div>
             <div class="table-card" data-cert-library-results hidden>
-              <div class="table-tools"><div><h2 class="table-title">查询结果</h2><span class="muted" data-cert-library-result-summary>0 条证书记录</span></div><div class="page-actions"><button class="btn" data-cert-toolbar-action="void">作废</button><button class="btn" data-cert-toolbar-action="regenerate">重新生成</button><a class="btn" href="成绩导入模板.xlsx" download="成绩导入模板.xlsx" data-toast="成绩导入模板已下载">导出成绩模板</a><button class="btn primary" data-cert-library-print>打印</button><button class="btn" data-toast="证书查询结果已导出">导出</button></div></div>
+              <div class="table-tools"><div><h2 class="table-title">查询结果</h2><span class="muted" data-cert-library-result-summary>0 条证书记录</span></div><div class="page-actions"><button class="btn" data-cert-toolbar-action="void">设置无效</button><button class="btn" data-cert-toolbar-action="regenerate">设置有效</button><a class="btn" href="成绩导入模板.xlsx" download="成绩导入模板.xlsx" data-toast="成绩导入模板已下载">导出成绩模板</a><button class="btn primary" data-cert-library-print>打印</button><button class="btn" data-toast="证书查询结果已导出">导出</button></div></div>
               <div class="table-wrap">
                 <table class="cert-table certificate-print-table is-sticky-table has-sticky-action">
                   <colgroup><col style="width:56px"><col style="width:160px"><col style="width:160px"><col style="width:130px"><col style="width:110px"><col style="width:190px"><col style="width:170px"><col style="width:170px"><col style="width:120px"><col style="width:160px"><col style="width:130px"><col style="width:120px"></colgroup>
@@ -5115,7 +5115,7 @@
       document.querySelectorAll(rootSelector + " button").forEach(function (item) {
         var label = item.textContent.trim();
         var isReadAction = /查询|重置|查看|详情|预览|版本记录|历史版本|关闭|返回|导出|下载|派遣/.test(label);
-        var isWriteAction = /新增|编辑|删除|保存|发布|停用|启用|复制|导入|上传|配置|清空|生成|提交|作废|解聘|聘用|重置密码/.test(label);
+        var isWriteAction = /新增|编辑|删除|保存|发布|停用|启用|复制|导入|上传|配置|清空|生成|提交|作废|设置无效|设置有效|解聘|聘用|重置密码/.test(label);
         item.classList.toggle("auth-role-hidden", isWriteAction && !isReadAction);
       });
     }
@@ -10713,7 +10713,7 @@
             title: role === "organizer" ? "承办单位证书权限" : "培训机构证书权限",
             tagText: "只读查询",
             tag: "green",
-            checks: ["证书生成、清除、发布和作废由平台统一处理。", "仅已提交入库的证书对当前角色开放查询、预览、下载和验真。", role === "organizer" ? "当前范围：本单位及下级培训机构。" : "当前范围：本培训机构。"]
+            checks: ["证书生成、清除、发布和设置无效由平台统一处理。", "仅已提交入库的证书对当前角色开放查询、预览、下载和验真。", role === "organizer" ? "当前范围：本单位及下级培训机构。" : "当前范围：本培训机构。"]
           },
           next: { title: "快捷动作", actions: [{ text: "进入证书库查询", jump: "certificates/library" }] }
         };
@@ -11314,13 +11314,14 @@
       var activeTab = root && root.querySelector("[data-result-status-tab].active");
       if (root) applyResultStatus(root, activeTab ? activeTab.getAttribute("data-result-status-tab") : "待发布", true);
     }
-    // 证书状态只有一条主线：待生成 → 待生效 → 有效；作废或重新生成后变为“无效”，并用副文案说明原因
+    // 证书状态只有一条主线：待生成 → 待生效 → 有效；设置无效 / 设置有效后变为“无效 / 有效”，并用副文案说明原因
     var CERT_STATUS_ALIAS = {
       "已生成": "待生效",
       "已发布": "待生效",
       "已提交": "有效",
       "已作废": "无效",
-      "已替代": "无效"
+      "已替代": "无效",
+      "已设置无效": "无效"
     };
     var CERT_STATUS_META = {
       "待生成": ["orange", "待生成"],
@@ -11337,7 +11338,7 @@
       var status = normalizeCertificateStatus(state);
       var meta = CERT_STATUS_META[status] || ["", status];
       var note = reason || (CERT_STATUS_ALIAS[state] === "无效" ? "" : "");
-      if (!note && status === "无效" && (state === "已作废" || state === "已替代")) note = state === "已替代" ? "已被新证替代" : "已作废";
+      if (!note && status === "无效" && (state === "已作废" || state === "已替代" || state === "已设置无效")) note = state === "已替代" ? "已被新证替代" : (state === "已设置无效" ? "已设置无效" : "已作废");
       return batchTagHtml(meta[0], meta[1]) + (note ? ' <span class="muted">' + escapeHtml(note) + '</span>' : "");
     }
     function certificateAuditHtml(batch) {
@@ -14850,7 +14851,7 @@
       { id: "BC-20260820-009", batchId: "batch-demo-08", type: "考官局部调整", stage: "dispatch", objectType: "考官派遣", objectLabel: "S-202608-012 · 钢琴7级", objectCount: 1, before: "张老师 / 已指派", after: "刘老师 / 已指派", status: "处理中", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-20 14:08", updatedAt: "2026-08-20 14:08", reason: "原考官临时请假，替换同专业同级别考官。", impact: "影响1个场次，完成新考官资格校验后生成派遣通知。", snapshots: { before: ["考官：张老师", "资质校验：通过", "派遣状态：已指派"], after: ["考官：刘老师", "资质校验：通过", "派遣状态：已指派"] }, audit: [{ at: "2026-08-20 14:08", text: "平台运营方完成替代考官资格校验" }] },
       { id: "BC-20260819-007", batchId: "batch-demo-10", type: "准考证局部重生成", stage: "tickets", objectType: "准考证", objectLabel: "S-202608-005关联考生", objectCount: 32, before: "已发布 / v1", after: "待重生成 / 原版本已作废", status: "已完成", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-19 16:26", updatedAt: "2026-08-19 16:34", reason: "场次考场调整后重新生成受影响考生准考证。", impact: "32张准考证生成新版本，未受影响准考证保持有效。", snapshots: { before: ["准考证版本：v1", "考场：A-201", "状态：已发布"], after: ["准考证版本：v2", "考场：A-203", "状态：已发布", "原版本：已作废"] }, audit: [{ at: "2026-08-19 16:26", text: "系统识别32名受影响考生" }, { at: "2026-08-19 16:34", text: "局部生成任务完成并发布新版本" }] },
       { id: "BC-20260818-006", batchId: "batch-demo-12", type: "成绩更正", stage: "grades", objectType: "考生成绩", objectLabel: "SC-2026-00192 · 赵子涵", objectCount: 1, before: "GOOD / 通过 / published-v1", after: "待平台审核 / 原成绩继续有效", status: "待审核", operator: "襄阳承办中心管理员", org: "襄阳承办中心", appliedAt: "2026-08-18 11:22", updatedAt: "2026-08-18 11:22", reason: "复核评分记录后申请版本化更正。", impact: "审核通过后生成并生效新成绩版本；如原证书有效，则先撤销并保留验真历史，再生成新证书；通知失败不回滚结果。", attachments: ["SC-2026-00192-评分复核记录.pdf"], snapshots: { before: ["整体评级：GOOD", "结果：通过", "版本：published-v1", "当前状态：已发布", "证书：有效"], after: ["申请状态：待平台审核", "新成绩版本：未生效", "原成绩：继续有效", "原证书：继续有效", "通知：待创建"] }, audit: [{ at: "2026-08-18 11:22", text: "襄阳承办中心管理员在批次变更管理提交成绩更正申请，等待平台审核" }] },
-      { id: "BC-20260817-004", batchId: "batch-demo-16", type: "证书作废/重新制证", stage: "certificates", objectType: "考级证书", objectLabel: "CERT-2026-00176 · 孙悦", objectCount: 1, before: "已发布 / CERT-2026-00176", after: "已作废 / 待重新制证", status: "已完成", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-17 10:05", updatedAt: "2026-08-17 10:16", reason: "证书姓名字段与实名信息不一致，作废后重新制证。", impact: "原证书保留验真记录，新证书编号待生成。", attachments: ["CERT-2026-00176-作废依据.pdf"], snapshots: { before: ["证书编号：CERT-2026-00176", "状态：已发布", "姓名：孙悦"], after: ["原证书状态：已作废", "新证书：待生成", "验真记录：保留"] }, audit: [{ at: "2026-08-17 10:05", text: "平台运营方提交证书作废" }, { at: "2026-08-17 10:16", text: "作废校验通过，已进入重新制证队列" }] },
+      { id: "BC-20260817-004", batchId: "batch-demo-16", type: "证书作废/重新制证", stage: "certificates", objectType: "考级证书", objectLabel: "CERT-2026-00176 · 孙悦", objectCount: 1, before: "已发布 / CERT-2026-00176", after: "已作废 / 待重新制证", status: "已完成", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-17 10:05", updatedAt: "2026-08-17 10:16", reason: "证书姓名字段与实名信息不一致，作废后重新制证。", impact: "原证书保留验真记录，补证沿用原编号重新发放。", attachments: ["CERT-2026-00176-作废依据.pdf"], snapshots: { before: ["证书编号：CERT-2026-00176", "状态：已发布", "姓名：孙悦"], after: ["原证书状态：已作废", "新证书：待生成", "验真记录：保留"] }, audit: [{ at: "2026-08-17 10:05", text: "平台运营方提交证书作废" }, { at: "2026-08-17 10:16", text: "作废校验通过，已进入重新制证队列" }] },
       { id: "BC-20260817-002", batchId: "batch-demo-10", type: "准考证局部重生成", stage: "tickets", objectType: "准考证", objectLabel: "S-202608-008关联考生", objectCount: 6, before: "已发布 / v1", after: "生成任务失败", status: "失败", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-17 09:18", updatedAt: "2026-08-17 09:21", reason: "场次调整后尝试重新生成受影响考生准考证。", failureReason: "6名考生的证件照片文件校验失败，未生成新文件；原准考证仍保持有效。", impact: "仅6名考生需要补充照片后重试，其他考生不受影响。", attachments: ["TICKET-2026-0008-失败报告.xlsx"], snapshots: { before: ["准考证版本：v1", "状态：已发布", "照片校验：待重试"], after: ["新版本：未生成", "任务状态：失败", "原版本：仍有效"] }, audit: [{ at: "2026-08-17 09:18", text: "系统识别6名受影响考生并发起局部重生成" }, { at: "2026-08-17 09:21", text: "照片文件校验失败，任务保留失败报告" }] },
       { id: "BC-20260816-003", batchId: "batch-demo-14", type: "批次冻结", stage: "tickets", objectType: "批次", objectLabel: "2026成绩已发布 · 黄石", objectCount: 1, before: "正常推进", after: "冻结中", status: "已冻结", operator: "平台运营方", org: "湖北艺术职业学院", appliedAt: "2026-08-16 09:42", updatedAt: "2026-08-20 09:42", reason: "考场容量配置存在批量异常，需暂停准考证生成并由运维核查。", impact: "报名、排期、派遣、准考证、成绩、证书写操作已阻断；查询和审计保持可用。", snapshots: { before: ["批次状态：正常", "当前阶段：准考证"], after: ["批次状态：冻结中", "冻结范围：排期、准考证", "运维工单：OPS-20260820-014"] }, audit: [{ at: "2026-08-16 09:42", text: "平台运营方冻结批次并记录影响范围" }, { at: "2026-08-20 09:42", text: "关联线下运维工单 OPS-20260820-014" }] }
     ];
@@ -15163,7 +15164,7 @@
       }).sort(function (a, b) { return String(b.updatedAt || b.appliedAt).localeCompare(String(a.updatedAt || a.appliedAt)); });
       var frozenBatchCount = batchChangeVisibleBatches().filter(function (batch) { return batchChangeFrozen(batch.id); }).length;
       var batchOptions = batchChangeVisibleBatches().filter(function (batch) { return allRecords.some(function (record) { return record.batchId === batch.id; }); }).map(function (batch) { return '<option value="' + escapeHtml(batch.id) + '">' + escapeHtml(batch.name) + '</option>'; }).join("");
-      root.innerHTML = '<div class="rollback-shell batch-change-shell"><div class="rollback-summary batch-change-summary"><button class="metric" data-batch-change-stat=""><span>异常变更记录</span><strong>' + formatDemoNumber(rows.length) + '</strong><small>当前筛选范围 · 点击查看全部</small></button><button class="metric" data-batch-change-stat="处理中"><span>处理中</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "处理中"; }).length) + '</strong><small>点击筛选</small></button><button class="metric" data-batch-change-stat="待审核"><span>待审核</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "待审核"; }).length) + '</strong><small>平台审核</small></button><button class="metric" data-batch-change-stat="失败"><span>失败记录</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "失败"; }).length) + '</strong><small>点击筛选并重试</small></button><button class="metric" data-batch-change-stat="已冻结"><span>冻结批次</span><strong>' + formatDemoNumber(frozenBatchCount) + '</strong><small>平台应急状态 · 点击筛选</small></button></div><div class="info-banner batch-change-boundary"><strong>排期变更边界：</strong>发布前的编排、复核、线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或消息；已发布排期只能在此发起“场次局部调整”，审批通过后才生成新版本并原子更新下游对象。</div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次变更管理</h2><span class="muted">集中查看异常变更、前后快照和审计链路。</span></div><div class="page-actions">' + (rollbackRole() === "organizer" ? '<button class="btn primary" data-batch-change-create-schedule>发起场次局部调整</button><button class="btn" data-batch-change-create-score-correction>发起成绩更正</button>' : '') + '<button class="btn" data-batch-change-refresh>刷新记录</button></div></div><div class="filter-card rollback-filter batch-change-filter"><div class="field"><label>处理状态</label><select class="select" data-batch-change-filter-status><option value="">全部状态</option><option>待审核</option><option>处理中</option><option>已完成</option><option>审核驳回</option><option>失败</option><option>已取消</option><option>已冻结</option><option>已解除冻结</option></select></div><div class="field"><label>目标批次</label><select class="select" data-batch-change-filter-batch><option value="">全部批次</option>' + batchOptions + '</select></div><div class="field"><label>变更类型</label><select class="select" data-batch-change-filter-type><option value="">全部类型</option><option>报名补录</option><option>异常缴费核验</option><option>场次局部调整</option><option>考官局部调整</option><option>准考证局部重生成</option><option>成绩更正</option><option>证书作废</option><option>证书重新生成</option><option>证书作废/重新制证</option><option>批次冻结</option></select></div><div class="field"><label>操作对象</label><input class="input" data-batch-change-filter-keyword placeholder="编号、考生、场次、操作人"></div><div class="field"><label>操作时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-change-filter-start aria-label="操作开始日期"><input class="input" type="date" data-batch-change-filter-end aria-label="操作结束日期"></div></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-change-search>查询</button><button class="btn" data-batch-change-reset>重置</button></div></div></div><div class="table-wrap"><table class="rollback-table batch-change-table"><thead><tr><th>变更编号</th><th>批次</th><th>变更类型</th><th>操作对象/数量</th><th>变更前 → 变更后</th><th>处理状态</th><th>操作人/时间</th><th>操作</th></tr></thead><tbody>' + (rows.map(batchChangeRecordRowHtml).join("") || '<tr><td colspan="8"><div class="dashboard-todo-empty">暂无符合条件的变更记录</div></td></tr>') + '</tbody></table></div></div></div>';
+      root.innerHTML = '<div class="rollback-shell batch-change-shell"><div class="rollback-summary batch-change-summary"><button class="metric" data-batch-change-stat=""><span>异常变更记录</span><strong>' + formatDemoNumber(rows.length) + '</strong><small>当前筛选范围 · 点击查看全部</small></button><button class="metric" data-batch-change-stat="处理中"><span>处理中</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "处理中"; }).length) + '</strong><small>点击筛选</small></button><button class="metric" data-batch-change-stat="待审核"><span>待审核</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "待审核"; }).length) + '</strong><small>平台审核</small></button><button class="metric" data-batch-change-stat="失败"><span>失败记录</span><strong>' + formatDemoNumber(rows.filter(function (record) { return record.status === "失败"; }).length) + '</strong><small>点击筛选并重试</small></button><button class="metric" data-batch-change-stat="已冻结"><span>冻结批次</span><strong>' + formatDemoNumber(frozenBatchCount) + '</strong><small>平台应急状态 · 点击筛选</small></button></div><div class="info-banner batch-change-boundary"><strong>排期变更边界：</strong>发布前的编排、复核、线下修正和保存只更新内部排期，不影响考生、准考证、派遣、评分任务或消息；已发布排期只能在此发起“场次局部调整”，审批通过后才生成新版本并原子更新下游对象。</div><div class="table-card"><div class="table-tools"><div><h2 class="table-title">批次变更管理</h2><span class="muted">集中查看异常变更、前后快照和审计链路。</span></div><div class="page-actions">' + (rollbackRole() === "organizer" ? '<button class="btn primary" data-batch-change-create-schedule>发起场次局部调整</button><button class="btn" data-batch-change-create-score-correction>发起成绩更正</button>' : '') + '<button class="btn" data-batch-change-refresh>刷新记录</button></div></div><div class="filter-card rollback-filter batch-change-filter"><div class="field"><label>处理状态</label><select class="select" data-batch-change-filter-status><option value="">全部状态</option><option>待审核</option><option>处理中</option><option>已完成</option><option>审核驳回</option><option>失败</option><option>已取消</option><option>已冻结</option><option>已解除冻结</option></select></div><div class="field"><label>目标批次</label><select class="select" data-batch-change-filter-batch><option value="">全部批次</option>' + batchOptions + '</select></div><div class="field"><label>变更类型</label><select class="select" data-batch-change-filter-type><option value="">全部类型</option><option>报名补录</option><option>异常缴费核验</option><option>场次局部调整</option><option>考官局部调整</option><option>准考证局部重生成</option><option>成绩更正</option><option>证书设置无效</option><option>证书设置有效</option><option>证书作废/重新制证</option><option>批次冻结</option></select></div><div class="field"><label>操作对象</label><input class="input" data-batch-change-filter-keyword placeholder="编号、考生、场次、操作人"></div><div class="field"><label>操作时间范围</label><div class="field-row-2"><input class="input" type="date" data-batch-change-filter-start aria-label="操作开始日期"><input class="input" type="date" data-batch-change-filter-end aria-label="操作结束日期"></div></div><div class="field"><label>&nbsp;</label><div class="page-actions"><button class="btn primary" data-batch-change-search>查询</button><button class="btn" data-batch-change-reset>重置</button></div></div></div><div class="table-wrap"><table class="rollback-table batch-change-table"><thead><tr><th>变更编号</th><th>批次</th><th>变更类型</th><th>操作对象/数量</th><th>变更前 → 变更后</th><th>处理状态</th><th>操作人/时间</th><th>操作</th></tr></thead><tbody>' + (rows.map(batchChangeRecordRowHtml).join("") || '<tr><td colspan="8"><div class="dashboard-todo-empty">暂无符合条件的变更记录</div></td></tr>') + '</tbody></table></div></div></div>';
       root.querySelector("[data-batch-change-filter-status]").value = statusValue;
       root.querySelector("[data-batch-change-filter-batch]").value = batchValue;
       root.querySelector("[data-batch-change-filter-type]").value = typeValue;
@@ -22693,22 +22694,22 @@
         var voidBatch = currentBatchContext();
         if (batchChangeIsFrozen(voidBatch, "certificates")) return;
         var voidReason = drawerBody.querySelector("[data-cert-void-reason]");
-        if (!voidReason || !voidReason.value.trim()) { toast("证书作废必须填写原因"); return; }
+        if (!voidReason || !voidReason.value.trim()) { toast("设置无效必须填写原因"); return; }
         var voidRows = window.__certActionTargets && window.__certActionTargets.length ? window.__certActionTargets : (window.__activeCertificateRow ? [window.__activeCertificateRow] : []);
         var voidCount = applyCertificateVoid(voidRows, voidReason.value.trim());
         closeDrawer();
-        if (voidCount) toast(voidCount > 1 ? "已作废 " + voidCount + " 张证书，状态改为无效" : "证书已作废，状态改为无效");
+        if (voidCount) toast(voidCount > 1 ? "已设置 " + voidCount + " 张证书为无效" : "证书已设置为无效");
         return;
       }
       if (event.target.closest("[data-cert-regenerate-confirm]")) {
         var regenBatch = currentBatchContext();
         if (batchChangeIsFrozen(regenBatch, "certificates")) return;
         var regenReason = drawerBody.querySelector("[data-cert-regenerate-reason]");
-        if (!regenReason || !regenReason.value.trim()) { toast("重新生成必须填写原因"); return; }
+        if (!regenReason || !regenReason.value.trim()) { toast("设置有效必须填写原因"); return; }
         var regenRows = window.__certActionTargets && window.__certActionTargets.length ? window.__certActionTargets : (window.__activeCertificateRow ? [window.__activeCertificateRow] : []);
         var regenCount = applyCertificateRegenerate(regenRows, regenReason.value.trim());
         closeDrawer();
-        if (regenCount) toast(regenCount > 1 ? "已重新生成 " + regenCount + " 张证书，沿用原编号" : "证书已重新生成，沿用原编号");
+        if (regenCount) toast(regenCount > 1 ? "已设置 " + regenCount + " 张证书为有效，沿用原编号" : "证书已设置为有效，沿用原编号");
         return;
       }
       var scheduleSelectAll = event.target.closest("[data-schedule-select-all]");
@@ -23079,7 +23080,7 @@
       if (event.target.closest("[data-cert-library-reset]")) { resetCertificateLibrarySearch(); return; }
       if (event.target.closest("[data-cert-download-electron]")) {
         var downloadRow = event.target.closest("[data-cert-library-row]");
-        if (!downloadRow || downloadRow.dataset.certValid === '0') { toast('这张证书已无效，不能下载电子版；需要补证请用「重新生成」'); return; }
+        if (!downloadRow || downloadRow.dataset.certValid === '0') { toast('这张证书已无效，不能下载电子版；需要恢复请用「设置有效」'); return; }
         toast('电子证书下载中');
         return;
       }
@@ -24417,7 +24418,7 @@
     }
     function certClearNumbersBodyHtml() {
       var batch = currentBatchContext();
-      return '<div class="info-banner"><strong>只有“待发布”的证书能清号：</strong>已发布或已作废的不能清号、不能改号。</div><dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>清除范围</dt><dd>已勾选 ' + formatDemoNumber(Math.max(batch.certGenerated - batch.certSubmitted, 0)) + ' 本已生成证书</dd><dt>当前状态</dt><dd><span class="tag blue">待发布</span></dd><dt>清除后状态</dt><dd><span class="tag orange">待生成</span></dd></dl><div class="field" style="margin-top:14px"><label>清除原因 *</label><textarea class="textarea" data-cert-clear-reason>编号规则选择有误，需要重新生成。</textarea></div>';
+      return '<div class="info-banner"><strong>只有“待发布”的证书能清号：</strong>已发布或已设置为无效的不能清号、不能改号。</div><dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd><dt>清除范围</dt><dd>已勾选 ' + formatDemoNumber(Math.max(batch.certGenerated - batch.certSubmitted, 0)) + ' 本已生成证书</dd><dt>当前状态</dt><dd><span class="tag blue">待发布</span></dd><dt>清除后状态</dt><dd><span class="tag orange">待生成</span></dd></dl><div class="field" style="margin-top:14px"><label>清除原因 *</label><textarea class="textarea" data-cert-clear-reason>编号规则选择有误，需要重新分配。</textarea></div>';
     }
     function certSubmitBodyHtml() {
       var batch = currentBatchContext();
@@ -24430,16 +24431,16 @@
       var rows = window.__certActionTargets || [];
       var first = rows[0] ? certRowSnapshot(rows[0]) : { certNo: "当前证书", name: "当前考生", major: "-", level: "-" };
       var batch = currentBatchContext();
-      return '<div class="info-banner"><strong>作废后状态变为“无效”：</strong>证书不能下载、不能验真；需要补证请用「重新生成」，沿用原编号重新发放。</div>'
+      return '<div class="info-banner"><strong>设置无效后状态变为“无效”：</strong>证书不能下载、不能验真；需要恢复请用「设置有效」，沿用原编号重新发放。</div>'
         + '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd>'
         + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : escapeHtml(first.certNo)) + '</dd>'
         + '<dt>考生</dt><dd>' + escapeHtml([first.name, first.major, first.level].filter(function (v) { return v && v !== "-"; }).join(" · ") || "-") + '</dd>'
-        + '<dt>作废后</dt><dd><span class="tag red">无效</span> <span class="muted">已作废</span></dd>'
+        + '<dt>变更后</dt><dd><span class="tag red">无效</span> <span class="muted">已设置无效</span></dd>'
         + '<dt>操作人 / 时间</dt><dd>当前登录用户 / ' + escapeHtml(formatDateTime(new Date())) + '</dd></dl>'
-        + '<div class="field" style="margin-top:14px"><label>作废原因 *</label><textarea class="textarea" data-cert-void-reason placeholder="如：证书信息有误 / 重复制证"></textarea></div>';
+        + '<div class="field" style="margin-top:14px"><label>设置无效原因 *</label><textarea class="textarea" data-cert-void-reason placeholder="如：证书信息有误 / 重复制证"></textarea></div>';
     }
-    /* ===== 证书作废 / 重新生成：与「有效-无效」统一口径 ===== */
-    // 证书状态的会话内记忆：作废/重新生成后切页面回来，仍显示同一结果（原型无后端，用内存兜住）
+    /* ===== 证书设置无效 / 设置有效：与「有效-无效」统一口径 ===== */
+    // 证书状态的会话内记忆：设置无效 / 设置有效后切页面回来，仍显示同一结果（原型无后端，用内存兜住）
     var CERT_STATE_OVERRIDES = {};
     var CERT_EXTRA_ROWS = [];
     function certScopeOf(table) {
@@ -24476,7 +24477,7 @@
         existing[item.certNo] = true;
       });
     }
-    // 工作台证书表没有 data-cert-* 属性，按表头兜底取值，保证作废/重新生成能拿到编号与考生
+    // 工作台证书表没有 data-cert-* 属性，按表头兜底取值，保证设置无效 / 设置有效能拿到编号与考生
     function certRowSnapshot(row) {
       var snap = certificateLibraryRowSnapshot(row);
       if (row && row.dataset && row.dataset.certNumber) { snap.row = row; return snap; }
@@ -24509,7 +24510,7 @@
     }
     function certStatusCellOf(row) { return row ? row.querySelector("[data-cert-status-cell]") : null; }
     // 证书状态拆成两个字段：certStage 表示流程阶段，certValid 表示能不能用；
-    // 列表上的一个状态由两者派生，避免“既在已提交阶段又已作废”这种组合被压成一个枚举
+    // 列表上的一个状态由两者派生，避免“既在已提交阶段又已设置无效”这种组合被压成一个枚举
     function certDisplayOfRow(row) {
       var stage = (row && row.dataset.certStage) || "已提交";
       var valid = !(row && row.dataset.certValid === "0");
@@ -24561,6 +24562,7 @@
       if (!hasNo || /待生成/.test(src)) { stage = "待生成"; valid = "0"; }
       else if (/已发布|已提交/.test(src)) { stage = "已提交"; valid = "1"; }
       else if (/待生效|已生成/.test(src)) { stage = "待生效"; valid = "1"; }
+      else if (/已设置无效/.test(src)) { stage = "已提交"; valid = "0"; note = "已设置无效"; }
       else if (/已作废/.test(src)) { stage = "已提交"; valid = "0"; note = "已作废"; }
       else if (/已替代/.test(src)) { stage = "已提交"; valid = "0"; note = "已被新证替代"; }
       else if (/无效/.test(src)) { stage = "已提交"; valid = "0"; }
@@ -24653,8 +24655,8 @@
         var noCell = row.querySelector(".cert-no-cell");
         if (!noCell || !/\d{4,}/.test(noCell.textContent)) return;
         var box = certActionBox(row.cells[row.cells.length - 1]);
-        if (!certRowIsInvalid(row)) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">作废</button>');
-        box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
+        if (!certRowIsInvalid(row)) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">设置无效</button>');
+        box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="regenerate">设置有效</button>');
       });
     }
     function refreshCertificateLibrarySummary() {
@@ -24683,7 +24685,7 @@
     }
     function openCertificateVoidDrawer(rows) {
       rows = (rows || []).filter(function (row) { return certStatusCellOf(row); });
-      if (!rows.length) { toast("请先勾选需要作废的证书，再点「作废」"); return; }
+      if (!rows.length) { toast("请先勾选需要设置为无效的证书，再点「设置无效」"); return; }
       if (rows.every(certRowIsInvalid)) { toast("所选证书已是无效状态"); return; }
       window.__certActionTargets = rows;
       window.__activeCertificateRow = rows[0];
@@ -24691,7 +24693,7 @@
     }
     function openCertificateRegenerateDrawer(rows) {
       rows = (rows || []).filter(function (row) { return certStatusCellOf(row); });
-      if (!rows.length) { toast("请先勾选需要重新生成的证书，再点「重新生成」"); return; }
+      if (!rows.length) { toast("请先勾选需要设置为有效的证书，再点「设置有效」"); return; }
       window.__certActionTargets = rows;
       window.__activeCertificateRow = rows[0];
       openDrawer("cert-regenerate");
@@ -24704,23 +24706,23 @@
         var snapshot = certRowSnapshot(row);
         var prevStatus = certRowStatusText(row) || "有效";
         var prevStage = (row.dataset.certStage) || "已提交";
-        setCertificateRowState(row, prevStage, false, "已作废");
+        setCertificateRowState(row, prevStage, false, "已设置无效");
         var box = row.querySelector(".operation");
         if (box) {
           Array.prototype.forEach.call(box.querySelectorAll('[data-toast*="下载"], [data-toast*="打印"], [data-toast*="验真"], [data-cert-download-electron], [data-cert-action="void"]'), function (node) { node.remove(); });
-          if (!box.querySelector('[data-cert-action="regenerate"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
+          if (!box.querySelector('[data-cert-action="regenerate"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="regenerate">设置有效</button>');
         }
-        appendBatchChangeRecord("证书作废", batch, {
+        appendBatchChangeRecord("证书设置无效", batch, {
           objectType: "考级证书",
           objectLabel: snapshot.certNo + " · " + snapshot.name,
           before: prevStatus,
-          after: "无效（已作废）",
+          after: "无效（已设置无效）",
           reason: reason,
-          snapshots: { before: ["证书编号：" + snapshot.certNo, "姓名：" + snapshot.name, "状态：" + prevStatus], after: ["状态：无效（已作废）", "原因：" + reason, "需要补证请重新生成"] },
-          impact: "证书不可下载、不可验真；补证请使用「重新生成」，沿用原编号重新发放。"
+          snapshots: { before: ["证书编号：" + snapshot.certNo, "姓名：" + snapshot.name, "状态：" + prevStatus], after: ["状态：无效（已设置无效）", "原因：" + reason, "需要恢复请设置有效"] },
+          impact: "证书不可下载、不可验真；需要恢复请使用「设置有效」，沿用原编号重新发放。"
         });
         window.__certificateAudit = window.__certificateAudit || [];
-        window.__certificateAudit.push({ batchId: batch.id, action: "证书作废", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
+        window.__certificateAudit.push({ batchId: batch.id, action: "证书设置无效", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
         done += 1;
       });
       if (!done) return 0;
@@ -24730,7 +24732,7 @@
       if (auditNode) auditNode.outerHTML = certificateAuditHtml(currentBatchContext());
       return done;
     }
-    // 重新生成 = 同一张证书重新发放，沿用原编号；原行原地恢复，不再插入同号新行
+    // 设置有效 = 同一张证书重新发放，沿用原编号；原行原地恢复，不再插入同号新行
     function restoreCertificateUsableActions(row) {
       if (!row || !row.cells || !row.cells.length) return;
       var box = certActionBox(row.cells[row.cells.length - 1]);
@@ -24748,7 +24750,7 @@
         }));
         if (tableSupportsVerify && !box.querySelector('[data-toast*="验真"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-toast="防伪验证结果已打开">验真</button>');
       }
-      box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">作废</button><button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
+      box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">设置无效</button><button class="btn link" data-platform-only data-cert-action="regenerate">设置有效</button>');
     }
     function refreshCertificateGeneratedTime(row) {
       var table = row && row.closest ? row.closest("table") : null;
@@ -24768,7 +24770,7 @@
         if (!keepNo || keepNo === "-") { toast("该考生还没有证书编号，请先「生成」证书"); return; }
         var prevStatus = certRowStatusText(row) || "有效";
         var inLibrary = !!(row.closest && row.closest(".certificate-print-table")) || row.hasAttribute("data-cert-library-row");
-        // 沿用原阶段：作废时只置无效、保留阶段，补证就从该阶段继续（已发布的补证后仍为已发布，未发布的回到待发布）
+        // 沿用原阶段：设置无效时只置无效、保留阶段，恢复就从该阶段继续（已发布的补证后仍为已发布，未发布的回到待发布）
         var oldStage = (row.dataset && row.dataset.certStage) || (inLibrary ? "已提交" : "待生效");
         var newStage = oldStage === "待生成" ? (inLibrary ? "已提交" : "待生效") : oldStage;
         restoreCertificateUsableActions(row);
@@ -24781,17 +24783,17 @@
           var storeCell = row.cells[10];
           if (storeCell) storeCell.textContent = formatDateTime(new Date()).slice(0, 10);
         }
-        appendBatchChangeRecord("证书重新生成", batch, {
+        appendBatchChangeRecord("证书设置有效", batch, {
           objectType: "考级证书",
           objectLabel: keepNo + " · " + snapshot.name,
           before: prevStatus,
           after: (inLibrary ? "有效" : "待生效") + " · 编号不变",
           reason: reason,
           snapshots: { before: ["证书编号：" + keepNo, "状态：" + prevStatus], after: ["证书编号：" + keepNo + "（沿用原编号）", "阶段：" + newStage + "，有效", inLibrary ? "可直接下载与验真" : "发布后可下载与验真"] },
-          impact: "沿用原编号重新发放，同一考生不产生重复证书记录；作废与补证全过程记入变更记录与审计日志。"
+          impact: "沿用原编号重新发放，同一考生不产生重复证书记录；设置无效与设置有效全过程记入变更记录与审计日志。"
         });
         window.__certificateAudit = window.__certificateAudit || [];
-        window.__certificateAudit.push({ batchId: batch.id, action: "证书重新生成", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
+        window.__certificateAudit.push({ batchId: batch.id, action: "证书设置有效", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
         done += 1;
       });
       if (!done) return 0;
@@ -24808,13 +24810,13 @@
       var keepNo = first.certNo && first.certNo !== "-" ? first.certNo : "待分配";
       var batch = currentBatchContext();
       var inLibrary = !!(first.row && first.row.closest && first.row.closest(".certificate-print-table"));
-      return '<div class="info-banner"><strong>重新生成沿用原编号：</strong>证书记录不新增、编号不变' + (inLibrary ? '，生成后即可下载与验真。' : '，发布后可下载和验真。') + '</div>'
+      return '<div class="info-banner"><strong>设置有效沿用原编号：</strong>证书记录不新增、编号不变' + (inLibrary ? '，设置后即可下载与验真。' : '，发布后可下载和验真。') + '</div>'
         + '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd>'
         + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : '1 张') + '</dd>'
         + '<dt>考生</dt><dd>' + escapeHtml([first.name, first.major, first.level].filter(function (v) { return v && v !== "-"; }).join(" · ") || "-") + '</dd>'
         + '<dt>证书编号</dt><dd>' + (rows.length > 1 ? '各自沿用原编号' : escapeHtml(keepNo) + ' <span class="muted">沿用原编号</span>') + '</dd>'
-        + '<dt>生成后状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">生成后可直接下载与验真</span>' : '<span class="tag blue">按原阶段</span> <span class="muted">未发布的补证后仍需发布</span>') + '</dd></dl>'
-        + '<div class="field" style="margin-top:14px"><label>重新生成原因 *</label><textarea class="textarea" data-cert-regenerate-reason placeholder="如：证书信息有误 / 证书遗失补办"></textarea></div>';
+        + '<dt>设置后状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">设置后可直接下载与验真</span>' : '<span class="tag blue">按原阶段</span> <span class="muted">未发布的设置有效后仍需发布</span>') + '</dd></dl>'
+        + '<div class="field" style="margin-top:14px"><label>设置有效原因 *</label><textarea class="textarea" data-cert-regenerate-reason placeholder="如：证书信息有误 / 证书遗失补办"></textarea></div>';
     }
     function certNumberSegmentBodyHtml() {
       return '<div class="table-card"><div class="table-tools"><h2 class="table-title">当前批次可用号段</h2><span class="tag blue">2026 / 武汉承办中心</span></div><div class="table-wrap"><table><thead><tr><th>专业</th><th>级别范围</th><th>起始号</th><th>当前号</th><th>已使用</th><th>剩余</th><th>状态</th></tr></thead><tbody><tr><td>钢琴</td><td>1-10级</td><td>0001</td><td>0046</td><td>45</td><td>9954</td><td><span class="tag green">可用</span></td></tr><tr><td>中国舞</td><td>1-10级</td><td>0001</td><td>0015</td><td>14</td><td>9985</td><td><span class="tag green">可用</span></td></tr><tr><td>小提琴</td><td>1-6级</td><td>0001</td><td>0003</td><td>2</td><td>9997</td><td><span class="tag green">可用</span></td></tr></tbody></table></div></div>';
@@ -25682,8 +25684,8 @@
       "cert-batch-generate": { title: "全部生成证书", wide: true, body: certBatchGenerateBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-toast="证书已生成，状态更新为已生成">确认生成</button>' },
       "cert-clear-numbers": { title: "清除证书号", body: certClearNumbersBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-clear-confirm>确认清除</button>' },
       "cert-submit": { title: "发布证书", wide: true, body: certSubmitBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-submit-confirm>确认发布</button>' },
-      "cert-void-confirm": { title: "作废证书", body: certVoidBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-void-confirm>确认作废</button>' },
-      "cert-regenerate": { title: "重新生成证书", body: certRegenerateBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-regenerate-confirm>确认生成</button>' },
+      "cert-void-confirm": { title: "设置无效", body: certVoidBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-void-confirm>确认设置无效</button>' },
+      "cert-regenerate": { title: "设置有效", body: certRegenerateBodyHtml, foot: '<button class="btn" data-close-drawer>取消</button><button class="btn primary" data-cert-regenerate-confirm>确认设置有效</button>' },
       "cert-number-segment": { title: "证书号码段查看", wide: true, body: certNumberSegmentBodyHtml, foot: '<button class="btn" data-close-drawer>关闭</button><button class="btn" data-jump="config/cert-segment" data-close-drawer>去号段配置</button>' },
       "cert-audit": { title: "证书审计记录", wide: true, body: function () { return certificateAuditHtml(currentBatchContext()); }, foot: '<button class="btn" data-close-drawer>关闭</button>' },
       "cert-batch-detail": { title: "证书查看", wide: true, body: certificateRowDetailBodyHtml, foot: '<button class="btn" data-close-drawer>返回</button>' },
