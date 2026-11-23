@@ -1211,6 +1211,10 @@
     .overview-alert span { color: var(--sub); font-size: 12px; }
     .overview-alert .btn { padding: 0; white-space: nowrap; }
     .dashboard-todo-shell { display: grid; gap: 12px; }
+    .dashboard-insights { display: grid; gap: 12px; margin: 0 0 12px; }
+    .dashboard-insights:empty { display: none; }
+    .dashboard-insights .score-task-alert { margin: 0; border-radius: 6px; align-items: center; }
+    .dashboard-insights .score-task-alert .btn.link { margin-left: auto; white-space: nowrap; }
     .dashboard-review-shortcuts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 4px 0; }
     .dashboard-review-shortcuts strong { color: var(--text); font-size: 13px; }
     .dashboard-review-shortcuts .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; white-space: nowrap; }
@@ -2826,20 +2830,21 @@
           <div class="page-head"><div><h1 class="page-title">工作台</h1></div><div class="page-actions"><a class="btn" href="exam-dashboard-cockpit.html" target="_blank">进入大屏驾驶舱</a></div></div>
           <div class="tabs" data-tabs role="tablist" aria-label="工作台视图"><button class="tab active" type="button" data-sub="workbench" role="tab" aria-selected="true">业务待办</button><button class="tab" type="button" data-sub="overview" role="tab" aria-selected="false">总览</button><button class="tab" type="button" data-sub="batch-analysis" role="tab" aria-selected="false">批次分析</button></div>
           <div class="subview active" data-subview="workbench">
-            <div class="grid-4">
-              <div class="card metric" data-jump="batch-workbench/enroll">报考人次<strong>2,685</strong><span class="muted">当前报名中批次</span></div>
-              <div class="card metric" data-jump="batch-workbench/enroll">已缴费<strong>2,109</strong><span class="muted">缴费后进入待排期</span></div>
-              <div class="card metric" data-jump="batch-workbench/schedule">已排期<strong>1,960</strong><span class="muted">待派遣/准考证</span></div>
-              <div class="card metric" data-jump="batch-workbench/certificates">证书待生成<strong>356</strong><span class="muted">发布后可下载</span></div>
+            <!-- 首屏常驻块：不依赖待办面板重建，保证平台身份进入工作台第一眼就能看到超时提醒与审核入口 -->
+            <div class="dashboard-insights" data-dashboard-insights>
+              <div class="score-task-alert" data-workbench-timeout data-platform-only>
+                <strong>评分任务超时：</strong><span>王俊（小提琴 6级 · 8月20日 14:00 场）超过当天 24:00 仍未提交 18 名考生评分，系统已于次日 09:00 提醒平台管理员。请先电话联系考官确认，再在成绩管理里后台补录。</span><button class="btn link" type="button" data-jump="grades/list">去补录</button>
+              </div>
+              <nav class="dashboard-review-shortcuts" aria-label="审核入口" data-platform-only>
+                <strong>审核入口</strong>
+                <button class="btn" type="button" data-dashboard-review-entry data-jump="system/unit-review"><span>单位审核</span><span class="dashboard-review-count" data-dashboard-review-count="system/unit-review" aria-label="待审核 1 项">1</span></button>
+                <button class="btn" type="button" data-dashboard-review-entry data-jump="org/site-review"><span>考点审核</span><span class="dashboard-review-count" data-dashboard-review-count="org/site-review" aria-label="待审核 1 项">1</span></button>
+                <button class="btn" type="button" data-dashboard-review-entry data-jump="org/judge-review" data-review-status="PENDING_REVIEW"><span>考官审核</span><span class="dashboard-review-count" data-dashboard-review-count="org/judge-review" aria-label="待审核 1 项">1</span></button>
+                <button class="btn" type="button" data-dashboard-review-entry data-jump="plans/batch-review"><span>计划审核</span><span class="dashboard-review-count" data-dashboard-review-count="plans/batch-review" aria-label="待审核 1 项">1</span></button>
+                <button class="btn" type="button" data-dashboard-review-entry data-jump="info/review"><span>信息审核</span><span class="dashboard-review-count" data-dashboard-review-count="info/review" aria-label="待审核 1 项">1</span></button>
+              </nav>
             </div>
-            <div class="table-card"><div class="table-tools"><h2 class="table-title">批次主链待办</h2><div class="page-actions"><button class="btn primary" data-jump="batch-workbench/overview">进入批次工作台</button></div></div>
-              <div class="table-wrap"><table><thead><tr><th>待办</th><th>批次</th><th>状态</th><th>入口</th></tr></thead><tbody>
-                <tr><td>待缴费登记</td><td>2026下半年 · 武汉</td><td><span class="tag orange">待缴费</span></td><td><button class="btn link" data-jump="batch-workbench/enroll">报名与缴费</button></td></tr>
-                <tr><td>已缴费待排期</td><td>2026下半年 · 武汉</td><td><span class="tag blue">培训机构编排中</span></td><td><button class="btn link" data-jump="batch-workbench/schedule">排期编排</button></td></tr>
-                <tr><td>已排期待分配考官</td><td>2026下半年 · 武汉</td><td><span class="tag blue">待派遣</span></td><td><button class="btn link" data-jump="batch-workbench/dispatch">考官派遣</button></td></tr>
-                <tr><td>待审核信息</td><td>承办单位信息 1 条</td><td><span class="tag orange">待审核</span></td><td><button class="btn link" data-jump="info/review" data-platform-only>信息审核</button></td></tr>
-              </tbody></table></div>
-            </div>
+            <div data-dashboard-todo-root></div>
           </div>
           <div class="subview" data-subview="overview"></div>
           <div class="subview" data-subview="batch-analysis"></div>
@@ -11667,6 +11672,32 @@
         if (actionCell) actionCell.innerHTML = '<div class="operation"><button class="btn link" data-drawer="result-detail">详情</button><button class="btn link" data-toast="成绩修改日志已打开">修改日志</button></div>';
       });
     }
+    // 成绩管理页同样把「评分任务」并进「待发布 / 已发布」做页签，不再上下两块堆着
+    function mergeScoreTaskIntoGradeTabs(scope) {
+      var root = scope || document;
+      Array.prototype.forEach.call(root.querySelectorAll("[data-page='grades'] .result-dashboard, .result-dashboard"), function (dash) {
+        if (dash.closest(".batch-workbench")) return; // 批次工作台由 enhanceGradesWorkbenchPanel 处理
+        var scoreCard = dash.querySelector(".score-task-card");
+        var flow = dash.querySelector(".result-flow");
+        if (!scoreCard || !flow) return;
+        var card = flow.closest(".table-card");
+        if (!card || card.contains(scoreCard)) return;
+        var panel = card.querySelector("[data-score-task-tab-panel]");
+        if (!panel) {
+          panel = document.createElement("div");
+          panel.setAttribute("data-score-task-tab-panel", "");
+          panel.hidden = true;
+          card.appendChild(panel);
+        }
+        panel.appendChild(scoreCard);
+        if (!flow.querySelector('[data-result-status-tab="评分任务"]')) {
+          var open = scoreCard.querySelectorAll('[data-score-task-row][data-score-task-status="超时未提交"], [data-score-task-row][data-score-task-status="补录中"]').length;
+          flow.insertAdjacentHTML("beforeend", '<button type="button" data-result-status-tab="评分任务" role="tab" aria-selected="false">评分任务<span data-score-task-tab-count>' + (open ? " · " + open + " 项超时" : "") + '</span></button>');
+        }
+        var active = flow.querySelector("[data-result-status-tab].active");
+        applyResultStatus(dash, active ? active.getAttribute("data-result-status-tab") : "待发布", false);
+      });
+    }
     function toggleGradeRootTab(tab) {
       var root = tab && tab.closest(".result-dashboard");
       if (!root) return;
@@ -12491,8 +12522,23 @@
       var scoreTimeoutBanner = role === "platform"
         ? '<div class="score-task-alert" style="margin:0 0 12px;border-radius:6px"><strong>评分任务超时：</strong><span>王俊（小提琴 6级 · 8月20日 14:00 场）超过当天 24:00 仍未提交 18 名考生评分，系统已于次日 09:00 提醒平台管理员。请先电话联系考官确认，再在成绩管理里后台补录。</span><button class="btn link" type="button" data-jump="grades/list" style="margin-left:auto;white-space:nowrap">去补录</button></div>'
         : '';
-      root.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + scoreTimeoutBanner + dashboardReviewShortcutsHtml() + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色显示下一步操作，已完成批次不列出。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
-      renderDashboardTodoRows(root.querySelector(".dashboard-todo-shell"));
+      // 提醒条与审核入口写到常驻容器里（该容器在静态 HTML 中已有兜底内容，渲染失败也不会空白）
+      var insights = root.querySelector("[data-dashboard-insights]");
+      if (!insights) {
+        insights = document.createElement("div");
+        insights.className = "dashboard-insights";
+        insights.setAttribute("data-dashboard-insights", "");
+        root.insertBefore(insights, root.firstChild);
+      }
+      insights.innerHTML = scoreTimeoutBanner + dashboardReviewShortcutsHtml();
+      var shellRoot = root.querySelector("[data-dashboard-todo-root]");
+      if (!shellRoot) {
+        shellRoot = document.createElement("div");
+        shellRoot.setAttribute("data-dashboard-todo-root", "");
+        root.appendChild(shellRoot);
+      }
+      shellRoot.innerHTML = '<div class="dashboard-todo-shell" data-dashboard-todo-mode="all">' + '<div class="dashboard-todo-summary"><div class="card metric"><span>待办批次</span><strong>' + pending.length + '</strong><span class="muted">' + roleLabel + '</span></div><div class="card metric"><span>待处理事项</span><strong>' + formatDemoNumber(todoTotal) + '</strong><span class="muted">按考生、场次或证书计数</span></div><div class="card metric"><span>线下 / 线上</span><strong>' + offline + ' / ' + online + '</strong><span class="muted">待办批次</span></div></div><div class="table-card"><div class="dashboard-todo-toolbar"><div><div class="dashboard-todo-tabs" role="tablist" aria-label="考试方式筛选"><button class="dashboard-todo-tab active" type="button" data-dashboard-todo-mode="all">全部批次</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="offline">线下考试</button><button class="dashboard-todo-tab" type="button" data-dashboard-todo-mode="online">线上考试</button></div><span class="muted" style="display:block;margin-top:8px">按当前角色显示下一步操作，已完成批次不列出。</span></div><div class="field dashboard-todo-filter"><label>阶段筛选</label><select class="select" data-dashboard-todo-stage><option value="all">全部阶段</option><option value="enroll">报名阶段</option><option value="schedule">排期编排</option><option value="tickets">准考证/录制</option><option value="dispatch">派遣阶段</option><option value="grades">成绩阶段</option><option value="certificates">证书阶段</option></select></div></div><div class="table-tools"><div><h2 class="table-title">批次主链待办</h2><span class="muted">共 <strong data-dashboard-todo-count>0 条</strong>，覆盖' + roleLabel + '</span></div><button class="btn" type="button" data-jump="batch-workbench/overview">进入批次工作台</button></div><div class="table-wrap"><table class="dashboard-todo-table"><thead><tr><th>考试方式</th><th>批次</th><th>当前阶段</th><th>当前状态</th><th>下一步待办</th><th>数量</th><th>截止 / 责任</th><th>操作</th></tr></thead><tbody data-dashboard-todo-body></tbody></table></div></div></div>';
+      renderDashboardTodoRows(shellRoot.querySelector(".dashboard-todo-shell"));
     }
     var ANALYTICS_STAT_LEVELS = LEVEL_DICTIONARY.slice();
     var ANALYTICS_STAT_LEVEL_CODES = LEVEL_OPTIONS.map(function (item) { return item.code; });
@@ -16352,6 +16398,7 @@
       if (view === "courses" && sub === "orders") filterCourseOrders(false, true);
       if (view === "system" && sub === "message-records") filterMessageRecords(false, true);
       if (view === "system" && sub === "my-messages") updateMyMessageMetrics();
+      if (view === "grades" && sub === "list") mergeScoreTaskIntoGradeTabs(page || document);
       normalizeRegistrationOrganizationUi(page || document);
       syncBaseProfessionalSelectOptions(page || document);
       syncStickyTableColumnsAsync(page || document);
@@ -16365,7 +16412,8 @@
       if (!target) return;
       var root = target.querySelector('[data-subview="workbench"]');
       if (!root) return;
-      var shell = root.querySelector(".dashboard-todo-shell");
+      var shellRoot = root.querySelector("[data-dashboard-todo-root]") || root;
+      var shell = shellRoot.querySelector(".dashboard-todo-shell");
       // 平台身份必须有提醒条；缺失说明这一块是在身份就绪前渲染的，需要重画
       var missingPlatformAlert = dashboardTodoRole() === "platform" && !root.querySelector(".score-task-alert");
       if (shell && !missingPlatformAlert) return;
@@ -29202,6 +29250,7 @@
     filterExamRooms(false, true);
     filterJudges(false, true);
     enhanceStandaloneTicketList();
+    mergeScoreTaskIntoGradeTabs(document);
     initResultStatusTabs();
     window.addEventListener("resize", function () { syncStickyTableColumnsAsync(document); });
     function ensureBrochureListRendered() {
