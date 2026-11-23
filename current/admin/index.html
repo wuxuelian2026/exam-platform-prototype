@@ -22708,7 +22708,7 @@
         var regenRows = window.__certActionTargets && window.__certActionTargets.length ? window.__certActionTargets : (window.__activeCertificateRow ? [window.__activeCertificateRow] : []);
         var regenCount = applyCertificateRegenerate(regenRows, regenReason.value.trim());
         closeDrawer();
-        if (regenCount) toast("已生成 " + regenCount + " 张新证书（待生效），原证书已置为无效");
+        if (regenCount) toast(regenCount > 1 ? "已重新生成 " + regenCount + " 张证书，沿用原编号" : "证书已重新生成，沿用原编号");
         return;
       }
       var scheduleSelectAll = event.target.closest("[data-schedule-select-all]");
@@ -24430,7 +24430,7 @@
       var rows = window.__certActionTargets || [];
       var first = rows[0] ? certRowSnapshot(rows[0]) : { certNo: "当前证书", name: "当前考生", major: "-", level: "-" };
       var batch = currentBatchContext();
-      return '<div class="info-banner"><strong>作废后状态变为“无效”：</strong>证书不能下载、不能验真；需要补证请用「重新生成」，会给出新编号。</div>'
+      return '<div class="info-banner"><strong>作废后状态变为“无效”：</strong>证书不能下载、不能验真；需要补证请用「重新生成」，沿用原编号重新发放。</div>'
         + '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd>'
         + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : escapeHtml(first.certNo)) + '</dd>'
         + '<dt>考生</dt><dd>' + escapeHtml([first.name, first.major, first.level].filter(function (v) { return v && v !== "-"; }).join(" · ") || "-") + '</dd>'
@@ -24696,14 +24696,6 @@
       window.__activeCertificateRow = rows[0];
       openDrawer("cert-regenerate");
     }
-    function certificateNextNumber(certNo) {
-      var match = String(certNo || "").trim().match(/^(.*?)(\d{2,})$/);
-      if (!match) return "";
-      var digits = match[2];
-      var next = String(Number(digits) + 1);
-      while (next.length < digits.length) next = "0" + next;
-      return match[1] + next;
-    }
     function applyCertificateVoid(rows, reason) {
       var batch = currentBatchContext();
       var done = 0;
@@ -24725,7 +24717,7 @@
           after: "无效（已作废）",
           reason: reason,
           snapshots: { before: ["证书编号：" + snapshot.certNo, "姓名：" + snapshot.name, "状态：" + prevStatus], after: ["状态：无效（已作废）", "原因：" + reason, "需要补证请重新生成"] },
-          impact: "证书不可下载、不可验真；补证请使用「重新生成」，会生成新编号。"
+          impact: "证书不可下载、不可验真；补证请使用「重新生成」，沿用原编号重新发放。"
         });
         window.__certificateAudit = window.__certificateAudit || [];
         window.__certificateAudit.push({ batchId: batch.id, action: "证书作废", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
@@ -24738,77 +24730,65 @@
       if (auditNode) auditNode.outerHTML = certificateAuditHtml(currentBatchContext());
       return done;
     }
+    // 重新生成 = 同一张证书重新发放，沿用原编号；原行原地恢复，不再插入同号新行
+    function restoreCertificateUsableActions(row) {
+      if (!row || !row.cells || !row.cells.length) return;
+      var box = certActionBox(row.cells[row.cells.length - 1]);
+      if (!box) return;
+      Array.prototype.forEach.call(box.querySelectorAll('[data-cert-action="void"], [data-cert-action="regenerate"]'), function (node) { node.remove(); });
+      var inLibrary = !!(row.closest && row.closest(".certificate-print-table")) || row.hasAttribute("data-cert-library-row");
+      if (inLibrary) {
+        if (!box.querySelector("[data-cert-download-electron]")) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-cert-download-electron>下载电子版</button>');
+      } else {
+        if (!box.querySelector('[data-toast*="下载"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-toast="电子证书下载中">下载</button>');
+        // 验真入口只在原本就提供验真的表里恢复，不给「工作台证书表」这类页面凭空造按钮
+        var table = row.closest ? row.closest("table") : null;
+        var tableSupportsVerify = !!(table && Array.prototype.some.call(table.querySelectorAll("tbody tr"), function (item) {
+          return item !== row && !!item.querySelector('[data-toast*="验真"]');
+        }));
+        if (tableSupportsVerify && !box.querySelector('[data-toast*="验真"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-toast="防伪验证结果已打开">验真</button>');
+      }
+      box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">作废</button><button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
+    }
+    function refreshCertificateGeneratedTime(row) {
+      var table = row && row.closest ? row.closest("table") : null;
+      if (!table) return;
+      var headers = Array.prototype.map.call(table.querySelectorAll("thead th"), function (th) { return (th.textContent || "").replace(/\s+/g, ""); });
+      var index = headers.indexOf("生成时间");
+      if (index > -1 && row.cells[index]) row.cells[index].textContent = formatDateTime(new Date()).slice(0, 16);
+    }
     function applyCertificateRegenerate(rows, reason) {
       var batch = currentBatchContext();
       var done = 0;
       (rows || []).forEach(function (row) {
         if (!certStatusCellOf(row)) return;
         var snapshot = certRowSnapshot(row);
-        var nextNo = certificateNextNumber(snapshot.certNo);
-        if (!nextNo) { toast("该考生还没有证书编号，请先「生成」证书"); return; }
-        // 编号不能和表里已有证书撞号，撞了往后顺延
-        var usedNumbers = {};
-        var table = row.closest("table");
-        if (table) {
-          Array.prototype.forEach.call(table.querySelectorAll("tbody tr"), function (item) {
-            var key = certKeyOfRow(item);
-            if (key) usedNumbers[key] = true;
-          });
-        }
-        var guard = 0;
-        while (nextNo && usedNumbers[nextNo] && guard < 999) { nextNo = certificateNextNumber(nextNo); guard += 1; }
+        // 编号是证书的唯一标识：补证不换号，继续使用原编号
+        var keepNo = snapshot.certNo;
+        if (!keepNo || keepNo === "-") { toast("该考生还没有证书编号，请先「生成」证书"); return; }
         var prevStatus = certRowStatusText(row) || "有效";
-        // 证书库只有“有效/无效”，重新生成即得到一张可直接用的新证；批次工作台要等提交，所以是“待生效”
-        var inLibrary = !!(row.closest && row.closest(".certificate-print-table"));
-        // 证书库里的证书已提交入库，重新生成直接得到可用新证；批次工作台要等提交，所以停在“待生效”
-        var newStage = inLibrary ? "已提交" : "待生效";
-        var newReason = inLibrary ? "重新生成" : "待提交";
-        var oldStage = row.dataset.certStage || "已提交";
-        setCertificateRowState(row, oldStage, false, "已被新证替代");
-        var clone = row.cloneNode(true);
-        clone.removeAttribute("data-cert-status-cell");
-        var noCell = clone.querySelector(".cert-no-cell");
-        if (noCell) {
-          var subline = noCell.querySelector("span");
-          var subText = subline ? subline.textContent : "";
-          noCell.innerHTML = escapeHtml(nextNo) + (subText ? '<br><span>' + escapeHtml(subText) + '</span>' : '');
-        }
-        // 新证的生成时间一律刷新（证书库原来用固定列号，工作台列号不同，统一按表头定位）
-        var cloneHeaders = Array.prototype.map.call((table || row.closest("table")).querySelectorAll("thead th"), function (th) { return (th.textContent || "").replace(/\s+/g, ""); });
-        var generatedIndex = cloneHeaders.indexOf("生成时间");
-        if (generatedIndex > -1 && clone.cells[generatedIndex]) clone.cells[generatedIndex].textContent = formatDateTime(new Date()).slice(0, 16);
-        if (clone.dataset) {
-          clone.dataset.certNumber = nextNo;
-          if (inLibrary) {
-            clone.dataset.certStage = newStage;
-            clone.dataset.certValid = "1";
-            delete clone.dataset.certNote;
-            if (clone.cells[8]) clone.cells[8].textContent = "未打印";
-            if (clone.cells[10]) clone.cells[10].textContent = formatDateTime(new Date()).slice(0, 10);
-          }
-        }
-        Array.prototype.forEach.call(clone.querySelectorAll("[data-cert-action]"), function (node) { node.remove(); });
-        var lastCell = clone.cells[clone.cells.length - 1];
-        if (lastCell) {
-          var box = certActionBox(lastCell);
-          box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="void">作废</button><button class="btn link" data-platform-only data-cert-action="regenerate">重新生成</button>');
-        }
-        row.parentNode.insertBefore(clone, row.nextSibling);
-        prepareCertificateStatusColumns(row.parentNode);
-        setCertificateRowState(clone, newStage, true, newReason);
+        var inLibrary = !!(row.closest && row.closest(".certificate-print-table")) || row.hasAttribute("data-cert-library-row");
+        // 沿用原阶段：作废时只置无效、保留阶段，补证就从该阶段继续（已发布的补证后仍为已发布，未发布的回到待发布）
+        var oldStage = (row.dataset && row.dataset.certStage) || (inLibrary ? "已提交" : "待生效");
+        var newStage = oldStage === "待生成" ? (inLibrary ? "已提交" : "待生效") : oldStage;
+        restoreCertificateUsableActions(row);
+        setCertificateRowState(row, newStage, true, "");
+        refreshCertificateGeneratedTime(row);
         if (inLibrary) {
-          var opBox = clone.cells[clone.cells.length - 1] ? clone.cells[clone.cells.length - 1].querySelector(".operation") : null;
-          if (opBox && !opBox.querySelector("[data-cert-download-electron]")) opBox.insertAdjacentHTML("beforeend", '<button class="btn link" data-cert-download-electron>下载电子版</button>');
+          // 补发的是新的一份证书实体：打印状态回到未打印，入库时间按今天
+          var printCell = row.cells[8];
+          if (printCell) printCell.textContent = "未打印";
+          var storeCell = row.cells[10];
+          if (storeCell) storeCell.textContent = formatDateTime(new Date()).slice(0, 10);
         }
-        CERT_EXTRA_ROWS.push({ scope: certScopeOf(row.closest("table")), certNo: nextNo, html: clone.outerHTML });
         appendBatchChangeRecord("证书重新生成", batch, {
           objectType: "考级证书",
-          objectLabel: snapshot.certNo + " → " + nextNo + " · " + snapshot.name,
-          before: snapshot.certNo + "（" + prevStatus + "）",
-          after: nextNo + "（" + (inLibrary ? "有效" : "待生效") + "）",
+          objectLabel: keepNo + " · " + snapshot.name,
+          before: prevStatus,
+          after: (inLibrary ? "有效" : "待生效") + " · 编号不变",
           reason: reason,
-          snapshots: { before: ["原证书：" + snapshot.certNo, "状态：无效（已被新证替代）"], after: ["新证书：" + nextNo, "阶段：" + newStage + "，有效", inLibrary ? "可直接下载与验真" : "提交后可下载与验真"] },
-          impact: "原证书保留为无效记录，新证书需提交后才可用于下载和验真。"
+          snapshots: { before: ["证书编号：" + keepNo, "状态：" + prevStatus], after: ["证书编号：" + keepNo + "（沿用原编号）", "阶段：" + newStage + "，有效", inLibrary ? "可直接下载与验真" : "发布后可下载与验真"] },
+          impact: "沿用原编号重新发放，同一考生不产生重复证书记录；作废与补证全过程记入变更记录与审计日志。"
         });
         window.__certificateAudit = window.__certificateAudit || [];
         window.__certificateAudit.push({ batchId: batch.id, action: "证书重新生成", operator: "当前用户", time: formatDateTime(new Date()), reason: reason });
@@ -24825,15 +24805,15 @@
     function certRegenerateBodyHtml() {
       var rows = window.__certActionTargets || [];
       var first = rows[0] ? certRowSnapshot(rows[0]) : { certNo: "-", name: "当前考生", major: "-", level: "-" };
-      var nextNo = certificateNextNumber(first.certNo) || "按号段分配";
+      var keepNo = first.certNo && first.certNo !== "-" ? first.certNo : "待分配";
       var batch = currentBatchContext();
       var inLibrary = !!(first.row && first.row.closest && first.row.closest(".certificate-print-table"));
-      return '<div class="info-banner"><strong>重新生成会作废旧证：</strong>旧证变为“无效（已被新证替代）”，新证使用新编号' + (inLibrary ? '，生成后即为“有效”。' : '，提交后才能下载和验真。') + '</div>'
+      return '<div class="info-banner"><strong>重新生成沿用原编号：</strong>证书记录不新增、编号不变' + (inLibrary ? '，生成后即可下载与验真。' : '，发布后可下载和验真。') + '</div>'
         + '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd>'
-        + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : escapeHtml(first.certNo)) + '</dd>'
+        + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : '1 张') + '</dd>'
         + '<dt>考生</dt><dd>' + escapeHtml([first.name, first.major, first.level].filter(function (v) { return v && v !== "-"; }).join(" · ") || "-") + '</dd>'
-        + '<dt>新证书编号</dt><dd>' + escapeHtml(nextNo) + '</dd>'
-        + '<dt>新证书状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">生成后可直接下载与验真</span>' : '<span class="tag blue">待生效</span> <span class="muted">提交后可用于下载与验真</span>') + '</dd></dl>'
+        + '<dt>证书编号</dt><dd>' + (rows.length > 1 ? '各自沿用原编号' : escapeHtml(keepNo) + ' <span class="muted">沿用原编号</span>') + '</dd>'
+        + '<dt>生成后状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">生成后可直接下载与验真</span>' : '<span class="tag blue">按原阶段</span> <span class="muted">未发布的补证后仍需发布</span>') + '</dd></dl>'
         + '<div class="field" style="margin-top:14px"><label>重新生成原因 *</label><textarea class="textarea" data-cert-regenerate-reason placeholder="如：证书信息有误 / 证书遗失补办"></textarea></div>';
     }
     function certNumberSegmentBodyHtml() {
