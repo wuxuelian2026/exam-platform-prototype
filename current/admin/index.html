@@ -2160,14 +2160,16 @@
     .cert-table.is-sticky-table td:last-child { min-width: 190px; }
     .cert-table.is-sticky-table .operation { display: flex; flex-wrap: wrap; gap: 6px; min-width: 174px; }
     .cert-workbench .cert-table.is-sticky-table .operation { gap: 4px; }
+    .cert-library-workbench .cert-table.is-sticky-table .operation { gap: 4px; min-width: 0; }
+    .cert-library-workbench .cert-table.is-sticky-table .operation .btn.link { padding: 0 2px; }
     .cert-workbench .cert-table .operation .btn.link { padding: 0 2px; }
     /* 「无效 + 原因」比一列宽，允许换行，不要压到生成时间 */
     .cert-workbench .cert-table td[data-cert-status-cell] { white-space: normal; }
     .cert-table.is-sticky-table .operation .btn { flex: 0 0 auto; }
     .cert-library-workbench .certificate-print-table th:nth-child(2),
-    .cert-library-workbench .certificate-print-table td:nth-child(2) { min-width: 160px; }
+    .cert-library-workbench .certificate-print-table td:nth-child(2) { min-width: 150px; }
     .cert-library-workbench .certificate-print-table th:nth-child(3),
-    .cert-library-workbench .certificate-print-table td:nth-child(3) { min-width: 160px; }
+    .cert-library-workbench .certificate-print-table td:nth-child(3) { min-width: 150px; }
     .cert-library-workbench > .info-banner { margin-bottom: 12px; }
     .cert-library-results[hidden] { display: none; }
     .cert-print-preview-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
@@ -4416,13 +4418,13 @@
               <div class="table-tools"><div><h2 class="table-title">查询结果</h2><span class="muted" data-cert-library-result-summary>0 条证书记录</span></div><div class="page-actions"><button class="btn" data-cert-toolbar-action="void">设置无效</button><button class="btn" data-cert-toolbar-action="regenerate">设置有效</button><a class="btn" href="成绩导入模板.xlsx" download="成绩导入模板.xlsx" data-toast="成绩导入模板已下载">导出成绩模板</a><button class="btn primary" data-cert-library-print>打印</button><button class="btn" data-toast="证书查询结果已导出">导出</button></div></div>
               <div class="table-wrap">
                 <table class="cert-table certificate-print-table is-sticky-table has-sticky-action">
-                  <colgroup><col style="width:56px"><col style="width:160px"><col style="width:160px"><col style="width:130px"><col style="width:110px"><col style="width:190px"><col style="width:170px"><col style="width:170px"><col style="width:120px"><col style="width:160px"><col style="width:130px"><col style="width:120px"></colgroup>
+                  <colgroup><col style="width:56px"><col style="width:150px"><col style="width:150px"><col style="width:130px"><col style="width:110px"><col style="width:180px"><col style="width:150px"><col style="width:150px"><col style="width:110px"><col style="width:160px"><col style="width:130px"><col style="width:190px"></colgroup>
                   <thead><tr><th class="sticky-left-cell"><input type="checkbox" data-cert-library-check-all aria-label="选择全部查询结果"></th><th class="sticky-left-cell">考级机构</th><th class="sticky-left-cell">姓名/证件号码</th><th>专业/等级</th><th>考评成绩</th><th>证书编号/发证日期</th><th>计划名称/考试批次</th><th>报名机构</th><th>打印状态</th><th>证书状态</th><th>入库时间</th><th>操作</th></tr></thead>
                   <tbody>
-                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026下半年 · 武汉" data-cert-name="周同学" data-cert-id="420105199806265521" data-cert-number="WH20260203080108" data-cert-major="中国舞" data-cert-level="8级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择周同学证书"></td><td class="cert-two-line">湖北艺术职业学院<br><span>HB000000</span></td><td class="cert-two-line">周同学<br><span>420105199806265521</span></td><td class="cert-two-line">中国舞<br><span>8级</span></td><td>优秀</td><td class="cert-no-cell">WH20260203080108<br><span>2026-08-29</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026下半年 · 武汉</span></td><td class="cert-two-line">汉口美育培训学校<br><span>ORG010111</span></td><td>已打印</td><td><span class="tag green">有效</span></td><td>2026-08-30</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button><button class="btn link" data-drawer="cert-batch-preview">预览电子版</button><button class="btn link" data-cert-download-electron>下载电子版</button></div></td></tr>
-                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026上半年 · 武汉" data-cert-name="林同学" data-cert-id="420106200212020819" data-cert-number="WH20260102070045" data-cert-major="钢琴" data-cert-level="7级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择林同学证书"></td><td class="cert-two-line">湖北艺术职业学院<br><span>HB000000</span></td><td class="cert-two-line">林同学<br><span>420106200212020819</span></td><td class="cert-two-line">钢琴<br><span>7级</span></td><td>良好</td><td class="cert-no-cell">WH20260102070045<br><span>2026-06-18</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026上半年 · 武汉</span></td><td class="cert-two-line">光谷少儿艺术中心<br><span>ORG010203</span></td><td>未打印</td><td><span class="tag green">有效</span></td><td>2026-06-18</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button><button class="btn link" data-drawer="cert-batch-preview">预览电子版</button><button class="btn link" data-cert-download-electron>下载电子版</button></div></td></tr>
-                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026下半年 · 武汉" data-cert-name="张同学" data-cert-id="420111200804142307" data-cert-number="WH20260205050031" data-cert-major="美术" data-cert-level="5级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择张同学证书"></td><td class="cert-two-line">武汉承办中心<br><span>HB010100</span></td><td class="cert-two-line">张同学<br><span>420111200804142307</span></td><td class="cert-two-line">美术<br><span>5级</span></td><td>合格</td><td class="cert-no-cell">WH20260205050031<br><span>2026-08-29</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026下半年 · 武汉</span></td><td class="cert-two-line">武昌美育中心<br><span>ORG010305</span></td><td>未打印</td><td><span class="tag green">有效</span></td><td>2026-08-30</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button><button class="btn link" data-drawer="cert-batch-preview">预览电子版</button><button class="btn link" data-cert-download-electron>下载电子版</button></div></td></tr>
-                    <tr data-cert-library-row data-cert-plan="2025年度考级规划" data-cert-batch="2025秋季批次" data-cert-name="王同学" data-cert-id="420111199907236620" data-cert-number="WH20250102030088" data-cert-major="钢琴" data-cert-level="3级" data-cert-status="无效"><td><input type="checkbox" data-cert-library-check aria-label="选择王同学证书"></td><td class="cert-two-line">宜昌承办中心<br><span>HB020100</span></td><td class="cert-two-line">王同学<br><span>420111199907236620</span></td><td class="cert-two-line">钢琴<br><span>3级</span></td><td>合格</td><td class="cert-no-cell">WH20250102030088<br><span>2025-11-06</span></td><td class="cert-two-line">2025年度考级规划<br><span>2025秋季批次</span></td><td class="cert-two-line">宜昌青少年艺术中心<br><span>ORG020102</span></td><td>-</td><td><span class="tag red">无效</span></td><td>2025-11-06</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button><button class="btn link" data-drawer="cert-batch-preview">预览电子版</button><button class="btn link" data-cert-download-electron>下载电子版</button></div></td></tr>
+                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026下半年 · 武汉" data-cert-name="周同学" data-cert-id="420105199806265521" data-cert-number="WH20260203080108" data-cert-major="中国舞" data-cert-level="8级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择周同学证书"></td><td class="cert-two-line">湖北艺术职业学院<br><span>HB000000</span></td><td class="cert-two-line">周同学<br><span>420105199806265521</span></td><td class="cert-two-line">中国舞<br><span>8级</span></td><td>优秀</td><td class="cert-no-cell">WH20260203080108<br><span>2026-08-29</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026下半年 · 武汉</span></td><td class="cert-two-line">汉口美育培训学校<br><span>ORG010111</span></td><td>已打印</td><td><span class="tag green">有效</span></td><td>2026-08-30</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button></div></td></tr>
+                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026上半年 · 武汉" data-cert-name="林同学" data-cert-id="420106200212020819" data-cert-number="WH20260102070045" data-cert-major="钢琴" data-cert-level="7级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择林同学证书"></td><td class="cert-two-line">湖北艺术职业学院<br><span>HB000000</span></td><td class="cert-two-line">林同学<br><span>420106200212020819</span></td><td class="cert-two-line">钢琴<br><span>7级</span></td><td>良好</td><td class="cert-no-cell">WH20260102070045<br><span>2026-06-18</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026上半年 · 武汉</span></td><td class="cert-two-line">光谷少儿艺术中心<br><span>ORG010203</span></td><td>未打印</td><td><span class="tag green">有效</span></td><td>2026-06-18</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button></div></td></tr>
+                    <tr data-cert-library-row data-cert-plan="2026年度考级规划" data-cert-batch="2026下半年 · 武汉" data-cert-name="张同学" data-cert-id="420111200804142307" data-cert-number="WH20260205050031" data-cert-major="美术" data-cert-level="5级" data-cert-status="有效"><td><input type="checkbox" data-cert-library-check aria-label="选择张同学证书"></td><td class="cert-two-line">武汉承办中心<br><span>HB010100</span></td><td class="cert-two-line">张同学<br><span>420111200804142307</span></td><td class="cert-two-line">美术<br><span>5级</span></td><td>合格</td><td class="cert-no-cell">WH20260205050031<br><span>2026-08-29</span></td><td class="cert-two-line">2026年度考级规划<br><span>2026下半年 · 武汉</span></td><td class="cert-two-line">武昌美育中心<br><span>ORG010305</span></td><td>未打印</td><td><span class="tag green">有效</span></td><td>2026-08-30</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button></div></td></tr>
+                    <tr data-cert-library-row data-cert-plan="2025年度考级规划" data-cert-batch="2025秋季批次" data-cert-name="王同学" data-cert-id="420111199907236620" data-cert-number="WH20250102030088" data-cert-major="钢琴" data-cert-level="3级" data-cert-status="无效"><td><input type="checkbox" data-cert-library-check aria-label="选择王同学证书"></td><td class="cert-two-line">宜昌承办中心<br><span>HB020100</span></td><td class="cert-two-line">王同学<br><span>420111199907236620</span></td><td class="cert-two-line">钢琴<br><span>3级</span></td><td>合格</td><td class="cert-no-cell">WH20250102030088<br><span>2025-11-06</span></td><td class="cert-two-line">2025年度考级规划<br><span>2025秋季批次</span></td><td class="cert-two-line">宜昌青少年艺术中心<br><span>ORG020102</span></td><td>-</td><td><span class="tag red">无效</span></td><td>2025-11-06</td><td><div class="operation"><button class="btn link" data-drawer="cert-batch-detail">查看</button></div></td></tr>
                     <tr data-cert-library-empty hidden><td colspan="12"><div class="empty-state"><strong>未查询到匹配证书</strong><span>请调整查询条件后重试。</span></div></td></tr>
                   </tbody>
                 </table>
@@ -11689,13 +11691,9 @@
             if (override.note) row.dataset.certNote = override.note; else delete row.dataset.certNote;
           }
           applyCertificateRowStatusCell(row);
-          var state = row.dataset.certStatus;
           var actions = row.cells[11];
           if (actions) {
-            actions.innerHTML = '<div class="operation"><button class="btn link" data-drawer="cert-batch-detail" data-batch-id="' + escapeHtml(batch.id) + '">查看</button>'
-              + '<button class="btn link" data-drawer="cert-batch-preview" data-batch-id="' + escapeHtml(batch.id) + '">预览电子版</button>'
-              + (/无效/.test(state) ? '' : '<button class="btn link" data-cert-download-electron data-batch-id="' + escapeHtml(batch.id) + '">下载电子版</button>')
-              + '</div>';
+            actions.innerHTML = '<div class="operation"><button class="btn link" data-drawer="cert-batch-detail" data-batch-id="' + escapeHtml(batch.id) + '">查看</button></div>';
           }
         });
         enhanceCertificateRowActions(library);
@@ -23078,12 +23076,6 @@
       }
       if (event.target.closest("[data-cert-library-search]")) { queryCertificateLibrary(); return; }
       if (event.target.closest("[data-cert-library-reset]")) { resetCertificateLibrarySearch(); return; }
-      if (event.target.closest("[data-cert-download-electron]")) {
-        var downloadRow = event.target.closest("[data-cert-library-row]");
-        if (!downloadRow || downloadRow.dataset.certValid === '0') { toast('这张证书已无效，不能下载电子版；需要恢复请用「设置有效」'); return; }
-        toast('电子证书下载中');
-        return;
-      }
       if (event.target.closest("[data-certificate-detail-edit]")) {
         window.__certificateDetailEditMode = true;
         renderCertificateDetailDrawer();
@@ -24709,7 +24701,7 @@
         setCertificateRowState(row, prevStage, false, "已设置无效");
         var box = row.querySelector(".operation");
         if (box) {
-          Array.prototype.forEach.call(box.querySelectorAll('[data-toast*="下载"], [data-toast*="打印"], [data-toast*="验真"], [data-cert-download-electron], [data-cert-action="void"]'), function (node) { node.remove(); });
+          Array.prototype.forEach.call(box.querySelectorAll('[data-toast*="下载"], [data-toast*="打印"], [data-toast*="验真"], [data-cert-action="void"]'), function (node) { node.remove(); });
           if (!box.querySelector('[data-cert-action="regenerate"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-platform-only data-cert-action="regenerate">设置有效</button>');
         }
         appendBatchChangeRecord("证书设置无效", batch, {
@@ -24739,9 +24731,8 @@
       if (!box) return;
       Array.prototype.forEach.call(box.querySelectorAll('[data-cert-action="void"], [data-cert-action="regenerate"]'), function (node) { node.remove(); });
       var inLibrary = !!(row.closest && row.closest(".certificate-print-table")) || row.hasAttribute("data-cert-library-row");
-      if (inLibrary) {
-        if (!box.querySelector("[data-cert-download-electron]")) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-cert-download-electron>下载电子版</button>');
-      } else {
+      // 证书库只做查询与状态维护，不再提供预览/下载电子版；工作台才恢复下载与验真入口
+      if (!inLibrary) {
         if (!box.querySelector('[data-toast*="下载"]')) box.insertAdjacentHTML("beforeend", '<button class="btn link" data-toast="电子证书下载中">下载</button>');
         // 验真入口只在原本就提供验真的表里恢复，不给「工作台证书表」这类页面凭空造按钮
         var table = row.closest ? row.closest("table") : null;
@@ -24810,13 +24801,13 @@
       var keepNo = first.certNo && first.certNo !== "-" ? first.certNo : "待分配";
       var batch = currentBatchContext();
       var inLibrary = !!(first.row && first.row.closest && first.row.closest(".certificate-print-table"));
-      return '<div class="info-banner"><strong>设置有效沿用原编号：</strong>证书记录不新增、编号不变' + (inLibrary ? '，设置后即可下载与验真。' : '，发布后可下载和验真。') + '</div>'
+      return '<div class="info-banner"><strong>设置有效沿用原编号：</strong>证书记录不新增、编号不变' + (inLibrary ? '，设置后恢复为有效状态。' : '，发布后可下载和验真。') + '</div>'
         + '<dl class="kv"><dt>批次</dt><dd>' + escapeHtml(batch.name) + ' / ' + escapeHtml(batch.id) + '</dd>'
         + '<dt>目标证书</dt><dd>' + (rows.length > 1 ? rows.length + ' 张' : '1 张') + '</dd>'
         + '<dt>考生</dt><dd>' + escapeHtml([first.name, first.major, first.level].filter(function (v) { return v && v !== "-"; }).join(" · ") || "-") + '</dd>'
         + '<dt>证书编号</dt><dd>' + (rows.length > 1 ? '各自沿用原编号' : escapeHtml(keepNo) + ' <span class="muted">沿用原编号</span>') + '</dd>'
-        + '<dt>设置后状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">设置后可直接下载与验真</span>' : '<span class="tag blue">按原阶段</span> <span class="muted">未发布的设置有效后仍需发布</span>') + '</dd></dl>'
-        + '<div class="field" style="margin-top:14px"><label>设置有效原因 *</label><textarea class="textarea" data-cert-regenerate-reason placeholder="如：证书信息有误 / 证书遗失补办"></textarea></div>';
+        + '<dt>设置后状态</dt><dd>' + (inLibrary ? '<span class="tag green">有效</span> <span class="muted">设置后恢复为有效状态</span>' : '<span class="tag blue">按原阶段</span> <span class="muted">未发布的设置有效后仍需发布</span>') + '</dd></dl>'
+        + '<div class="field" style="margin-top:14px"><label>设置有效原因 *</label><textarea class="textarea" data-cert-regenerate-reason placeholder="如：信息核实无误 / 证书遗失补办"></textarea></div>';
     }
     function certNumberSegmentBodyHtml() {
       return '<div class="table-card"><div class="table-tools"><h2 class="table-title">当前批次可用号段</h2><span class="tag blue">2026 / 武汉承办中心</span></div><div class="table-wrap"><table><thead><tr><th>专业</th><th>级别范围</th><th>起始号</th><th>当前号</th><th>已使用</th><th>剩余</th><th>状态</th></tr></thead><tbody><tr><td>钢琴</td><td>1-10级</td><td>0001</td><td>0046</td><td>45</td><td>9954</td><td><span class="tag green">可用</span></td></tr><tr><td>中国舞</td><td>1-10级</td><td>0001</td><td>0015</td><td>14</td><td>9985</td><td><span class="tag green">可用</span></td></tr><tr><td>小提琴</td><td>1-6级</td><td>0001</td><td>0003</td><td>2</td><td>9997</td><td><span class="tag green">可用</span></td></tr></tbody></table></div></div>';
